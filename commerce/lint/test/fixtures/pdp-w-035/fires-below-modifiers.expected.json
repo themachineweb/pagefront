@@ -1,0 +1,26 @@
+{
+  "sheet": "https://merchant.example/products/harbour-desk",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.3.0",
+  "sheet_spec_version": "0.9.0",
+  "catalogue_version": "0.15.0",
+  "findings": [
+    {
+      "rule": "PDP-W-035",
+      "severity": "warning",
+      "path": "$['data']['offers'][0]['pagefront:configuratorPricing']",
+      "values": {},
+      "message": "basePrice may be a component price, not a configured total.",
+      "remediation": "Confirm that `basePrice` is what a buyer pays for the whole of `baseConfiguration`. If it is the price of one part, replace it with the configured total and recompute the modifiers as differences from that total."
+    }
+  ],
+  "summary": {
+    "errors": 0,
+    "warnings": 1,
+    "info": 0,
+    "rules_fired": [
+      "PDP-W-035"
+    ]
+  }
+}

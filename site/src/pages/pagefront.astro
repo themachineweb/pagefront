@@ -1,0 +1,386 @@
+---
+/**
+ * themachineweb.org/pagefront — the standard's section landing.
+ *
+ * On the shared Site shell (layouts/Site.astro), which carries the head
+ * block and masthead; the wide-page chrome (.wide, .frame h1) is
+ * shared in /styles.css. Only this page's own sections — the sheet
+ * example, the benefits tabs, section footer — are styled here.
+ *
+ * "What a sheet looks like" is a screenshot, a Ba&sh product page beside
+ * the sheet derived from it, served from /public/pagefront in two display
+ * sizes; the link opens the full page and the full sheet.
+ *
+ * Links: several destinations don't exist yet; they live in lib/links.ts,
+ * pointed at their real equivalents in the repository, shared with the
+ * other pages that carry the Pagefront masthead.
+ */
+import Site from '../layouts/Site.astro';
+import { LINKS, pagefrontNav } from '../lib/links';
+import SectionFoot from '../components/SectionFoot.astro';
+// Inlined rather than referenced with <img>: every colour in the SVG is
+// var(--token, #fallback), and custom properties do not cross a document
+// boundary, so an <img> would freeze the palette instead of tracking
+// styles.css. Its <title> and <desc> are the accessible description.
+import diagram from '../assets/machine-web-layers.svg?raw';
+
+const title = 'Pagefront — The Machine Web';
+const description =
+  'Pagefront is an open specification for publishing reliable product data to the Machine Web: a small typed file, served on the publisher’s own domain, discovered through a standard HTTP link.';
+const canonical = 'https://themachineweb.org/pagefront';
+
+---
+
+<Site
+  title={title}
+  description={description}
+  canonical={canonical}
+  ogType="article"
+  section="Pagefront"
+  sectionHref={LINKS.landing}
+  navLabel="Pagefront"
+  nav={pagefrontNav()}
+>
+
+<main class="section-page wide">
+
+  <section class="frame">
+    <div class="frame-head">
+      <h1>Pagefront</h1>
+      <p class="spec-cta">
+        <a href={LINKS.spec}>Read the spec docs <span aria-hidden="true">&rarr;</span></a>
+      </p>
+    </div>
+    <p>
+      Fewer and fewer visitors to your product pages are people. Assistants
+      answer questions about your products, comparison engines rank them,
+      agents are starting to buy them.
+    </p>
+    <p>
+      What all of them find is a page built for human eyes and stuffed like a
+      stockroom: every box shelved for a good reason, no map ever drawn. Your
+      data is in there somewhere.
+    </p>
+    <p>
+      Everything machines know about your products came out of the first few
+      boxes they happened to open. Agentic commerce cannot run on a lottery.
+    </p>
+    <p>
+      Pagefront is an open specification for publishing reliable product data
+      to the Machine Web. A publisher writes a small typed file, called a
+      Pagefront Sheet, serves it on their own domain, and links to it from the
+      page it describes.
+    </p>
+
+    <figure>
+      <Fragment set:html={diagram} />
+      <figcaption>
+        The page is one document in the human web; the sheet is one document in
+        the Machine Web. A <code>rel="describedby"</code> link joins them, and
+        both are served from your own domain.
+      </figcaption>
+    </figure>
+
+    <p>
+      A Pagefront Sheet is a standard way to describe a commerce entity — a
+      product, a catalogue, or the organization behind it.
+    </p>
+    <ul class="sheet-traits">
+      <li>It extends the Schema.org vocabulary to cover specific commerce needs.</li>
+      <li>
+        It is written in JSON, a format machines read natively — assistants,
+        crawlers, comparison engines, your partners' own systems.
+      </li>
+      <li>
+        It lives as an independent document with its own URL — so it can be
+        fetched without the page, cached on its own, and cited by other sheets.
+        Schema.org embedded in a page is bound to that page; a sheet is not.
+      </li>
+    </ul>
+
+    <h2>Where does it fit?</h2>
+    <p>
+      Pagefront builds on standards the web already has: Schema.org for the
+      vocabulary, JSON-LD for the shape, RFC 8288 linking for the discovery.
+    </p>
+    <p>
+      Headless decoupled the front end from the back end. Pagefront decouples
+      the data from the page.
+    </p>
+    <p>
+      llms.txt has the same instinct: a file you write, on your own domain,
+      addressed to machines. It points a model at the prose worth reading. A
+      sheet carries the data itself, typed.
+    </p>
+    <p>
+      Agentic commerce protocols define how a sale is carried out. None of them
+      define what is being sold. Pagefront is that layer.
+    </p>
+    <p>
+      Unlike a product feed, a sheet is not an enumeration pushed to one
+      destination in that destination's schema. One standard document, at your address,
+      readable by whoever needs it.
+    </p>
+    <p>
+      Unlike GEO tools, Pagefront doesn't promise you'll be cited; what it
+      removes is the excuse: too expensive to fetch, too ambiguous to trust.
+    </p>
+
+  </section>
+
+  <section class="sheet" aria-labelledby="sheet-heading">
+    <h2 id="sheet-heading">What a sheet looks like</h2>
+    <figure class="sheet-figure">
+      <a class="sheet-shot" href="/pagefront/bash-sheet-full.png">
+        <img
+          src="/pagefront/bash-sheet-1200.png"
+          srcset="/pagefront/bash-sheet-1200.png 1200w, /pagefront/bash-sheet-2400.png 2400w"
+          sizes="(min-width: 1100px) 1040px, 100vw"
+          width="1200" height="847" loading="lazy"
+          alt="A rendered product page on the left; on the right, the sheet describing the same product."
+        />
+      </a>
+      <figcaption>
+        The same product, twice. On the left, the page a person reads. On the
+        right, its machine twin: the same product with the storefront stripped
+        away.<br />
+        Simulated from a public product page; not published by the brand.<br />
+        Click to enlarge at full size.
+      </figcaption>
+    </figure>
+  </section>
+
+  <section class="benefits" aria-label="Benefits">
+    <div class="modes" role="tablist" aria-label="Benefits">
+      <button type="button" id="tab-publishers" class="mode active" role="tab" aria-selected="true" aria-controls="panel-publishers">Benefits for publishers</button>
+      <button type="button" id="tab-consumers" class="mode" role="tab" aria-selected="false" aria-controls="panel-consumers" tabindex="-1">Benefits for consumers</button>
+    </div>
+
+    <div id="panel-publishers" class="panel is-active" role="tabpanel" aria-labelledby="tab-publishers">
+      <h2 class="panel-heading">Benefits for publishers</h2>
+      <h3>First-party</h3>
+      <p>
+        You author the sheet and you serve it. Correct it or withdraw it, and the
+        change is live the moment you make it. Nothing in the format assumes a
+        gatekeeper in the middle.
+      </p>
+
+      <h3>Cheap to read, safe to quote</h3>
+      <p>
+        A sheet is a lightweight file, and the data is the file itself. One
+        request, one pass, and a machine has your material composition, your lead
+        times, your certification scope and the legal entity behind your brand,
+        served from your own domain. Ask twice and you get the same answer.
+      </p>
+
+      <h3>One foundational document</h3>
+      <p>
+        You maintain one document rather than five integrations, each in its own
+        format, each drifting from the others as your catalogue changes.
+      </p>
+      <p>
+        That document will become the shape your product record actually takes.
+        Your site renders from it. Your partners point at it by reference, so a
+        correction you make in the morning is what they read in the afternoon. An
+        agent works on it directly: adding the new colourway, fixing a lead time,
+        answering a question, changing prices.
+      </p>
+      <p>
+        Most of the software between you and your commerce data will become
+        optional.
+      </p>
+      <p class="more"><a href={LINKS.publish}>How to publish <span aria-hidden="true">→</span></a></p>
+    </div>
+
+    <div id="panel-consumers" class="panel" role="tabpanel" aria-labelledby="tab-consumers">
+      <h2 class="panel-heading">Benefits for consumers</h2>
+      <h3>Fetch instead of compute</h3>
+      <p>
+        One merchant's page measured against its sheet: 6.3 MB down to 3 KB, 195
+        requests down to one. Getting the same data out of the page means
+        fetching all of it and often executing it, because price, stock and
+        variants frequently arrive only after the scripts run. Reading a sheet
+        takes a request and a parse, whether you are indexing a million products
+        or writing a script over a weekend.
+      </p>
+
+      <h3>On the record</h3>
+      <p>
+        What a sheet contains is what the publisher states, served from their own
+        domain. You can attribute it, you can act on it, and the same fetch
+        returns the same answer tomorrow. When something turns out wrong, it is a
+        claim you can point at rather than an inference you have to defend.
+      </p>
+
+      <h3>Comparable across publishers</h3>
+      <p>
+        Two merchants describing the same kind of thing use the same vocabulary,
+        so comparing them is a lookup rather than a reconciliation of two page
+        layouts. A sheet can also point at another by reference, so a retailer's
+        product leads you to the manufacturer's own statement about it rather
+        than a paraphrase.
+      </p>
+
+      <h3>Additive by design</h3>
+      <p>
+        A sheet is found by a link from the page you already fetch, so nothing
+        changes for the pages that do not have one. The specification is pre-1.0,
+        so what you need next can still go into it.
+      </p>
+      <p class="more"><a href={LINKS.consume}>How to consume <span aria-hidden="true">→</span></a></p>
+    </div>
+  </section>
+
+</main>
+
+<SectionFoot />
+
+</Site>
+
+<style>
+  /* The layers diagram. The SVG arrives through set:html, outside Astro's
+     style scoping, hence :global on the svg selector. */
+  figure { margin: 2.5rem 0; }
+  figure :global(svg) { width: 100%; height: auto; display: block; }
+  figcaption { font-family: var(--sans); font-size: .82rem; line-height: 1.55;
+               color: var(--ink-soft); margin-top: 1rem; }
+
+  /* ---- opening block --------------------------------------------- */
+
+  /* The opening runs the page's full wide measure, like the sections
+     below it; no separate reading measure. */
+
+  /* ---- spec call-to-action ---------------------------------------- */
+
+  /* The one solid element on the page: the spec is the section's main
+     destination and the masthead nav alone was too easy to miss. It sits
+     on the title row, against the right edge of the measure; the row
+     wraps on narrow screens and the pill drops under the title. */
+  .frame-head{
+    display:flex; align-items:center; justify-content:space-between;
+    flex-wrap:wrap; gap:.75rem 1.5rem;
+    margin:0 0 clamp(1.5rem,3vw,2.25rem);
+  }
+  .frame-head h1{ margin:0; }
+  .section-page .spec-cta{ margin:0; }
+  /* .spec-cta a: the global `.wide a` underline rule is (0,1,1); the
+     scoped attributes make this (0,3,1) and it wins. The benefits
+     section's closing link wears the same pill. */
+  .spec-cta a,
+  .section-page .more a{
+    display:inline-block;
+    font-family:var(--sans);
+    font-weight:600;
+    font-size:.95rem;
+    letter-spacing:.01em;
+    padding:.7em 1.3em .75em;
+    background:var(--ink);
+    color:var(--paper);
+    border-radius:999px;
+    text-decoration:none;
+  }
+  .spec-cta a:hover,
+  .section-page .more a:hover{ background:var(--ink-soft); text-decoration:none; }
+  .spec-cta a span,
+  .section-page .more a span{ margin-left:.35em; }
+
+  /* ---- sheet example ---------------------------------------------- */
+
+  /* Full width between the CTA and the columns, on the page's standard
+     section gap. */
+  .section-page .sheet,
+  .section-page .benefits{ margin-top: clamp(2.5rem,6vw,4rem); }
+
+  /* The section headings repeat the home page's column heading
+     treatment (.door h2 in /styles.css, scoped to its columns) so the
+     two pages read as one register. Keep the two in step. */
+  .frame h2,
+  .sheet h2{
+    font-family:var(--sans);
+    font-weight:600;
+    font-size:1rem;
+    letter-spacing:.07rem;
+    text-transform:uppercase;
+    color:var(--ink);
+    margin:0 0 1.1rem;
+  }
+  .frame h2{ margin-top: clamp(2.5rem,6vw,4rem); }
+  /* The benefit titles: the site's smallest heading style, .doc-body h3
+     in /styles.css, repeated here because that rule is scoped to the
+     spec documents. Keep the two in step. */
+  .benefits h3{ font-family:var(--sans); font-weight:600; font-size:1.05rem; margin:2rem 0 .7rem; }
+  .benefits .panel > h3:first-child{ margin-top:1.4rem; }
+
+  /* The two benefit sections as tabs, the validator's tab strip carrying
+     the section-heading typography. Both panels are in the markup and
+     both render until the script runs: nothing is hidden with the
+     `hidden` attribute, so a reader that takes the page's text without
+     running scripts, which is what assistants and most crawlers do,
+     gets both. The script marks the section, and only then does CSS
+     show one panel; it switches panels and moves focus with the arrow
+     keys. */
+  .benefits .modes{ display:flex; flex-wrap:wrap; gap:.5rem; margin:0; }
+  .benefits .mode{
+    font-family:var(--sans); font-weight:600; font-size:.85rem; letter-spacing:.07rem;
+    text-transform:uppercase; padding:.45rem 1rem; background:none;
+    border:1px solid var(--rule); border-radius:999px; color:var(--ink-soft); cursor:pointer;
+  }
+  .benefits .mode.active{ border-color:var(--ink); color:var(--ink); }
+  .benefits.is-tabbed .panel:not(.is-active){ display:none; }
+  /* Each panel keeps its title as a heading for the outline and for
+     assistive tech; the visible title is the tab. Clipped, not
+     display:none, so it stays in the accessibility tree. */
+  .benefits .panel-heading{
+    position:absolute; width:1px; height:1px; margin:-1px; padding:0;
+    overflow:hidden; clip:rect(0 0 0 0); clip-path:inset(50%); white-space:nowrap; border:0;
+  }
+
+  /* The screenshot: a product page beside its sheet. The inline copy is
+     sized for the measure; the link opens the full-size capture. */
+  .sheet-figure{ margin:0; max-width:none; }
+  .sheet-shot{ display:block; }
+  .sheet-shot img{ display:block; width:100%; height:auto; border:1px solid var(--ink); }
+  /* ---- two columns ------------------------------------------------ */
+
+  /* The benefits section's closing link; the two-class selector outranks
+     the global `.wide p` margin shorthand, as on the home page. */
+  .section-page .more{ margin:1.6rem 0 0; }
+
+  /* ---- code ------------------------------------------------------- */
+
+  code{
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+    font-size:.85em;
+    background:#efe9db;
+    padding:.1em .3em;
+    border-radius:4px;
+    overflow-wrap:anywhere;
+  }
+
+
+</style>
+
+<script>
+  const section = document.querySelector('.benefits');
+  const tabs = Array.from(document.querySelectorAll<HTMLButtonElement>('.benefits [role="tab"]'));
+  section?.classList.add('is-tabbed');
+  const show = (tab: HTMLButtonElement, focus = false) => {
+    for (const t of tabs) {
+      const on = t === tab;
+      t.classList.toggle('active', on);
+      t.setAttribute('aria-selected', String(on));
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute('aria-controls')!)?.classList.toggle('is-active', on);
+    }
+    if (focus) tab.focus();
+  };
+  tabs.forEach((tab, i) => {
+    tab.addEventListener('click', () => show(tab));
+    tab.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+        e.preventDefault();
+        show(tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length], true);
+      }
+    });
+  });
+</script>

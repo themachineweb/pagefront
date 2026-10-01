@@ -1,0 +1,58 @@
+---
+/**
+ * Prose shell for essay-measure pages (/manifesto and the validator):
+ * the shared Site head + masthead around a .page article, closed by the
+ * contact colophon. Wide pages (/ and /pagefront) use Site directly.
+ */
+import Site from './Site.astro';
+
+interface NavItem {
+  label: string;
+  href: string;
+  current?: boolean;
+}
+
+interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  section?: string;
+  sectionHref?: string;
+  nav?: NavItem[];
+  navLabel?: string;
+  ogImage?: string;
+  ogImageAlt?: string;
+}
+
+const TOP_NAV = [
+  { label: 'Manifesto', href: '/manifesto' },
+  { label: 'Pagefront', href: '/pagefront' },
+];
+
+const { title, description, canonical, section, sectionHref, nav = TOP_NAV, navLabel, ogImage, ogImageAlt } = Astro.props;
+---
+
+<Site
+  title={title}
+  description={description}
+  canonical={canonical}
+  ogType="article"
+  section={section}
+  sectionHref={sectionHref}
+  nav={nav}
+  navLabel={navLabel}
+  ogImage={ogImage}
+  ogImageAlt={ogImageAlt}
+>
+  <main class="page">
+    <article>
+      <slot />
+    </article>
+
+    <footer class="colophon">
+      <slot name="colophon">
+        <a href="mailto:contact@themachineweb.org">contact@themachineweb.org</a>
+      </slot>
+    </footer>
+  </main>
+</Site>

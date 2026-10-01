@@ -1,0 +1,28 @@
+{
+  "sheet": "https://merchant.example/pages/about",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.3.0",
+  "sheet_spec_version": "0.3.0",
+  "catalogue_version": "0.15.0",
+  "findings": [
+    {
+      "rule": "ORG-W-004",
+      "severity": "warning",
+      "path": "$['data']",
+      "values": {
+        "fields": "hasMerchantReturnPolicy"
+      },
+      "message": "Seller content (`hasMerchantReturnPolicy`) is present at `$['data']`, but `pagefront:commerceRole` does not declare `seller`.",
+      "remediation": "Declare `seller` in `pagefront:commerceRole`, or move the store-wide terms to the seller's own sheet."
+    }
+  ],
+  "summary": {
+    "errors": 0,
+    "warnings": 1,
+    "info": 0,
+    "rules_fired": [
+      "ORG-W-004"
+    ]
+  }
+}

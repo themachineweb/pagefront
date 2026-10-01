@@ -1,0 +1,60 @@
+---
+/**
+ * /pagefront/publish — the publishing guide: write, serve, link, check.
+ * Site copy, kept as markdown at src/content/publish.md and rendered with
+ * the same doc chrome as the spec pages; the markdown's own H1 is hidden
+ * under the page header.
+ */
+import { getCollection, render } from 'astro:content';
+import Section from '../../layouts/Section.astro';
+import { LINKS } from '../../lib/links';
+
+const entries = await getCollection('publish');
+const entry = entries[0];
+const { Content, headings } = await render(entry);
+const toc = headings.filter((h) => h.depth === 2);
+---
+
+<Section
+  title="Publish a sheet — Pagefront"
+  description="How to publish a Pagefront sheet: write a few kilobytes of JSON, serve it at a stable URL on your own domain, add one link to the page, check it. No account, no registry, no permission."
+  path={LINKS.publish}
+>
+  <header class="doc-head">
+    <p class="pf-kicker"><a href={LINKS.landing}>Pagefront</a></p>
+    <h1>Publish</h1>
+  </header>
+
+  {toc.length > 0 && (
+    <nav class="doc-toc" aria-label="On this page">
+      <p class="doc-toc-title">On this page</p>
+      <ul>
+        {toc.map((h) => (
+          <li><a href={`#${h.slug}`}>{h.text}</a></li>
+        ))}
+      </ul>
+    </nav>
+  )}
+
+  <div class="doc-body">
+    <Content />
+  </div>
+</Section>
+
+<style is:global>
+  /* The one solid element on the page: the assistant prompt is the route
+     most first-time publishers take. Same pill as the landing's spec CTA. */
+  .doc-body a.pf-cta{
+    display:inline-block;
+    font-family:var(--sans);
+    font-weight:600;
+    font-size:.92rem;
+    padding:.6em 1.2em .65em;
+    background:var(--ink);
+    color:var(--paper);
+    border-radius:999px;
+    text-decoration:none;
+  }
+  .doc-body a.pf-cta:hover{ background:var(--ink-soft); text-decoration:none; }
+  .doc-body a.pf-cta span{ margin-left:.35em; }
+</style>

@@ -1,0 +1,28 @@
+{
+  "sheet": "https://merchant.example/products/harbour-desk",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.3.0",
+  "sheet_spec_version": "0.9.0",
+  "catalogue_version": "0.15.0",
+  "findings": [
+    {
+      "rule": "PDP-E-001",
+      "severity": "error",
+      "path": "$['data']['offers'][0]['pagefront:configuratorPricing']['configurator']['@id']",
+      "values": {
+        "value": "https://merchant.example/products/harbour-desk.pagefront.json#configurator"
+      },
+      "message": "Reference `https://merchant.example/products/harbour-desk.pagefront.json#configurator` at `$['data']['offers'][0]['pagefront:configuratorPricing']['configurator']['@id']` does not resolve to any entity in this Sheet.",
+      "remediation": "Either correct the reference to match an existing `@id`, or add the referenced entity to the Sheet. Same-document references (fragments, bare tokens, or full URLs on this Sheet's own base) must resolve within the Sheet, by exact string match. A pricing block's `configurator.@id` must equal the `@id` declared on the Sheet's `pagefront:configurator`. A full-URL `@id` on another document's base in `isVariantOf` or a `hasVariant` entry is a legitimate cross-Sheet reference (multi-Sheet variant family) and is validated for URL shape only — see PDP-W-021 for the traversal-hint recommendation that accompanies it."
+    }
+  ],
+  "summary": {
+    "errors": 1,
+    "warnings": 0,
+    "info": 0,
+    "rules_fired": [
+      "PDP-E-001"
+    ]
+  }
+}

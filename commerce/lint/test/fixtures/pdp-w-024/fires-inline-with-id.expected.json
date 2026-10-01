@@ -1,0 +1,28 @@
+{
+  "sheet": "https://merchant.example/products/aurora-lamp",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.3.0",
+  "sheet_spec_version": "0.9.0",
+  "catalogue_version": "0.15.0",
+  "findings": [
+    {
+      "rule": "PDP-W-024",
+      "severity": "warning",
+      "path": "$['data']['pagefront:legalEntity'][0]",
+      "values": {
+        "role": "brand_owner"
+      },
+      "message": "`pagefront:legalEntity` entry with role `brand_owner` at `$['data']['pagefront:legalEntity'][0]` declares an organization without an `address`.",
+      "remediation": "Add the entity's postal address to the `organization`. If no address is available, the entry still identifies the organization but should not be relied on as a regulatory responsible-person declaration."
+    }
+  ],
+  "summary": {
+    "errors": 0,
+    "warnings": 1,
+    "info": 0,
+    "rules_fired": [
+      "PDP-W-024"
+    ]
+  }
+}

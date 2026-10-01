@@ -1,0 +1,30 @@
+{
+  "sheet": "https://merchant.example/products/aurora-lamp",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.3.0",
+  "sheet_spec_version": "0.9.0",
+  "catalogue_version": "0.15.0",
+  "findings": [
+    {
+      "rule": "PDP-W-010",
+      "severity": "warning",
+      "path": "$['data']['pagefront:configurator']['dimensions'][0]",
+      "values": {
+        "dimension": "model",
+        "configurator_path": "$['data']['pagefront:configurator']['dimensions'][0]",
+        "variant_path": "$['data']['hasVariant'][0]"
+      },
+      "message": "Dimension `model` is declared in both `pagefront:configurator` at `$['data']['pagefront:configurator']['dimensions'][0]` and as a variant property at `$['data']['hasVariant'][0]`.",
+      "remediation": "Choose one representation. Use the configurator for combinatorial spaces, made-to-order products, or continuous dimensions. Use `ProductGroup` + `hasVariant` for discrete SKU families that ship from inventory."
+    }
+  ],
+  "summary": {
+    "errors": 0,
+    "warnings": 1,
+    "info": 0,
+    "rules_fired": [
+      "PDP-W-010"
+    ]
+  }
+}

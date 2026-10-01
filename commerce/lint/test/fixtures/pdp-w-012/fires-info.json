@@ -1,0 +1,50 @@
+{
+  "$schema": "https://themachineweb.org/pagefront/spec/commerce/product/v0.9.0.json",
+  "release": "0.3.0",
+  "schema_org_version": "30.0",
+  "canonical_url": "https://merchant.example/products/aurora-lamp",
+  "sheet_url": "https://merchant.example/products/aurora-lamp.pagefront.json",
+  "generated_at": "2026-08-01T00:00:00Z",
+  "data": {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "@id": "#aurora-lamp",
+    "name": "Aurora Table Lamp",
+    "url": "https://merchant.example/products/aurora-lamp",
+    "inLanguage": "en",
+    "sku": "AUR-100",
+    "description": "A dimmable table lamp with a hand-blown glass shade and a solid oak base.",
+    "brand": {
+      "@type": "Brand",
+      "name": "Auroral"
+    },
+    "image": [
+      {
+        "@type": "ImageObject",
+        "url": "https://merchant.example/media/aurora-lamp-hero.jpg",
+        "additionalProperty": [
+          {
+            "@type": "PropertyValue",
+            "name": "role",
+            "value": "hero"
+          }
+        ]
+      }
+    ],
+    "video": [
+      {
+        "@type": "VideoObject",
+        "name": "Aurora lamp video",
+        "contentUrl": "https://merchant.example/media/aurora-lamp.mp4",
+        "thumbnailUrl": "https://merchant.example/media/aurora-lamp-thumb.jpg",
+        "additionalProperty": [
+          {
+            "@type": "PropertyValue",
+            "name": "role",
+            "value": "unboxing"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,45 @@
+---
+/**
+ * Every published specification document, rendered from the repository
+ * markdown. Routes come from SPEC_DOCS; a document not listed there is not
+ * published, however complete it may be in the repo.
+ */
+import { getCollection, render } from 'astro:content';
+import SpecDoc from '../../../layouts/SpecDoc.astro';
+import { SPEC_DOCS } from '../../../lib/spec-routes.mjs';
+import { schemaPath } from '../../../lib/releases.mjs';
+
+/**
+ * A document that has a JSON Schema gets a chip linking to it: the
+ * schema of the sheet-spec version the current release bundles, per
+ * commerce/spec/releases.json. The link is to a released, frozen schema,
+ * never to the editable head.
+ */
+const schemaLink = (sheetType: string | undefined): string | undefined =>
+  sheetType ? schemaPath(sheetType) : undefined;
+
+export async function getStaticPaths() {
+  const entries = await getCollection('spec');
+  return entries
+    .filter((entry) => SPEC_DOCS[entry.id])
+    .map((entry) => ({
+      params: { doc: SPEC_DOCS[entry.id].route },
+      props: { entry, meta: SPEC_DOCS[entry.id] },
+    }));
+}
+
+const { entry, meta } = Astro.props;
+const { Content, headings } = await render(entry);
+---
+
+<SpecDoc
+  title={meta.title}
+  blurb={meta.blurb}
+  status={meta.status}
+  statusLine={meta.statusLine}
+  schema={schemaLink(meta.schemaType)}
+  route={meta.route}
+  headings={headings}
+>
+  <Content />
+</SpecDoc>

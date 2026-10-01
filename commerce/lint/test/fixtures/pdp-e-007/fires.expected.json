@@ -1,0 +1,29 @@
+{
+  "sheet": "https://merchant.example/products/harbour-desk",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.3.0",
+  "sheet_spec_version": "0.9.0",
+  "catalogue_version": "0.15.0",
+  "findings": [
+    {
+      "rule": "PDP-E-007",
+      "severity": "error",
+      "path": "$['data']['offers'][0]['pagefront:configuratorPricing']['baseConfiguration']",
+      "values": {
+        "dimension": "frame",
+        "problem": "omits priced dimension `frame`"
+      },
+      "message": "Base configuration at `$['data']['offers'][0]['pagefront:configuratorPricing']['baseConfiguration']` omits priced dimension `frame`.",
+      "remediation": "Name exactly one option for every priced dimension, spelled as the configurator's `options` spell it. If a dimension never changes the price, declare `affectsPrice: false` on it and leave it out."
+    }
+  ],
+  "summary": {
+    "errors": 1,
+    "warnings": 0,
+    "info": 0,
+    "rules_fired": [
+      "PDP-E-007"
+    ]
+  }
+}

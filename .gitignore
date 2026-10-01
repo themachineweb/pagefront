@@ -1,0 +1,18 @@
+.DS_Store
+
+# Source-material binaries, not tracked
+*.har
+*.pdf
+screencapture-*
+*_standalone_.html
+
+# Astro site
+site/node_modules/
+site/dist/
+site/.astro/
+
+# Lint workspaces
+node_modules/
+core/lint/dist/
+commerce/lint/dist/
+commerce/lint/src/generated/

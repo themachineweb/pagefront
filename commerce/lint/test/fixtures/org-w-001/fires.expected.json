@@ -1,0 +1,26 @@
+{
+  "sheet": "https://merchant.example/pages/about",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.3.0",
+  "sheet_spec_version": "0.3.0",
+  "catalogue_version": "0.15.0",
+  "findings": [
+    {
+      "rule": "ORG-W-001",
+      "severity": "warning",
+      "path": "$['data']",
+      "values": {},
+      "message": "`pagefront:commerceRole` at `$['data']` declares `brand_owner`, but the sheet carries no `brand` node.",
+      "remediation": "Add the `Brand` node with `@id` and `name` — the `Brand.@id` is the identity Product Sheets resolve via `Product.brand`."
+    }
+  ],
+  "summary": {
+    "errors": 0,
+    "warnings": 1,
+    "info": 0,
+    "rules_fired": [
+      "ORG-W-001"
+    ]
+  }
+}

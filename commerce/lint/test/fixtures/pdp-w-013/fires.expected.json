@@ -1,0 +1,28 @@
+{
+  "sheet": "https://merchant.example/products/aurora-lamp",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.3.0",
+  "sheet_spec_version": "0.9.0",
+  "catalogue_version": "0.15.0",
+  "findings": [
+    {
+      "rule": "PDP-W-013",
+      "severity": "warning",
+      "path": "$['data']['offers'][0]['availability']",
+      "values": {
+        "value": "http://schema.org/InStock"
+      },
+      "message": "Legacy HTTP Schema.org URI `http://schema.org/InStock` at `$['data']['offers'][0]['availability']`.",
+      "remediation": "Change `http://schema.org/...` to `https://schema.org/...`. The value is otherwise unchanged."
+    }
+  ],
+  "summary": {
+    "errors": 0,
+    "warnings": 1,
+    "info": 0,
+    "rules_fired": [
+      "PDP-W-013"
+    ]
+  }
+}

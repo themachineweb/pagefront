@@ -1,0 +1,30 @@
+{
+  "sheet": "https://merchant.example/products/harbour-desk",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.3.0",
+  "sheet_spec_version": "0.9.0",
+  "catalogue_version": "0.15.0",
+  "findings": [
+    {
+      "rule": "PDP-E-009",
+      "severity": "error",
+      "path": "$['data']['offers'][0]['pagefront:configuratorPricing']['modifiers']['engraving']['monogram']",
+      "values": {
+        "dimension": "engraving",
+        "option": "monogram",
+        "problem": "names `monogram`, which is not an option of `engraving`"
+      },
+      "message": "Modifier at `$['data']['offers'][0]['pagefront:configuratorPricing']['modifiers']['engraving']['monogram']` names `monogram`, which is not an option of `engraving`.",
+      "remediation": "Spell dimension names and option values as the configurator spells them. Remove modifiers for dimensions that do not change the price, or remove `affectsPrice: false` from a dimension that does."
+    }
+  ],
+  "summary": {
+    "errors": 1,
+    "warnings": 0,
+    "info": 0,
+    "rules_fired": [
+      "PDP-E-009"
+    ]
+  }
+}

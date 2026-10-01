@@ -1,0 +1,48 @@
+{
+  "$schema": "https://themachineweb.org/pagefront/spec/commerce/organization/v0.3.0.json",
+  "release": "0.3.0",
+  "schema_org_version": "30.0",
+  "canonical_url": "https://www.zalando.de/friboo/",
+  "sheet_url": "https://www.zalando.de/pagefront/commerce/organization/friboo.de.json",
+  "generated_at": "2026-08-14T00:00:00Z",
+  "expires_at": "2026-09-14T00:00:00Z",
+  "data": {
+    "@context": [
+      "https://schema.org",
+      { "pagefront": "https://themachineweb.org/pagefront/vocabulary/" }
+    ],
+    "@type": "Organization",
+    "@id": "https://www.zalando.de/#org",
+    "name": "Zalando",
+    "legalName": "Zalando SE",
+    "inLanguage": "de",
+    "url": "https://www.zalando.de",
+    "pagefront:commerceRole": [
+      "brand_owner"
+    ],
+    "leiCode": "529900YRFFGH5AXU4S86",
+    "vatID": "DE260543043",
+    "identifier": {
+      "@type": "PropertyValue",
+      "propertyID": "Handelsregister",
+      "value": "HRB 158855 B, Amtsgericht Charlottenburg Berlin"
+    },
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Valeska-Gert-Straße 5",
+      "postalCode": "10243",
+      "addressLocality": "Berlin",
+      "addressCountry": "DE"
+    },
+    "sameAs": [
+      "https://www.wikidata.org/wiki/Q136570"
+    ],
+    "brand": {
+      "@type": "Brand",
+      "@id": "https://www.zalando.de/friboo/#brand",
+      "name": "Friboo",
+      "url": "https://www.zalando.de/friboo/",
+      "description": "Friboo by Zalando — Eigenmarke für Damen, Herren und Kinder: Casual-Basics, Schuhe und Kindermode, häufig mit Lizenz-Designs und Multipacks."
+    }
+  }
+}

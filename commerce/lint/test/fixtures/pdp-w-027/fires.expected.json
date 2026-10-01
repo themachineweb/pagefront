@@ -1,0 +1,28 @@
+{
+  "sheet": "https://merchant.example/products/aurora-lamp",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.3.0",
+  "sheet_spec_version": "0.9.0",
+  "catalogue_version": "0.15.0",
+  "findings": [
+    {
+      "rule": "PDP-W-027",
+      "severity": "warning",
+      "path": "$['data']['question'][0]['acceptedAnswer']",
+      "values": {
+        "name": "Is the shade replaceable?"
+      },
+      "message": "Question `Is the shade replaceable?` at `$['data']['question'][0]['acceptedAnswer']` has an `acceptedAnswer` with no text.",
+      "remediation": "Populate `acceptedAnswer.text` with the answer prose, or remove the `acceptedAnswer` (and consider whether an unanswered question belongs in the sheet at all)."
+    }
+  ],
+  "summary": {
+    "errors": 0,
+    "warnings": 1,
+    "info": 0,
+    "rules_fired": [
+      "PDP-W-027"
+    ]
+  }
+}

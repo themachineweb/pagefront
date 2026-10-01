@@ -1,0 +1,1494 @@
+{
+  "$schema": "https://themachineweb.org/pagefront/spec/commerce/organization/v0.3.0.json",
+  "release": "0.3.0",
+  "schema_org_version": "30.0",
+  "canonical_url": "https://afs-foiling.com/",
+  "sheet_url": "https://afs-foiling.com/pagefront/commerce/organization/afs.en.json",
+  "generated_at": "2026-09-04T13:30:00Z",
+  "expires_at": "2026-09-11T13:30:00Z",
+  "data": {
+    "@context": [
+      "https://schema.org",
+      {
+        "pagefront": "https://themachineweb.org/pagefront/vocabulary/"
+      }
+    ],
+    "@type": "Organization",
+    "@id": "https://foilandco.fr/#org",
+    "name": "Foil And Co.",
+    "legalName": "FOIL AND CO SAS",
+    "inLanguage": "en",
+    "url": "https://afs-foiling.com",
+    "pagefront:commerceRole": [
+      "brand_owner",
+      "manufacturer",
+      "seller"
+    ],
+    "iso6523Code": "0002:822822615",
+    "identifier": {
+      "@type": "PropertyValue",
+      "propertyID": "RCS",
+      "value": "822 822 615 R.C.S. Brest"
+    },
+    "vatID": "FR23822822615",
+    "description": "AFS’s mission is to offer the best-performing foils, boards and wings, while guaranteeing first-rate accessibility and stability. To ensure that all riders can practice their sport in complete safety, whatever the conditions and whatever their riding style (freeride, carving, downwind, surf foil, etc.). These products are designed and manufactured in Brittany, France, by Foil And Co. French manufacturing using the most advanced techniques to offer you the best quality!",
+    "foundingDate": "2016-09",
+    "numberOfEmployees": {
+      "@type": "QuantitativeValue",
+      "value": 40
+    },
+    "telephone": "02 98 19 29 03",
+    "email": "contact@foilandco.com",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "ZAE Correquer",
+      "postalCode": "29800",
+      "addressLocality": "Pencran",
+      "addressCountry": "FR"
+    },
+    "sameAs": [
+      "https://foilandco.fr/"
+    ],
+    "pagefront:socialAccount": [
+      {
+        "@type": "pagefront:SocialAccount",
+        "platform": "instagram",
+        "url": "https://www.instagram.com/afsfoils/",
+        "handle": "afsfoils"
+      },
+      {
+        "@type": "pagefront:SocialAccount",
+        "platform": "facebook",
+        "url": "https://www.facebook.com/afsfoils/",
+        "handle": "afsfoils"
+      },
+      {
+        "@type": "pagefront:SocialAccount",
+        "platform": "youtube",
+        "url": "https://www.youtube.com/channel/UCv-LqvRBRFQWBSJSeIZK_5g"
+      }
+    ],
+    "brand": {
+      "@type": "Brand",
+      "@id": "https://afs-foiling.com/#brand",
+      "name": "AFS",
+      "slogan": "The foiling spirit since 2009"
+    },
+    "pagefront:authorizedResellers": {
+      "@type": "pagefront:AuthorizedResellers",
+      "reseller": [
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Clinique De La Planche",
+            "description": "Advanced dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "11 rue de la Dive",
+              "postalCode": "14000",
+              "addressLocality": "CAEN",
+              "addressCountry": "FR"
+            },
+            "telephone": "02 31 84 48 63"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Gliss Up",
+            "description": "Advanced dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "101 Rue François de Sourdis",
+              "postalCode": "33000",
+              "addressLocality": "Bordeaux",
+              "addressCountry": "FR"
+            },
+            "telephone": "33 5 56 93 22 96"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Direct Sailing",
+            "description": "Advanced dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "ZA de Pornichet Atlantique Chemin de la Monnerie",
+              "postalCode": "44380",
+              "addressLocality": "Pornichet",
+              "addressCountry": "FR"
+            },
+            "telephone": "02 40 15 35 35"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Surfone",
+            "description": "Advanced dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "15 Avenue Pierre Racine",
+              "postalCode": "11370",
+              "addressLocality": "Leucate",
+              "addressCountry": "FR"
+            },
+            "telephone": "33 4 68 40 92 11"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Gliss Attitude",
+            "description": "Advanced dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "17 Mnt Commandant de Robien",
+              "postalCode": "13011",
+              "addressLocality": "Marseille",
+              "addressCountry": "FR"
+            },
+            "telephone": "33 4 42 05 16 15"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Wet Feet Sports",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "1221 Kona St",
+              "addressLocality": "Honolulu",
+              "addressCountry": "US"
+            },
+            "telephone": "1 808-255-6255"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Sunset Sailboards",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "1543 48th Ave",
+              "addressLocality": "San Francisco",
+              "addressCountry": "US"
+            },
+            "telephone": "1 510-919-0913"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "The Foil Shop",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "1700 Pacific Coast Hwy, Seal Beach, CA 90740",
+              "addressLocality": "Seal Beach",
+              "addressCountry": "US"
+            },
+            "telephone": "1 562-685-1884"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Impact Surf Shop",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "67 Av. Général de Gaulle",
+              "postalCode": "69300",
+              "addressLocality": "Caluire-et-Cuire",
+              "addressCountry": "FR"
+            },
+            "telephone": "33 4 72 27 59 88"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Surfshop",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "240 Av. des Maurettes",
+              "postalCode": "06270",
+              "addressLocality": "Villeneuve-Loubet",
+              "addressCountry": "FR"
+            },
+            "telephone": "33 4 93 98 57 17"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Mareta Surf",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "CALLE 9 # 6 - 39 APTO 41, PUNTA ROCA, SALGAR",
+              "addressLocality": "PUERTO COLOMBIA",
+              "addressCountry": "CO"
+            },
+            "telephone": "573174300708"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "FX Sports Co.",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "L.G.Smith Boulevard 488",
+              "addressLocality": "Noord",
+              "addressCountry": "AW"
+            },
+            "telephone": "297-5922707"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Northwave Sails",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "400 Portway Ave UNIT 12, 97031 Hood River",
+              "addressLocality": "OR",
+              "addressCountry": "US"
+            },
+            "telephone": "15 413 866 156"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Houston Kiteboarding",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "524 9th Ave N",
+              "addressLocality": "Texas City",
+              "addressCountry": "US"
+            },
+            "telephone": "1 281-508-6485"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Quickwater Canada",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "305 -5930 No.6 Rd",
+              "addressLocality": "Richmond",
+              "addressCountry": "CA"
+            },
+            "telephone": "1 604-518-6933"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "SeaRide",
+            "description": "Advanced dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "470 Rue Graham Bell",
+              "postalCode": "29200",
+              "addressLocality": "Brest",
+              "addressCountry": "FR"
+            },
+            "telephone": "33 2 98 34 44 01"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "MM SAILING USA",
+            "description": "Distributor",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "17121 Cam Ct Ste. 1",
+              "addressLocality": "Fort Myers",
+              "addressCountry": "US"
+            },
+            "telephone": "13237123151"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Oss 56",
+            "description": "Advanced dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "2 rue de l'industrie",
+              "postalCode": "56100",
+              "addressLocality": "LORIENT",
+              "addressCountry": "FR"
+            },
+            "telephone": "06 51 30 56 73"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "HOTMER Rennes",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "ZA le Triangle Vert",
+              "postalCode": "35520",
+              "addressLocality": "LA MEZIERE",
+              "addressCountry": "FR"
+            },
+            "telephone": "02 99 36 07 36"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "HOTMER Dinard",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "7 Rue de la Ville Biais",
+              "postalCode": "35780",
+              "addressLocality": "La Richardais",
+              "addressCountry": "FR"
+            },
+            "telephone": "02 99 46 12 78"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Neway Nantes",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "17 place MAGELLAN",
+              "postalCode": "44800",
+              "addressLocality": "st herblain",
+              "addressCountry": "FR"
+            },
+            "telephone": "02 40 92 25 92"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Hotmer Lille",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "39 rue de la cimaise",
+              "postalCode": "59650",
+              "addressLocality": "VILLENEUVE D'ASCQ",
+              "addressCountry": "FR"
+            },
+            "telephone": "06 78 39 92 87"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Quai 34 CHAMPIGNY",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "26 rue de VERDUN",
+              "postalCode": "94500",
+              "addressLocality": "CHAMPIGNY SUR MARNE",
+              "addressCountry": "FR"
+            },
+            "telephone": "33 1 48 80 03 54"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Palmyr Wind",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "2 avenue du Limousin",
+              "postalCode": "17570",
+              "addressLocality": "LES MATHES",
+              "addressCountry": "FR"
+            },
+            "telephone": "33 5 46 23 61 61"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Sooruz Surfshop Bidart",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "991 Av. de Bayonne",
+              "postalCode": "64210",
+              "addressLocality": "Bidart",
+              "addressCountry": "FR"
+            },
+            "telephone": "33 5 46 34 71 46"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Source Palavas",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Résidence La Louisiane, Bd Frédéric Fabrèges",
+              "postalCode": "34250",
+              "addressLocality": "Palavas-les-Flots",
+              "addressCountry": "FR"
+            },
+            "telephone": "33 4 48 20 02 83"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Flysurf.com - Vente en ligne",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "1200 Av. des ventadouiro",
+              "postalCode": "13300",
+              "addressLocality": "Salon-de-Provence",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "FUNWAY Surf Shop",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "375 Av. Saint-Just",
+              "postalCode": "83130",
+              "addressLocality": "La Garde",
+              "addressCountry": "FR"
+            },
+            "telephone": "33 4 89 79 74 81"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Hotmer L'Almanarre",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "951 Rte de l'Almanarre",
+              "postalCode": "83400",
+              "addressLocality": "Hyères",
+              "addressCountry": "FR"
+            },
+            "telephone": "33 4 94 58 64 24"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Alpha Ship",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Le, 1 Quai Baptistin Pins",
+              "postalCode": "83980",
+              "addressLocality": "Le Lavandou",
+              "addressCountry": "FR"
+            },
+            "telephone": "33 6 10 24 47 69"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Freeride Attitude Puget sur Argens",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Zac, La Tuilière lot 2E",
+              "postalCode": "83480",
+              "addressLocality": "Puget-sur-Argens",
+              "addressCountry": "FR"
+            },
+            "telephone": "33 4 94 51 73 00"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "AGILIS d.o.o.",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Doslovče 15a",
+              "postalCode": "4274",
+              "addressLocality": "Žirovnica",
+              "addressCountry": "SI"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Display Sport",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Via dei Francescani, 1439100",
+              "postalCode": "39100",
+              "addressLocality": "Bolzano BZ",
+              "addressCountry": "IT"
+            },
+            "telephone": "390471973255"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "FreestyleWorld",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Anna-Seghers-Straße 16, 86830",
+              "addressLocality": "Schwabmünchen",
+              "addressCountry": "DE"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Inland.be",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Beekstraat 18",
+              "postalCode": "9800",
+              "addressLocality": "Deinze",
+              "addressCountry": "BE"
+            },
+            "telephone": "32 9 282 69 57"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Molo Vecchio marine supply srl",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Calata Molo Vecchio, 2",
+              "postalCode": "16128",
+              "addressLocality": "Genova GE",
+              "addressCountry": "IT"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Pure Magic Kitesurfing Ltd",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "370 Clontarf Rd, Clontarf East, Dublin",
+              "addressLocality": "D03 YK40",
+              "addressCountry": "IE"
+            },
+            "telephone": "35318054912"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Seasport Import As",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Munkedamsveien 20",
+              "postalCode": "0250",
+              "addressLocality": "Oslo",
+              "addressCountry": "NO"
+            },
+            "telephone": "47 90 72 17 60"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "SURFspot",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Åldermansvägen 6",
+              "addressLocality": "141 39 Huddinge",
+              "addressCountry": "SE"
+            },
+            "telephone": "46707102903"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Twind",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Kalliorinteenkuja 8",
+              "postalCode": "02770",
+              "addressLocality": "Espoo",
+              "addressCountry": "FI"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "windsport.dk",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Vesterhavsvej 320",
+              "postalCode": "6830",
+              "addressLocality": "Nørre Nebel",
+              "addressCountry": "DK"
+            },
+            "telephone": "45 21 42 87 97"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Ride Up – Importateur AFS España",
+            "description": "Advanced dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Carrer Nou 63-65, 1º",
+              "addressLocality": "6a E-17600 FIGUERES - ESPAÑA"
+            },
+            "telephone": "34 653 388 652"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Pinnell & Bax",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Pinnell & Bax Sailmakers, 1 Heathfield Way, Kings Heath",
+              "postalCode": "NN5 7QP",
+              "addressLocality": "Northampton",
+              "addressCountry": "GB"
+            },
+            "telephone": "441604592808"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "24-7 Boardsports",
+            "description": "Advanced dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Calshot Activities Centre Jack Maynard Road",
+              "postalCode": "SO45 1BR",
+              "addressLocality": "Southampton Hampshire"
+            },
+            "telephone": "2380894000"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "HySea",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "8711 Burnet Road, Suite G-80",
+              "addressLocality": "Austin",
+              "addressCountry": "US"
+            },
+            "telephone": "1(512) 919 2499"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Wing Foil Pro Center",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "1665 NE Darlich ave",
+              "addressLocality": "Jensen Beach",
+              "addressCountry": "US"
+            },
+            "telephone": "1(208) 509 7882"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Neway 38",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "32 Rue de Comboire",
+              "postalCode": "38130",
+              "addressLocality": "Échirolles",
+              "addressCountry": "FR"
+            },
+            "telephone": "33 4 76 09 72 12"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Desert Point : Surf Shop - Ecole de Surf",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "2 Rte de la côte d'Argent",
+              "postalCode": "40660",
+              "addressLocality": "Messanges",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Kiteworldshop.com",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Via Lega Lombarda, 10",
+              "postalCode": "24040",
+              "addressLocality": "Bonate Sopra BG",
+              "addressCountry": "IT"
+            },
+            "telephone": "390240030467"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Covewater Paddle Surf",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "726 Water St",
+              "addressLocality": "Santa Cruz",
+              "addressCountry": "US"
+            },
+            "telephone": "1 831-600-7230"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Sunset Sailboards LLC",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "1543 48th Ave",
+              "addressLocality": "San Francisco",
+              "addressCountry": "US"
+            },
+            "telephone": "1 (510) 919-0913"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Tech Concept",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Arce 555 12D",
+              "addressLocality": "Buenos Aires",
+              "addressCountry": "AR"
+            },
+            "telephone": "54 11 6448 007"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Foil and Co",
+            "description": "Advanced dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Espace Joseph Rolland",
+              "postalCode": "29800",
+              "addressLocality": "PENCRAN",
+              "addressCountry": "FR"
+            },
+            "telephone": "33 2 98 19 29 03"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Neway Nantes",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "17 Place Magellan",
+              "postalCode": "44800",
+              "addressLocality": "Saint-Herblain"
+            },
+            "telephone": "+33 2 40 92 25 92"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Murrays Sports",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "6389 Rose Ln STE B, Carpinteria",
+              "addressLocality": "Carpinteria",
+              "addressCountry": "US"
+            },
+            "telephone": "(805) 684-8393"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Hatteras Island Surf Shop",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "25410 North Carolina Hwy 12",
+              "addressLocality": "Waves",
+              "addressCountry": "US"
+            },
+            "telephone": "12529872296"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Octofoil",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Centre commercial de Bellevue Immeuble Corniche 3, Fort-de-France, Martinique, Martinique",
+              "addressLocality": "97200",
+              "addressCountry": "MQ"
+            },
+            "telephone": "596 696 93 28 20"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "MACkite Boardsports Center",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "16881 Hayes St Unit a",
+              "addressLocality": "Grand Haven",
+              "addressCountry": "US"
+            },
+            "telephone": "1 800.622.4655"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Wingwing Fuerteventura",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "postalCode": "35660",
+              "addressLocality": "Corralejo",
+              "addressRegion": "Fuerteventura"
+            },
+            "telephone": "34 689 85 81 19"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "The Ridery",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "8 avenue Paul Adam",
+              "postalCode": "75017",
+              "addressLocality": "Paris"
+            },
+            "telephone": "33 7 69 47 25 84"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "The Ridery",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "14 place Amiral Muselier",
+              "postalCode": "13008",
+              "addressLocality": "Marseille"
+            },
+            "telephone": "33 7 67 44 05 17"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Noremana",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "3 bis Rue des Métiers",
+              "postalCode": "50550",
+              "addressLocality": "Saint-Vaast-la-Hougue",
+              "addressCountry": "FR"
+            },
+            "telephone": "33782165005"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "SURFSHOP.FR",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "240 avenue des Maurettes 0",
+              "postalCode": "6270",
+              "addressLocality": "Villeneuve-loubet"
+            },
+            "telephone": "33493985717"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Edge Watersports",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Queens Drive",
+              "postalCode": "EX8 2GD",
+              "addressLocality": "Exmouth"
+            },
+            "telephone": "441 395 222 551"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Mor Watersports",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "20 Rhos Rd",
+              "addressLocality": "Rhôs-on-Sea"
+            },
+            "telephone": "441492588001"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Puravida Boardriders",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Unit 2, Herbert Terrace",
+              "addressLocality": "Cardiff"
+            },
+            "telephone": "442920711946"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Northern Watersports",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Coastal Dr",
+              "postalCode": "CH45 3PZ",
+              "addressLocality": "Wallasey"
+            },
+            "telephone": "441516620318"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "109 Watersports",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "109 Portland Rd",
+              "postalCode": "DT4 9BG",
+              "addressLocality": "Weymouth"
+            },
+            "telephone": "441305773109"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Hydrofoil Store",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Hydrofoil Store, 8A Francis St",
+              "postalCode": "SA1 4NH",
+              "addressLocality": "Swansea",
+              "addressCountry": "GB"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Andy Biggs Watersports",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "103 Bury Rd",
+              "postalCode": "PO12 3PR",
+              "addressLocality": "Gosport"
+            },
+            "telephone": "442392582614"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Bywill",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "1 Riverside",
+              "addressLocality": "Trevenen Helston"
+            },
+            "telephone": "447772464185"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Fluid Lines",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "13 Peartree Centre, Colchester, Essex",
+              "addressLocality": "CO3 0JN",
+              "addressCountry": "GB"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Sailrepair",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Northwinds, Marine Road",
+              "addressLocality": "Nairn",
+              "addressRegion": "Scotland",
+              "addressCountry": "GB"
+            },
+            "telephone": "447881581618"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Flow Watersports",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "3 Banks Road, BH13 7PW Sandbanks",
+              "addressLocality": "Poole",
+              "addressCountry": "GB"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "KITEFORCE",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "8400 Boul. St-Laurent",
+              "addressLocality": "Montréal",
+              "addressCountry": "CA"
+            },
+            "telephone": "1 514 691-3314"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Green Hat Kiteboarding",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "50 Main Street",
+              "addressLocality": "Waretown",
+              "addressCountry": "US"
+            },
+            "telephone": "1 732-284-3800"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Burton Outdoor Adventures",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "5962 Jim Crow Rd",
+              "postalCode": "30542",
+              "addressLocality": "Flowery Branch",
+              "addressRegion": "GA",
+              "addressCountry": "US"
+            },
+            "telephone": "1 678-828-8119"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Foil Surfing Häsler",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Gsteigstrasse 6",
+              "postalCode": "3812",
+              "addressLocality": "Wilderswil"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Valaysport",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Z.I Pré-Loup Route de la vallée 2",
+              "postalCode": "1868",
+              "addressLocality": "Collombey"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "MARNIEROU ELENI 1CO",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "ALEXANDREIAS 75",
+              "postalCode": "17235",
+              "addressLocality": "DAFNIE"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Techno surf",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Rte de Suisse 119",
+              "postalCode": "1290",
+              "addressLocality": "Versoix",
+              "addressCountry": "CH"
+            },
+            "telephone": "+41 22 791 01 77"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Sevensurf Shop",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Schwäbismattweg 4",
+              "postalCode": "3613",
+              "addressLocality": "Steffisburg",
+              "addressCountry": "CH"
+            },
+            "telephone": "+41 77 456 06 06"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Roze Marine",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "3 Quai Philippe JEANTOT",
+              "postalCode": "85100",
+              "addressLocality": "Les sables d'Olonne",
+              "addressCountry": "FR"
+            },
+            "telephone": "06 52 63 87 59"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Cyprus Wind",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Evagora Laniti 23, house E17",
+              "postalCode": "4607",
+              "addressLocality": "Pissouri",
+              "addressCountry": "CY"
+            },
+            "telephone": "35 799 604 129"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Vital / Wakestyle",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Oud-Loosdrechtsedijk 165D",
+              "postalCode": "1231",
+              "addressLocality": "Loosdrecht",
+              "addressCountry": "NL"
+            },
+            "telephone": "+31 6 23521549"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Ozone",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Stanley",
+              "addressCountry": "HK"
+            },
+            "telephone": "85252338845"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "SAMUI",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Phuket",
+              "addressCountry": "TH"
+            },
+            "telephone": "+66 6 205 97 575"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "U Ship evian",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "17 Quai Paul Léger",
+              "postalCode": "74500",
+              "addressLocality": "Evian",
+              "addressCountry": "FR"
+            },
+            "telephone": "04 50 70 73 43"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Instant Out doors",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "13 Av. de Chavoires",
+              "postalCode": "74940",
+              "addressLocality": "Annecy",
+              "addressCountry": "FR"
+            },
+            "telephone": "04 50 32 71 91"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Instant Out doors",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "13 Av. de Chavoires",
+              "postalCode": "74940",
+              "addressLocality": "Annecy",
+              "addressCountry": "FR"
+            },
+            "telephone": "04 50 32 71 91"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Proust Sailing",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "12 Rue de la Trinquette",
+              "postalCode": "17000",
+              "addressLocality": "La Rochelle"
+            },
+            "telephone": "05 46 44 13 66"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Foil Land",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "182 allée des Gemmeurs",
+              "postalCode": "40440",
+              "addressLocality": "ONDRES"
+            },
+            "telephone": "06 28 45 29 00"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "le marin surfshop ( Atom )",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Quai Jean Verandy",
+              "postalCode": "13500",
+              "addressLocality": "Martigues"
+            },
+            "telephone": "04 42 42 88 99"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Culture foil",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "8 Rue Emile Baudoux, 33680 Lacanau",
+              "postalCode": "33680",
+              "addressLocality": "Lacanau",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Culture foil",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "8 Rue Emile Baudoux, 33680 Lacanau",
+              "postalCode": "33680",
+              "addressLocality": "Lacanau",
+              "addressCountry": "FR"
+            }
+          }
+        }
+      ]
+    },
+    "hasMerchantReturnPolicy": {
+      "@type": "MerchantReturnPolicy",
+      "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+      "merchantReturnDays": 14,
+      "returnFees": "https://schema.org/ReturnShippingFees",
+      "returnMethod": "https://schema.org/ReturnByMail",
+      "description": "In accordance with legal provisions, within 14 days of receiving your product, you may exercise your right of withdrawal. You do not have to give reasons or pay any penalty. Except for return costs, which remain your responsibility, we will refund you the total sums paid no later than 14 days after your withdrawal. The product must be returned complete and in its original condition. In accordance with legal provisions, the right of withdrawal cannot be exercised for products made to order, according to the consumer's specific specifications ."
+    },
+    "pagefront:fulfillmentTerms": [
+      {
+        "@type": "OfferShippingDetails",
+        "name": "Worldwide delivery — shipping costs calculated in the basket",
+        "description": "We will deliver the products to the address indicated in the order form. The shipping costs for any deliverable order are calculated in your shopping basket. If you request delivery outside French territory, your order may be subject to possible taxes and customs duties when it arrives at its destination.",
+        "shippingDestination": [
+          {
+            "@type": "DefinedRegion",
+            "name": "Worldwide delivery"
+          }
+        ]
+      },
+      {
+        "@type": "OfferShippingDetails",
+        "name": "Click & Collect",
+        "description": "Click & Collect",
+        "shippingDestination": [
+          {
+            "@type": "DefinedRegion",
+            "addressCountry": "FR",
+            "name": "Pencran"
+          }
+        ]
+      }
+    ],
+    "paymentAccepted": [
+      "Visa",
+      "Mastercard",
+      "Carte bleue",
+      "Secure payments in 3 or 4 instalments"
+    ],
+    "location": [
+      {
+        "@type": "Place",
+        "name": "Foil and Co factory (Pencran)",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "ZAE Correquer",
+          "postalCode": "29800",
+          "addressLocality": "Pencran",
+          "addressCountry": "FR"
+        }
+      }
+    ]
+  }
+}

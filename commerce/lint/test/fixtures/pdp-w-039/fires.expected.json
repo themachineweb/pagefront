@@ -1,0 +1,28 @@
+{
+  "sheet": "https://merchant.example/products/harbour-desk",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.3.0",
+  "sheet_spec_version": "0.9.0",
+  "catalogue_version": "0.15.0",
+  "findings": [
+    {
+      "rule": "PDP-W-039",
+      "severity": "warning",
+      "path": "$['data']['pagefront:sizeRecommendation']",
+      "values": {
+        "system": "UK"
+      },
+      "message": "Size advice at `$['data']['pagefront:sizeRecommendation']` could not be stated in the Sheet's sizing system (`UK`); it is carried as prose only.",
+      "remediation": "If the merchant states the advice in the sizing dimension's system, add a `sizeAdjustment` in that system. If it does not, no action: do not convert between systems."
+    }
+  ],
+  "summary": {
+    "errors": 0,
+    "warnings": 1,
+    "info": 0,
+    "rules_fired": [
+      "PDP-W-039"
+    ]
+  }
+}

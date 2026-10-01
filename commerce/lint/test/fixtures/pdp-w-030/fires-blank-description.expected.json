@@ -1,0 +1,26 @@
+{
+  "sheet": "https://merchant.example/products/aurora-lamp",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.3.0",
+  "sheet_spec_version": "0.9.0",
+  "catalogue_version": "0.15.0",
+  "findings": [
+    {
+      "rule": "PDP-W-030",
+      "severity": "warning",
+      "path": "$['data']['offers'][0]['warranty']",
+      "values": {},
+      "message": "Warranty at `$['data']['offers'][0]['warranty']` states neither a duration nor a description.",
+      "remediation": "State the warranty as written in `description`, and add `durationOfWarranty` where a finite length is stated. A lifetime warranty carries `description` (and optionally `name`) with no `durationOfWarranty`."
+    }
+  ],
+  "summary": {
+    "errors": 0,
+    "warnings": 1,
+    "info": 0,
+    "rules_fired": [
+      "PDP-W-030"
+    ]
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "sheet": "https://merchant.example/products/harbour-desk",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.3.0",
+  "sheet_spec_version": "0.9.0",
+  "catalogue_version": "0.15.0",
+  "findings": [
+    {
+      "rule": "PDP-E-013",
+      "severity": "error",
+      "path": "$['data']['pagefront:configurator']['dimensions'][4]",
+      "values": {
+        "dimension": "engraving"
+      },
+      "message": "Dimension `engraving` at `$['data']['pagefront:configurator']['dimensions'][4]` declares `inputType: \"text\"` and enumerates options.",
+      "remediation": "Remove `options` from a free-text dimension, or remove `inputType: \"text\"` from a dimension the buyer picks a value in."
+    }
+  ],
+  "summary": {
+    "errors": 1,
+    "warnings": 0,
+    "info": 0,
+    "rules_fired": [
+      "PDP-E-013"
+    ]
+  }
+}

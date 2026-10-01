@@ -1,0 +1,26 @@
+{
+  "$comment": "The commerce release manifest: each release and the member versions it bundles. Consumed by the linter; the human-readable form is releases.md.",
+  "vertical": "commerce",
+  "schema_url_template": "https://themachineweb.org/pagefront/spec/commerce/{sheet}/v{version}.json",
+  "releases": [
+    {
+      "release": "0.3.0",
+      "date": "2026-10-01",
+      "vocabulary": "0.3.0",
+      "sheets": {
+        "product": "0.9.0",
+        "organization": "0.3.0"
+      }
+    }
+  ],
+  "legacy": {
+    "envelope_field": "format_version",
+    "format_versions": [
+      "0.9"
+    ],
+    "schemas": {
+      "product": "https://themachineweb.org/pagefront/spec/commerce/product/v0.9.json",
+      "organization": "https://themachineweb.org/pagefront/spec/commerce/organization/v0.9.json"
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "sheet": "https://merchant.example/products/aurora-lamp",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.3.0",
+  "sheet_spec_version": "0.9.0",
+  "catalogue_version": "0.15.0",
+  "findings": [
+    {
+      "rule": "PDP-W-028",
+      "severity": "warning",
+      "path": "$['data']['offers'][0]",
+      "values": {},
+      "message": "Offer at `$['data']['offers'][0]` states a price but not whether value-added tax is included.",
+      "remediation": "Add a `UnitPriceSpecification` entry mirroring `price` with `valueAddedTaxIncluded` set to `true` or `false`; on an Offer that already uses `priceSpecification`, set the flag on each entry."
+    }
+  ],
+  "summary": {
+    "errors": 0,
+    "warnings": 1,
+    "info": 0,
+    "rules_fired": [
+      "PDP-W-028"
+    ]
+  }
+}

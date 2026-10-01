@@ -1,0 +1,8 @@
+{
+  "name": "pagefront",
+  "private": true,
+  "workspaces": [
+    "core/lint",
+    "commerce/lint"
+  ]
+}

@@ -1,0 +1,341 @@
+{
+  "$id": "https://themachineweb.org/pagefront/commerce/registry/properties.json",
+  "name": "Pagefront Property Registry",
+  "description": "Machine-readable registry of propertyID values used in Pagefront Sheets (variant dimensions, pagefront:featureGroup entries, and additionalProperty conventions). The registry is a coordination artifact: producers SHOULD draw propertyID values from it so that independent publishers converge on the same identifiers, making sheets comparable across merchants. Consumers MUST treat propertyID values not present in this registry as opaque but usable identifiers, never as errors.",
+  "registry_version": "1.0.0-draft",
+  "updated": "2026-08-06",
+  "spec": "https://themachineweb.org/pagefront/commerce",
+  "policy": {
+    "stability": "Entries are never removed or renamed. Status transitions: proposed -> stable -> deprecated. Deprecated entries remain resolvable and valid.",
+    "registration": "New entries are proposed from observed real-merchant use (facet analysis, produced sheets) via the spec repository. Additive-only between registry versions.",
+    "units": "recommendedUnitCode is UN/CEFACT. When a concept has no UN/CEFACT code, recommendedUnitCode is null and unitLabel carries the conventional symbol. Producers SHOULD emit values in the recommended unit so raw values compare across sheets without conversion."
+  },
+  "entries": [
+    {
+      "id": "width",
+      "definition": "Width designation where not the Schema.org width dimension: shoe width (D, EE), strap width, etc.",
+      "valueType": "string",
+      "recommendedUnitCode": null,
+      "verticals": ["footwear", "accessories"],
+      "status": "stable"
+    },
+    {
+      "id": "capacity",
+      "definition": "Fluid or volumetric capacity (bag volume, bottle capacity, board volume).",
+      "valueType": "number",
+      "recommendedUnitCode": "LTR",
+      "verticals": ["bags", "kitchen", "watersports"],
+      "status": "stable"
+    },
+    {
+      "id": "finish",
+      "definition": "Surface finish (matte, polished, brushed).",
+      "valueType": "string",
+      "recommendedUnitCode": null,
+      "verticals": ["jewelry", "furniture", "hardware"],
+      "status": "stable"
+    },
+    {
+      "id": "memory",
+      "definition": "Installed RAM.",
+      "valueType": "number",
+      "recommendedUnitCode": "E34",
+      "unitLabel": "GB",
+      "verticals": ["computing"],
+      "status": "stable",
+      "aliases": ["ram", "ram_size"]
+    },
+    {
+      "id": "storage",
+      "definition": "Disk or flash storage capacity. Emit in gigabytes even for terabyte-class values so raw values compare without unit conversion.",
+      "valueType": "number",
+      "recommendedUnitCode": "E34",
+      "unitLabel": "GB",
+      "verticals": ["computing", "mobile"],
+      "status": "stable"
+    },
+    {
+      "id": "display_size",
+      "definition": "Diagonal display size.",
+      "valueType": "number",
+      "recommendedUnitCode": "INH",
+      "unitLabel": "in",
+      "verticals": ["computing", "mobile", "tv"],
+      "status": "stable"
+    },
+    {
+      "id": "power",
+      "definition": "Power rating.",
+      "valueType": "number",
+      "recommendedUnitCode": "WTT",
+      "unitLabel": "W",
+      "verticals": ["electronics", "appliances", "tools"],
+      "status": "stable"
+    },
+    {
+      "id": "voltage",
+      "definition": "Voltage rating.",
+      "valueType": "number",
+      "recommendedUnitCode": "VLT",
+      "unitLabel": "V",
+      "verticals": ["electronics", "appliances", "tools"],
+      "status": "stable"
+    },
+    {
+      "id": "cpu_manufacturer",
+      "definition": "CPU/SoC manufacturer (Intel, AMD, Apple, Qualcomm, MediaTek, ARM licensees).",
+      "valueType": "string",
+      "recommendedUnitCode": null,
+      "verticals": ["computing", "mobile"],
+      "status": "proposed"
+    },
+    {
+      "id": "cpu_model",
+      "definition": "CPU/SoC model designation as marketed.",
+      "valueType": "string",
+      "recommendedUnitCode": null,
+      "verticals": ["computing", "mobile"],
+      "status": "proposed"
+    },
+    {
+      "id": "cpu_clock_speed",
+      "definition": "Maximum (boost) CPU clock speed.",
+      "valueType": "number",
+      "recommendedUnitCode": "A86",
+      "unitLabel": "GHz",
+      "verticals": ["computing"],
+      "status": "proposed"
+    },
+    {
+      "id": "cpu_cores",
+      "definition": "Number of physical CPU cores.",
+      "valueType": "number",
+      "recommendedUnitCode": null,
+      "verticals": ["computing"],
+      "status": "proposed"
+    },
+    {
+      "id": "memory_type",
+      "definition": "RAM technology (DDR4, DDR5, LPDDR5X, ...).",
+      "valueType": "string",
+      "recommendedUnitCode": null,
+      "verticals": ["computing"],
+      "status": "proposed"
+    },
+    {
+      "id": "storage_type",
+      "definition": "Storage technology (SSD, HDD, eMMC, UFS, SSHD).",
+      "valueType": "string",
+      "recommendedUnitCode": null,
+      "verticals": ["computing", "mobile"],
+      "status": "proposed"
+    },
+    {
+      "id": "graphics_coprocessor",
+      "definition": "GPU designation, integrated or discrete, as marketed.",
+      "valueType": "string",
+      "recommendedUnitCode": null,
+      "verticals": ["computing"],
+      "status": "proposed"
+    },
+    {
+      "id": "display_resolution",
+      "definition": "Native display resolution as 'width x height' in pixels.",
+      "valueType": "string",
+      "recommendedUnitCode": null,
+      "verticals": ["computing", "mobile", "tv"],
+      "status": "proposed"
+    },
+    {
+      "id": "display_refresh_rate",
+      "definition": "Maximum display refresh rate.",
+      "valueType": "number",
+      "recommendedUnitCode": "HTZ",
+      "unitLabel": "Hz",
+      "verticals": ["computing", "mobile", "tv"],
+      "status": "proposed"
+    },
+    {
+      "id": "input_type",
+      "definition": "Input capability of the device (Touchscreen, Touch Pad, Touch Bar, Stylus). Repeatable: one entry per capability.",
+      "valueType": "string",
+      "recommendedUnitCode": null,
+      "repeatable": true,
+      "verticals": ["computing", "mobile"],
+      "status": "proposed"
+    },
+    {
+      "id": "webcam_resolution",
+      "definition": "Webcam sensor resolution in megapixels. No UN/CEFACT code exists for megapixel.",
+      "valueType": "number",
+      "recommendedUnitCode": null,
+      "unitLabel": "MP",
+      "verticals": ["computing"],
+      "status": "proposed"
+    },
+    {
+      "id": "wifi_generation",
+      "definition": "Wi-Fi generation by Wi-Fi Alliance naming (Wi-Fi 5, Wi-Fi 6, Wi-Fi 6E, Wi-Fi 7).",
+      "valueType": "string",
+      "recommendedUnitCode": null,
+      "verticals": ["computing", "mobile", "networking"],
+      "status": "proposed"
+    },
+    {
+      "id": "bluetooth_version",
+      "definition": "Bluetooth version (e.g. 'Bluetooth 5.3').",
+      "valueType": "string",
+      "recommendedUnitCode": null,
+      "verticals": ["computing", "mobile", "audio"],
+      "status": "proposed"
+    },
+    {
+      "id": "port",
+      "definition": "A physical port on the device. Repeatable: one entry per port type; an optional count rides in the entry's value ('2x USB4' is an anti-pattern — emit the port type as value and the count separately where expressible).",
+      "valueType": "string",
+      "recommendedUnitCode": null,
+      "repeatable": true,
+      "verticals": ["computing", "mobile", "tv", "audio"],
+      "status": "proposed"
+    },
+    {
+      "id": "battery_life",
+      "definition": "Battery runtime. Attach test methodology via Schema.org measurementTechnique on the same PropertyValue.",
+      "valueType": "number",
+      "recommendedUnitCode": "HUR",
+      "unitLabel": "h",
+      "verticals": ["computing", "mobile", "audio"],
+      "status": "proposed"
+    },
+    {
+      "id": "battery_capacity",
+      "definition": "Battery energy capacity.",
+      "valueType": "number",
+      "recommendedUnitCode": "WHR",
+      "unitLabel": "Wh",
+      "verticals": ["computing", "mobile", "tools"],
+      "status": "proposed"
+    },
+    {
+      "id": "operating_system",
+      "definition": "Operating system shipped, including edition (e.g. 'Windows 11 Home').",
+      "valueType": "string",
+      "recommendedUnitCode": null,
+      "verticals": ["computing", "mobile"],
+      "status": "proposed"
+    },
+    {
+      "id": "active_noise_cancellation",
+      "definition": "Whether the product has active noise cancellation.",
+      "valueType": "boolean",
+      "recommendedUnitCode": null,
+      "verticals": ["audio"],
+      "status": "proposed"
+    },
+    {
+      "id": "driver_size",
+      "definition": "Audio driver diameter.",
+      "valueType": "number",
+      "recommendedUnitCode": "MMT",
+      "unitLabel": "mm",
+      "verticals": ["audio"],
+      "status": "proposed"
+    },
+    {
+      "id": "intended_use",
+      "definition": "Publisher-declared intended use case (Working, Gaming, Traveling, Video Editing, ...). Repeatable: one entry per use case. Open value vocabulary; values stabilize per vertical through observed use.",
+      "valueType": "string",
+      "recommendedUnitCode": null,
+      "repeatable": true,
+      "verticals": ["cross-vertical"],
+      "status": "proposed"
+    },
+    {
+      "id": "benefit",
+      "definition": "Publisher-claimed benefit or addressed concern (Anti-Aging, Dark Spots, Anti-cernes, ...). Repeatable: one entry per benefit. Distinct from intended_use: a benefit is an outcome claim, an intended use is an activity.",
+      "valueType": "string",
+      "recommendedUnitCode": null,
+      "repeatable": true,
+      "verticals": ["cross-vertical"],
+      "status": "proposed"
+    },
+    {
+      "id": "skin_type",
+      "definition": "Skin types the product is suited to (all, dry, sensitive, mature, ...). Repeatable.",
+      "valueType": "string",
+      "recommendedUnitCode": null,
+      "repeatable": true,
+      "verticals": ["cosmetics"],
+      "status": "proposed"
+    },
+    {
+      "id": "spf",
+      "definition": "Sun protection factor, numeric.",
+      "valueType": "number",
+      "recommendedUnitCode": null,
+      "verticals": ["cosmetics"],
+      "status": "proposed"
+    },
+    {
+      "id": "period_after_opening",
+      "definition": "Cosmetics PAO in months (the open-jar symbol value).",
+      "valueType": "number",
+      "recommendedUnitCode": "MON",
+      "unitLabel": "months",
+      "verticals": ["cosmetics"],
+      "status": "proposed"
+    },
+    {
+      "id": "max_rider_weight",
+      "definition": "Maximum recommended rider/user weight for the size or product.",
+      "valueType": "number",
+      "recommendedUnitCode": "KGM",
+      "unitLabel": "kg",
+      "verticals": ["watersports", "sports", "mobility"],
+      "status": "proposed"
+    },
+    {
+      "id": "drive_type",
+      "definition": "Screw drive / tip type the tool or bit fits (Phillips, Pozidriv, Torx, Hex, Flat, Pentalobe, Tri-Wing, ...). Repeatable: one entry per drive type covered — a set typically covers many.",
+      "valueType": "string",
+      "recommendedUnitCode": null,
+      "repeatable": true,
+      "verticals": ["tools", "hardware"],
+      "status": "proposed"
+    },
+    {
+      "id": "special_feature",
+      "definition": "Publisher-declared tool feature flag (Magnetic Tip, Ergonomic, Soft Grip, Adjustable Torque, LED Light, Quick Release Chuck, Reversible, Impact Resistant, ...). Repeatable: one entry per feature. Open value vocabulary; prefer a dedicated registry ID where one exists (e.g. insulated).",
+      "valueType": "string",
+      "recommendedUnitCode": null,
+      "repeatable": true,
+      "verticals": ["tools", "hardware"],
+      "status": "proposed"
+    },
+    {
+      "id": "insulated",
+      "definition": "Whether the tool is electrically insulated for live working (e.g. VDE / IEC 60900 rated). Pair with the existing voltage entry for the insulation rating.",
+      "valueType": "boolean",
+      "recommendedUnitCode": null,
+      "verticals": ["tools"],
+      "status": "proposed"
+    },
+    {
+      "id": "magnetic_tip",
+      "definition": "Whether the tool has a magnetic tip.",
+      "valueType": "boolean",
+      "recommendedUnitCode": null,
+      "verticals": ["tools"],
+      "status": "proposed"
+    },
+    {
+      "id": "piece_count",
+      "definition": "Number of pieces in a set (screwdriver sets, bit sets, building sets).",
+      "valueType": "number",
+      "recommendedUnitCode": "H87",
+      "unitLabel": "pieces",
+      "verticals": ["tools", "toys", "hardware"],
+      "status": "proposed"
+    }
+  ]
+}

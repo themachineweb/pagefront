@@ -1,0 +1,94 @@
+{
+  "$schema": "https://themachineweb.org/pagefront/spec/commerce/product/v0.9.0.json",
+  "release": "0.3.0",
+  "schema_org_version": "30.0",
+  "canonical_url": "https://merchant.example/products/aurora-lamp",
+  "sheet_url": "https://merchant.example/products/aurora-lamp.pagefront.json",
+  "generated_at": "2026-08-01T00:00:00Z",
+  "data": {
+    "@context": [
+      "https://schema.org",
+      {
+        "pagefront": "https://themachineweb.org/pagefront/vocabulary/"
+      }
+    ],
+    "@type": "ProductGroup",
+    "@id": "#aurora-lamp",
+    "name": "Aurora Table Lamp",
+    "url": "https://merchant.example/products/aurora-lamp",
+    "inLanguage": "en",
+    "description": "A dimmable table lamp with a hand-blown glass shade and a solid oak base.",
+    "brand": {
+      "@type": "Brand",
+      "name": "Auroral"
+    },
+    "image": [
+      {
+        "@type": "ImageObject",
+        "url": "https://merchant.example/media/aurora-lamp-hero.jpg",
+        "additionalProperty": [
+          {
+            "@type": "PropertyValue",
+            "name": "role",
+            "value": "hero"
+          }
+        ]
+      }
+    ],
+    "productGroupID": "AUR-100",
+    "variesBy": [
+      "model"
+    ],
+    "hasVariant": [
+      {
+        "@type": "Product",
+        "@id": "#tall",
+        "name": "Aurora Table Lamp — Tall",
+        "sku": "AUR-100-TAL",
+        "url": "https://merchant.example/products/aurora-lamp-tall",
+        "additionalProperty": [
+          {
+            "@type": "PropertyValue",
+            "propertyID": "model",
+            "name": "Modèle",
+            "value": "Tall"
+          }
+        ]
+      },
+      {
+        "@type": "Product",
+        "@id": "#compact",
+        "name": "Aurora Table Lamp — Compact",
+        "sku": "AUR-100-CMP",
+        "url": "https://merchant.example/products/aurora-lamp-compact",
+        "additionalProperty": [
+          {
+            "@type": "PropertyValue",
+            "propertyID": "model",
+            "name": "Modèle",
+            "value": "Compact"
+          }
+        ]
+      }
+    ],
+    "pagefront:configurator": {
+      "@type": "pagefront:Configurator",
+      "dimensions": [
+        {
+          "name": "model",
+          "options": [
+            {
+              "value": "tall",
+              "description": "Tall"
+            },
+            {
+              "value": "compact",
+              "description": "Compact"
+            }
+          ],
+          "affectsPrice": false
+        }
+      ]
+    }
+  }
+}

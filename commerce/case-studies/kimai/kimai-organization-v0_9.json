@@ -1,0 +1,189 @@
+{
+  "$schema": "https://themachineweb.org/pagefront/spec/commerce/organization/v0.3.0.json",
+  "release": "0.3.0",
+  "schema_org_version": "30.0",
+  "canonical_url": "https://kimai.com/uk/about",
+  "sheet_url": "https://kimai.com/pagefront/commerce/organization/kimai.en-GB.json",
+  "generated_at": "2026-09-04T12:30:00Z",
+  "expires_at": "2026-09-11T12:30:00Z",
+  "data": {
+    "@context": [
+      "https://schema.org",
+      {
+        "pagefront": "https://themachineweb.org/pagefront/vocabulary/"
+      }
+    ],
+    "@type": "Organization",
+    "@id": "https://kimai.com/#org",
+    "name": "Kimaï",
+    "legalName": "Kimaï Ltd",
+    "inLanguage": "en-GB",
+    "url": "https://kimai.com",
+    "pagefront:commerceRole": [
+      "brand_owner",
+      "seller"
+    ],
+    "identifier": {
+      "@type": "PropertyValue",
+      "propertyID": "Companies House",
+      "value": "11545199"
+    },
+    "vatID": "GB305158722",
+    "description": "In 2019, we founded Kimai - a celebration of our heritage reimagined as a modern jewellery brand. Our vision was to create unique high-quality pieces with low impact and full traceability. The majority of our creations are made-to-order just for you, crafted in Antwerp - the diamond capital of the world- in collaboration with trusted goldsmiths, polishers, and setters.",
+    "foundingDate": "2019",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "24 Chiltern Street",
+      "addressLocality": "London",
+      "postalCode": "W1U 7QE",
+      "addressCountry": "GB"
+    },
+    "email": "info-uk@kimai.com",
+    "pagefront:socialAccount": [
+      {
+        "@type": "pagefront:SocialAccount",
+        "platform": "instagram",
+        "url": "https://www.instagram.com/kimai_jewelry",
+        "handle": "kimai_jewelry"
+      },
+      {
+        "@type": "pagefront:SocialAccount",
+        "platform": "facebook",
+        "url": "https://www.facebook.com/kimai.co",
+        "handle": "kimai.co"
+      }
+    ],
+    "brand": {
+      "@type": "Brand",
+      "@id": "https://kimai.com/#brand",
+      "name": "Kimaï"
+    },
+    "hasMerchantReturnPolicy": {
+      "@type": "MerchantReturnPolicy",
+      "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+      "merchantReturnDays": 14,
+      "returnFees": "https://schema.org/ReturnShippingFees",
+      "returnMethod": "https://schema.org/ReturnByMail",
+      "description": "If your item is eligible for return, you have 14 days from the day after you receive your package to send it back to us. Only non-personalised, non made-to-order jewellery can be returned. All rings (including engagement rings), engraved items and any pieces marked as made to order are final sale and cannot be returned or refunded. Our returns aren’t free as you’ll be charged the shipping fee for the delivery and return of your order."
+    },
+    "pagefront:fulfillmentTerms": [
+      {
+        "@type": "OfferShippingDetails",
+        "name": "United Kingdom — shipped from London, duties and taxes included, signature on delivery",
+        "description": "All UK orders are shipped from London. For orders being shipped to the UK, US, EU & UAE - all import duties and taxes have been included in the final price so you won’t have to pay for anything additional upon arrival. If the items are in stock they'll be shipped within 7 working days. For deliveries in the UK and Europe we can ship in 48h as long as the product is in stock. Yes, we ask for a signature to make sure your jewelry arrives safely.",
+        "shippingDestination": [
+          {
+            "@type": "DefinedRegion",
+            "addressCountry": "GB",
+            "name": "United Kingdom"
+          }
+        ],
+        "deliveryTime": {
+          "@type": "ShippingDeliveryTime",
+          "handlingTime": {
+            "@type": "QuantitativeValue",
+            "minValue": 0,
+            "maxValue": 7,
+            "unitCode": "DAY"
+          }
+        },
+        "pagefront:dutiesIncludedRegions": [
+          "GB"
+        ]
+      },
+      {
+        "@type": "OfferShippingDetails",
+        "name": "United States, European Union and United Arab Emirates — shipped from Antwerp by DHL Express, duties and taxes included, signature on delivery",
+        "description": "And all other orders are shipped from Antwerp, Belgium via DHL Express. Shipping costs vary from 19.99 to 49.99 depending on the country it’s being shipped to. For orders being shipped to the UK, US, EU & UAE - all import duties and taxes have been included in the final price so you won’t have to pay for anything additional upon arrival. If the items are in stock they'll be shipped within 7 working days. For the US and international deliveries it might take 3 to 4 working days.",
+        "shippingDestination": [
+          {
+            "@type": "DefinedRegion",
+            "addressCountry": "US",
+            "name": "United States"
+          },
+          {
+            "@type": "DefinedRegion",
+            "name": "European Union"
+          },
+          {
+            "@type": "DefinedRegion",
+            "addressCountry": "AE",
+            "name": "United Arab Emirates"
+          }
+        ],
+        "deliveryTime": {
+          "@type": "ShippingDeliveryTime",
+          "handlingTime": {
+            "@type": "QuantitativeValue",
+            "minValue": 0,
+            "maxValue": 7,
+            "unitCode": "DAY"
+          }
+        },
+        "pagefront:dutiesIncludedRegions": [
+          "US",
+          "EU",
+          "AE"
+        ]
+      },
+      {
+        "@type": "OfferShippingDetails",
+        "name": "Rest of the world (excluding Russia and China) — shipped from Antwerp by DHL Express, duties and taxes may be charged on delivery",
+        "description": "Kimaï ships worldwide (excluding Russia and China). And all other orders are shipped from Antwerp, Belgium via DHL Express. Shipping costs vary from 19.99 to 49.99 depending on the country it’s being shipped to. For the rest of the world, some taxes and duties might be charged by the delivery company on our jewelry pieces. If the items are in stock they'll be shipped within 7 working days.",
+        "shippingDestination": [
+          {
+            "@type": "DefinedRegion",
+            "name": "Rest of the world (excluding Russia and China)"
+          }
+        ],
+        "deliveryTime": {
+          "@type": "ShippingDeliveryTime",
+          "handlingTime": {
+            "@type": "QuantitativeValue",
+            "minValue": 0,
+            "maxValue": 7,
+            "unitCode": "DAY"
+          }
+        }
+      }
+    ],
+    "paymentAccepted": [
+      "PayPal",
+      "American Express",
+      "debit and credit cards",
+      "Bank transfers",
+      "Klarna Pay in 3",
+      "Alma"
+    ],
+    "location": [
+      {
+        "@type": "Place",
+        "name": "The Paris Store",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "75 rue des Saints-Pères",
+          "postalCode": "75006",
+          "addressLocality": "Paris",
+          "addressCountry": "FR"
+        },
+        "openingHours": "Tu-Sa 11:00-19:00",
+        "telephone": "+33623046861",
+        "email": "bonjour@kimai.com"
+      },
+      {
+        "@type": "Place",
+        "name": "The Marylebone Store",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "24 Chiltern Street",
+          "postalCode": "W1U 7QE",
+          "addressLocality": "London",
+          "addressCountry": "GB"
+        },
+        "openingHours": "Tu-Sa 10:00-18:00",
+        "telephone": "+447897789225",
+        "email": "chiltern.store@kimai.com"
+      }
+    ]
+  }
+}

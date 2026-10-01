@@ -1,0 +1,40 @@
+---
+/**
+ * Generic Pagefront section page: the Site shell with the Pagefront
+ * masthead, a wide main band, and the shared section footer. The
+ * landing (/pagefront) still composes these pieces itself; pages under
+ * the section (the spec index and documents) use this.
+ */
+import Site from './Site.astro';
+import SectionFoot from '../components/SectionFoot.astro';
+import { LINKS, pagefrontNav } from '../lib/links';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Site-absolute path of this page; the canonical URL derives from it. */
+  path: string;
+  current?: 'spec' | 'validator' | 'caseStudies';
+}
+
+const { title, description, path, current } = Astro.props;
+---
+
+<Site
+  title={title}
+  description={description}
+  canonical={`https://themachineweb.org${path}`}
+  ogType="article"
+  section="Pagefront"
+  sectionHref={LINKS.landing}
+  navLabel="Pagefront"
+  nav={pagefrontNav(current)}
+>
+
+<main class="section-page wide">
+  <slot />
+</main>
+
+<SectionFoot />
+
+</Site>

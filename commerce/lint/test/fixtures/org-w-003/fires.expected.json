@@ -1,0 +1,26 @@
+{
+  "sheet": "https://merchant.example/pages/about",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.3.0",
+  "sheet_spec_version": "0.3.0",
+  "catalogue_version": "0.15.0",
+  "findings": [
+    {
+      "rule": "ORG-W-003",
+      "severity": "warning",
+      "path": "$['data']",
+      "values": {},
+      "message": "A `brand` node is present at `$['data']`, but `pagefront:commerceRole` does not declare `brand_owner`.",
+      "remediation": "Declare `brand_owner` in `pagefront:commerceRole`, or remove the `brand` node if this sheet is not the brand's sheet."
+    }
+  ],
+  "summary": {
+    "errors": 0,
+    "warnings": 1,
+    "info": 0,
+    "rules_fired": [
+      "ORG-W-003"
+    ]
+  }
+}

@@ -1,0 +1,43 @@
+---
+/**
+ * /pagefront/contributing — the contributing guide, rendered from the
+ * repository's CONTRIBUTING.md, which remains the canonical source.
+ * Same treatment as /pagefront/governance: kicker and title, no GitHub
+ * button (the section footer's Repository link covers the source), the
+ * markdown's own H1 hidden by the doc-body styles.
+ */
+import { getCollection, render } from 'astro:content';
+import Section from '../../layouts/Section.astro';
+import { LINKS } from '../../lib/links';
+
+const entries = await getCollection('contributing');
+const entry = entries[0];
+const { Content, headings } = await render(entry);
+const toc = headings.filter((h) => h.depth === 2);
+---
+
+<Section
+  title="Contributing — Pagefront"
+  description="Two ways to contribute: publish Sheets, build producers and consumers, bring case studies; or improve the spec itself."
+  path="/pagefront/contributing"
+>
+  <header class="doc-head">
+    <p class="pf-kicker"><a href={LINKS.landing}>Pagefront</a></p>
+    <h1>Contributing</h1>
+  </header>
+
+  {toc.length > 0 && (
+    <nav class="doc-toc" aria-label="On this page">
+      <p class="doc-toc-title">On this page</p>
+      <ul>
+        {toc.map((h) => (
+          <li><a href={`#${h.slug}`}>{h.text}</a></li>
+        ))}
+      </ul>
+    </nav>
+  )}
+
+  <div class="doc-body">
+    <Content />
+  </div>
+</Section>

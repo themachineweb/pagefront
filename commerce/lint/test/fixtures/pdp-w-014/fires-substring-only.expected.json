@@ -1,0 +1,28 @@
+{
+  "sheet": "https://merchant.example/products/product-12345",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.3.0",
+  "sheet_spec_version": "0.9.0",
+  "catalogue_version": "0.15.0",
+  "findings": [
+    {
+      "rule": "PDP-W-014",
+      "severity": "warning",
+      "path": "$['data']",
+      "values": {
+        "count": "2"
+      },
+      "message": "ProductGroup at `$['data']` has `2` variants with no declared per-variant `url`s. If each variant is genuinely reachable at its own address — its own page or a variant-selecting parameter — declare it in the variant's `url` field; a fragment `@id` identifies the variant but does not promise it is addressable.",
+      "remediation": "For each variant entry in `hasVariant`, add a `url` field with the variant's addressable URL — its own page (case 3) or the shared page with its variant-selecting query parameter (case 2). If all variants share the exact same URL with no parameter-based differentiation (case 1), the per-variant `url` field can be omitted."
+    }
+  ],
+  "summary": {
+    "errors": 0,
+    "warnings": 1,
+    "info": 0,
+    "rules_fired": [
+      "PDP-W-014"
+    ]
+  }
+}

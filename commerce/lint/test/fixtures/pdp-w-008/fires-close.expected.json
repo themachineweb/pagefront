@@ -1,0 +1,29 @@
+{
+  "sheet": "https://merchant.example/products/aurora-lamp",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.3.0",
+  "sheet_spec_version": "0.9.0",
+  "catalogue_version": "0.15.0",
+  "findings": [
+    {
+      "rule": "PDP-W-008",
+      "severity": "warning",
+      "path": "$['expires_at']",
+      "values": {
+        "expires_at": "2026-06-01T00:00:30Z",
+        "reason": "trivially close to generated_at"
+      },
+      "message": "Sheet `expires_at` is `2026-06-01T00:00:30Z`, which is trivially close to generated_at.",
+      "remediation": "Set `expires_at` to a sensible window after `generated_at`. For static product catalogs, hours to days; for sheets with live pricing or inventory signals, minutes."
+    }
+  ],
+  "summary": {
+    "errors": 0,
+    "warnings": 1,
+    "info": 0,
+    "rules_fired": [
+      "PDP-W-008"
+    ]
+  }
+}

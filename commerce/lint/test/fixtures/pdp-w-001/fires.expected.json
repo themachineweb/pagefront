@@ -1,0 +1,28 @@
+{
+  "sheet": "https://merchant.example/products/aurora-lamp",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.3.0",
+  "sheet_spec_version": "0.9.0",
+  "catalogue_version": "0.15.0",
+  "findings": [
+    {
+      "rule": "PDP-W-001",
+      "severity": "warning",
+      "path": "$['data']",
+      "values": {
+        "field": "image"
+      },
+      "message": "No images declared at `$['data']`.",
+      "remediation": "Add at least one `ImageObject` to the `data.image` array. The primary image should typically declare role `hero` or `packshot`."
+    }
+  ],
+  "summary": {
+    "errors": 0,
+    "warnings": 1,
+    "info": 0,
+    "rules_fired": [
+      "PDP-W-001"
+    ]
+  }
+}

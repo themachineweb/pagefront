@@ -1,0 +1,108 @@
+---
+/**
+ * One published case study, rendered from the repository writeup. Routes
+ * come from CASE_STUDIES; a case not listed there is not published. Same
+ * doc chrome as the spec pages: kicker, title, "On this page", then the
+ * markdown (its own H1 hidden).
+ */
+import { getCollection, render } from 'astro:content';
+import Section from '../../../../layouts/Section.astro';
+import { CASE_STUDIES, CASE_STUDIES_BASE } from '../../../../lib/case-study-routes.mjs';
+import { LINKS } from '../../../../lib/links';
+
+// The sheets' sizes, from the same files the [cs]/[file] endpoint serves.
+const RAW = import.meta.glob('../../../../../../commerce/case-studies/*/*.json', {
+  query: '?raw',
+  import: 'default',
+  eager: true,
+}) as Record<string, string>;
+const bytes = (folder: string, file: string): number => {
+  const key = Object.keys(RAW).find((k) => k.endsWith(`/${folder}/${file}`));
+  if (!key) throw new Error(`case-study sheet not found in repository: ${folder}/${file}`);
+  return new TextEncoder().encode(RAW[key]).length;
+};
+const kb = (n: number) => `${(n / 1024).toFixed(1)} KB`;
+
+export async function getStaticPaths() {
+  const entries = await getCollection('caseStudies');
+  return entries
+    .filter((entry) => CASE_STUDIES[entry.id])
+    .map((entry) => ({
+      params: { cs: CASE_STUDIES[entry.id].route },
+      props: { entry, meta: CASE_STUDIES[entry.id] },
+    }));
+}
+
+const { entry, meta } = Astro.props;
+const { Content, headings } = await render(entry);
+const toc = headings.filter((h) => h.depth === 2);
+const base = `${CASE_STUDIES_BASE}/${meta.route}`;
+const sheets = meta.sheets.map((s) => ({
+  ...s,
+  href: `${base}/${s.file}`,
+  size: kb(bytes(meta.folder, s.file)),
+  validate: s.kind === 'product' ? `${LINKS.validator}?url=${encodeURIComponent(`https://themachineweb.org${base}/${s.file}`)}` : null,
+}));
+---
+
+<Section
+  title={`${meta.title} — Pagefront Case Study`}
+  description={meta.description}
+  path={`${CASE_STUDIES_BASE}/${meta.route}`}
+  current="caseStudies"
+>
+  <header class="doc-head">
+    <p class="pf-kicker"><a href={CASE_STUDIES_BASE}>Case study · {meta.sector}</a></p>
+    <h1>{meta.title}</h1>
+  </header>
+
+  <section class="cs-sheets" aria-label="The sheets">
+    <p class="doc-toc-title">The sheets</p>
+    <ul>
+      {sheets.map((s) => (
+        <li>
+          <a href={s.href}>{s.label}</a>
+          <span class="cs-size">{s.size}</span>
+          {s.validate && <a class="cs-validate" href={s.validate}>Validate</a>}
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  {toc.length > 0 && (
+    <nav class="doc-toc" aria-label="On this page">
+      <p class="doc-toc-title">On this page</p>
+      <ul>
+        {toc.map((h) => (
+          <li><a href={`#${h.slug}`}>{h.text}</a></li>
+        ))}
+      </ul>
+    </nav>
+  )}
+
+  <div class="doc-body">
+    <Content />
+  </div>
+</Section>
+
+<style is:global>
+  .cs-sheets{
+    margin-top: clamp(1.5rem,4vw,2.25rem);
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+  }
+  .cs-sheets ul{ margin:0; padding:0; list-style:none; }
+  .cs-sheets li{
+    display:flex; flex-wrap:wrap; align-items:baseline; gap:.6rem;
+    margin:.4rem 0; font-family:var(--sans); font-size:.92rem;
+  }
+  .cs-sheets li > a:first-child{ font-weight:600; }
+  .cs-size{ color:var(--ink-soft); font-size:.85rem; }
+  a.cs-validate{
+    font-size:.78rem; font-weight:600; letter-spacing:.04em;
+    padding:.1em .6em .15em; border:1px solid var(--rule); border-radius:999px;
+    color:var(--ink-soft); text-decoration:none;
+  }
+  a.cs-validate:hover{ color:var(--ink); border-color:var(--ink); text-decoration:none; }
+</style>

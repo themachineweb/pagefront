@@ -1,0 +1,42 @@
+---
+/**
+ * /pagefront/governance — the governance document, rendered from the
+ * repository's GOVERNANCE.md, which remains the canonical source. Same
+ * doc chrome as the spec pages (styles in /styles.css); the markdown's
+ * own H1 is hidden under the page header.
+ */
+import { getCollection, render } from 'astro:content';
+import Section from '../../layouts/Section.astro';
+import { LINKS } from '../../lib/links';
+
+const entries = await getCollection('governance');
+const entry = entries[0];
+const { Content, headings } = await render(entry);
+const toc = headings.filter((h) => h.depth === 2);
+---
+
+<Section
+  title="Governance — Pagefront"
+  description="How decisions are made about the Pagefront specification today, and how that process is expected to evolve."
+  path="/pagefront/governance"
+>
+  <header class="doc-head">
+    <p class="pf-kicker"><a href={LINKS.landing}>Pagefront</a></p>
+    <h1>Governance</h1>
+  </header>
+
+  {toc.length > 0 && (
+    <nav class="doc-toc" aria-label="On this page">
+      <p class="doc-toc-title">On this page</p>
+      <ul>
+        {toc.map((h) => (
+          <li><a href={`#${h.slug}`}>{h.text}</a></li>
+        ))}
+      </ul>
+    </nav>
+  )}
+
+  <div class="doc-body">
+    <Content />
+  </div>
+</Section>

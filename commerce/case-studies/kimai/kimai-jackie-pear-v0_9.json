@@ -1,0 +1,617 @@
+{
+  "$schema": "https://themachineweb.org/pagefront/spec/commerce/product/v0.9.0.json",
+  "release": "0.3.0",
+  "schema_org_version": "30.0",
+  "canonical_url": "https://kimai.com/uk/engagement-rings/jackie",
+  "sheet_url": "https://kimai.com/pagefront/commerce/product/jackie-pear.en-GB.json",
+  "generated_at": "2026-10-01T09:58:06Z",
+  "expires_at": "2026-10-08T09:58:06Z",
+  "data": {
+    "@context": [
+      "https://schema.org",
+      {
+        "pagefront": "https://themachineweb.org/pagefront/vocabulary/"
+      }
+    ],
+    "@type": "Product",
+    "@id": "https://kimai.com/uk/engagement-rings/jackie#product",
+    "url": "https://kimai.com/uk/engagement-rings/jackie",
+    "name": "Jackie Pear Ring",
+    "productID": "jackie-pear",
+    "inLanguage": "en-GB",
+    "brand": {
+      "@type": "Brand",
+      "@id": "https://kimai.com/#brand",
+      "name": "Kimaï",
+      "url": "https://kimai.com",
+      "pagefront:sheetUrl": "https://kimai.com/pagefront/commerce/organization/kimai.en-GB.json"
+    },
+    "description": "The Jackie Ring dares to be different. With its timeless Pear-shaped diamond set on a contemporary, curved 18k recycled gold band, Jackie brings something new to a classic engagement style. You can choose a plain band, or customize with a ¾ pave band that brings a dazzle of accent diamonds to join in the conversation.",
+    "category": "Engagement rings",
+    "material": "18k recycled gold",
+    "weight": {
+      "@type": "QuantitativeValue",
+      "value": 6.25,
+      "unitCode": "GRM",
+      "description": "Made with a total of 6.25g of 18k recycled gold"
+    },
+    "image": [
+      {
+        "@type": "ImageObject",
+        "url": "https://images.ctfassets.net/nsyfb5eoelrk/1iRHvSNLwO0HQtPBqql9ZU/9f64559050f79eff496d7a842fe30dd8/Jackie_Ring_Packshot.jpg",
+        "caption": "Jackie Engagement ring packshot - yellow gold",
+        "additionalProperty": [
+          {
+            "@type": "PropertyValue",
+            "name": "role",
+            "value": "hero"
+          },
+          {
+            "@type": "PropertyValue",
+            "name": "role",
+            "value": "packshot"
+          }
+        ]
+      },
+      {
+        "@type": "ImageObject",
+        "url": "https://images.ctfassets.net/nsyfb5eoelrk/3TDk8eCNwXXKL1sruBf9m/355c9596ad33f4da984a0ea7de01ec40/Jackie_Ring_Packshot_wit.jpg",
+        "caption": "Jackie Engagement ring packshot - white gold",
+        "additionalProperty": [
+          {
+            "@type": "PropertyValue",
+            "name": "role",
+            "value": "packshot"
+          }
+        ]
+      },
+      {
+        "@type": "ImageObject",
+        "url": "https://images.ctfassets.net/nsyfb5eoelrk/51DTEerRlrIm63zQPO9Zmt/3ea6486404907eadff02e7154725f640/Jackie_Ring_Packshot_rose.jpg",
+        "caption": "Jackie Engagement ring packshot - rose gold",
+        "additionalProperty": [
+          {
+            "@type": "PropertyValue",
+            "name": "role",
+            "value": "packshot"
+          }
+        ]
+      },
+      {
+        "@type": "ImageObject",
+        "url": "https://images.ctfassets.net/nsyfb5eoelrk/6HOXbKnTfw6xzDKGhSWTT3/bceba2ad9989fff4b63a00a35d366534/Jackie_Ring_Packshot_wit.jpg",
+        "caption": "Jackie Engagement ring packshot - platinum",
+        "additionalProperty": [
+          {
+            "@type": "PropertyValue",
+            "name": "role",
+            "value": "packshot"
+          }
+        ]
+      },
+      {
+        "@type": "ImageObject",
+        "url": "https://images.ctfassets.net/nsyfb5eoelrk/42ah8JsnAck8P88HfUqD7Z/c0cc23c1babaaffd493e80c77ea01e89/Tony___Jackie_thin.jpg",
+        "additionalProperty": [
+          {
+            "@type": "PropertyValue",
+            "name": "role",
+            "value": "lifestyle"
+          }
+        ]
+      },
+      {
+        "@type": "ImageObject",
+        "url": "https://images.ctfassets.net/nsyfb5eoelrk/2p55NtAcssuA9dwwXgc0JO/6cabb080da8a73381abbf948adc9c655/jackie_galactic2.jpg",
+        "caption": "jackie pear",
+        "additionalProperty": [
+          {
+            "@type": "PropertyValue",
+            "name": "role",
+            "value": "detail"
+          }
+        ]
+      }
+    ],
+    "video": [
+      {
+        "@type": "VideoObject",
+        "contentUrl": "https://videos.ctfassets.net/nsyfb5eoelrk/2DznsLcNHjF4pOSif9rIwx/d5ae1074ba77a90b32ea2c296797da7e/IMG_5688__2_.mp4",
+        "caption": "Jackie Pear Ring"
+      }
+    ],
+    "additionalProperty": [
+      {
+        "@type": "PropertyValue",
+        "name": "ring_band_width_mm",
+        "value": "3-4"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "pictured_ring_size_eu",
+        "value": "50"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "pictured_carat",
+        "value": "2"
+      }
+    ],
+    "hasCertification": [
+      {
+        "@type": "Certification",
+        "name": "IGI",
+        "issuedBy": {
+          "@type": "Organization",
+          "name": "International Gemological Institute"
+        },
+        "about": "Our lab diamonds are IGI certified or GIA upon request. We preselect our stones to offer you only the highest color (DEF) and clarity (VS+) available.",
+        "additionalProperty": [
+          {
+            "@type": "PropertyValue",
+            "name": "scope",
+            "value": "diamond"
+          },
+          {
+            "@type": "PropertyValue",
+            "name": "color_grade",
+            "value": "DEF"
+          },
+          {
+            "@type": "PropertyValue",
+            "name": "clarity_grade",
+            "value": "VS+"
+          }
+        ]
+      }
+    ],
+    "pagefront:materialComposition": [
+      {
+        "@type": "pagefront:Material",
+        "material": "gold",
+        "purity": "18k",
+        "purityPercentage": 75,
+        "provenance": "recycled",
+        "weightGrams": 6.25
+      }
+    ],
+    "pagefront:gemstone": {
+      "@type": "pagefront:Gemstone",
+      "type": "diamond",
+      "origin": "lab_grown",
+      "shape": "pear",
+      "colorGrade": "DEF",
+      "clarityGrade": "VS+",
+      "certifyingBody": "IGI"
+    },
+    "pagefront:configurator": {
+      "@type": "pagefront:Configurator",
+      "@id": "https://kimai.com/uk/engagement-rings/jackie#configurator",
+      "dimensions": [
+        {
+          "name": "diamond_carat",
+          "options": [
+            {
+              "value": "0.5",
+              "description": "0.5ct"
+            },
+            {
+              "value": "0.7",
+              "description": "0.7ct"
+            },
+            {
+              "value": "0.8",
+              "description": "0.8ct"
+            },
+            {
+              "value": "0.9",
+              "description": "0.9ct"
+            },
+            {
+              "value": "1",
+              "description": "1ct"
+            },
+            {
+              "value": "1.2",
+              "description": "1.2ct"
+            },
+            {
+              "value": "1.4",
+              "description": "1.4ct"
+            },
+            {
+              "value": "1.5",
+              "description": "1.5ct"
+            },
+            {
+              "value": "1.7",
+              "description": "1.7ct"
+            },
+            {
+              "value": "1.9",
+              "description": "1.9ct"
+            },
+            {
+              "value": "2",
+              "description": "2ct"
+            },
+            {
+              "value": "2.3",
+              "description": "2.3ct"
+            },
+            {
+              "value": "2.5",
+              "description": "2.5ct"
+            }
+          ],
+          "note": "Carat weight of the pear diamond, in carats (ct)."
+        },
+        {
+          "name": "band_style",
+          "options": [
+            {
+              "value": "plain",
+              "description": "Plain"
+            },
+            {
+              "value": "three_quarter_pave",
+              "description": "Pavé"
+            }
+          ]
+        },
+        {
+          "name": "band_metal",
+          "options": [
+            {
+              "value": "yellow_gold",
+              "description": "Yellow Gold",
+              "image": "https://images.ctfassets.net/nsyfb5eoelrk/1iRHvSNLwO0HQtPBqql9ZU/9f64559050f79eff496d7a842fe30dd8/Jackie_Ring_Packshot.jpg"
+            },
+            {
+              "value": "rose_gold",
+              "description": "Rose Gold",
+              "image": "https://images.ctfassets.net/nsyfb5eoelrk/51DTEerRlrIm63zQPO9Zmt/3ea6486404907eadff02e7154725f640/Jackie_Ring_Packshot_rose.jpg"
+            },
+            {
+              "value": "white_gold",
+              "description": "White Gold",
+              "image": "https://images.ctfassets.net/nsyfb5eoelrk/3TDk8eCNwXXKL1sruBf9m/355c9596ad33f4da984a0ea7de01ec40/Jackie_Ring_Packshot_wit.jpg"
+            },
+            {
+              "value": "platinum",
+              "description": "Platinum",
+              "image": "https://images.ctfassets.net/nsyfb5eoelrk/6HOXbKnTfw6xzDKGhSWTT3/bceba2ad9989fff4b63a00a35d366534/Jackie_Ring_Packshot_wit.jpg"
+            }
+          ]
+        },
+        {
+          "name": "ring_size",
+          "affectsPrice": false,
+          "system": "UK",
+          "options": [
+            {
+              "value": "H½",
+              "description": "H ½ UK"
+            },
+            {
+              "value": "I",
+              "description": "I UK"
+            },
+            {
+              "value": "I½",
+              "description": "I ½ UK"
+            },
+            {
+              "value": "J",
+              "description": "J UK"
+            },
+            {
+              "value": "J½",
+              "description": "J ½ UK"
+            },
+            {
+              "value": "K",
+              "description": "K UK"
+            },
+            {
+              "value": "K½",
+              "description": "K ½ UK"
+            },
+            {
+              "value": "L",
+              "description": "L UK"
+            },
+            {
+              "value": "L½",
+              "description": "L ½ UK"
+            },
+            {
+              "value": "M",
+              "description": "M UK"
+            },
+            {
+              "value": "M½",
+              "description": "M ½ UK"
+            },
+            {
+              "value": "N",
+              "description": "N UK"
+            },
+            {
+              "value": "N½",
+              "description": "N ½ UK"
+            },
+            {
+              "value": "O",
+              "description": "O UK"
+            },
+            {
+              "value": "O½",
+              "description": "O ½ UK"
+            },
+            {
+              "value": "P",
+              "description": "P UK"
+            },
+            {
+              "value": "P½",
+              "description": "P ½ UK"
+            },
+            {
+              "value": "Q",
+              "description": "Q UK"
+            },
+            {
+              "value": "Q½",
+              "description": "Q ½ UK"
+            },
+            {
+              "value": "R",
+              "description": "R UK"
+            },
+            {
+              "value": "R½",
+              "description": "R ½ UK"
+            }
+          ],
+          "note": "Kimaï recommends half a European size down from the usual size because of the wavy band. A free ring sizer can be ordered before confirming the size."
+        },
+        {
+          "name": "engraving",
+          "inputType": "text",
+          "maxLength": 20,
+          "affectsPrice": false,
+          "note": "Optional engraving, up to 20 characters, at no charge."
+        }
+      ]
+    },
+    "pagefront:sizeRecommendation": {
+      "@type": "pagefront:SizeRecommendation",
+      "description": "As the ring features a wavy band, we recommend selecting half a European size down from your usual ring size."
+    },
+    "pagefront:madeToOrderTerms": {
+      "@type": "pagefront:MadeToOrderTerms",
+      "productionLeadTime": {
+        "@type": "pagefront:Duration",
+        "minDays": 42,
+        "maxDays": 56,
+        "description": "As all our pieces are made to order for you, it takes approximately 6 to 8 weeks to be shipped."
+      },
+      "cancellationPolicy": "Once your order has been placed, it cannot be cancelled.",
+      "returnsExceptions": [
+        "faulty",
+        "not as described"
+      ],
+      "aftermarketServices": [
+        {
+          "@type": "pagefront:AftermarketService",
+          "service": "free_resizing",
+          "limit": "up to two sizes above or below your original size",
+          "description": "If your ring is not the correct size, we offer one complimentary resize of up to two sizes above or below your original size."
+        }
+      ]
+    },
+    "pagefront:availableLanguages": [
+      {
+        "lang": "en-GB",
+        "url": "https://kimai.com/pagefront/commerce/product/jackie-pear.en-GB.json"
+      },
+      {
+        "lang": "fr",
+        "url": "https://kimai.com/pagefront/commerce/product/jackie-pear.fr.json"
+      }
+    ],
+    "pagefront:relatedProduct": [
+      {
+        "@type": "pagefront:RelatedProduct",
+        "relationship": "recommended_with",
+        "@id": "https://kimai.com/uk/product/yellow-gold-large-tony-band/",
+        "name": "Large Tony Band",
+        "url": "https://kimai.com/uk/product/yellow-gold-large-tony-band/"
+      },
+      {
+        "@type": "pagefront:RelatedProduct",
+        "relationship": "recommended_with",
+        "@id": "https://kimai.com/uk/product/yellow-gold-tony-band/",
+        "name": "Tony Band",
+        "url": "https://kimai.com/uk/product/yellow-gold-tony-band/"
+      },
+      {
+        "@type": "pagefront:RelatedProduct",
+        "relationship": "recommended_with",
+        "@id": "https://kimai.com/uk/product/yellow-gold-galactic-band/",
+        "name": "Galactic Band",
+        "url": "https://kimai.com/uk/product/yellow-gold-galactic-band/"
+      },
+      {
+        "@type": "pagefront:RelatedProduct",
+        "relationship": "recommended_with",
+        "@id": "https://kimai.com/uk/product/yellow-gold-delia-brushed/",
+        "name": "Delia Brushed for Men",
+        "url": "https://kimai.com/uk/product/yellow-gold-delia-brushed/"
+      },
+      {
+        "@type": "pagefront:RelatedProduct",
+        "relationship": "recommended_with",
+        "@id": "https://kimai.com/uk/product/yellow-gold-lia-pave/",
+        "name": "Lia Pavé",
+        "url": "https://kimai.com/uk/product/yellow-gold-lia-pave/"
+      },
+      {
+        "@type": "pagefront:RelatedProduct",
+        "relationship": "recommended_with",
+        "@id": "https://kimai.com/uk/product/yellow-gold-lia-plain/",
+        "name": "Lia Plain",
+        "url": "https://kimai.com/uk/product/yellow-gold-lia-plain/"
+      },
+      {
+        "@type": "pagefront:RelatedProduct",
+        "relationship": "recommended_with",
+        "@id": "https://kimai.com/uk/product/yellow-gold-delia-plain/",
+        "name": "Delia Plain",
+        "url": "https://kimai.com/uk/product/yellow-gold-delia-plain/"
+      },
+      {
+        "@type": "pagefront:RelatedProduct",
+        "relationship": "recommended_with",
+        "@id": "https://kimai.com/uk/product/yellow-gold-delia-pave/",
+        "name": "Delia Pavé",
+        "url": "https://kimai.com/uk/product/yellow-gold-delia-pave/"
+      }
+    ],
+    "offers": [
+      {
+        "@type": "AggregateOffer",
+        "@id": "https://kimai.com/uk/engagement-rings/jackie#offer",
+        "priceCurrency": "GBP",
+        "lowPrice": 3140,
+        "highPrice": 11040,
+        "priceSpecification": {
+          "@type": "UnitPriceSpecification",
+          "valueAddedTaxIncluded": true
+        },
+        "availability": "https://schema.org/MadeToOrder",
+        "itemCondition": "https://schema.org/NewCondition",
+        "seller": {
+          "@type": "Organization",
+          "@id": "https://kimai.com/#org",
+          "name": "Kimaï",
+          "url": "https://kimai.com",
+          "pagefront:sheetUrl": "https://kimai.com/pagefront/commerce/organization/kimai.en-GB.json"
+        },
+        "areaServed": "GB",
+        "shippingDetails": {
+          "@type": "OfferShippingDetails",
+          "name": "Shipping is on us for engagement rings orders.",
+          "shippingRate": {
+            "@type": "MonetaryAmount",
+            "value": 0,
+            "currency": "GBP"
+          }
+        },
+        "warranty": {
+          "@type": "WarrantyPromise",
+          "name": "Lifetime Warranty",
+          "description": "If for any reason your ring is damaged due to manufacturing, we’ll repair or replace it, no questions asked."
+        },
+        "acceptedPaymentMethod": [
+          "PayPal",
+          "Amex",
+          "credit cards",
+          "bank transfer",
+          "Klarna",
+          "Alma"
+        ],
+        "pagefront:configuratorPricing": {
+          "@type": "pagefront:ConfiguratorPricing",
+          "configurator": {
+            "@id": "https://kimai.com/uk/engagement-rings/jackie#configurator"
+          },
+          "baseConfiguration": {
+            "diamond_carat": "0.5",
+            "band_style": "plain",
+            "band_metal": "yellow_gold"
+          },
+          "basePrice": 3140,
+          "modifiers": {
+            "diamond_carat": {
+              "0.5": 0,
+              "0.7": 220,
+              "0.8": 450,
+              "0.9": 760,
+              "1": 1230,
+              "1.2": 1860,
+              "1.4": 2500,
+              "1.5": 2880,
+              "1.7": 3660,
+              "1.9": 4450,
+              "2": 5000,
+              "2.3": 6100,
+              "2.5": 6870
+            },
+            "band_style": {
+              "plain": 0,
+              "three_quarter_pave": 830
+            },
+            "band_metal": {
+              "yellow_gold": 0,
+              "rose_gold": 0,
+              "white_gold": 0,
+              "platinum": 200
+            }
+          }
+        }
+      }
+    ],
+    "isVariantOf": {
+      "@type": "ProductGroup",
+      "@id": "https://kimai.com/uk/engagement-rings/jackie#group",
+      "productGroupID": "jackie",
+      "name": "Jackie",
+      "variesBy": [
+        "diamond_shape"
+      ],
+      "hasVariant": [
+        {
+          "@type": "Product",
+          "url": "https://kimai.com/uk/engagement-rings/jackie/",
+          "name": "Jackie Pear Ring",
+          "additionalProperty": [
+            {
+              "@type": "PropertyValue",
+              "propertyID": "diamond_shape",
+              "name": "diamond_shape",
+              "value": "pear"
+            }
+          ]
+        },
+        {
+          "@type": "Product",
+          "url": "https://kimai.com/uk/engagement-rings/jackie-oval/",
+          "name": "Jackie Oval Ring",
+          "additionalProperty": [
+            {
+              "@type": "PropertyValue",
+              "propertyID": "diamond_shape",
+              "name": "diamond_shape",
+              "value": "oval"
+            }
+          ]
+        },
+        {
+          "@type": "Product",
+          "url": "https://kimai.com/uk/engagement-rings/jackie-marquise-ring/",
+          "name": "Jackie Marquise Ring",
+          "additionalProperty": [
+            {
+              "@type": "PropertyValue",
+              "propertyID": "diamond_shape",
+              "name": "diamond_shape",
+              "value": "marquise"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

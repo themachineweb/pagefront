@@ -1,0 +1,28 @@
+{
+  "sheet": "https://merchant.example/products/aurora-lamp",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.3.0",
+  "sheet_spec_version": "0.9.0",
+  "catalogue_version": "0.15.0",
+  "findings": [
+    {
+      "rule": "PDP-W-019",
+      "severity": "warning",
+      "path": "$['data']['pagefront:relatedProduct'][0]",
+      "values": {
+        "name": "Aurora Replacement Shade"
+      },
+      "message": "`pagefront:relatedProduct` entry `Aurora Replacement Shade` at `$['data']['pagefront:relatedProduct'][0]` carries an identifier field that is present but empty or non-dereferenceable, so it has no usable structured identifier.",
+      "remediation": "Supply a real, dereferenceable identifier — a URL-shaped `@id`, or a non-empty `sku`, `gtin`, `gtin13`, or `mpn`. If no structured identifier is available for this reference, it does not meet `pagefront:relatedProduct`'s requirement: move it to Schema.org's native `isRelatedTo` (which carries no identifier requirement) and drop the `relationship` typing."
+    }
+  ],
+  "summary": {
+    "errors": 0,
+    "warnings": 1,
+    "info": 0,
+    "rules_fired": [
+      "PDP-W-019"
+    ]
+  }
+}

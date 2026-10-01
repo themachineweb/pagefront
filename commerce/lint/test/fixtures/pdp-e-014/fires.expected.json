@@ -1,0 +1,29 @@
+{
+  "sheet": "https://merchant.example/products/harbour-desk",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.3.0",
+  "sheet_spec_version": "0.9.0",
+  "catalogue_version": "0.15.0",
+  "findings": [
+    {
+      "rule": "PDP-E-014",
+      "severity": "error",
+      "path": "$['data']['pagefront:sizeRecommendation']['sizeAdjustment']",
+      "values": {
+        "sizeSystem": "WearableSizeSystemEU",
+        "dimensionSystem": "UK"
+      },
+      "message": "Size adjustment at `$['data']['pagefront:sizeRecommendation']['sizeAdjustment']` is in `WearableSizeSystemEU` but the Sheet's sizing dimension is in `UK`.",
+      "remediation": "State the adjustment in the sizing dimension's system if the merchant states it there. If the merchant's advice is in another system, remove `sizeAdjustment` and keep the merchant's wording in `description`."
+    }
+  ],
+  "summary": {
+    "errors": 1,
+    "warnings": 0,
+    "info": 0,
+    "rules_fired": [
+      "PDP-E-014"
+    ]
+  }
+}

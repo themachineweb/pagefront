@@ -1,0 +1,29 @@
+{
+  "sheet": "https://merchant.example/products/aurora-lamp",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.3.0",
+  "sheet_spec_version": "0.9.0",
+  "catalogue_version": "0.15.0",
+  "findings": [
+    {
+      "rule": "PDP-W-025",
+      "severity": "warning",
+      "path": "$['data']['pagefront:featureGroup'][0]['feature'][0]",
+      "values": {
+        "name": "Weight",
+        "value": "220 g"
+      },
+      "message": "Feature `Weight` at `$['data']['pagefront:featureGroup'][0]['feature'][0]` carries value `220 g`, which parses as a number plus a unit.",
+      "remediation": "Move the numeric part into `value`, express the unit as a `unitCode`, and if the merchant's display formatting matters, carry the original string in `pagefront:presentationValue`."
+    }
+  ],
+  "summary": {
+    "errors": 0,
+    "warnings": 1,
+    "info": 0,
+    "rules_fired": [
+      "PDP-W-025"
+    ]
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "sheet": "https://merchant.example/products/aurora-lamp",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.3.0",
+  "sheet_spec_version": "0.9.0",
+  "catalogue_version": "0.15.0",
+  "findings": [
+    {
+      "rule": "PDP-W-006",
+      "severity": "warning",
+      "path": "$['data']['hasCertification'][0]",
+      "values": {
+        "name": "OEKO-TEX Standard 100"
+      },
+      "message": "Certification `OEKO-TEX Standard 100` at `$['data']['hasCertification'][0]` has no scope declared.",
+      "remediation": "Add a `PropertyValue` to `additionalProperty` with name `scope` and a value drawn from the conventional vocabulary (`yarn`, `fabric`, `finished_product`, `diamond`, `gemstone`, etc.)."
+    }
+  ],
+  "summary": {
+    "errors": 0,
+    "warnings": 1,
+    "info": 0,
+    "rules_fired": [
+      "PDP-W-006"
+    ]
+  }
+}

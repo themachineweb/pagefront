@@ -1,0 +1,18 @@
+---
+/**
+ * The Pagefront section footer — project links left, contact right.
+ * Shared by the section landing and every page on the Section layout;
+ * styles live in /styles.css (.sectionfoot).
+ */
+import { LINKS } from '../lib/links';
+---
+
+<footer class="sectionfoot">
+  <div class="sectionfoot-inner">
+    <a href={LINKS.governance}>Governance</a>
+    <a href={LINKS.contributing}>Contributing</a>
+    <a href="https://creativecommons.org/licenses/by/4.0/" rel="license noopener">CC BY 4.0</a>
+    <a href={LINKS.repo} rel="noopener">Repository</a>
+    <a class="contact" href="mailto:contact@themachineweb.org">contact@themachineweb.org</a>
+  </div>
+</footer>

@@ -1,0 +1,35 @@
+# Workers static-assets header rules (developers.cloudflare.com/workers/static-assets/headers/).
+# The prompt is served as a markdown file; without a charset, browsers guess a
+# legacy encoding and mangle the em dashes and the euro sign.
+/pagefront/publish/assistant.md
+	Content-Type: text/markdown; charset=utf-8
+
+# The spec documents' markdown twins, and the model-facing index.
+/pagefront/spec/commerce/product.md
+	Content-Type: text/markdown; charset=utf-8
+/pagefront/spec/commerce/organization.md
+	Content-Type: text/markdown; charset=utf-8
+/pagefront/spec/commerce/vocabulary.md
+	Content-Type: text/markdown; charset=utf-8
+/pagefront/spec/commerce/rules.md
+	Content-Type: text/markdown; charset=utf-8
+/pagefront/spec/commerce/scoring.md
+	Content-Type: text/markdown; charset=utf-8
+/pagefront/spec/core/linter.md
+	Content-Type: text/markdown; charset=utf-8
+/llms.txt
+	Content-Type: text/plain; charset=utf-8
+
+# The published JSON Schemas (commerce/schemas/, frozen and append-only)
+# are machine-facing public documents: served as JSON Schema, with open
+# CORS so browser-based validators fetch them directly.
+/pagefront/spec/commerce/product/*
+	Content-Type: application/schema+json; charset=utf-8
+	Access-Control-Allow-Origin: *
+
+/pagefront/spec/commerce/organization/*
+	Content-Type: application/schema+json; charset=utf-8
+	Access-Control-Allow-Origin: *
+
+/pagefront/spec/commerce/releases.md
+	Content-Type: text/markdown; charset=utf-8

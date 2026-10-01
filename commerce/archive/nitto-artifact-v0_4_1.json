@@ -1,0 +1,360 @@
+{
+  "$schema": "https://themachineweb.org/pagefront/commerce/schemas/product/v0.4.1.json",
+  "format_version": "0.4.1",
+  "schema_org_version": "30.0",
+  "canonical_url": "https://www.nittoknitwear.com/products/vahe-manches-longues-indigo",
+  "artifact_url": "https://www.nittoknitwear.com/pagefront/products/vahe-manches-longues-indigo.json",
+  "generated_at": "2026-05-10T14:32:00Z",
+  "expires_at": "2026-05-10T15:32:00Z",
+  "data": {
+    "@context": [
+      "https://schema.org",
+      {
+        "pagefront": "https://themachineweb.org/pagefront/vocabulary/"
+      }
+    ],
+    "@type": "Product",
+    "@id": "https://www.nittoknitwear.com/products/vahe-manches-longues-indigo#product",
+    "url": "https://www.nittoknitwear.com/products/vahe-manches-longues-indigo",
+    "name": "Vahé manches longues - Indigo",
+    "productID": "vahe-manches-longues-indigo",
+    "inLanguage": "fr",
+    "brand": {
+      "@type": "Brand",
+      "name": "Nitto Knitwear",
+      "url": "https://www.nittoknitwear.com"
+    },
+    "manufacturer": {
+      "@type": "Organization",
+      "name": "Nitto Knitwear",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Clamart",
+        "addressCountry": "FR"
+      }
+    },
+    "description": "Le modèle Vahé est avant tout une pièce de style. Ni sweat, ni pull, ni t-shirt, il échappe volontairement aux catégories classiques. Tricoté en maille gaufrée sur machine circulaire en jauge 14, le Vahé tire ses caractéristiques d'un dos en deux pièces — couture américaine au centre — et d'une matière pleine, structurée, qui prend la pose avec le temps.",
+    "category": "Apparel > Knitwear > Sweaters",
+    "color": "Indigo",
+    "material": "100% combed cotton",
+    "weight": {
+      "@type": "QuantitativeValue",
+      "value": 650,
+      "unitCode": "GRM",
+      "description": "Weight in size L"
+    },
+    "countryOfOrigin": "FR",
+    "image": [
+      {
+        "@type": "ImageObject",
+        "url": "https://www.nittoknitwear.com/cdn/shop/files/nittoete2026-chris0608.jpg",
+        "caption": "Vahé manches longues Indigo, vue principale",
+        "additionalProperty": [
+          {
+            "@type": "PropertyValue",
+            "name": "role",
+            "value": "hero"
+          },
+          {
+            "@type": "PropertyValue",
+            "name": "role",
+            "value": "lifestyle"
+          }
+        ]
+      },
+      {
+        "@type": "ImageObject",
+        "url": "https://www.nittoknitwear.com/cdn/shop/files/nittoete2026-chris0616.jpg",
+        "additionalProperty": [
+          {
+            "@type": "PropertyValue",
+            "name": "role",
+            "value": "lifestyle"
+          }
+        ]
+      },
+      {
+        "@type": "ImageObject",
+        "url": "https://www.nittoknitwear.com/cdn/shop/files/Nittoete202611030.jpg",
+        "additionalProperty": [
+          {
+            "@type": "PropertyValue",
+            "name": "role",
+            "value": "detail"
+          }
+        ]
+      },
+      {
+        "@type": "ImageObject",
+        "url": "https://www.nittoknitwear.com/cdn/shop/files/SHP_VAHE_ML_INDIGO_FRONT-1.jpg",
+        "additionalProperty": [
+          {
+            "@type": "PropertyValue",
+            "name": "role",
+            "value": "packshot"
+          }
+        ]
+      },
+      {
+        "@type": "ImageObject",
+        "url": "https://cdn.shopify.com/s/files/1/0620/7661/6884/files/Vahe_ML.jpg",
+        "additionalProperty": [
+          {
+            "@type": "PropertyValue",
+            "name": "role",
+            "value": "size_chart"
+          }
+        ]
+      }
+    ],
+    "additionalProperty": [
+      {
+        "@type": "PropertyValue",
+        "name": "fit",
+        "value": "relaxed"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "season",
+        "value": "spring_summer_2026"
+      },
+      {
+        "@type": "PropertyValue",
+        "name": "size_system",
+        "value": "EU"
+      }
+    ],
+    "hasCertification": [
+      {
+        "@type": "Certification",
+        "name": "OEKO-TEX",
+        "issuedBy": {
+          "@type": "Organization",
+          "name": "OEKO-TEX Association"
+        },
+        "about": "Yarn tested against 300+ harmful substances at all production stages",
+        "additionalProperty": [
+          {
+            "@type": "PropertyValue",
+            "name": "scope",
+            "value": "yarn"
+          }
+        ]
+      }
+    ],
+    "pagefront:sizeChart": {
+      "@type": "pagefront:SizeChart",
+      "unitCode": "CMT",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL",
+        "XXL"
+      ],
+      "measurements": [
+        {
+          "@type": "pagefront:Measurement",
+          "name": "Length, shoulder point to hem",
+          "values": {
+            "S": 70,
+            "M": 72,
+            "L": 74,
+            "XL": 76,
+            "XXL": 78
+          }
+        },
+        {
+          "@type": "pagefront:Measurement",
+          "name": "Half chest",
+          "values": {
+            "S": 56,
+            "M": 58,
+            "L": 60,
+            "XL": 62,
+            "XXL": 64
+          }
+        },
+        {
+          "@type": "pagefront:Measurement",
+          "name": "Sleeve length, shoulder point",
+          "values": {
+            "S": 59,
+            "M": 60,
+            "L": 60,
+            "XL": 61,
+            "XXL": 61
+          }
+        }
+      ],
+      "modelReferences": [
+        {
+          "@type": "pagefront:ModelReference",
+          "name": "Malek",
+          "heightCm": 186,
+          "wearsSize": "L"
+        },
+        {
+          "@type": "pagefront:ModelReference",
+          "name": "Christ",
+          "heightCm": 190,
+          "wearsSize": "XL"
+        }
+      ]
+    },
+    "pagefront:construction": {
+      "@type": "pagefront:Construction",
+      "stitch": "waffle knit",
+      "gauge": 14,
+      "machine": "circular",
+      "constructionNotes": "Two-piece back with central seam (couture américaine)."
+    },
+    "pagefront:materialComposition": [
+      {
+        "@type": "pagefront:Material",
+        "material": "combed cotton",
+        "percentage": 100
+      }
+    ],
+    "pagefront:careInstructions": [
+      "Hand wash cold or machine wash at 20°C max on wool/delicate cycle",
+      "Maximum 800 rpm spin",
+      "Dry flat"
+    ],
+    "pagefront:manufacturingChain": [
+      {
+        "@type": "pagefront:ManufacturingStage",
+        "stage": "yarn_spinning",
+        "country": "FR"
+      },
+      {
+        "@type": "pagefront:ManufacturingStage",
+        "stage": "knitting",
+        "country": "FR",
+        "facility": "Atelier in Troyes"
+      },
+      {
+        "@type": "pagefront:ManufacturingStage",
+        "stage": "assembly",
+        "country": "FR",
+        "facility": "Clamart workshop"
+      }
+    ],
+    "offers": [
+      {
+        "@type": "Offer",
+        "@id": "https://www.nittoknitwear.com/products/vahe-manches-longues-indigo#offer",
+        "price": "135.00",
+        "priceCurrency": "EUR",
+        "availability": "https://schema.org/LimitedAvailability",
+        "itemCondition": "https://schema.org/NewCondition",
+        "seller": {
+          "@type": "Organization",
+          "name": "Nitto Knitwear",
+          "url": "https://www.nittoknitwear.com"
+        },
+        "shippingDetails": [
+          {
+            "@type": "OfferShippingDetails",
+            "name": "Free shipping over €200",
+            "shippingRate": {
+              "@type": "MonetaryAmount",
+              "value": "0",
+              "currency": "EUR"
+            },
+            "shippingDestination": [
+              {
+                "@type": "DefinedRegion",
+                "addressCountry": "FR"
+              }
+            ],
+            "pagefront:appliesWhen": {
+              "@type": "pagefront:PricingCondition",
+              "minimumOrderValue": {
+                "@type": "MonetaryAmount",
+                "value": "200",
+                "currency": "EUR"
+              }
+            }
+          }
+        ],
+        "pagefront:estimatedDelivery": {
+          "@type": "pagefront:DeliveryEstimate",
+          "earliest": "2026-05-13",
+          "latest": "2026-05-15"
+        },
+        "hasMerchantReturnPolicy": {
+          "@type": "MerchantReturnPolicy",
+          "applicableCountry": "FR",
+          "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+          "merchantReturnDays": 14,
+          "returnFees": "https://schema.org/FreeReturn"
+        },
+        "eligibleRegion": [
+          {
+            "@type": "Country",
+            "name": "FR"
+          }
+        ],
+        "acceptedPaymentMethod": [
+          "Visa",
+          "Mastercard",
+          "Amex",
+          "PayPal",
+          "ApplePay",
+          "GooglePay"
+        ]
+      }
+    ],
+    "isVariantOf": {
+      "@type": "ProductGroup",
+      "@id": "https://www.nittoknitwear.com/products/vahe-manches-longues#group",
+      "productGroupID": "vahe-manches-longues",
+      "name": "Vahé manches longues",
+      "variesBy": [
+        "https://schema.org/color"
+      ],
+      "hasVariant": [
+        {
+          "@type": "Product",
+          "url": "https://www.nittoknitwear.com/products/vahe-manches-longues-naturel",
+          "color": "Naturel"
+        },
+        {
+          "@type": "Product",
+          "url": "https://www.nittoknitwear.com/products/vahe-manches-longues-kaki",
+          "color": "Kaki"
+        },
+        {
+          "@type": "Product",
+          "url": "https://www.nittoknitwear.com/products/vahe-manches-longues-indigo",
+          "color": "Indigo"
+        },
+        {
+          "@type": "Product",
+          "url": "https://www.nittoknitwear.com/products/vahe-manches-longues-noir",
+          "color": "Noir"
+        },
+        {
+          "@type": "Product",
+          "url": "https://www.nittoknitwear.com/products/vahe-manches-longues-vert",
+          "color": "Vert"
+        }
+      ]
+    },
+    "isRelatedTo": [
+      {
+        "@type": "Product",
+        "url": "https://www.nittoknitwear.com/products/vahe-manches-courtes-indigo",
+        "name": "Vahé manches courtes - Indigo",
+        "additionalProperty": [
+          {
+            "@type": "PropertyValue",
+            "name": "relationship",
+            "value": "short_sleeve_version"
+          }
+        ]
+      }
+    ]
+  }
+}

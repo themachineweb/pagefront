@@ -1,0 +1,42 @@
+{
+  "sheet": "https://merchant.example/pages/about",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.3.0",
+  "sheet_spec_version": "0.3.0",
+  "catalogue_version": "0.15.0",
+  "findings": [
+    {
+      "rule": "ORG-W-005",
+      "severity": "warning",
+      "path": "$['data']['iso6523Code']",
+      "values": {
+        "field": "iso6523Code",
+        "value": "808641435",
+        "form": "ISO 6523 shape (four-digit ICD, colon, register number)"
+      },
+      "message": "`iso6523Code` at `$['data']['iso6523Code']` carries `808641435`, which does not match the ISO 6523 shape (four-digit ICD, colon, register number).",
+      "remediation": "Correct the machine key: `iso6523Code` is `NNNN:register-number` (e.g. `0002:808641435` for a SIREN), `leiCode` is a 20-character ISO 17442 LEI. If no well-formed machine key exists for this register, drop the field and keep the display-form `identifier` — absence is conformant."
+    },
+    {
+      "rule": "ORG-W-005",
+      "severity": "warning",
+      "path": "$['data']['leiCode']",
+      "values": {
+        "field": "leiCode",
+        "value": "not-a-lei",
+        "form": "ISO 17442 shape (18 alphanumerics plus 2 check digits)"
+      },
+      "message": "`leiCode` at `$['data']['leiCode']` carries `not-a-lei`, which does not match the ISO 17442 shape (18 alphanumerics plus 2 check digits).",
+      "remediation": "Correct the machine key: `iso6523Code` is `NNNN:register-number` (e.g. `0002:808641435` for a SIREN), `leiCode` is a 20-character ISO 17442 LEI. If no well-formed machine key exists for this register, drop the field and keep the display-form `identifier` — absence is conformant."
+    }
+  ],
+  "summary": {
+    "errors": 0,
+    "warnings": 2,
+    "info": 0,
+    "rules_fired": [
+      "ORG-W-005"
+    ]
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "sheet": "https://merchant.example/products/harbour-desk",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.3.0",
+  "sheet_spec_version": "0.9.0",
+  "catalogue_version": "0.15.0",
+  "findings": [
+    {
+      "rule": "PDP-W-032",
+      "severity": "warning",
+      "path": "$['data']['offers'][0]['pagefront:configuratorPricing']",
+      "values": {
+        "dimension": "frame",
+        "option": "electric",
+        "problem": "states no modifier for option `electric` of `frame`"
+      },
+      "message": "Pricing block at `$['data']['offers'][0]['pagefront:configuratorPricing']` states no modifier for option `electric` of `frame`, and `pricing` is not `partial`.",
+      "remediation": "State the modifier, zero included; for a text dimension, state it under the key `\"*\"`. If the dimension never changes the price, declare `affectsPrice: false` on it. If the price is not known, declare `pricing: \"partial\"`."
+    }
+  ],
+  "summary": {
+    "errors": 0,
+    "warnings": 1,
+    "info": 0,
+    "rules_fired": [
+      "PDP-W-032"
+    ]
+  }
+}

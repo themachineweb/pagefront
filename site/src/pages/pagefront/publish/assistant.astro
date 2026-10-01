@@ -1,0 +1,94 @@
+---
+/**
+ * /pagefront/publish/assistant — the prompt a merchant hands to an AI
+ * assistant to draft a first product sheet from one product page. The
+ * prompt text lives in src/content/assistant-prompt.md and is also served
+ * verbatim at /pagefront/publish/assistant.md; this page wraps it with a
+ * short brief and a copy button.
+ */
+import Section from '../../../layouts/Section.astro';
+import { LINKS } from '../../../lib/links';
+import prompt from '../../../content/assistant-prompt.md?raw';
+
+const RAW_URL = `${LINKS.publish}/assistant.md`;
+import { CURRENT_RELEASE } from '../../../lib/releases.mjs';
+---
+
+<Section
+  title="Assistant prompt — Pagefront"
+  description="A prompt to hand an AI assistant to draft a first Pagefront product sheet from one product page: it asks for the URL, reads the spec and the page, writes the sheet, and never invents a value."
+  path={`${LINKS.publish}/assistant`}
+>
+  <header class="doc-head">
+    <p class="pf-kicker"><a href={LINKS.landing}>Pagefront</a> · <a href={LINKS.publish}>Publish</a></p>
+    <h1>The assistant prompt</h1>
+  </header>
+
+  <div class="doc-body">
+    <p>
+      Copy the prompt below into ChatGPT, Claude or whatever assistant you use
+      and send it as is. Its first reply asks which product page to work from;
+      answer with the page's URL. It will read the spec and the page, write
+      the sheet, validate it, and present it together with the link element
+      for the page head and a list of anything it had to leave out. The
+      assistant needs to be able to fetch web pages; one that cannot will say
+      so.
+    </p>
+    <p>
+      What comes back is a draft. The prompt forbids the assistant from
+      inventing any value, but it can still misread a page. Check the price,
+      the availability and the identifier yourself before you serve it, then
+      run it through the <a href={LINKS.validator}>validator</a>. The rest of
+      the procedure is on the <a href={LINKS.publish}>publishing page</a>.
+    </p>
+    <p class="pf-note">
+      Markdown version: <a href={RAW_URL}>{RAW_URL}</a>
+    </p>
+  </div>
+
+  <div class="prompt-box">
+    <div class="prompt-bar">
+      <span class="prompt-title">Prompt · Product sheet, release {CURRENT_RELEASE}</span>
+      <button type="button" class="prompt-copy" id="prompt-copy">Copy prompt</button>
+    </div>
+    <pre id="prompt-text">{prompt}</pre>
+  </div>
+</Section>
+
+<style is:global>
+  .prompt-box{
+    margin-top: clamp(1.5rem,4vw,2.25rem);
+    border:1px solid var(--rule);
+    border-radius:6px;
+    overflow:hidden;
+  }
+  .prompt-bar{
+    display:flex; align-items:center; justify-content:space-between; gap:1rem;
+    padding:.6rem .9rem;
+    border-bottom:1px solid var(--rule);
+    font-family:var(--sans); font-size:.85rem; color:var(--ink-soft);
+  }
+  .prompt-title{ font-weight:600; }
+  .prompt-copy{
+    font:inherit; font-weight:600; font-size:.8rem;
+    padding:.25rem .75rem; border:1px solid var(--rule); border-radius:999px;
+    background:transparent; color:var(--ink-soft); cursor:pointer;
+  }
+  .prompt-copy:hover{ color:var(--ink); border-color:var(--ink); }
+  .prompt-box pre{
+    margin:0; padding:1rem 1.1rem;
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:.78rem; line-height:1.55;
+    white-space:pre-wrap; overflow-wrap:anywhere;
+    background:#efe9db;
+  }
+</style>
+
+<script>
+  const button = document.getElementById('prompt-copy') as HTMLButtonElement;
+  const text = document.getElementById('prompt-text') as HTMLPreElement;
+  button.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(text.textContent ?? '');
+    button.textContent = 'Copied';
+    setTimeout(() => { button.textContent = 'Copy prompt'; }, 1500);
+  });
+</script>

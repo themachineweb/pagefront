@@ -1,0 +1,416 @@
+/* ---------------------------------------------------------------
+   Authoring, or being inferred. — stylesheet
+   Generic tag-based styling so any well-formed markdown renders
+   correctly without per-element classes.
+   --------------------------------------------------------------- */
+
+:root{
+  --paper:#f7f4ed;
+  --ink:#1a1814;
+  --ink-soft:#5a554c;
+  --rule:#d9d2c2;
+  --measure:42rem;            /* ~672px at 16px base */
+  --body: 'Charter','Iowan Old Style','Sitka Text','Source Serif Pro',
+          'Lora','Crimson Pro','Cambria','Georgia',serif;
+  --sans: -apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,
+          'Helvetica Neue',Arial,sans-serif;
+}
+
+*{ box-sizing:border-box; }
+
+html,body{
+  margin:0;
+  padding:0;
+  background:var(--paper);
+  color:var(--ink);
+}
+
+html{
+  -webkit-text-size-adjust:100%;
+  text-rendering:optimizeLegibility;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+body{
+  font-family:var(--body);
+  font-size:19px;
+  line-height:1.65;
+  font-feature-settings:"kern" 1,"liga" 1,"onum" 1;
+}
+
+::selection{
+  background:#e6dfcc;
+  color:var(--ink);
+}
+
+/* ---- layout ---------------------------------------------------- */
+
+.page{
+  max-width:var(--measure);
+  margin:0 auto;
+  padding: clamp(4rem, 10vw, 8rem) clamp(1.5rem, 5vw, 2.5rem) 5rem;
+}
+
+/* ---- article: heading -----------------------------------------*/
+
+article h1{
+  font-family:var(--sans);
+  font-weight:600;
+  font-size: clamp(1.9rem, 1.4rem + 1.8vw, 2.6rem);
+  line-height:1.15;
+  letter-spacing:-0.015em;
+  color:var(--ink);
+  margin: 0 0 clamp(3rem, 6vw, 4.5rem);
+}
+
+/* ---- article: prose -------------------------------------------*/
+
+article p{
+  margin: 0 0 1.35em;
+  text-wrap: pretty;
+  hyphens: auto;
+}
+
+article strong{
+  font-weight:600;
+  color:var(--ink);
+}
+
+article em{
+  font-style:italic;
+}
+
+article a{
+  color:inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+  text-decoration-color: var(--rule);
+}
+article a:hover{
+  text-decoration-color: var(--ink);
+}
+
+/* ---- blockquote -----------------------------------------------*/
+
+article blockquote{
+  margin: 2rem 0;
+  padding: 0 0 0 1.25rem;
+  border-left: 2px solid var(--rule);
+  color: var(--ink-soft);
+  font-style: italic;
+}
+article blockquote p:last-child{ margin-bottom: 0; }
+
+/* ---- section break (markdown `---` -> <hr>) -------------------*/
+
+article hr{
+  border:0;
+  margin: 2.6rem auto;
+  width: 4rem;
+  border-top: 1px solid var(--rule);
+}
+
+/* ---- signature -------------------------------------------------*/
+
+article p.signature,
+article .signature,
+article > p:last-child{
+  margin-top: clamp(3rem, 6vw, 4.5rem);
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--ink);
+}
+
+/* ---- contact line (outside the article) -----------------------*/
+
+footer.colophon{
+  margin-top: 2.2rem;
+  font-family:var(--sans);
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  color: var(--ink-soft);
+}
+footer.colophon a{
+  color:inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+/* ---- responsive type ------------------------------------------*/
+
+@media (max-width: 640px){
+  body{ font-size: 18px; line-height: 1.62; }
+  .page{ padding-left: 24px; padding-right: 24px; }
+}
+@media (max-width: 380px){
+  body{ font-size: 17.5px; }
+}
+
+/* ---- print -----------------------------------------------------*/
+
+@media print{
+  :root{ --paper:#fff; --ink:#000; --ink-soft:#333; --rule:#bbb; }
+  .page{ max-width: 36em; padding: 1in; }
+  body{ font-size: 11pt; line-height: 1.55; }
+  article a{ text-decoration: none; }
+}
+
+/* ---- wide page chrome ------------------------------------------
+   Shared by the masthead'd wide pages (/ and /pagefront): the 54rem
+   band, its prose and link defaults, the frame heading, and the
+   two-column doors. Page-specific spacing stays in each page. -----*/
+
+:root{ --wide-measure:54rem; }
+
+.wide{
+  max-width:var(--wide-measure);
+  margin:0 auto;
+  padding: clamp(3.5rem,8vw,6rem) clamp(1.5rem,5vw,2.5rem) clamp(4rem,9vw,7rem);
+}
+.wide p{
+  margin:0 0 1.35em;
+  text-wrap:pretty;
+  hyphens:auto;
+}
+.wide a{
+  color:inherit;
+  text-decoration:underline;
+  text-decoration-thickness:1px;
+  text-underline-offset:2px;
+  text-decoration-color:var(--rule);
+}
+.wide a:hover{ text-decoration-color:var(--ink); }
+
+.frame h1{
+  font-family:var(--sans);
+  font-weight:600;
+  font-size: clamp(1.9rem,1.4rem + 1.8vw,2.6rem);
+  line-height:1.15;
+  letter-spacing:-0.015em;
+  margin:0 0 clamp(1.5rem,3vw,2.25rem);
+}
+
+.doors{
+  display:grid;
+  /* minmax(0,1fr), not 1fr: a bare 1fr's minimum is the content, so an
+     unbreakable line (the discovery example's URL) would widen its
+     column instead of scrolling inside it. Zero the minimum and the
+     columns stay equal. */
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap: clamp(2rem,5vw,3.5rem);
+}
+/* Columns are never the same length; a flex column lets a page pin its
+   outbound link to the bottom (see .home .more) so the difference reads
+   as alignment rather than as one column having run short. */
+.door{
+  display:flex;
+  flex-direction:column;
+}
+.door h2{
+  font-family:var(--sans);
+  font-weight:600;
+  font-size:1rem;
+  letter-spacing:.07rem;
+  text-transform:uppercase;
+  color:var(--ink);
+  margin:0 0 1.1rem;
+}
+.door p{ font-size:.95em; }
+.door p:last-child{ margin-bottom:0; }
+
+@media (max-width: 760px){
+  .doors{ grid-template-columns:minmax(0,1fr); gap:0; }
+  .door + .door{
+    margin-top:2.5rem;
+    padding-top:2.5rem;
+    border-top:1px solid var(--rule);
+  }
+}
+
+/* ---- Pagefront section footer ----------------------------------
+   Shared by the landing and every Section-layout page. ------------*/
+
+.sectionfoot{ border-top:1px solid var(--rule); }
+.sectionfoot-inner{
+  max-width:var(--wide-measure);
+  margin:0 auto;
+  padding:1.5rem clamp(1.5rem,5vw,2.5rem) 3rem;
+  display:flex;
+  flex-wrap:wrap;
+  gap:.5rem 1.5rem;
+  font-family:var(--sans);
+  font-size:.8rem;
+}
+.sectionfoot a{
+  color:var(--ink-soft);
+  text-decoration:none;
+  overflow-wrap:anywhere;
+}
+.sectionfoot a:hover{ color:var(--ink); text-decoration:underline; text-underline-offset:2px; }
+/* The contact address sits apart from the project links, on the right
+   edge; when the row wraps on narrow screens it right-aligns within
+   its own line. */
+.sectionfoot .contact{ margin-left:auto; }
+
+/* ---- Pagefront doc chrome ---------------------------------------
+   The spec index and document pages: kicker, status pills, notes,
+   the on-this-page box, and rendered repository markdown. ---------*/
+
+.pf-kicker{
+  margin:0 0 .8rem;
+  font-family:var(--sans);
+  font-size:.72rem;
+  font-weight:600;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--ink-soft);
+}
+/* Kicker segments link to their parent pages. .wide a (0,1,1) sets the
+   underline; this (0,1,1) comes later and wins by order. */
+.pf-kicker a{ color:inherit; text-decoration:none; }
+.pf-kicker a:hover{ color:var(--ink); text-decoration:underline; text-decoration-thickness:1px; }
+.doc-head h1{
+  font-family:var(--sans);
+  font-weight:700;
+  font-size: clamp(2.1rem,1.5rem + 2.2vw,3rem);
+  line-height:1.1;
+  letter-spacing:-0.02em;
+  margin:0 0 1rem;
+}
+.pf-pill{
+  display:inline-block;
+  font-family:var(--sans);
+  font-size:.62rem;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  padding:.18em .7em .22em;
+  border:1px solid var(--ink);
+  border-radius:999px;
+  color:var(--ink);
+}
+.pf-pill-non-normative,
+.pf-pill-design{
+  border-style:dashed;
+  border-color:var(--ink-soft);
+  color:var(--ink-soft);
+}
+.pf-note{ font-family:var(--sans); font-size:.8rem; color:var(--ink-soft); }
+
+.doc-meta{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:.75rem;
+  margin:0 0 .9rem;
+}
+/* a.doc-schema, not .doc-schema: the global `.wide a` underline rule is
+   (0,1,1) and would out-specify a bare class — match it and win by order. */
+a.doc-schema{
+  display:inline-block;
+  font-family:var(--sans);
+  font-size:.68rem;
+  font-weight:600;
+  letter-spacing:.05em;
+  padding:.18em .7em .22em;
+  border:1px solid var(--rule);
+  border-radius:999px;
+  color:var(--ink-soft);
+  text-decoration:none;
+}
+a.doc-schema:hover{ color:var(--ink); border-color:var(--ink); text-decoration:none; }
+.doc-statusline{
+  font-family:var(--sans);
+  font-size:.85rem;
+  color:var(--ink-soft);
+  margin:0;
+}
+
+.doc-toc{
+  margin: clamp(1.8rem,4vw,2.5rem) 0 0;
+  padding:1.1rem 1.4rem 1.3rem;
+  border:1px solid var(--rule);
+  border-radius:10px;
+  background:#fbf9f2;
+}
+.doc-toc-title{
+  margin:0 0 .6rem;
+  font-family:var(--sans);
+  font-size:.7rem;
+  font-weight:700;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--ink-soft);
+}
+.doc-toc ul{ margin:0; padding:0; list-style:none; columns:2; column-gap:2.5rem; }
+.doc-toc li{ margin:.3rem 0; break-inside:avoid; font-family:var(--sans); font-size:.92rem; }
+.doc-toc a{ color:var(--ink-soft); text-decoration:none; }
+.doc-toc a:hover{ color:var(--ink); text-decoration:underline; text-underline-offset:2px; }
+@media (max-width:640px){ .doc-toc ul{ columns:1; } }
+
+/* rendered repository markdown */
+.doc-body{ margin-top: clamp(2rem,5vw,3rem); }
+.doc-body > h1:first-child{ display:none; } /* the markdown repeats the page title */
+.doc-body h2{
+  font-family:var(--sans);
+  font-weight:700;
+  font-size:1.35rem;
+  letter-spacing:-0.01em;
+  margin:2.6rem 0 1rem;
+  padding-top:1.6rem;
+  border-top:1px solid var(--rule);
+}
+.doc-body h3{ font-family:var(--sans); font-weight:600; font-size:1.05rem; margin:2rem 0 .7rem; }
+.doc-body h4{ font-family:var(--sans); font-weight:600; font-size:.95rem; margin:1.6rem 0 .5rem; }
+.doc-body ul,
+.doc-body ol{ padding-left:1.4rem; }
+.doc-body li{ margin:.35rem 0; }
+.doc-body li > ul,
+.doc-body li > ol{ margin:.35rem 0; }
+.doc-body :not(pre) > code{
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:.85em;
+  background:#efe9db;
+  padding:.1em .3em;
+  border-radius:4px;
+  overflow-wrap:anywhere;
+}
+.doc-body pre{
+  margin:1.4rem 0;
+  padding:1rem 1.2rem;
+  border:1px solid var(--rule);
+  border-radius:10px;
+  overflow-x:auto;
+  font-size:.8rem;
+  line-height:1.55;
+}
+.doc-body pre code{ background:none; padding:0; font-size:1em; }
+.doc-body table{
+  display:block;
+  width:max-content;
+  max-width:100%;
+  overflow-x:auto;
+  border-collapse:collapse;
+  margin:1.4rem 0;
+  font-family:var(--sans);
+  font-size:.85rem;
+  line-height:1.5;
+}
+.doc-body th,
+.doc-body td{
+  border-bottom:1px solid var(--rule);
+  padding:.45rem 1.1rem .45rem 0;
+  text-align:left;
+  vertical-align:top;
+}
+.doc-body th{ font-weight:600; border-bottom-color:var(--ink); }
+.doc-body blockquote{
+  margin:1.5rem 0;
+  padding:0 0 0 1.2rem;
+  border-left:2px solid var(--rule);
+  color:var(--ink-soft);
+}
+.doc-body hr{ border:0; border-top:1px solid var(--rule); margin:2.5rem 0; }

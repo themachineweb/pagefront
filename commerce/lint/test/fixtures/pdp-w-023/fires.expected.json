@@ -1,0 +1,28 @@
+{
+  "sheet": "https://merchant.example/products/aurora-lamp",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.3.0",
+  "sheet_spec_version": "0.9.0",
+  "catalogue_version": "0.15.0",
+  "findings": [
+    {
+      "rule": "PDP-W-023",
+      "severity": "warning",
+      "path": "$['data']['pagefront:safetyNotice'][0]",
+      "values": {
+        "offerPath": "$['data']['offers'][0]"
+      },
+      "message": "Recall safety notice at `$['data']['pagefront:safetyNotice'][0]` coexists with offer at `$['data']['offers'][0]` declaring `InStock`; the recall overrides commercial signals and the offer data likely needs updating.",
+      "remediation": "Update the offer's `availability` to reflect the corrective measure (typically `Discontinued` or `OutOfStock`). If the recall has been resolved and the product legitimately relisted, remove the stale `pagefront:safetyNotice` entry instead."
+    }
+  ],
+  "summary": {
+    "errors": 0,
+    "warnings": 1,
+    "info": 0,
+    "rules_fired": [
+      "PDP-W-023"
+    ]
+  }
+}

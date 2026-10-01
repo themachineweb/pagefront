@@ -1,0 +1,29 @@
+{
+  "sheet": "https://merchant.example/products/aurora-lamp",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.3.0",
+  "sheet_spec_version": "0.9.0",
+  "catalogue_version": "0.15.0",
+  "findings": [
+    {
+      "rule": "PDP-E-006",
+      "severity": "error",
+      "path": "$['data']['brand']['pagefront:sheetUrl']",
+      "values": {
+        "sheetUrlHost": "auroral.example",
+        "idHost": "(none)"
+      },
+      "message": "Brand sheet URL at `$['data']['brand']['pagefront:sheetUrl']` is on host `auroral.example`; the brand's `@id` is on `(none)`.",
+      "remediation": "Point `pagefront:sheetUrl` at the sheet the brand publishes on its own host, or remove it."
+    }
+  ],
+  "summary": {
+    "errors": 1,
+    "warnings": 0,
+    "info": 0,
+    "rules_fired": [
+      "PDP-E-006"
+    ]
+  }
+}

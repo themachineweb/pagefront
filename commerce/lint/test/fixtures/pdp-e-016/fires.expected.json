@@ -1,0 +1,26 @@
+{
+  "sheet": "https://merchant.example/products/aurora-lamp",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.3.0",
+  "sheet_spec_version": "0.9.0",
+  "catalogue_version": "0.15.0",
+  "findings": [
+    {
+      "rule": "PDP-E-016",
+      "severity": "error",
+      "path": "$",
+      "values": {},
+      "message": "Sheet carries both `format_version` and `release`; a sheet declares one.",
+      "remediation": "Keep `release` and remove `format_version`. A sheet on the legacy draft line keeps `format_version` alone and its legacy `$schema`."
+    }
+  ],
+  "summary": {
+    "errors": 1,
+    "warnings": 0,
+    "info": 0,
+    "rules_fired": [
+      "PDP-E-016"
+    ]
+  }
+}

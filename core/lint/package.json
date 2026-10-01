@@ -1,0 +1,43 @@
+{
+  "name": "@pagefront/lint-core",
+  "version": "0.2.0",
+  "description": "Vertical-agnostic Pagefront linter engine: rule runner, report emitter, renderers.",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/themachineweb/pagefront.git",
+    "directory": "core/lint"
+  },
+  "homepage": "https://github.com/themachineweb/pagefront/tree/main/core/lint#readme",
+  "bugs": "https://github.com/themachineweb/pagefront/issues",
+  "keywords": [
+    "pagefront",
+    "linter",
+    "schema.org",
+    "json-ld",
+    "structured-data"
+  ],
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "tsc && node --test test/*.test.mjs",
+    "prepublishOnly": "npm test"
+  },
+  "devDependencies": {
+    "@types/node": "^26.2.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "json-p3": "^2.2.2"
+  }
+}

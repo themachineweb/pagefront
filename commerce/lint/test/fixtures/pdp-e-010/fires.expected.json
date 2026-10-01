@@ -1,0 +1,29 @@
+{
+  "sheet": "https://merchant.example/products/harbour-desk",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.3.0",
+  "sheet_spec_version": "0.9.0",
+  "catalogue_version": "0.15.0",
+  "findings": [
+    {
+      "rule": "PDP-E-010",
+      "severity": "error",
+      "path": "$['data']['offers'][0]['price']",
+      "values": {
+        "price": "399",
+        "basePrice": "349"
+      },
+      "message": "Offer `price` at `$['data']['offers'][0]['price']` is `399` but its pricing block's `basePrice` is `349`.",
+      "remediation": "Make the two amounts equal. If `price` is the amount the page shows on load, set `baseConfiguration` to the configuration the page preselects and `basePrice` to its total."
+    }
+  ],
+  "summary": {
+    "errors": 1,
+    "warnings": 0,
+    "info": 0,
+    "rules_fired": [
+      "PDP-E-010"
+    ]
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "themachineweb",
+  "compatibility_date": "2025-04-01",
+  // Serve on the custom domain only; no *.workers.dev twin of the site.
+  "workers_dev": false,
+  // The Worker serves one route, the validator endpoint; every other
+  // request goes straight to the assets (see worker/index.ts).
+  "main": "./worker/index.ts",
+  // json-p3 (lint-core's JSONPath engine) publishes a `browser` field
+  // pointing at its IIFE bundle, which has no named exports; the
+  // bundler would pick it for the Worker. Pin the ESM build, as
+  // astro.config.mjs does for the browser page.
+  "alias": { "json-p3": "json-p3/dist/json-p3.esm.js" },
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "run_worker_first": ["/pagefront/commerce/product/validate.json"]
+  },
+  // Rate limits for the validator endpoint, per target host and in
+  // total. Provisional values, to be confirmed against real traffic;
+  // period must be 10 or 60 seconds.
+  "ratelimits": [
+    { "name": "VALIDATE_RATE_PER_HOST", "namespace_id": "1001", "simple": { "limit": 30, "period": 60 } },
+    { "name": "VALIDATE_RATE_TOTAL", "namespace_id": "1002", "simple": { "limit": 300, "period": 60 } }
+  ],
+  // Mirrors the dashboard's observability settings so a deploy from this
+  // config doesn't reset them: Workers Logs on (every request, persisted),
+  // traces off. Keys per wrangler's config schema.
+  "observability": {
+    "enabled": false,
+    "head_sampling_rate": 1,
+    "logs": {
+      "enabled": true,
+      "head_sampling_rate": 1,
+      "persist": true,
+      "invocation_logs": true
+    },
+    "traces": {
+      "enabled": false,
+      "persist": true,
+      "head_sampling_rate": 1
+    }
+  }
+}

@@ -1,0 +1,118 @@
+{
+  "$schema": "https://themachineweb.org/pagefront/spec/commerce/organization/v0.3.0.json",
+  "release": "0.3.0",
+  "schema_org_version": "30.0",
+  "canonical_url": "https://www.zalando.de",
+  "sheet_url": "https://www.zalando.de/pagefront/commerce/organization/zalando.de.json",
+  "generated_at": "2026-08-14T00:00:00Z",
+  "expires_at": "2026-09-14T00:00:00Z",
+  "data": {
+    "@context": [
+      "https://schema.org",
+      { "pagefront": "https://themachineweb.org/pagefront/vocabulary/" }
+    ],
+    "@type": "OnlineStore",
+    "@id": "https://www.zalando.de/#org",
+    "name": "Zalando",
+    "legalName": "Zalando SE",
+    "inLanguage": "de",
+    "url": "https://www.zalando.de",
+    "pagefront:commerceRole": [
+      "seller"
+    ],
+    "leiCode": "529900YRFFGH5AXU4S86",
+    "vatID": "DE260543043",
+    "identifier": {
+      "@type": "PropertyValue",
+      "propertyID": "Handelsregister",
+      "value": "HRB 158855 B, Amtsgericht Charlottenburg Berlin"
+    },
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Valeska-Gert-Straße 5",
+      "postalCode": "10243",
+      "addressLocality": "Berlin",
+      "addressCountry": "DE"
+    },
+    "email": "impressum@zalando.de",
+    "telephone": "+49 30 20 21 98 00",
+    "sameAs": [
+      "https://www.wikidata.org/wiki/Q136570",
+      "https://corporate.zalando.com"
+    ],
+    "pagefront:socialAccount": [
+      {
+        "@type": "pagefront:SocialAccount",
+        "platform": "instagram",
+        "url": "https://instagram.com/zalando/",
+        "handle": "zalando"
+      },
+      {
+        "@type": "pagefront:SocialAccount",
+        "platform": "facebook",
+        "url": "https://www.facebook.com/Zalando",
+        "handle": "Zalando"
+      },
+      {
+        "@type": "pagefront:SocialAccount",
+        "platform": "pinterest",
+        "url": "https://www.pinterest.com/zalando/",
+        "handle": "zalando"
+      },
+      {
+        "@type": "pagefront:SocialAccount",
+        "platform": "tiktok",
+        "url": "https://www.tiktok.com/@zalando",
+        "handle": "zalando"
+      }
+    ],
+    "hasMerchantReturnPolicy": {
+      "@type": "MerchantReturnPolicy",
+      "applicableCountry": "DE",
+      "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+      "merchantReturnDays": 30,
+      "returnFees": "https://schema.org/FreeReturn",
+      "returnMethod": "https://schema.org/ReturnByMail"
+    },
+    "pagefront:fulfillmentTerms": [
+      {
+        "@type": "OfferShippingDetails",
+        "name": "Gratis Standardversand ab 34,90 €",
+        "shippingRate": {
+          "@type": "MonetaryAmount",
+          "value": "0",
+          "currency": "EUR"
+        },
+        "shippingDestination": [
+          {
+            "@type": "DefinedRegion",
+            "addressCountry": "DE"
+          }
+        ],
+        "pagefront:appliesWhen": {
+          "@type": "pagefront:PricingCondition",
+          "minimumOrderValue": {
+            "@type": "MonetaryAmount",
+            "value": "34.90",
+            "currency": "EUR"
+          }
+        }
+      },
+      {
+        "@type": "OfferShippingDetails",
+        "name": "Standardversand",
+        "shippingRate": {
+          "@type": "MonetaryAmount",
+          "value": "4.90",
+          "currency": "EUR"
+        },
+        "shippingDestination": [
+          {
+            "@type": "DefinedRegion",
+            "addressCountry": "DE"
+          }
+        ]
+      }
+    ]
+  }
+}

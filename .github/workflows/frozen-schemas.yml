@@ -1,0 +1,29 @@
+# Guards the frozen schema store, commerce/schemas/: published JSON Schemas
+# are append-only. The check fails a pull request that modifies or deletes
+# a schema already on the base branch, or that leaves the store and
+# commerce/spec/releases.json disagreeing. Adding files is allowed: that is
+# how a release publishes a schema. See "Releasing" in CONTRIBUTING.md.
+#
+# No path filter: the job is meant to be a required status check, and a
+# required check that is skipped blocks the merge.
+name: Frozen schemas
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  frozen-schemas:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # The check diffs against the merge base with the base branch.
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Check that published schemas are untouched and referenced
+        run: node scripts/check-frozen-schemas.mjs "origin/${{ github.base_ref }}"

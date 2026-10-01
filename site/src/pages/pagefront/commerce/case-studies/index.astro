@@ -1,0 +1,99 @@
+---
+/**
+ * /pagefront/commerce/case-studies — the case-study index.
+ *
+ * Only cases that are both in CASE_STUDIES and present in the repository
+ * are listed, so a route is never advertised for a writeup that isn't there.
+ */
+import { getCollection } from 'astro:content';
+import Section from '../../../../layouts/Section.astro';
+import { CASE_STUDIES, CASE_STUDIES_BASE } from '../../../../lib/case-study-routes.mjs';
+import { LINKS } from '../../../../lib/links';
+
+const present = new Set((await getCollection('caseStudies')).map((e) => e.id));
+const cases = Object.entries(CASE_STUDIES)
+  .filter(([id]) => present.has(id))
+  .map(([, meta]) => meta);
+---
+
+<Section
+  title="Case studies — Pagefront"
+  description="Three real merchants, each modeled as Pagefront sheets: what their pages say today, what the sheets add, where the data came from, and what publishing would take."
+  path={CASE_STUDIES_BASE}
+  current="caseStudies"
+>
+  <header class="doc-head">
+    <p class="pf-kicker"><a href={LINKS.landing}>Pagefront · Commerce</a></p>
+    <h1>Case studies</h1>
+  </header>
+
+  <div class="spec-lede">
+    <p>
+      Each case takes one real product page and models it as Pagefront sheets:
+      a product sheet, and an organization sheet for the merchant that makes or
+      sells it. The writeups are for merchants deciding whether to publish, and
+      for implementers building the tools that would publish for them. They
+      lead with the question that matters: what an agent can answer from the
+      sheet that it cannot from the page.
+    </p>
+    <p>
+      Nothing in a sheet was written for it. Every value is quoted from the
+      merchant's pages or taken from its shop data, and each writeup says where
+      its values came from and what was the editor's reading rather than the
+      merchant's statement. The sheets themselves live in the repository and
+      validate against the public rule catalogue.
+    </p>
+  </div>
+
+  <section class="spec-group">
+    <dl class="spec-list">
+      {cases.map((c) => (
+        <>
+          <dt class:list={{ unlinked: c.unlinked }}>
+            {c.unlinked ? <span>{c.title}</span> : <a href={`${CASE_STUDIES_BASE}/${c.route}`}>{c.title}</a>}
+            <span class="pf-pill">{c.sector}</span>
+          </dt>
+          <dd class:list={{ unlinked: c.unlinked }}>{c.blurb}</dd>
+        </>
+      ))}
+    </dl>
+  </section>
+
+  <p class="pf-note spec-foot">
+    Each page renders the current writeup from the repository, which remains
+    the canonical source, and links to the folder that holds its sheets. To
+    bring a case of your own, see <a href={LINKS.contributing}>Contributing</a>.
+  </p>
+</Section>
+
+<style is:global>
+  .spec-group{ margin-top: clamp(2.5rem,6vw,3.5rem); }
+  .spec-list{ margin:1.25rem 0 0; }
+  .spec-list dt{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:.6rem;
+    margin-top:1.5rem;
+    font-family:var(--sans);
+    font-weight:600;
+    font-size:.98rem;
+  }
+  .spec-list dd{
+    margin:.35rem 0 0;
+    font-size:.95em;
+    color:var(--ink-soft);
+  }
+  /* A case kept on the index without a link: title, pill and blurb
+     greyed, faded rather than recoloured so the pill's border fades with
+     its text. */
+  .spec-list dt.unlinked,
+  .spec-list dd.unlinked{ color:var(--ink-soft); opacity:.55; }
+  /* Two classes: the global `.wide p` margin shorthand (0,1,1) would
+     otherwise zero this top margin and put the rule against the list. */
+  .section-page .spec-foot{
+    margin-top: clamp(2.5rem,6vw,3.5rem);
+    padding-top:1.25rem;
+    border-top:1px solid var(--rule);
+  }
+</style>

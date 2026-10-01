@@ -1,0 +1,26 @@
+{
+  "sheet": "https://merchant.example/products/harbour-desk",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.3.0",
+  "sheet_spec_version": "0.9.0",
+  "catalogue_version": "0.15.0",
+  "findings": [
+    {
+      "rule": "PDP-W-036",
+      "severity": "warning",
+      "path": "$['data']['pagefront:configurator']['dimensions'][3]['options'][0]",
+      "values": {},
+      "message": "Option value should be a stable identifier; put the label in description.",
+      "remediation": "Replace the value with a lowercase identifier without spaces (`yellow_gold`, `0.5`) and move the label to `description`. Put a unit in the dimension's `note`. Update the pricing block's keys, `baseConfiguration`, `when` and `exclusions` to the new value."
+    }
+  ],
+  "summary": {
+    "errors": 0,
+    "warnings": 1,
+    "info": 0,
+    "rules_fired": [
+      "PDP-W-036"
+    ]
+  }
+}

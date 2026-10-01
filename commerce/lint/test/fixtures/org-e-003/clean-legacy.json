@@ -1,0 +1,29 @@
+{
+  "$schema": "https://themachineweb.org/pagefront/spec/commerce/organization/v0.9.json",
+  "format_version": "0.9",
+  "schema_org_version": "30.0",
+  "canonical_url": "https://merchant.example/pages/about",
+  "sheet_url": "https://merchant.example/pagefront/commerce/organization/maison-example.fr.json",
+  "generated_at": "2026-08-01T00:00:00Z",
+  "data": {
+    "@context": [
+      "https://schema.org",
+      {
+        "pagefront": "https://themachineweb.org/pagefront/vocabulary/"
+      }
+    ],
+    "@type": "Organization",
+    "@id": "https://merchant.example/#org",
+    "name": "Maison Example",
+    "inLanguage": "fr",
+    "url": "https://merchant.example",
+    "pagefront:commerceRole": [
+      "brand_owner"
+    ],
+    "brand": {
+      "@type": "Brand",
+      "@id": "https://merchant.example/#brand",
+      "name": "Maison Example"
+    }
+  }
+}

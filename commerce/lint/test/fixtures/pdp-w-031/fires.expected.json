@@ -1,0 +1,26 @@
+{
+  "sheet": "https://merchant.example/products/aurora-lamp",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.3.0",
+  "sheet_spec_version": "0.9.0",
+  "catalogue_version": "0.15.0",
+  "findings": [
+    {
+      "rule": "PDP-W-031",
+      "severity": "warning",
+      "path": "$['data']['offers'][0]['seller']",
+      "values": {},
+      "message": "Seller at `$['data']['offers'][0]['seller']` has an `@id` but no `pagefront:sheetUrl`, and the Offer states no return or shipping terms of its own.",
+      "remediation": "Add `pagefront:sheetUrl` to the seller reference, or state the terms on the Offer."
+    }
+  ],
+  "summary": {
+    "errors": 0,
+    "warnings": 1,
+    "info": 0,
+    "rules_fired": [
+      "PDP-W-031"
+    ]
+  }
+}

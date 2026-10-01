@@ -1,0 +1,69 @@
+---
+/**
+ * One published specification document: kicker, title, status pill, a
+ * chip to the markdown twin and, for a document with a JSON Schema, a
+ * chip linking to it, then the
+ * status line, an "On this page" box over the
+ * top-level headings, then the rendered repository markdown. The
+ * markdown's own H1 repeats the title and is hidden by the doc-body
+ * styles in /styles.css.
+ */
+import Section from './Section.astro';
+import { SPEC_BASE } from '../lib/spec-routes.mjs';
+
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  title: string;
+  /** One-sentence summary; the page's meta description. */
+  blurb: string;
+  status: string;
+  /** Status notice shown under the pill (not the description). */
+  statusLine: string;
+  /** Served URL of the document's JSON Schema, when it has one. */
+  schema?: string;
+  route: string;
+  headings: Heading[];
+}
+
+const { title, blurb, status, statusLine, schema, route, headings } = Astro.props;
+const area = route.startsWith('commerce/') ? 'Commerce' : 'Core';
+const toc = headings.filter((h) => h.depth === 2);
+---
+
+<Section
+  title={`${title} — Pagefront Spec`}
+  description={blurb}
+  path={`${SPEC_BASE}/${route}`}
+  current="spec"
+>
+  <header class="doc-head">
+    <p class="pf-kicker"><a href={SPEC_BASE}>Spec · {area}</a></p>
+    <h1>{title}</h1>
+    <p class="doc-meta">
+      <span class:list={['pf-pill', `pf-pill-${status}`]}>{status}</span>
+      <a class="doc-schema" href={`${SPEC_BASE}/${route}.md`}>Markdown <span aria-hidden="true">→</span></a>
+      {schema && <a class="doc-schema" href={schema}>JSON Schema <span aria-hidden="true">→</span></a>}
+    </p>
+    <p class="doc-statusline">{statusLine}</p>
+  </header>
+
+  {toc.length > 0 && (
+    <nav class="doc-toc" aria-label="On this page">
+      <p class="doc-toc-title">On this page</p>
+      <ul>
+        {toc.map((h) => (
+          <li><a href={`#${h.slug}`}>{h.text}</a></li>
+        ))}
+      </ul>
+    </nav>
+  )}
+
+  <div class="doc-body">
+    <slot />
+  </div>
+</Section>

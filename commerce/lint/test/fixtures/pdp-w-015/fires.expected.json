@@ -1,0 +1,28 @@
+{
+  "sheet": "https://merchant.example/products/aurora-lamp",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.3.0",
+  "sheet_spec_version": "0.9.0",
+  "catalogue_version": "0.15.0",
+  "findings": [
+    {
+      "rule": "PDP-W-015",
+      "severity": "warning",
+      "path": "$['data']['offers'][0]['pagefront:priceOnRequest']",
+      "values": {
+        "method": "quote_form"
+      },
+      "message": "Price-on-request at `$['data']['offers'][0]['pagefront:priceOnRequest']` declares method `quote_form` but no contact channel (`contactUrl`, `contactEmail`, or `contactPhone`).",
+      "remediation": "Add the contact channel matching the declared method (e.g., `contactUrl` for `authorized_retailer` and `dealer_network`, `contactEmail` for `email`, `contactPhone` for `phone`, `contactUrl` for `quote_form`). If no such channel exists, change `method` to `unspecified`."
+    }
+  ],
+  "summary": {
+    "errors": 0,
+    "warnings": 1,
+    "info": 0,
+    "rules_fired": [
+      "PDP-W-015"
+    ]
+  }
+}

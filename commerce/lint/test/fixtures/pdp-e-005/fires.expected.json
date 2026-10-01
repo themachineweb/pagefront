@@ -1,0 +1,29 @@
+{
+  "sheet": "https://merchant.example/products/aurora-lamp",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.3.0",
+  "sheet_spec_version": "0.9.0",
+  "catalogue_version": "0.15.0",
+  "findings": [
+    {
+      "rule": "PDP-E-005",
+      "severity": "error",
+      "path": "$['data']['offers'][0]['seller']['pagefront:sheetUrl']",
+      "values": {
+        "sheetUrlHost": "sheets.other.example",
+        "sheetHost": "merchant.example"
+      },
+      "message": "Seller sheet URL at `$['data']['offers'][0]['seller']['pagefront:sheetUrl']` is on host `sheets.other.example`; the product sheet is on `merchant.example`.",
+      "remediation": "Publish the seller's organization sheet on the storefront host."
+    }
+  ],
+  "summary": {
+    "errors": 1,
+    "warnings": 0,
+    "info": 0,
+    "rules_fired": [
+      "PDP-E-005"
+    ]
+  }
+}

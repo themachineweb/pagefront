@@ -1,0 +1,29 @@
+{
+  "sheet": "https://merchant.example/products/harbour-desk",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.3.0",
+  "sheet_spec_version": "0.9.0",
+  "catalogue_version": "0.15.0",
+  "findings": [
+    {
+      "rule": "PDP-E-012",
+      "severity": "error",
+      "path": "$['data']['offers'][1]",
+      "values": {
+        "value": "https://merchant.example/products/harbour-desk.pagefront.json#configurator",
+        "firstPath": "$['data']['offers'][0]"
+      },
+      "message": "Offer at `$['data']['offers'][1]` prices configurator `https://merchant.example/products/harbour-desk.pagefront.json#configurator`, which the offer at `$['data']['offers'][0]` already prices.",
+      "remediation": "Keep one pricing block per configurator. Publish each further market's price list in that market's own Sheet."
+    }
+  ],
+  "summary": {
+    "errors": 1,
+    "warnings": 0,
+    "info": 0,
+    "rules_fired": [
+      "PDP-E-012"
+    ]
+  }
+}

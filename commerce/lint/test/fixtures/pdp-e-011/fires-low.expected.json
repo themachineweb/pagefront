@@ -1,0 +1,31 @@
+{
+  "sheet": "https://merchant.example/products/harbour-desk",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.3.0",
+  "sheet_spec_version": "0.9.0",
+  "catalogue_version": "0.15.0",
+  "findings": [
+    {
+      "rule": "PDP-E-011",
+      "severity": "error",
+      "path": "$['data']['offers'][0]['lowPrice']",
+      "values": {
+        "bound": "lowPrice",
+        "extreme": "cheapest",
+        "stated": "299",
+        "computed": "349"
+      },
+      "message": "`lowPrice` at `$['data']['offers'][0]['lowPrice']` is `299` but the cheapest non-excluded configuration computed from the pricing block totals `349`.",
+      "remediation": "Correct the bound, or correct the price list: a missing adjustment, a missing exclusion and a wrong modifier each move the computed band. If the price list is known to have gaps, declare `pricing: \"partial\"`."
+    }
+  ],
+  "summary": {
+    "errors": 1,
+    "warnings": 0,
+    "info": 0,
+    "rules_fired": [
+      "PDP-E-011"
+    ]
+  }
+}

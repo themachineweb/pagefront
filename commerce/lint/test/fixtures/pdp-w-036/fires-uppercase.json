@@ -1,0 +1,157 @@
+{
+  "$schema": "https://themachineweb.org/pagefront/spec/commerce/product/v0.9.0.json",
+  "release": "0.3.0",
+  "schema_org_version": "30.0",
+  "canonical_url": "https://merchant.example/products/harbour-desk",
+  "sheet_url": "https://merchant.example/products/harbour-desk.pagefront.json",
+  "generated_at": "2026-08-01T00:00:00Z",
+  "data": {
+    "@context": [
+      "https://schema.org",
+      {
+        "pagefront": "https://themachineweb.org/pagefront/vocabulary/"
+      }
+    ],
+    "@type": "Product",
+    "@id": "https://merchant.example/products/harbour-desk.pagefront.json",
+    "name": "Harbour Desk",
+    "url": "https://merchant.example/products/harbour-desk",
+    "inLanguage": "en",
+    "sku": "HRB-DESK",
+    "description": "A made-to-order desk with a choice of top size, top material, frame and frame colour.",
+    "brand": {
+      "@type": "Brand",
+      "name": "Harbour"
+    },
+    "image": [
+      {
+        "@type": "ImageObject",
+        "url": "https://merchant.example/media/harbour-desk-hero.jpg",
+        "additionalProperty": [
+          {
+            "@type": "PropertyValue",
+            "name": "role",
+            "value": "hero"
+          }
+        ]
+      }
+    ],
+    "pagefront:configurator": {
+      "@type": "pagefront:Configurator",
+      "@id": "https://merchant.example/products/harbour-desk.pagefront.json#configurator",
+      "dimensions": [
+        {
+          "name": "top_size",
+          "options": [
+            {
+              "value": "120x60"
+            },
+            {
+              "value": "140x70"
+            },
+            {
+              "value": "160x80"
+            }
+          ]
+        },
+        {
+          "name": "top_material",
+          "options": [
+            {
+              "value": "laminate"
+            },
+            {
+              "value": "oak_veneer"
+            },
+            {
+              "value": "solid_oak"
+            }
+          ]
+        },
+        {
+          "name": "frame",
+          "options": [
+            {
+              "value": "fixed"
+            },
+            {
+              "value": "electric"
+            }
+          ]
+        },
+        {
+          "name": "frame_colour",
+          "affectsPrice": false,
+          "options": [
+            {
+              "value": "Black"
+            },
+            {
+              "value": "white"
+            }
+          ]
+        }
+      ],
+      "exclusions": [
+        {
+          "top_size": "160x80",
+          "top_material": "solid_oak"
+        }
+      ]
+    },
+    "offers": [
+      {
+        "@type": "Offer",
+        "price": 349.0,
+        "priceCurrency": "EUR",
+        "availability": "https://schema.org/MadeToOrder",
+        "areaServed": "DE",
+        "priceSpecification": [
+          {
+            "@type": "UnitPriceSpecification",
+            "price": 349.0,
+            "priceCurrency": "EUR",
+            "valueAddedTaxIncluded": true
+          }
+        ],
+        "pagefront:configuratorPricing": {
+          "@type": "pagefront:ConfiguratorPricing",
+          "configurator": {
+            "@id": "https://merchant.example/products/harbour-desk.pagefront.json#configurator"
+          },
+          "baseConfiguration": {
+            "top_size": "120x60",
+            "top_material": "laminate",
+            "frame": "fixed"
+          },
+          "basePrice": 349.0,
+          "modifiers": {
+            "top_size": {
+              "120x60": 0,
+              "140x70": 40,
+              "160x80": 90
+            },
+            "top_material": {
+              "laminate": 0,
+              "oak_veneer": 80,
+              "solid_oak": 220
+            },
+            "frame": {
+              "fixed": 0,
+              "electric": 250
+            }
+          },
+          "adjustments": [
+            {
+              "when": {
+                "top_size": "160x80",
+                "top_material": "oak_veneer"
+              },
+              "priceModifier": 30
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,179 @@
+---
+/**
+ * Shared page shell: the head block and masthead, factored out of the
+ * previously self-contained index and pagefront pages (whose header
+ * comments used to call the duplication out as deliberate debt).
+ *
+ * The masthead is a lockup — "The Machine Web" is always the way home,
+ * with an optional section name beside it — plus a right-hand nav the
+ * page supplies. Wide-page chrome shared at the CSS level (.wide,
+ * .frame h1, .doors) lives in /styles.css; the masthead's own styles
+ * are scoped here, the one place its markup exists.
+ */
+interface NavItem {
+  label: string;
+  href: string;
+  current?: boolean;
+}
+
+interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  ogType?: string;
+  /** Share card and its alt text; the defaults are the site-wide card. */
+  ogImage?: string;
+  ogImageAlt?: string;
+  section?: string;
+  sectionHref?: string;
+  nav?: NavItem[];
+  navLabel?: string;
+}
+
+const {
+  title,
+  description,
+  canonical,
+  ogType = 'website',
+  ogImage = '/og-default.png',
+  ogImageAlt = 'Pagefront: an open specification for publishing reliable product data to the Machine Web. Authoring, or being inferred.',
+  section,
+  sectionHref,
+  nav = [],
+  navLabel = 'Primary',
+} = Astro.props;
+
+// The section name is the current page only on the section landing
+// itself — one aria-current per page. Derived from the canonical path
+// when we have one (pages like /pagefront/governance sit inside the
+// section without any nav item claiming currency); the nav-based
+// fallback covers pages without a canonical.
+const canonicalPath = canonical ? new URL(canonical).pathname : undefined;
+const sectionIsCurrent =
+  section !== undefined &&
+  (canonicalPath !== undefined
+    ? canonicalPath === sectionHref
+    : !nav.some((item) => item.current));
+
+// Cloudflare Web Analytics: the manual beacon, cookieless, so no consent
+// banner. The site token is public by construction (it ships in every
+// page) and is the one issued for themachineweb.org under Web Analytics
+// in the Cloudflare dashboard. Snippet per
+// https://developers.cloudflare.com/web-analytics/faq/ — type="module"
+// is required for the manually placed tag.
+const CF_BEACON_TOKEN = 'e585e452a5ba4db9a6568e60e3e3d8eb';
+---
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{title}</title>
+  <meta name="description" content={description}>
+  {canonical && <link rel="canonical" href={canonical}>}
+  <meta property="og:title" content={title}>
+  <meta property="og:description" content={description}>
+  <meta property="og:type" content={ogType}>
+  {canonical && <meta property="og:url" content={canonical}>}
+  <meta property="og:site_name" content="The Machine Web">
+  <meta property="og:image" content={`https://themachineweb.org${ogImage}`}>
+  <meta property="og:image:width" content="2400">
+  <meta property="og:image:height" content="1260">
+  <meta property="og:image:alt" content={ogImageAlt}>
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content={`https://themachineweb.org${ogImage}`}>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%231A1A18'/%3E%3Ctext x='16' y='16' font-family='DejaVu Sans Mono,Menlo,Consolas,monospace' font-weight='bold' font-size='16.64' fill='%23FAF9F5' text-anchor='middle' dominant-baseline='central'%3E%7Bw%7D%3C/text%3E%3C/svg%3E">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <p class="lockup">
+      <a href="/">The Machine Web</a>
+      {section && <span aria-hidden="true">·</span>}
+      {section && sectionHref && (
+        <a class="section" href={sectionHref} aria-current={sectionIsCurrent ? 'page' : undefined}>{section}</a>
+      )}
+      {section && !sectionHref && (
+        <span class="section" aria-current={sectionIsCurrent ? 'page' : undefined}>{section}</span>
+      )}
+    </p>
+    {nav.length > 0 && (
+      <nav aria-label={navLabel}>
+        {nav.map((item) => (
+          <a href={item.href} aria-current={item.current ? 'page' : undefined}>{item.label}</a>
+        ))}
+      </nav>
+    )}
+  </div>
+</header>
+
+<slot />
+
+{CF_BEACON_TOKEN && (
+  <script
+    type="module"
+    src="https://static.cloudflareinsights.com/beacon.min.js"
+    data-cf-beacon={JSON.stringify({ token: CF_BEACON_TOKEN })}
+  ></script>
+)}
+
+</body>
+</html>
+
+<style>
+  .masthead{ border-bottom:1px solid var(--rule); }
+  .masthead-inner{
+    max-width:var(--wide-measure);
+    margin:0 auto;
+    padding:1.1rem clamp(1.5rem,5vw,2.5rem);
+    display:flex;
+    flex-wrap:wrap;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:.5rem 2rem;
+  }
+
+  /* The lockup keeps "The Machine Web" as the way home and names the
+     section beside it, so a reader three levels down still has a route
+     back to the frame. Without a section it reduces to the wordmark. */
+  .lockup{
+    margin:0;
+    font-family:var(--sans);
+    font-weight:600;
+    font-size:.9rem;
+    letter-spacing:-0.01em;
+    display:flex;
+    align-items:baseline;
+    gap:.45rem;
+  }
+  .lockup a{ color:var(--ink); text-decoration:none; }
+  .lockup a:hover{ text-decoration:underline; text-underline-offset:3px; }
+  .lockup span[aria-hidden]{ color:var(--rule); font-weight:400; }
+  /* The section is a link back to its landing on every page that carries
+     it — including the landing itself, where it self-links. It keeps the
+     softer color either way; hover underline comes from .lockup a. */
+  .lockup .section{ color:var(--ink-soft); }
+
+  .masthead nav{
+    display:flex;
+    gap:1.5rem;
+    font-family:var(--sans);
+    font-size:.9rem;
+  }
+  .masthead nav a{
+    color:var(--ink-soft);
+    text-decoration:none;
+    padding-bottom:2px;
+    border-bottom:1px solid transparent;
+  }
+  .masthead nav a:hover{ color:var(--ink); border-bottom-color:var(--ink); }
+
+  @media (max-width: 760px){
+    .masthead-inner{ justify-content:flex-start; }
+    .masthead nav{ width:100%; gap:1.25rem; }
+  }
+</style>

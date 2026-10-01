@@ -1,0 +1,433 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://themachineweb.org/pagefront/spec/commerce/organization/v0.9.json",
+  "title": "Pagefront Commerce Organization Sheet v0.9",
+  "description": "Formal schema for the Pagefront Commerce Organization Sheet — the sheet describing the entity behind products (brand owner, manufacturer, seller), introduced with commerce format 0.9 alongside the reference-capable legalEntity and the seller-sheet return/shipping model. The data block roots on Schema.org Organization (recognized subtypes permitted; @type is not constrained to a single value). pagefront:commerceRole is the required role discriminator, an array of one or more values from the closed enum brand_owner / manufacturer / seller. pagefront:fulfillmentTerms carries the store-wide shipping defaults as an array of Schema.org-native OfferShippingDetails objects; only the attachment shell is validated, the payload is Schema.org content. pagefront:socialAccount carries the organization's official social accounts (platform / url / handle; publisher-stated only), distinct from sameAs, which carries identity authority records only. pagefront:authorizedResellers carries the brand's authorization claim over its distribution — a pagefront:AuthorizedResellers object with an optional exhaustive flag and a reseller array whose entries name an Organization either as a reference stub (@id) or inline (name plus url and/or address), with optional Schema.org-native areaServed; valid only where commerceRole includes brand_owner (linter ORG-W-006). There is no GTIN-equivalent identifier requirement: identity is @id + name. Validates the envelope and pagefront-namespaced extensions strictly; Schema.org-typed blocks permit additional unspecified properties.",
+  "type": "object",
+  "required": [
+    "format_version",
+    "schema_org_version",
+    "canonical_url",
+    "sheet_url",
+    "generated_at",
+    "data"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "format": "uri"
+    },
+    "format_version": {
+      "const": "0.9"
+    },
+    "schema_org_version": {
+      "type": "string",
+      "pattern": "^\\d+(\\.\\d+)?$"
+    },
+    "canonical_url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "sheet_url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "data": {
+      "$ref": "#/$defs/dataBlock"
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "dataBlock": {
+      "type": "object",
+      "required": [
+        "@context",
+        "@type",
+        "@id",
+        "name",
+        "inLanguage",
+        "pagefront:commerceRole"
+      ],
+      "properties": {
+        "@context": {
+          "oneOf": [
+            {
+              "const": "https://schema.org"
+            },
+            {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  {
+                    "type": "object"
+                  }
+                ]
+              },
+              "minItems": 1
+            }
+          ]
+        },
+        "@type": {
+          "type": "string"
+        },
+        "@id": {
+          "type": "string",
+          "format": "uri"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "legalName": {
+          "type": "string"
+        },
+        "inLanguage": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "description": {
+          "type": "string"
+        },
+        "slogan": {
+          "type": "string"
+        },
+        "logo": {
+          "oneOf": [
+            {
+              "type": "string",
+              "format": "uri"
+            },
+            {
+              "type": "object"
+            }
+          ]
+        },
+        "iso6523Code": {
+          "type": "string"
+        },
+        "identifier": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "object"
+            },
+            {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "object"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "sameAs": {
+          "oneOf": [
+            {
+              "type": "string",
+              "format": "uri"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uri"
+              }
+            }
+          ]
+        },
+        "email": {
+          "type": "string",
+          "format": "email"
+        },
+        "address": {
+          "type": "object"
+        },
+        "contactPoint": {
+          "oneOf": [
+            {
+              "type": "object"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          ]
+        },
+        "foundingDate": {
+          "type": "string"
+        },
+        "numberOfEmployees": {
+          "type": "object"
+        },
+        "parentOrganization": {
+          "type": "object"
+        },
+        "subOrganization": {
+          "oneOf": [
+            {
+              "type": "object"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          ]
+        },
+        "location": {
+          "oneOf": [
+            {
+              "type": "object"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          ]
+        },
+        "brand": {
+          "type": "object"
+        },
+        "aggregateRating": {
+          "type": "object"
+        },
+        "hasCertification": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/certification"
+          }
+        },
+        "hasMerchantReturnPolicy": {
+          "type": "object"
+        },
+        "paymentAccepted": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "pagefront:commerceRole": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "enum": [
+              "brand_owner",
+              "manufacturer",
+              "seller"
+            ]
+          }
+        },
+        "pagefront:fulfillmentTerms": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "@type"
+            ],
+            "properties": {
+              "@type": {
+                "const": "OfferShippingDetails"
+              }
+            },
+            "additionalProperties": true
+          }
+        },
+        "pagefront:socialAccount": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "platform",
+              "url"
+            ],
+            "properties": {
+              "@type": {
+                "const": "pagefront:SocialAccount"
+              },
+              "platform": {
+                "type": "string",
+                "minLength": 1
+              },
+              "url": {
+                "type": "string",
+                "format": "uri"
+              },
+              "handle": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "additionalProperties": true
+          }
+        },
+        "pagefront:authorizedResellers": {
+          "type": "object",
+          "required": [
+            "reseller"
+          ],
+          "properties": {
+            "@type": {
+              "const": "pagefront:AuthorizedResellers"
+            },
+            "exhaustive": {
+              "type": "boolean"
+            },
+            "reseller": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "required": [
+                  "organization"
+                ],
+                "properties": {
+                  "organization": {
+                    "type": "object",
+                    "properties": {
+                      "@type": {
+                        "type": "string"
+                      },
+                      "@id": {
+                        "type": "string",
+                        "format": "uri"
+                      },
+                      "name": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "url": {
+                        "type": "string",
+                        "format": "uri"
+                      },
+                      "address": {
+                        "type": "object"
+                      }
+                    },
+                    "anyOf": [
+                      {
+                        "required": [
+                          "@id"
+                        ]
+                      },
+                      {
+                        "required": [
+                          "name",
+                          "url"
+                        ]
+                      },
+                      {
+                        "required": [
+                          "name",
+                          "address"
+                        ]
+                      }
+                    ],
+                    "additionalProperties": true
+                  },
+                  "areaServed": {
+                    "oneOf": [
+                      {
+                        "type": "object"
+                      },
+                      {
+                        "type": "array",
+                        "minItems": 1,
+                        "items": {
+                          "type": "object"
+                        }
+                      }
+                    ]
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "pagefront:availableLanguages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "lang",
+              "url"
+            ],
+            "properties": {
+              "lang": {
+                "type": "string"
+              },
+              "url": {
+                "type": "string",
+                "format": "uri"
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "certification": {
+      "type": "object",
+      "required": [
+        "@type",
+        "name"
+      ],
+      "properties": {
+        "@type": {
+          "const": "Certification"
+        },
+        "name": {
+          "type": "string"
+        },
+        "issuedBy": {
+          "type": "object"
+        },
+        "about": {
+          "type": "string"
+        },
+        "additionalProperty": {
+          "type": "array"
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}

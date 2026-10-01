@@ -1,0 +1,50 @@
+{
+  "name": "@pagefront/lint-commerce",
+  "version": "0.11.0",
+  "description": "Pagefront commerce linter: the commerce rule catalogue and CLI, on the @pagefront/lint-core engine.",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/themachineweb/pagefront.git",
+    "directory": "commerce/lint"
+  },
+  "homepage": "https://github.com/themachineweb/pagefront/tree/main/commerce/lint#readme",
+  "bugs": "https://github.com/themachineweb/pagefront/issues",
+  "keywords": [
+    "pagefront",
+    "linter",
+    "commerce",
+    "product",
+    "schema.org",
+    "json-ld",
+    "structured-data"
+  ],
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "pagefront-lint-commerce": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "node scripts/bundle-schemas.mjs && tsc && node scripts/compile-validators.mjs",
+    "test": "npm run build && node --test test/*.test.mjs",
+    "prepublishOnly": "npm test"
+  },
+  "dependencies": {
+    "@pagefront/lint-core": "^0.2.0",
+    "ajv": "^8.20.0",
+    "ajv-formats": "^3.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^26.2.0",
+    "typescript": "^5.0.0"
+  }
+}

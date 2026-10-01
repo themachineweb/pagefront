@@ -1,0 +1,155 @@
+---
+/**
+ * /pagefront/spec — the document index.
+ *
+ * Only documents that are both in SPEC_DOCS and present in the repository are
+ * listed, so a route can never be advertised for a file that isn't there.
+ */
+import { getCollection } from 'astro:content';
+import Section from '../../../layouts/Section.astro';
+import { LINKS } from '../../../lib/links';
+import { SPEC_DOCS, SPEC_BASE } from '../../../lib/spec-routes.mjs';
+import { CURRENT_RELEASE, currentSheetSpec } from '../../../lib/releases.mjs';
+
+const present = new Set((await getCollection('spec')).map((e) => e.id));
+
+const docs = Object.entries(SPEC_DOCS)
+  .filter(([id]) => present.has(id))
+  .map(([, meta]) => meta);
+
+const commerce = docs.filter((d) => d.route.startsWith('commerce/'));
+const core = docs.filter((d) => d.route.startsWith('core/'));
+---
+
+<Section
+  title="Specification — Pagefront"
+  description="The Pagefront specification: what a publisher states about a resource, how that statement is wrapped, and how a machine finds it."
+  path={SPEC_BASE}
+  current="spec"
+>
+  <header class="doc-head">
+    <p class="pf-kicker"><a href={LINKS.landing}>Pagefront</a></p>
+    <h1>Specification</h1>
+  </header>
+
+  <div class="spec-lede">
+    <p>
+      The Pagefront specification defines what a publisher states about a
+      resource, how that statement is wrapped, and how a machine finds it. Most
+      of the terms are Schema.org's; the <code>pagefront:</code> vocabulary adds
+      what commerce needs and Schema.org doesn't carry — configurable pricing,
+      made-to-order terms, manufacturing chains, certifications.
+    </p>
+    <p>
+      The commerce documents cover product and organization sheets as brands,
+      manufacturers and retailers publish them. The core documents are
+      vertical-agnostic and apply to any future page type.
+    </p>
+  </div>
+
+  {commerce.length > 0 && (
+    <section class="spec-group">
+      <h2>Commerce</h2>
+      <dl class="spec-list">
+        {commerce.map((doc) => (
+          <>
+            <dt>
+              <a href={`${SPEC_BASE}/${doc.route}`}>{doc.title}</a>
+              <span class:list={['pf-pill', `pf-pill-${doc.status}`]}>{doc.status}</span>
+            </dt>
+            <dd>{doc.blurb}</dd>
+          </>
+        ))}
+      </dl>
+    </section>
+  )}
+
+  {core.length > 0 && (
+    <section class="spec-group">
+      <h2>Core</h2>
+      <dl class="spec-list">
+        {core.map((doc) => (
+          <>
+            <dt>
+              <a href={`${SPEC_BASE}/${doc.route}`}>{doc.title}</a>
+              <span class:list={['pf-pill', `pf-pill-${doc.status}`]}>{doc.status}</span>
+            </dt>
+            <dd>{doc.blurb}</dd>
+          </>
+        ))}
+      </dl>
+    </section>
+  )}
+
+  <p class="pf-note spec-foot">
+    Each document renders the current version from the repository, which remains
+    the canonical source. Every page links to its source file, whose history is
+    the versioned record.
+  </p>
+
+  <section class="status" aria-label="Status">
+    <p>
+      <span class="k">Release {CURRENT_RELEASE}</span> · the current commerce release:
+      Product Sheet spec {currentSheetSpec('product')}, Organization Sheet spec {currentSheetSpec('organization')}. Breaking changes
+      follow semver; the stability policy applies from release 1.0.0.
+    </p>
+    <p>
+      <span class="k">Published</span>: commerce product and organization
+      sheets, the <code>pagefront:</code> vocabulary, the rule catalogue, the
+      linter design.
+    </p>
+    <p>
+      <span class="k">Tooling</span>: <code>@pagefront/lint-core</code> and <code>@pagefront/lint-commerce</code> on npm;
+      the <a href={LINKS.validator}>conformance validator</a>, running in your browser.
+    </p>
+    <p>
+      <span class="k">Not yet</span>: category and collection sheets.
+    </p>
+  </section>
+</Section>
+
+<style is:global>
+  /* ---- status band ------------------------------------------------ */
+
+  .status{
+    margin: clamp(2.5rem,6vw,4rem) 0;
+    padding: clamp(1.5rem,3vw,2rem) 0;
+    /* Top rule only: the band closes the page, and the section footer
+       brings its own rule. */
+    border-top:1px solid var(--rule);
+    font-family:var(--sans);
+    font-size:.85rem;
+    line-height:1.6;
+    color:var(--ink-soft);
+  }
+  .status p{ margin:0 0 .55em; max-width:none; }
+  .status p:last-child{ margin-bottom:0; }
+  .status .k{ color:var(--ink); font-weight:600; }
+  .status code{ font-size:.95em; }
+
+  .spec-group{ margin-top: clamp(2.5rem,6vw,3.5rem); }
+  .spec-group h2{ margin-top:0; padding-top:1.5rem; border-top:1px solid var(--rule); }
+
+  .spec-list{ margin:1.25rem 0 0; }
+  .spec-list dt{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:.6rem;
+    margin-top:1.5rem;
+    font-family:var(--sans);
+    font-weight:600;
+    font-size:.98rem;
+  }
+  .spec-list dd{
+    margin:.35rem 0 0;
+    font-size:.95em;
+    color:var(--ink-soft);
+  }
+
+  .spec-foot{
+    margin-top: clamp(2.5rem,6vw,3.5rem);
+    padding-top:1.25rem;
+    border-top:1px solid var(--rule);
+  }
+</style>

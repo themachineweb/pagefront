@@ -1,0 +1,50 @@
+{
+  "$schema": "https://themachineweb.org/pagefront/spec/commerce/product/v0.9.0.json",
+  "release": "0.3.0",
+  "schema_org_version": "30.0",
+  "canonical_url": "https://merchant.example/fr/products/lampe-aurora",
+  "sheet_url": "https://merchant.example/fr/products/lampe-aurora.pagefront.json",
+  "generated_at": "2026-08-01T00:00:00Z",
+  "data": {
+    "@context": [
+      "https://schema.org",
+      {
+        "pagefront": "https://themachineweb.org/pagefront/vocabulary/"
+      }
+    ],
+    "@type": "Product",
+    "@id": "#aurora-lamp",
+    "name": "Lampe de table Aurora",
+    "url": "https://merchant.example/fr/products/lampe-aurora",
+    "inLanguage": "fr",
+    "sku": "AUR-100",
+    "description": "Une lampe de table à intensité variable avec un abat-jour en verre soufflé.",
+    "brand": {
+      "@type": "Brand",
+      "name": "Auroral"
+    },
+    "image": [
+      {
+        "@type": "ImageObject",
+        "url": "https://merchant.example/media/aurora-lamp-hero.jpg",
+        "additionalProperty": [
+          {
+            "@type": "PropertyValue",
+            "name": "role",
+            "value": "hero"
+          }
+        ]
+      }
+    ],
+    "pagefront:availableLanguages": [
+      {
+        "lang": "en",
+        "url": "https://merchant.example/en/products/aurora-lamp.pagefront.json"
+      },
+      {
+        "lang": "fr",
+        "url": "https://merchant.example/fr/products/lampe-aurora.pagefront.json"
+      }
+    ]
+  }
+}

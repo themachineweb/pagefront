@@ -1,0 +1,30 @@
+{
+  "sheet": "https://merchant.example/products/aurora-lamp",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.3.0",
+  "sheet_spec_version": "0.9.0",
+  "catalogue_version": "0.15.0",
+  "findings": [
+    {
+      "rule": "PDP-W-020",
+      "severity": "warning",
+      "path": "$['data']['isRelatedTo'][0]",
+      "values": {
+        "name": "(unnamed)",
+        "field": "isRelatedTo",
+        "problem": "declares internal `@id` `#luna-lamp` that does not resolve to any declared `@id` in this Sheet"
+      },
+      "message": "Relationship reference `(unnamed)` at `$['data']['isRelatedTo'][0]` in `isRelatedTo` declares internal `@id` `#luna-lamp` that does not resolve to any declared `@id` in this Sheet.",
+      "remediation": "Add at least one identifying field — `@id`, `url`, `name`, `sku`, `gtin`, `gtin13`, or `mpn` — so the reference is dereferenceable, displayable, or matchable. If the `@id` was meant to name an entity in this Sheet, correct it to match a declared `@id` or add that entity; if it was meant to point at another product, use the target's full URL."
+    }
+  ],
+  "summary": {
+    "errors": 0,
+    "warnings": 1,
+    "info": 0,
+    "rules_fired": [
+      "PDP-W-020"
+    ]
+  }
+}

@@ -1,0 +1,42 @@
+---
+/**
+ * /pagefront/consume — the consuming guide: find, fetch, read the envelope,
+ * read the data. The sibling of /pagefront/publish: site copy, kept as
+ * markdown at src/content/consume.md and rendered with the same doc chrome
+ * as the spec pages; the markdown's own H1 is hidden under the page header.
+ */
+import { getCollection, render } from 'astro:content';
+import Section from '../../layouts/Section.astro';
+import { LINKS } from '../../lib/links';
+
+const entries = await getCollection('consume');
+const entry = entries[0];
+const { Content, headings } = await render(entry);
+const toc = headings.filter((h) => h.depth === 2);
+---
+
+<Section
+  title="Consume a sheet — Pagefront"
+  description="How to consume a Pagefront sheet: follow the describedby link from a page you already fetch, read the envelope, read the Schema.org data. No key, no account, no permission."
+  path={LINKS.consume}
+>
+  <header class="doc-head">
+    <p class="pf-kicker"><a href={LINKS.landing}>Pagefront</a></p>
+    <h1>Consume</h1>
+  </header>
+
+  {toc.length > 0 && (
+    <nav class="doc-toc" aria-label="On this page">
+      <p class="doc-toc-title">On this page</p>
+      <ul>
+        {toc.map((h) => (
+          <li><a href={`#${h.slug}`}>{h.text}</a></li>
+        ))}
+      </ul>
+    </nav>
+  )}
+
+  <div class="doc-body">
+    <Content />
+  </div>
+</Section>

@@ -1,0 +1,126 @@
+---
+/**
+ * themachineweb.org — front door.
+ *
+ * On the shared Site shell (layouts/Site.astro), which carries the head
+ * block and masthead; the wide-page chrome (.wide, .frame h1, .doors)
+ * is shared in /styles.css. Only what is specific to the homepage —
+ * the framed intro, the door pinning, the attribution — is styled here.
+ */
+import Site from '../layouts/Site.astro';
+
+const NAV = [
+  { label: 'Manifesto', href: '/manifesto' },
+  { label: 'Pagefront', href: '/pagefront' },
+];
+
+const title = 'The Machine Web';
+const description =
+  'The web was built to be displayed. Machines now read it more than people do. The Machine Web is the second web — one that states what a page means instead of encoding it in how the page looks.';
+const canonical = 'https://themachineweb.org/';
+---
+
+<Site title={title} description={description} canonical={canonical} nav={NAV}>
+
+<main class="home wide">
+
+  <section class="frame">
+    <h1>The Machine Web</h1>
+    <p>
+      The web was built to be displayed. Its meaning is carried by arrangement:
+      a price is a price because of where it sits, how large it is, what
+      surrounds it. People decode that instantly and without effort, which is
+      why the web was allowed to work this way.
+    </p>
+    <p>
+      Machines now read the web more than people do. It matters little whether
+      one parses the HTML or looks at a screenshot: either way it is
+      reverse-engineering meaning out of a presentation built for human eyes,
+      and guessing wherever the presentation is ambiguous.
+    </p>
+    <p>
+      A second web would state what a page means, instead of encoding it in how
+      the page looks. That is the Machine Web.
+    </p>
+  </section>
+
+  <div class="doors">
+
+    <section class="door">
+      <h2><a href="/manifesto">Manifesto</a></h2>
+      <p>
+        Imagine a web where you don't decide how your business looks. Your site
+        exists, but most of your customers never see it. They see a platform's
+        version: a format you didn't choose, ranked against competitors you
+        didn't agree to, described in words you didn't write.
+      </p>
+      <p>
+        It's not your imagination. You're being turned into a supplier.
+      </p>
+      <p class="attrib">
+        <cite>Authoring, or being inferred</cite> — Stephane Lee
+      </p>
+      <p class="more"><a href="/manifesto">Read the manifesto <span aria-hidden="true">→</span></a></p>
+    </section>
+
+    <section class="door">
+      <h2><a href="/pagefront">Pagefront</a></h2>
+      <p>
+        The Machine Web needs a way to publish reliable data into it that
+        nobody controls. Pagefront is one: an open specification for a small,
+        typed file — a Sheet — that a publisher serves on their own domain and
+        links from the page it describes.
+      </p>
+      <p>
+        Machines read the Sheet instead of inferring from the page. There is
+        no registration, no platform, and no gatekeeper. The spec is CC BY 4.0,
+        so you can implement it without ever talking to us.
+      </p>
+      <p class="more"><a href="/pagefront">Read the standard <span aria-hidden="true">→</span></a></p>
+    </section>
+
+  </div>
+
+</main>
+
+</Site>
+
+<style>
+  /* ---- frame ------------------------------------------------------ */
+
+  .frame{
+    padding-bottom: clamp(2.5rem,6vw,4rem);
+    border-bottom:1px solid var(--rule);
+  }
+  .frame p:last-child{ margin-bottom:0; }
+
+  /* ---- doors ------------------------------------------------------ */
+
+  .home .doors{
+    padding-top: clamp(2.5rem,6vw,4rem);
+  }
+
+  .attrib{
+    font-style:italic;
+    font-size:.88em;
+    color:var(--ink-soft);
+  }
+  .attrib cite{ font-style:italic; }
+
+  /* The global `.wide p` margin shorthand would beat a bare `.more`
+     rule — hence the two-class selector. Without it the auto margin is
+     silently discarded and the two links drift apart. */
+  .home .more{
+    font-family:var(--sans);
+    font-size:.85rem;
+    margin-top:auto;
+    padding-top:1.6rem;
+  }
+  .more a{ text-decoration-color:var(--ink-soft); }
+
+  /* The column titles are links to the same destinations as the
+     "Read" lines below, so the way in is visible without scrolling on
+     a laptop. A heading shouldn't wear an underline at rest. */
+  .door h2 a{ text-decoration:none; }
+  .door h2 a:hover{ text-decoration:underline; text-underline-offset:3px; }
+</style>

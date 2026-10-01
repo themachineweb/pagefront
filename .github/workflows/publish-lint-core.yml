@@ -1,0 +1,40 @@
+# Publishes @pagefront/lint-core to npm through npm trusted publishing
+# (docs.npmjs.com/trusted-publishers): the registry accepts the GitHub OIDC
+# token for this repository and this workflow file, so no npm token and no
+# second factor are involved. Configured on npmjs.com under the package's
+# Trusted Publishers as themachineweb / pagefront / publish-lint-core.yml.
+#
+# Runs on a tag of the form lint-core-v<version>; the tag must match the
+# version in core/lint/package.json. Provenance is off because the
+# repository is private, where npm does not support it.
+name: Publish lint-core
+
+on:
+  push:
+    tags:
+      - 'lint-core-v*'
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          registry-url: 'https://registry.npmjs.org'
+      # Trusted publishing needs npm 11.5.1 or later.
+      - run: npm install -g npm@latest
+      - run: npm ci
+      - name: Check the tag matches the package version
+        run: |
+          version=$(node -p "require('./core/lint/package.json').version")
+          test "${GITHUB_REF_NAME}" = "lint-core-v${version}" \
+            || { echo "tag ${GITHUB_REF_NAME} does not match package version ${version}"; exit 1; }
+      - run: npm publish -w @pagefront/lint-core
+        env:
+          NPM_CONFIG_PROVENANCE: 'false'

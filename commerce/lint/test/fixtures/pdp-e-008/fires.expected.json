@@ -1,0 +1,30 @@
+{
+  "sheet": "https://merchant.example/products/harbour-desk",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.3.0",
+  "sheet_spec_version": "0.9.0",
+  "catalogue_version": "0.15.0",
+  "findings": [
+    {
+      "rule": "PDP-E-008",
+      "severity": "error",
+      "path": "$['data']['offers'][0]['pagefront:configuratorPricing']['modifiers']['top_size']['120x60']",
+      "values": {
+        "dimension": "top_size",
+        "option": "120x60",
+        "modifier": "40"
+      },
+      "message": "Modifier for base option `120x60` of `top_size` at `$['data']['offers'][0]['pagefront:configuratorPricing']['modifiers']['top_size']['120x60']` is `40`; the base option's modifier is `0`.",
+      "remediation": "Set the base option's modifier to zero and express the other options of the dimension as differences from it. If the modifier is right, `basePrice` is the total of another configuration: correct `baseConfiguration` or `basePrice`."
+    }
+  ],
+  "summary": {
+    "errors": 1,
+    "warnings": 0,
+    "info": 0,
+    "rules_fired": [
+      "PDP-E-008"
+    ]
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "sheet": "https://merchant.example/products/aurora-lamp",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.3.0",
+  "sheet_spec_version": "0.9.0",
+  "catalogue_version": "0.15.0",
+  "findings": [
+    {
+      "rule": "PDP-I-001",
+      "severity": "info",
+      "path": "$['data']['award']",
+      "values": {
+        "property": "award"
+      },
+      "message": "Property `award` at `$['data']['award']` is valid Schema.org but is not explicitly modeled by Pagefront.",
+      "remediation": "No action required. This finding is informational. If you find yourself using a Schema.org property frequently and would value formal Pagefront modeling for it, consider opening a spec proposal."
+    }
+  ],
+  "summary": {
+    "errors": 0,
+    "warnings": 0,
+    "info": 1,
+    "rules_fired": [
+      "PDP-I-001"
+    ]
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "sheet": "https://merchant.example/products/aurora-lamp",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.3.0",
+  "sheet_spec_version": "0.9.0",
+  "catalogue_version": "0.15.0",
+  "findings": [
+    {
+      "rule": "PDP-E-004",
+      "severity": "error",
+      "path": "$['data']['offers'][0]['priceSpecification'][0]",
+      "values": {
+        "price": "129.00",
+        "specPrice": "119.00"
+      },
+      "message": "Price specification at `$['data']['offers'][0]['priceSpecification'][0]` states `119.00` but its Offer's `price` is `129.00`.",
+      "remediation": "Make the two amounts equal, or remove the duplicated amount from the specification entry and keep `valueAddedTaxIncluded` (and `priceCurrency`) on it."
+    }
+  ],
+  "summary": {
+    "errors": 1,
+    "warnings": 0,
+    "info": 0,
+    "rules_fired": [
+      "PDP-E-004"
+    ]
+  }
+}

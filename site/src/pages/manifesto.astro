@@ -1,0 +1,20 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+
+const entries = await getCollection('manifesto');
+const entry = entries[0];
+const { Content } = await render(entry);
+---
+
+<Base
+  title="Authoring, or being inferred. — Stephane Lee"
+  description="A manifesto on the publisher's place in the web that machines now read. By Stephane Lee."
+  canonical="https://themachineweb.org/manifesto"
+  nav={[]}
+  ogImage="/og-manifesto.png"
+  ogImageAlt="Authoring, or being inferred."
+>
+  <Content />
+  <a slot="colophon" href="https://journal.themachineweb.org/subscribe">Subscribe to the journal</a>
+</Base>

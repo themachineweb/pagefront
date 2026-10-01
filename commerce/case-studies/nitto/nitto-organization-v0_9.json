@@ -1,0 +1,2282 @@
+{
+  "$schema": "https://themachineweb.org/pagefront/spec/commerce/organization/v0.3.0.json",
+  "release": "0.3.0",
+  "schema_org_version": "30.0",
+  "canonical_url": "https://www.nittoknitwear.com/pages/atelier",
+  "sheet_url": "https://www.nittoknitwear.com/pagefront/commerce/organization/nitto-knitwear.fr.json",
+  "generated_at": "2026-09-30T17:06:00Z",
+  "expires_at": "2026-10-07T17:06:00Z",
+  "data": {
+    "@context": [
+      "https://schema.org",
+      {
+        "pagefront": "https://themachineweb.org/pagefront/vocabulary/"
+      }
+    ],
+    "@type": "Organization",
+    "@id": "https://www.nittoknitwear.com/#org",
+    "name": "Nitto Knitwear",
+    "legalName": "MBTJM SAS",
+    "inLanguage": "fr",
+    "url": "https://www.nittoknitwear.com",
+    "pagefront:commerceRole": [
+      "brand_owner",
+      "manufacturer",
+      "seller"
+    ],
+    "iso6523Code": "0002:808641435",
+    "identifier": {
+      "@type": "PropertyValue",
+      "propertyID": "RCS",
+      "value": "808 641 435 R.C.S. Nanterre"
+    },
+    "vatID": "FR04808641435",
+    "description": "Forte de cinquante ans d’expérience dans la maille haut de gamme, l’un des derniers ateliers de tricot en région parisienne crée en 2022 Nitto Knitwear, marque de pulls pour homme 100% fabriqués en France. Derrière ce projet, une histoire familiale où le savoir-faire se transmet depuis trois générations. Équipé de 20 machines haut de gamme Shima Seiki et Stoll, il permet de fabriquer des pièces complexes avec une qualité irréprochable. Tout commence par la sélection rigoureuse des matières naturelles – laine mérinos, mohair, cachemire, coton – auprès des meilleurs filateurs européens.",
+    "slogan": "Tricoteurs depuis 1972 — nos vêtements sont faits à Clamart en France",
+    "logo": "https://www.nittoknitwear.com/cdn/shop/t/12/assets/logo_header.png",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "45-47 rue de la Porte de Trivaux",
+      "postalCode": "92140",
+      "addressLocality": "Clamart",
+      "addressCountry": "FR"
+    },
+    "email": "info@nittoknitwear.com",
+    "pagefront:socialAccount": [
+      {
+        "@type": "pagefront:SocialAccount",
+        "platform": "instagram",
+        "url": "https://www.instagram.com/nittoknitwear/",
+        "handle": "nittoknitwear"
+      },
+      {
+        "@type": "pagefront:SocialAccount",
+        "platform": "facebook",
+        "url": "https://www.facebook.com/nittoknitwear",
+        "handle": "nittoknitwear"
+      }
+    ],
+    "brand": {
+      "@type": "Brand",
+      "@id": "https://www.nittoknitwear.com/#brand",
+      "name": "Nitto Knitwear",
+      "logo": "https://www.nittoknitwear.com/cdn/shop/t/12/assets/logo_header.png",
+      "slogan": "Tricoteurs depuis 1972"
+    },
+    "pagefront:authorizedResellers": {
+      "@type": "pagefront:AuthorizedResellers",
+      "reseller": [
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "57 l'Alzette",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "57 Rue De L'Alzette",
+              "postalCode": "L-4011",
+              "addressLocality": "Esch Sur Alzette",
+              "addressCountry": "LU"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "À la petite Jeannette",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "7 rue Victor Hugo",
+              "postalCode": "14360",
+              "addressLocality": "Trouville",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "A.GI.EMME MAN",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Via Vittorio Emanuele II, 91",
+              "postalCode": "22100",
+              "addressLocality": "Como",
+              "addressCountry": "IT"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Acte",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "42 rue Lafayette",
+              "postalCode": "13210",
+              "addressLocality": "Saint-Rémy-de-Provence",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "AndCo Concept Store",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "147 boulevard de la République",
+              "postalCode": "33510",
+              "addressLocality": "Andernos-les-Bains",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Archer",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "4 rue du Terrail",
+              "postalCode": "63000",
+              "addressLocality": "Clermont-Ferrand",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Arniko",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Lagerstrasse 16a",
+              "postalCode": "8004",
+              "addressLocality": "Zürich",
+              "addressCountry": "CH"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Attitude",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "11 Cours Lamarque de Plaisance",
+              "postalCode": "33120",
+              "addressLocality": "Arcachon",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Au Voilier Bleu",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "62 rue Carnot",
+              "postalCode": "62930",
+              "addressLocality": "Wimereux",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Authentique Parenthèse",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "50 B rue de la Bidassoa",
+              "postalCode": "75020",
+              "addressLocality": "Paris",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Ayumi",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "3 rue Vavin",
+              "postalCode": "75006",
+              "addressLocality": "Paris",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Azori",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "90 route de Roquelaure",
+              "postalCode": "32000",
+              "addressLocality": "Auch",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Ballpark Store Weesp",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Slijkstraat 11",
+              "postalCode": "1381",
+              "addressLocality": "AX Weesp",
+              "addressCountry": "NL"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Barnabe",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "11 rue de l'Argenterie",
+              "postalCode": "34000",
+              "addressLocality": "Montpellier",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Bienvenu Store",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "68 rue Carnot",
+              "postalCode": "74000",
+              "addressLocality": "Annecy",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Blender Trinité",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "6 rue du Tabellion",
+              "postalCode": "1050",
+              "addressLocality": "Bruxelles",
+              "addressCountry": "BE"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Blender Uccle",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "57 rue Xavier de bue",
+              "postalCode": "1180",
+              "addressLocality": "Bruxelles",
+              "addressCountry": "BE"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Bonjour Monsieur",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "70 rue Pierre Julien",
+              "postalCode": "26200",
+              "addressLocality": "Montélimar",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Booster",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Stüssihofstatt 6",
+              "postalCode": "8001",
+              "addressLocality": "Zürich",
+              "addressCountry": "CH"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Boutique Joseph",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "48 rue du Casino",
+              "postalCode": "73100",
+              "addressLocality": "Aix-Les-Bains",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Boutique Vertical",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "10 Rue du Rieu",
+              "postalCode": "15000",
+              "addressLocality": "Aurillac",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Brock",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "16 rue Cujas",
+              "postalCode": "31000",
+              "addressLocality": "Toulouse",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Buddies",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "3 Place de la Libération",
+              "postalCode": "64000",
+              "addressLocality": "Pau",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Buxy",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "42 rue du Général de Gaulle",
+              "postalCode": "53000",
+              "addressLocality": "Laval",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "CA Biche",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "52 rue de Londres",
+              "postalCode": "62520",
+              "addressLocality": "Le Touquet Paris Plage",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Calame",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "15 rue Claude Bernard",
+              "postalCode": "75005",
+              "addressLocality": "Paris",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Changes",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "19 Tinker Street Woodstock",
+              "postalCode": "12498",
+              "addressLocality": "New-York",
+              "addressCountry": "US"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Club 21",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "21 rue Lecampion",
+              "postalCode": "50400",
+              "addressLocality": "Granville",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Comptoir Général de la Perrière",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Rue Foinart",
+              "postalCode": "61360",
+              "addressLocality": "Belforêt-en-Perche",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Confidentiel By Lo",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "84 avenue Jean Jaurès",
+              "postalCode": "92140",
+              "addressLocality": "Clamart",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Cris | Men Store",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Springweg 7A",
+              "postalCode": "3511VH",
+              "addressLocality": "Utrecht",
+              "addressCountry": "NL"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Culture Denim",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "4 rue des 3 Mollettes",
+              "postalCode": "59000",
+              "addressLocality": "Lille",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Dee cee Style Zürich",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Talacker 21",
+              "postalCode": "8001",
+              "addressLocality": "Zürich",
+              "addressCountry": "CH"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Détroit Houdan",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "30 Grande Rue",
+              "postalCode": "78550",
+              "addressLocality": "Houdan",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Détroit Rambouillet",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "65 Rue du Général de Gaulle",
+              "postalCode": "78120",
+              "addressLocality": "Rambouillet",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Drapeur",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "45 avenue du Président J.F. Kennedy",
+              "postalCode": "64200",
+              "addressLocality": "Biarritz",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Dress Code",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "21 rue de la Patrie",
+              "postalCode": "56100",
+              "addressLocality": "Lorient",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Echoppe Dat",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Rue du 23-Juin 1",
+              "postalCode": "2800",
+              "addressLocality": "Delémont",
+              "addressCountry": "CH"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Edgar",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "30 rue Saint James",
+              "postalCode": "33000",
+              "addressLocality": "Bordeaux",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Eleven Souls",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Eftichidou 2",
+              "postalCode": "11635",
+              "addressLocality": "Athina",
+              "addressCountry": "GR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "EVENTS",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "35 rue des Lices",
+              "postalCode": "49100",
+              "addressLocality": "Angers"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Excelsior",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "74 rue Victor Hugo",
+              "postalCode": "26000",
+              "addressLocality": "Valence",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Excess",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "18 rue du Château",
+              "postalCode": "50100",
+              "addressLocality": "Cherbourg",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Flair",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "91 Grande Rue",
+              "postalCode": "25000",
+              "addressLocality": "Besançon",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Flaneurs",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "5 rue Leperdit",
+              "postalCode": "35000",
+              "addressLocality": "Rennes",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Forties Factory",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "7 rue Ampère",
+              "postalCode": "78310",
+              "addressLocality": "Coignières",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Göteborg Manufaktur",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Tredje Långgatan 3",
+              "postalCode": "413 04",
+              "addressLocality": "Göteborg",
+              "addressCountry": "SE"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Graduate Store",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "63 rue de Pas-Saint-Georges",
+              "postalCode": "33000",
+              "addressLocality": "Bordeaux",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Grand Central",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "98 avenue Jacqueline Auriol",
+              "postalCode": "83160",
+              "addressLocality": "La Valette-du-Var",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "H.P. France",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "H.P France Edogawa Logistic Center c/o ITS Rinkai Center Danchi-souko bldg. C 3-5-1 Rinkaicho, Edogawa-ku",
+              "postalCode": "134-0086",
+              "addressLocality": "Tokyo",
+              "addressCountry": "JP"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Hall 1",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "5 rue de la République",
+              "postalCode": "66000",
+              "addressLocality": "Perpignan",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "HCS Boutique Galerie",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "8 rue Lallier",
+              "postalCode": "75009",
+              "addressLocality": "Paris",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Helt",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Mechelsestraat 48",
+              "postalCode": "3000",
+              "addressLocality": "Leuven",
+              "addressCountry": "BE"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Hermosa",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "180 avenue des Menuisiers ZA de Pedebert",
+              "postalCode": "40150",
+              "addressLocality": "Hossegor",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Hiverna Bis",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "13 rue Maries",
+              "postalCode": "8100",
+              "addressLocality": "Albi",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Hoot",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Rue des Côtes-de-Montbenon 3",
+              "postalCode": "1003",
+              "addressLocality": "Lausanne",
+              "addressCountry": "CH"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Hudson Surplus",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Josefstrasse 73",
+              "postalCode": "8005",
+              "addressLocality": "Zürich",
+              "addressCountry": "CH"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Illinois",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Onderbergen 35",
+              "postalCode": "9000",
+              "addressLocality": "Gent",
+              "addressCountry": "BE"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Indian Rock",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "11 rue Keller",
+              "postalCode": "75011",
+              "addressLocality": "Paris",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Isciacus",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "8 Rue Auguste Gervais",
+              "postalCode": "92130",
+              "addressLocality": "Issy-les-Moulineaux",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Iza Boutique",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "1 Boulevard Maillol",
+              "postalCode": "66750",
+              "addressLocality": "Saint Cyprien Plage",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "James & Basile",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Franslaan 20-22",
+              "postalCode": "8620",
+              "addressLocality": "Nieuwpoort-aan-zee",
+              "addressCountry": "BE"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Karltex",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Haga Nygata 27",
+              "postalCode": "41301",
+              "addressLocality": "Gothenburg",
+              "addressCountry": "SE"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "King&Queens",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Sint-Jorispoort 37",
+              "postalCode": "2000",
+              "addressLocality": "Antwerpen",
+              "addressCountry": "BE"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Kitchener",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Viaduktstrasse 49 & 47",
+              "postalCode": "8005",
+              "addressLocality": "Zürich",
+              "addressCountry": "CH"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Kitchener",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Aarbergergasse 40",
+              "postalCode": "3011",
+              "addressLocality": "Bern",
+              "addressCountry": "CH"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Klubb",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "25 rue de Bolton",
+              "postalCode": "72000",
+              "addressLocality": "Le Mans",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Kolkoz",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "8 rue Cornac",
+              "postalCode": "33000",
+              "addressLocality": "Bordeaux",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Kul & Koks",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Helligkorsgade 13",
+              "postalCode": "6000",
+              "addressLocality": "Kolding",
+              "addressCountry": "DK"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Kullberg",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Rindermarkt 23",
+              "postalCode": "8001",
+              "addressLocality": "Zürich",
+              "addressCountry": "CH"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "L'Appart",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "38 rue Georges Clémenceau",
+              "postalCode": "85000",
+              "addressLocality": "La Roche sur Yon",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "L'habit Français",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "99 rue de Seine",
+              "postalCode": "75006",
+              "addressLocality": "Paris",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "L'île Bleue",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "22 rue de la porte Dijeaux",
+              "postalCode": "33000",
+              "addressLocality": "Bordeaux",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "L133",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "28 rue Saint Urbain",
+              "postalCode": "57100",
+              "addressLocality": "Thionville",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "La Boutique de Léon",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "8 Place des Échaudes",
+              "postalCode": "29120",
+              "addressLocality": "Pont-l'Abbé",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "La Manufacture",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "10 rue Léon Nautin",
+              "postalCode": "42000",
+              "addressLocality": "Saint-Étienne",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Label BoutiQ",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "4 rue du Pâquier",
+              "postalCode": "74000",
+              "addressLocality": "Annecy",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Lace Up",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "38 rue de la Casquette",
+              "postalCode": "4000",
+              "addressLocality": "Liège",
+              "addressCountry": "BE"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Le 17",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "17 rue Sainte Catherine",
+              "postalCode": "45000",
+              "addressLocality": "Orléans",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Le 5",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "7 rue Ducouëdic",
+              "postalCode": "29200",
+              "addressLocality": "Brest",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Le Cinq",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "7 rue Ducouedic",
+              "postalCode": "29200",
+              "addressLocality": "Brest",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Le Globe LTD",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "2-22-1 Higashi Shibuyaku",
+              "postalCode": "150-0011",
+              "addressLocality": "Tokyo",
+              "addressCountry": "JP"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Le Shop",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "3 rue Saint Castor",
+              "postalCode": "30000",
+              "addressLocality": "Nîmes",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Legacy",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "15 boulevard Sadi Carnot",
+              "postalCode": "90000",
+              "addressLocality": "Belfort",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Maison Bonheur",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "33 rue de la République",
+              "postalCode": "19100",
+              "addressLocality": "Brive-la-Gaillarde",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Man of Still",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "229 avenue Michel Croz",
+              "postalCode": "74400",
+              "addressLocality": "Chamonix",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Matter Urban Market",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "71 Schlankreye",
+              "postalCode": "20144",
+              "addressLocality": "Hamburg",
+              "addressCountry": "DE"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Merci",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "111 boulevard Beaumarchais",
+              "postalCode": "75011",
+              "addressLocality": "Paris",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Mix et Tendances",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "29 rue Saint Nicolas",
+              "postalCode": "17000",
+              "addressLocality": "La Rochelle",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Monsieur Cam",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "15 rue Fournirue",
+              "postalCode": "57000",
+              "addressLocality": "Metz",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Motorious",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Flæsketorvet 34",
+              "postalCode": "1711",
+              "addressLocality": "Copenhagen",
+              "addressCountry": "DK"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "MR Cam",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "15 rue Fournirue",
+              "postalCode": "57000",
+              "addressLocality": "Metz",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Navy Market",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "9-6, Seongnae-ro 8-gil",
+              "postalCode": "5399",
+              "addressLocality": "Gangdong-gu Seoul",
+              "addressCountry": "KR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Nexø Herremagasin",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Købmagergade 1a",
+              "postalCode": "3730",
+              "addressLocality": "Nexø",
+              "addressCountry": "DK"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Nielsen & Co",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Christian IX's Gade 3",
+              "postalCode": "1111",
+              "addressLocality": "Copenhagen",
+              "addressCountry": "DK"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "No Sense",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Middenbaan 39",
+              "postalCode": "2991CS",
+              "addressLocality": "Barendrecht",
+              "addressCountry": "NL"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Nouveau.men",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "17 rue Thiers",
+              "postalCode": "64100",
+              "addressLocality": "Bayonne",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Nouveau.men",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "17 rue Thiers",
+              "postalCode": "64100",
+              "addressLocality": "Bayonne",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Nouveau.men",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "8 avenue Victor Hugo",
+              "postalCode": "64200",
+              "addressLocality": "Biarritz",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Nouveau.women",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "4 avenue Victor Hugo",
+              "postalCode": "64200",
+              "addressLocality": "Biarritz",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Odeon",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "23 rue de la République",
+              "postalCode": "13200",
+              "addressLocality": "Arles",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Okko",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "2 rue Haute Casserie",
+              "postalCode": "44000",
+              "addressLocality": "Nantes",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Olmo Fashion",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Zeughausgasse 20",
+              "postalCode": "3011",
+              "addressLocality": "Bern",
+              "addressCountry": "CH"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Ordine e Disordine",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Via Cittadella 19",
+              "postalCode": "6600",
+              "addressLocality": "Locarno",
+              "addressCountry": "CH"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Out of Sight",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "105 avenue du Général de Gaulle",
+              "postalCode": "44500",
+              "addressLocality": "La Baule",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Pacific Wear",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "9 rue André Bonnefant",
+              "postalCode": "78100",
+              "addressLocality": "Saint Germain en Laye",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Par terre",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "K. Maenhoutstraat 12 B 2",
+              "postalCode": "9830",
+              "addressLocality": "Sint-Martens-Latem",
+              "addressCountry": "BE"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Parure Store",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "16 Place de la Résistance",
+              "postalCode": "37000",
+              "addressLocality": "Tours",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Peppone",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "8 rue des Cordeliers",
+              "postalCode": "40000",
+              "addressLocality": "Mont de Marsan",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Père et Fils",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Rue de Berne 8",
+              "postalCode": "1201",
+              "addressLocality": "Genève",
+              "addressCountry": "CH"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "PH Henne Strand",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Strandvejen 413B",
+              "postalCode": "6854",
+              "addressLocality": "Henne Strand",
+              "addressCountry": "DK"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Pinkomo",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Fredrikinkatu 41",
+              "postalCode": "120",
+              "addressLocality": "Helsinki",
+              "addressCountry": "FI"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Plank Lab",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Istedgade 99",
+              "postalCode": "1650",
+              "addressLocality": "Copenhagen",
+              "addressCountry": "DK"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Ponant Shop",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "2 rue Maréchal Joffre",
+              "postalCode": "22700",
+              "addressLocality": "Perros Guirec",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Potion",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "12 rue Georges Clemenceau",
+              "postalCode": "11000",
+              "addressLocality": "Carcassonne",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Råh Roskilde",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Skomagergade 21",
+              "postalCode": "4000",
+              "addressLocality": "Roskilde",
+              "addressCountry": "DK"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Rayne 77",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "77 cours Victor Hugo",
+              "postalCode": "84300",
+              "addressLocality": "Cavaillon",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Refinement",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "2nd floor, Central Embassy 1031 Phloen Chit Rd, Pathum Wan",
+              "postalCode": "10330",
+              "addressLocality": "Lumpini Bangkok",
+              "addressCountry": "TH"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Roganel",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "23 rue des Archives",
+              "postalCode": "75003",
+              "addressLocality": "Paris",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Royal Cheese",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "113 rue de Turenne",
+              "postalCode": "75003",
+              "addressLocality": "Paris",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Shop 54",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "8 Rue Centrale",
+              "postalCode": "5100",
+              "addressLocality": "Briançon",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Sjøsprøyt",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Fjordgata 36B",
+              "postalCode": "7010",
+              "addressLocality": "Trondheim",
+              "addressCountry": "NO"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Slow",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "3 Boulevard Duponchel",
+              "postalCode": "22380",
+              "addressLocality": "Saint-Cast-Le-Guildo",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Sporlux / Albert",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "12 rue Saint Guillaume",
+              "postalCode": "22000",
+              "addressLocality": "Saint Brieuc",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Steranko",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "172 Burton Road, West Didsbury",
+              "postalCode": "M20 1LH",
+              "addressLocality": "Manchester",
+              "addressCountry": "GB"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Steven Alan",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "511 West 20th Street",
+              "postalCode": "10011",
+              "addressLocality": "New York",
+              "addressCountry": "US"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Stocks Americains",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "8 rue Emile Zola",
+              "postalCode": "81100",
+              "addressLocality": "Castres",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Sunday Morning",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "17 rue Granet",
+              "postalCode": "13100",
+              "addressLocality": "Aix-en-Provence",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Sunday Morning",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "9 rue Haxo",
+              "postalCode": "131001",
+              "addressLocality": "Marseille",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Sunrise",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "9 rue des Poulets",
+              "postalCode": "71100",
+              "addressLocality": "Chalon-sur-Saône",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "SUPERHUIT Concept Store",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "8 rue d'Amerval",
+              "postalCode": "54000",
+              "addressLocality": "Nancy",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Sydney's",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "682 Queen Street",
+              "postalCode": "M6J 1E5",
+              "addressLocality": "Toronto",
+              "addressCountry": "CA"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "T-Bird",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "16 bis rue Mayet",
+              "postalCode": "75006",
+              "addressLocality": "Paris",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "T.C.H.",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "21 rue Louis Blanc",
+              "postalCode": "66000",
+              "addressLocality": "Perpignan",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Tant qu'il y aura des hommes...",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "11 rue du Cente",
+              "postalCode": "20127",
+              "addressLocality": "Saint-Florent",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "The Road",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "2 Route d'Ohain",
+              "postalCode": "1380",
+              "addressLocality": "Lasne",
+              "addressCountry": "BE"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "The Royal Racer",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "46 Boulevard des Brotteaux",
+              "postalCode": "69006",
+              "addressLocality": "Lyon",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "The Shop Around the Corner - Own History",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "24 rue Saint Pierre",
+              "postalCode": "91410",
+              "addressLocality": "Dourdan",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "The White Shop",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "47 rue du Quesnoy",
+              "postalCode": "59300",
+              "addressLocality": "Valenciennes",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Two Cour Homme",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "9 bis rue Saint Jean",
+              "postalCode": "66000",
+              "addressLocality": "Perpignan",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Urban by Pimprenelle",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "1 Rue Crollé",
+              "postalCode": "1380",
+              "addressLocality": "Lasne",
+              "addressCountry": "BE"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Vibe",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "12 rue Augustin Daumas",
+              "postalCode": "83000",
+              "addressLocality": "Toulon",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Visitor Store",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Badenerstrasse 119",
+              "postalCode": "8004",
+              "addressLocality": "Zürich",
+              "addressCountry": "CH"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Vitamine",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "6 rue de la Petite Fusterie",
+              "postalCode": "84000",
+              "addressLocality": "Avignon",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Vogue",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "46 rue du Général de Gaulle",
+              "postalCode": "27300",
+              "addressLocality": "Bernay",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Zeppelin Mode",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Gutenbergstraße 91",
+              "postalCode": "10178",
+              "addressLocality": "Berlin",
+              "addressCountry": "DE"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Zinzolines",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "2 Bd des Nations Unies",
+              "postalCode": "92190",
+              "addressLocality": "Meudon",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Zus & Gus",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Brusselsesteenweg 54",
+              "postalCode": "3080",
+              "addressLocality": "Tervuren",
+              "addressCountry": "BE"
+            }
+          }
+        }
+      ]
+    },
+    "hasMerchantReturnPolicy": {
+      "@type": "MerchantReturnPolicy",
+      "applicableCountry": "FR",
+      "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+      "merchantReturnDays": 14,
+      "returnFees": "https://schema.org/FreeReturn",
+      "returnMethod": "https://schema.org/ReturnByMail",
+      "returnLabelSource": "https://schema.org/ReturnLabelDownloadAndPrint",
+      "description": "Retour sous 14 jours à compter de la réception, contre échange ou remboursement. Les retours sont offerts depuis la France métropolitaine via Colissimo, avec une étiquette de retour prépayée valable 7 jours, à demander à info@nittoknitwear.com ; en dehors de ce cas, les frais de retour restent à la charge de l'acheteur (CGV, art. 6). Le produit doit être retourné dans son emballage d'origine, à l'état neuf, non porté, non lavé, avec son étiquette intacte ; les articles abîmés, endommagés ou dont l'étiquette a été détachée ne sont pas repris. Remboursement dans les 14 jours suivant la notification de la rétractation, sous réserve de la réception ou d'une preuve de renvoi du produit, selon le mode de paiement initial."
+    },
+    "pagefront:fulfillmentTerms": [
+      {
+        "@type": "OfferShippingDetails",
+        "name": "France métropolitaine et Belgique — livraison offerte dès 200 € d'achat",
+        "shippingRate": {
+          "@type": "MonetaryAmount",
+          "value": "0",
+          "currency": "EUR"
+        },
+        "shippingDestination": [
+          {
+            "@type": "DefinedRegion",
+            "addressCountry": "FR",
+            "name": "France métropolitaine"
+          },
+          {
+            "@type": "DefinedRegion",
+            "addressCountry": "BE",
+            "name": "Belgique"
+          }
+        ],
+        "pagefront:appliesWhen": {
+          "@type": "pagefront:PricingCondition",
+          "minimumOrderValue": {
+            "@type": "MonetaryAmount",
+            "value": "200",
+            "currency": "EUR"
+          }
+        }
+      },
+      {
+        "@type": "OfferShippingDetails",
+        "name": "Colissimo point relais — commande inférieure à 75 € (jours ouvrés)",
+        "shippingRate": {
+          "@type": "MonetaryAmount",
+          "value": "4",
+          "currency": "EUR"
+        },
+        "shippingDestination": [
+          {
+            "@type": "DefinedRegion",
+            "addressCountry": "FR",
+            "name": "France métropolitaine"
+          }
+        ],
+        "deliveryTime": {
+          "@type": "ShippingDeliveryTime",
+          "transitTime": {
+            "@type": "QuantitativeValue",
+            "minValue": 4,
+            "maxValue": 5,
+            "unitCode": "DAY"
+          }
+        }
+      },
+      {
+        "@type": "OfferShippingDetails",
+        "name": "Colissimo point relais — commande entre 75 € et 200 € (jours ouvrés)",
+        "shippingRate": {
+          "@type": "MonetaryAmount",
+          "value": "6",
+          "currency": "EUR"
+        },
+        "shippingDestination": [
+          {
+            "@type": "DefinedRegion",
+            "addressCountry": "FR",
+            "name": "France métropolitaine"
+          }
+        ],
+        "deliveryTime": {
+          "@type": "ShippingDeliveryTime",
+          "transitTime": {
+            "@type": "QuantitativeValue",
+            "minValue": 4,
+            "maxValue": 5,
+            "unitCode": "DAY"
+          }
+        },
+        "pagefront:appliesWhen": {
+          "@type": "pagefront:PricingCondition",
+          "minimumOrderValue": {
+            "@type": "MonetaryAmount",
+            "value": "75",
+            "currency": "EUR"
+          }
+        }
+      },
+      {
+        "@type": "OfferShippingDetails",
+        "name": "Colissimo domicile — commande inférieure à 75 € (jours ouvrés)",
+        "shippingRate": {
+          "@type": "MonetaryAmount",
+          "value": "6",
+          "currency": "EUR"
+        },
+        "shippingDestination": [
+          {
+            "@type": "DefinedRegion",
+            "addressCountry": "FR",
+            "name": "France métropolitaine"
+          }
+        ],
+        "deliveryTime": {
+          "@type": "ShippingDeliveryTime",
+          "transitTime": {
+            "@type": "QuantitativeValue",
+            "minValue": 2,
+            "maxValue": 3,
+            "unitCode": "DAY"
+          }
+        }
+      },
+      {
+        "@type": "OfferShippingDetails",
+        "name": "Colissimo domicile — commande entre 75 € et 200 € (jours ouvrés)",
+        "shippingRate": {
+          "@type": "MonetaryAmount",
+          "value": "9",
+          "currency": "EUR"
+        },
+        "shippingDestination": [
+          {
+            "@type": "DefinedRegion",
+            "addressCountry": "FR",
+            "name": "France métropolitaine"
+          }
+        ],
+        "deliveryTime": {
+          "@type": "ShippingDeliveryTime",
+          "transitTime": {
+            "@type": "QuantitativeValue",
+            "minValue": 2,
+            "maxValue": 3,
+            "unitCode": "DAY"
+          }
+        },
+        "pagefront:appliesWhen": {
+          "@type": "pagefront:PricingCondition",
+          "minimumOrderValue": {
+            "@type": "MonetaryAmount",
+            "value": "75",
+            "currency": "EUR"
+          }
+        }
+      },
+      {
+        "@type": "OfferShippingDetails",
+        "name": "Outre-Mer",
+        "shippingRate": {
+          "@type": "MonetaryAmount",
+          "value": "15",
+          "currency": "EUR"
+        },
+        "shippingDestination": [
+          {
+            "@type": "DefinedRegion",
+            "name": "Outre-Mer"
+          }
+        ],
+        "deliveryTime": {
+          "@type": "ShippingDeliveryTime",
+          "transitTime": {
+            "@type": "QuantitativeValue",
+            "minValue": 5,
+            "maxValue": 7,
+            "unitCode": "DAY"
+          }
+        }
+      },
+      {
+        "@type": "OfferShippingDetails",
+        "name": "Europe",
+        "shippingRate": {
+          "@type": "MonetaryAmount",
+          "value": "15",
+          "currency": "EUR"
+        },
+        "shippingDestination": [
+          {
+            "@type": "DefinedRegion",
+            "name": "Europe"
+          }
+        ],
+        "deliveryTime": {
+          "@type": "ShippingDeliveryTime",
+          "transitTime": {
+            "@type": "QuantitativeValue",
+            "minValue": 2,
+            "maxValue": 3,
+            "unitCode": "DAY"
+          }
+        }
+      },
+      {
+        "@type": "OfferShippingDetails",
+        "name": "Suisse",
+        "shippingRate": {
+          "@type": "MonetaryAmount",
+          "value": "25",
+          "currency": "EUR"
+        },
+        "shippingDestination": [
+          {
+            "@type": "DefinedRegion",
+            "addressCountry": "CH",
+            "name": "Suisse"
+          }
+        ],
+        "deliveryTime": {
+          "@type": "ShippingDeliveryTime",
+          "transitTime": {
+            "@type": "QuantitativeValue",
+            "minValue": 3,
+            "maxValue": 5,
+            "unitCode": "DAY"
+          }
+        }
+      },
+      {
+        "@type": "OfferShippingDetails",
+        "name": "Royaume-Uni",
+        "shippingRate": {
+          "@type": "MonetaryAmount",
+          "value": "20",
+          "currency": "EUR"
+        },
+        "shippingDestination": [
+          {
+            "@type": "DefinedRegion",
+            "addressCountry": "GB",
+            "name": "Royaume-Uni"
+          }
+        ],
+        "deliveryTime": {
+          "@type": "ShippingDeliveryTime",
+          "transitTime": {
+            "@type": "QuantitativeValue",
+            "minValue": 3,
+            "maxValue": 5,
+            "unitCode": "DAY"
+          }
+        }
+      },
+      {
+        "@type": "OfferShippingDetails",
+        "name": "Autres pays — environ 7 jours",
+        "shippingRate": {
+          "@type": "MonetaryAmount",
+          "value": "25",
+          "currency": "EUR"
+        },
+        "shippingDestination": [
+          {
+            "@type": "DefinedRegion",
+            "name": "Autres pays"
+          }
+        ],
+        "deliveryTime": {
+          "@type": "ShippingDeliveryTime",
+          "transitTime": {
+            "@type": "QuantitativeValue",
+            "minValue": 7,
+            "maxValue": 7,
+            "unitCode": "DAY"
+          }
+        }
+      }
+    ],
+    "paymentAccepted": [
+      "Visa",
+      "Mastercard",
+      "American Express",
+      "PayPal",
+      "Apple Pay",
+      "Google Pay"
+    ]
+  }
+}

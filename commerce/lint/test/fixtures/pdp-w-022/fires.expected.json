@@ -1,0 +1,28 @@
+{
+  "sheet": "https://merchant.example/products/aurora-lamp",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.3.0",
+  "sheet_spec_version": "0.9.0",
+  "catalogue_version": "0.15.0",
+  "findings": [
+    {
+      "rule": "PDP-W-022",
+      "severity": "warning",
+      "path": "$['data']['pagefront:productHighlights'][1]",
+      "values": {
+        "index": "1"
+      },
+      "message": "`pagefront:productHighlights[1]` is empty or whitespace-only; highlights must carry the publisher's selling-point text.",
+      "remediation": "Populate the entry with the highlight text from the merchant's page, or remove the entry. If the pipeline cannot recover the text, drop the entry rather than emitting a placeholder — a shorter honest list beats a ranked list with blanks."
+    }
+  ],
+  "summary": {
+    "errors": 0,
+    "warnings": 1,
+    "info": 0,
+    "rules_fired": [
+      "PDP-W-022"
+    ]
+  }
+}

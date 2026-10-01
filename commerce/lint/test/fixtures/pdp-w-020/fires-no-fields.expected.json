@@ -1,0 +1,42 @@
+{
+  "sheet": "https://merchant.example/products/aurora-lamp",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.3.0",
+  "sheet_spec_version": "0.9.0",
+  "catalogue_version": "0.15.0",
+  "findings": [
+    {
+      "rule": "PDP-W-020",
+      "severity": "warning",
+      "path": "$['data']['isPartOf']",
+      "values": {
+        "name": "(unnamed)",
+        "field": "isPartOf",
+        "problem": "has no identifying field (`@id`, `url`, `name`, `sku`, `gtin`, `gtin13`, `mpn`)"
+      },
+      "message": "Relationship reference `(unnamed)` at `$['data']['isPartOf']` in `isPartOf` has no identifying field (`@id`, `url`, `name`, `sku`, `gtin`, `gtin13`, `mpn`).",
+      "remediation": "Add at least one identifying field — `@id`, `url`, `name`, `sku`, `gtin`, `gtin13`, or `mpn` — so the reference is dereferenceable, displayable, or matchable. If the `@id` was meant to name an entity in this Sheet, correct it to match a declared `@id` or add that entity; if it was meant to point at another product, use the target's full URL."
+    },
+    {
+      "rule": "PDP-W-020",
+      "severity": "warning",
+      "path": "$['data']['isRelatedTo'][0]",
+      "values": {
+        "name": "(unnamed)",
+        "field": "isRelatedTo",
+        "problem": "has no identifying field (`@id`, `url`, `name`, `sku`, `gtin`, `gtin13`, `mpn`)"
+      },
+      "message": "Relationship reference `(unnamed)` at `$['data']['isRelatedTo'][0]` in `isRelatedTo` has no identifying field (`@id`, `url`, `name`, `sku`, `gtin`, `gtin13`, `mpn`).",
+      "remediation": "Add at least one identifying field — `@id`, `url`, `name`, `sku`, `gtin`, `gtin13`, or `mpn` — so the reference is dereferenceable, displayable, or matchable. If the `@id` was meant to name an entity in this Sheet, correct it to match a declared `@id` or add that entity; if it was meant to point at another product, use the target's full URL."
+    }
+  ],
+  "summary": {
+    "errors": 0,
+    "warnings": 2,
+    "info": 0,
+    "rules_fired": [
+      "PDP-W-020"
+    ]
+  }
+}

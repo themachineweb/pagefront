@@ -1,0 +1,294 @@
+---
+/**
+ * Hosted validator for Pagefront Commerce PRODUCT sheets: the current
+ * commerce release and the legacy draft line, both read from
+ * commerce/spec/releases.json.
+ * Route is fully qualified — /pagefront/{vertical}/{type}/validate —
+ * because this tool validates exactly one page type of one vertical.
+ *
+ * Standing rules for this page (inherit them, don't relitigate):
+ *
+ * 1. CLIENT-SIDE PAGE. This page runs in the visitor's browser: the
+ *    visitor's browser fetches the sheet, and a CORS failure gets an
+ *    honest explainer and the paste fallback. The one server-side
+ *    piece is the endpoint at validate.json (worker/validate.ts), for
+ *    callers that cannot run a page: a served sheet's URL, or the sheet
+ *    itself in the URL or a POST body. It returns the same result as
+ *    JSON and nothing else, never the fetched bytes, with the limits
+ *    listed in that file. It is a validator; it is not a proxy.
+ * 2. CONFORMANCE ONLY. No score, anywhere on this page. Scoring is
+ *    consumer-side per commerce/spec/scoring.md; this validator is
+ *    the standard's and renders the linter's judgment, nothing more.
+ * 3. NO EXTRACTION AFFORDANCE, EVER. When a URL yields no sheet, the
+ *    result is a dead-end error pointing at the spec for how
+ *    publishers add one. NEVER "want us to generate one?" — that act
+ *    is an operator's product and does not exist under this domain.
+ */
+import Base from '../../../../layouts/Base.astro';
+import { LINKS, pagefrontNav } from '../../../../lib/links';
+import { SPEC_BASE, SPEC_DOCS } from '../../../../lib/spec-routes.mjs';
+import { CURRENT_RELEASE, currentSheetSpec, LEGACY_FORMATS } from '../../../../lib/releases.mjs';
+
+const legacyFormat = LEGACY_FORMATS[LEGACY_FORMATS.length - 1];
+---
+
+<Base
+  title="Pagefront validator — commerce product"
+  description={`Validate a Pagefront commerce product sheet (release ${CURRENT_RELEASE}, or a legacy format ${legacyFormat} sheet) against the JSON Schema and rule catalogue, entirely in your browser.`}
+  canonical="https://themachineweb.org/pagefront/commerce/product/validate"
+  section="Pagefront"
+  sectionHref={LINKS.landing}
+  navLabel="Pagefront"
+  nav={pagefrontNav('validator')}
+>
+  <h1>Sheet validator</h1>
+  <h2 class="sheet-type">Product sheet</h2>
+  <p class="scope">
+    Validates Pagefront Commerce <strong>Product</strong> sheets: commerce
+    release {CURRENT_RELEASE} (Product Sheet spec {currentSheetSpec('product')}), and legacy sheets carrying
+    <code>format_version</code> {legacyFormat}.
+    Runs entirely in your browser: when you enter a URL, <em>your</em> browser
+    fetches it — nothing is sent to this site.
+  </p>
+  <p class="scope">
+    Programs and AI assistants can ask for the same result as JSON from
+    <code>/pagefront/commerce/product/validate.json</code>: <code>?url=…</code>
+    with a served sheet's URL, <code>?sheet=…</code> with the sheet's JSON
+    URL-encoded (up to about 60 KB once encoded), or a POST with the JSON as
+    the body. The route returns the report and nothing else, and is
+    rate-limited.
+  </p>
+
+  <div class="validator" id="validator">
+    <div class="modes" role="tablist">
+      <button type="button" id="mode-url" class="mode active" role="tab" aria-selected="true" aria-controls="form-url">Sheet URL</button>
+      <button type="button" id="mode-paste" class="mode" role="tab" aria-selected="false" aria-controls="form-paste">Paste JSON</button>
+    </div>
+
+    <form id="form-url" class="panel" role="tabpanel" aria-labelledby="mode-url">
+      <input type="url" id="input-url" placeholder="https://merchant.example/pagefront/commerce/product/anorak.en.json"
+             spellcheck="false" required>
+      <button type="submit">Validate</button>
+    </form>
+
+    <form id="form-paste" class="panel" role="tabpanel" aria-labelledby="mode-paste" hidden>
+      <textarea id="input-paste" rows="12" placeholder={`{"release": "${CURRENT_RELEASE}", …}`}
+                spellcheck="false" required></textarea>
+      <button type="submit">Validate</button>
+    </form>
+
+    <div id="result" aria-live="polite"></div>
+
+    <p class="tool-meta">
+      Covers commerce release {CURRENT_RELEASE} and the legacy draft line ·
+      rule catalogue: <a href={`${SPEC_BASE}/${SPEC_DOCS['commerce/spec/rules'].route}`}>rules.md</a> ·
+      linter design: <a href={`${SPEC_BASE}/${SPEC_DOCS['core/spec/linter'].route}`}>linter.md</a>
+    </p>
+  </div>
+</Base>
+
+<style>
+  /* The sheet-type title under the h1. Future sheet types (organization,
+     category) will validate on this same page — this title is where the
+     type selector will sit when they land; until then it names the one. */
+  .sheet-type { font-family: var(--sans); font-weight: 700; font-size: 1.15rem;
+          letter-spacing: -0.01em; margin: -1.5rem 0 1rem; }
+  .scope { font-family: var(--sans); font-size: .95rem; color: var(--ink-soft); }
+  .validator { font-family: var(--sans); font-size: .95rem; }
+  .modes { display: flex; gap: .5rem; margin: 1.5rem 0 .75rem; }
+  .mode { font: inherit; padding: .35rem .9rem; background: none; border: 1px solid var(--rule);
+          border-radius: 999px; color: var(--ink-soft); cursor: pointer; }
+  .mode.active { border-color: var(--ink); color: var(--ink); }
+  .panel { display: flex; flex-direction: column; gap: .75rem; }
+  /* The explicit display above would otherwise defeat the `hidden`
+     attribute (the UA's display:none loses to any author display), so
+     both panels rendered at once and the tabs looked inert. */
+  .panel[hidden] { display: none; }
+  .panel input, .panel textarea { font: inherit; padding: .6rem .75rem; border: 1px solid var(--rule);
+          border-radius: 6px; background: #fffdf8; color: var(--ink); width: 100%; }
+  .panel textarea { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .85rem; }
+  .panel button { font: inherit; font-weight: 600; align-self: flex-start; padding: .5rem 1.25rem;
+          border: 1px solid var(--ink); border-radius: 6px; background: var(--ink);
+          color: var(--paper); cursor: pointer; }
+  #result { margin-top: 1.75rem; }
+  #result .status { font-weight: 600; margin: 0 0 .75rem; }
+  #result .clean { color: #15803d; }
+  #result .problem { color: #b91c1c; }
+  #result .note { color: var(--ink-soft); margin: .5rem 0; }
+  #result ol { list-style: none; margin: 1rem 0; padding: 0; }
+  #result li { border: 1px solid var(--rule); border-left: 4px solid var(--ink-soft);
+          border-radius: 6px; padding: .6rem .9rem; margin: 0 0 .75rem; }
+  #result li.sev-error { border-left-color: #b91c1c; }
+  #result li.sev-warning { border-left-color: #b45309; }
+  #result li.sev-info { border-left-color: #0369a1; }
+  #result .sev { font-weight: 700; margin-right: .5rem; }
+  #result li.sev-error .sev { color: #b91c1c; }
+  #result li.sev-warning .sev { color: #b45309; }
+  #result li.sev-info .sev { color: #0369a1; }
+  #result .rule-id { font-weight: 600; margin-right: .5rem; }
+  #result code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .85em;
+          background: #efe9db; padding: .1em .3em; border-radius: 4px; overflow-wrap: anywhere; }
+  #result .msg { margin: .4rem 0 0; }
+  #result .fix { margin: .35rem 0 0; color: var(--ink-soft); }
+  #result details { margin: 1.25rem 0; }
+  #result summary { cursor: pointer; color: var(--ink-soft); }
+  #result pre { overflow-x: auto; background: #efe9db; padding: .75rem; border-radius: 6px;
+          font-size: .8rem; line-height: 1.45; }
+  #result .copy { font: inherit; font-size: .85rem; padding: .25rem .75rem; margin-left: .75rem;
+          border: 1px solid var(--rule); border-radius: 6px; background: none; cursor: pointer; }
+  #result .versions { color: var(--ink-soft); font-size: .85rem; margin-top: 1rem; }
+  .tool-meta { color: var(--ink-soft); font-size: .85rem; border-top: 1px solid var(--rule);
+          margin-top: 2.5rem; padding-top: 1rem; }
+</style>
+
+<script>
+  import { buildResult, loadFromUrl } from '../../../../lib/validate-model';
+  import { CURRENT_RELEASE, LEGACY_FORMATS } from '../../../../lib/releases.mjs';
+  import type { RenderModel } from '../../../../lib/validate-model';
+
+  const SPEC_URL = '/pagefront/spec/commerce/product';
+
+  const modeUrl = document.getElementById('mode-url') as HTMLButtonElement;
+  const modePaste = document.getElementById('mode-paste') as HTMLButtonElement;
+  const formUrl = document.getElementById('form-url') as HTMLFormElement;
+  const formPaste = document.getElementById('form-paste') as HTMLFormElement;
+  const inputUrl = document.getElementById('input-url') as HTMLInputElement;
+  const inputPaste = document.getElementById('input-paste') as HTMLTextAreaElement;
+  const result = document.getElementById('result') as HTMLDivElement;
+
+  function setMode(url: boolean): void {
+    modeUrl.classList.toggle('active', url);
+    modePaste.classList.toggle('active', !url);
+    modeUrl.setAttribute('aria-selected', String(url));
+    modePaste.setAttribute('aria-selected', String(!url));
+    formUrl.hidden = !url;
+    formPaste.hidden = url;
+  }
+  modeUrl.addEventListener('click', () => setMode(true));
+  modePaste.addEventListener('click', () => setMode(false));
+
+  function el(tag: string, className: string | null, text?: string): HTMLElement {
+    const node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text !== undefined) node.textContent = text;
+    return node;
+  }
+
+  function render(model: RenderModel): void {
+    result.replaceChildren();
+
+    if (model.kind === 'invalid-json') {
+      result.append(el('p', 'status problem', 'Not valid JSON.'));
+      result.append(el('p', 'note', model.message));
+      return;
+    }
+
+    if (model.kind === 'no-sheet') {
+      result.append(el('p', 'status problem', 'No Pagefront Sheet found at this URL.'));
+      const note = el('p', 'note', `(${model.detail}.) See the spec for how publishers add one: `);
+      const link = el('a', null, 'product.md') as HTMLAnchorElement;
+      link.href = SPEC_URL;
+      note.append(link);
+      result.append(note);
+      return;
+    }
+
+    if (model.kind === 'fetch-error') {
+      result.append(el('p', 'status problem', "Your browser couldn't fetch this URL."));
+      result.append(el('p', 'note',
+        "Commonly this means the publisher's server doesn't send Access-Control-Allow-Origin, " +
+        'so browsers are not allowed to read the sheet cross-origin. Open the sheet URL directly, ' +
+        'copy the JSON, and paste it here (Paste JSON tab). ' +
+        `(${model.detail})`));
+      return;
+    }
+
+    if (model.kind === 'scope-error') {
+      result.append(el('p', 'status problem', 'Out of scope for this validator.'));
+      result.append(el('p', 'note',
+        `This validator covers commerce product sheets at release ${CURRENT_RELEASE}, and legacy sheets at format ${LEGACY_FORMATS[LEGACY_FORMATS.length - 1]}; ` +
+        `this sheet declares ${model.declared}.`));
+      return;
+    }
+
+    if (model.kind === 'layer1') {
+      const n = model.schemaErrors.length;
+      result.append(el('p', 'status problem',
+        `Layer 1 — structural validation failed (${n} error${n === 1 ? '' : 's'}).`));
+      result.append(el('p', 'note',
+        'The sheet does not conform to the product JSON Schema. The rule catalogue runs only against schema-valid sheets.'));
+      const list = el('ol', null);
+      for (const e of model.schemaErrors) {
+        const item = el('li', 'sev-error');
+        item.append(el('code', null, e.instancePath === '' ? '(root)' : e.instancePath));
+        item.append(el('p', 'msg', e.message));
+        list.append(item);
+      }
+      result.append(list);
+      return;
+    }
+
+    const report = model.report;
+    const { errors, warnings, info, rules_fired } = report.summary;
+    if (report.findings.length === 0) {
+      result.append(el('p', 'status clean', '✓ No findings — well-formed under the commerce product catalogue.'));
+    } else {
+      result.append(el('p', 'status',
+        `${errors} error${errors === 1 ? '' : 's'} · ${warnings} warning${warnings === 1 ? '' : 's'} · ${info} info` +
+        ` — rules fired: ${rules_fired.join(', ')}`));
+      const list = el('ol', null);
+      for (const f of report.findings) {
+        const item = el('li', `sev-${f.severity}`);
+        const head = el('p', null);
+        head.append(el('span', 'sev', f.severity));
+        head.append(el('span', 'rule-id', f.rule));
+        head.append(el('code', null, f.path));
+        item.append(head);
+        item.append(el('p', 'msg', f.message));
+        item.append(el('p', 'fix', `fix: ${f.remediation}`));
+        list.append(item);
+      }
+      result.append(list);
+    }
+
+    const json = JSON.stringify(report, null, 2);
+    const details = el('details', null);
+    const summary = el('summary', null, 'Canonical JSON report');
+    const copy = el('button', 'copy', 'Copy') as HTMLButtonElement;
+    copy.type = 'button';
+    copy.addEventListener('click', async () => {
+      await navigator.clipboard.writeText(json);
+      copy.textContent = 'Copied';
+      setTimeout(() => { copy.textContent = 'Copy'; }, 1500);
+    });
+    summary.append(copy);
+    details.append(summary);
+    details.append(el('pre', null, json));
+    result.append(details);
+
+    result.append(el('p', 'versions',
+      `linter ${report.linter_version} · catalogue ${report.catalogue_version} · ` +
+      `release ${report.release ?? 'none'} · sheet spec ${report.sheet_spec_version ?? 'none'} · checked ${report.checked_at}`));
+  }
+
+  formUrl.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    result.replaceChildren(el('p', 'note', 'Fetching…'));
+    render(await loadFromUrl(inputUrl.value.trim()));
+  });
+
+  formPaste.addEventListener('submit', (event) => {
+    event.preventDefault();
+    render(buildResult(inputPaste.value, 'paste'));
+  });
+
+  // A `?url=` parameter pre-fills the URL form and runs it, so a page can
+  // link straight into a validation (the case studies do). The value goes
+  // through the same fetch-and-lint path as a typed URL; nothing else.
+  const prefill = new URLSearchParams(location.search).get('url');
+  if (prefill) {
+    setMode(true);
+    inputUrl.value = prefill;
+    formUrl.requestSubmit();
+  }
+</script>

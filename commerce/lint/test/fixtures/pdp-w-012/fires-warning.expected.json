@@ -1,0 +1,28 @@
+{
+  "sheet": "https://merchant.example/products/aurora-lamp",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.3.0",
+  "sheet_spec_version": "0.9.0",
+  "catalogue_version": "0.15.0",
+  "findings": [
+    {
+      "rule": "PDP-W-012",
+      "severity": "warning",
+      "path": "$['data']['video'][0]",
+      "values": {
+        "role": "overview"
+      },
+      "message": "Video at `$['data']['video'][0]` with role `overview` has no caption or transcript.",
+      "remediation": "Add a `caption` field with a 1–3 sentence summary of the video's content, or a `transcript` field with the full spoken content. For overview and tutorial videos, at least one is strongly recommended."
+    }
+  ],
+  "summary": {
+    "errors": 0,
+    "warnings": 1,
+    "info": 0,
+    "rules_fired": [
+      "PDP-W-012"
+    ]
+  }
+}
