@@ -4,7 +4,7 @@
   "linter_version": "0.0.0-test",
   "release": "0.9",
   "sheet_spec_version": "0.8",
-  "catalogue_version": "0.15.0",
+  "catalogue_version": "0.16.0",
   "findings": [
     {
       "rule": "PDP-E-002",
@@ -12,6 +12,7 @@
       "path": "$['format_version']",
       "values": {
         "declared": "`format_version` is `0.9`",
+        "found": "`$schema` URL declares version `0.8`",
         "format_version": "0.9",
         "schema_version": "0.8"
       },

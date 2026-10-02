@@ -11,5 +11,7 @@ export const pdpE002: Rule = {
   ...RELEASE_SCHEMA_MISMATCH,
   check: releaseSchemaMismatch("product"),
   introduced: "v0.6",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "product.md#the-envelope",
 };

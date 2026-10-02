@@ -32,5 +32,7 @@ export const pdpW033: Rule = {
   remediation:
     "Add an offer carrying `pagefront:configuratorPricing` for this configurator. If no option changes the price, declare `affectsPrice: false` on each dimension.",
   introduced: "v0.9 (2026-10-01 revision)",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "product.md#configurator-pricing-and-price-bands",
 };

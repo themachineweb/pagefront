@@ -1,0 +1,30 @@
+{
+  "sheet": "https://merchant.example/products/harbour-desk",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.4.0",
+  "sheet_spec_version": "0.10.0",
+  "catalogue_version": "0.16.0",
+  "findings": [
+    {
+      "rule": "PDP-E-017",
+      "severity": "error",
+      "path": "$['data']['pagefront:configurator']['exclusions'][1]['legs']",
+      "values": {
+        "dimension": "legs",
+        "option": "\"steel\"",
+        "problem": "the configurator declares no dimension `legs`"
+      },
+      "message": "Configuration reference at `$['data']['pagefront:configurator']['exclusions'][1]['legs']` (dimension `legs`, option `\"steel\"`) does not resolve: the configurator declares no dimension `legs`.",
+      "remediation": "Name a dimension the configurator declares, and write the option exactly as its `value` is written in that dimension's `options`, including its JSON type. Remove an exclusion or adjustment that refers to an option the product no longer offers."
+    }
+  ],
+  "summary": {
+    "errors": 1,
+    "warnings": 0,
+    "info": 0,
+    "rules_fired": [
+      "PDP-E-017"
+    ]
+  }
+}

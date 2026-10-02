@@ -29,5 +29,7 @@ export const pdpI001: Rule = {
   remediation:
     "No action required. This finding is informational. If you find yourself using a Schema.org property frequently and would value formal Pagefront modeling for it, consider opening a spec proposal.",
   introduced: "v0.6",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "product.md#data--schemaorg-json-ld",
 };

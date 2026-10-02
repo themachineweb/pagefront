@@ -33,5 +33,7 @@ export const pdpE010: Rule = {
   remediation:
     "Make the two amounts equal. If `price` is the amount the page shows on load, set `baseConfiguration` to the configuration the page preselects and `basePrice` to its total.",
   introduced: "v0.9 (2026-10-01 revision)",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "product.md#configurator-pricing-and-price-bands",
 };

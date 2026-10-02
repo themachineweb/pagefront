@@ -54,5 +54,7 @@ export const pdpW032: Rule = {
   remediation:
     "State the modifier, zero included; for a text dimension, state it under the key `\"*\"`. If the dimension never changes the price, declare `affectsPrice: false` on it. If the price is not known, declare `pricing: \"partial\"`.",
   introduced: "v0.9 (2026-10-01 revision)",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "product.md#configurator-pricing-and-price-bands",
 };

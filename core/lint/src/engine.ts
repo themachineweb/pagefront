@@ -11,6 +11,7 @@ import type {
   Finding,
   LintOptions,
   Report,
+  Rule,
   RuleContext,
   RuleMatch,
   Sheet,
@@ -38,6 +39,34 @@ function renderTemplate(
     }
     return substitution;
   });
+}
+
+/** A full semver as three numbers, or null when the text is not one. */
+function semver(text: unknown): [number, number, number] | null {
+  if (typeof text !== "string") return null;
+  const m = /^(\d+)\.(\d+)\.(\d+)$/.exec(text);
+  return m === null ? null : [Number(m[1]), Number(m[2]), Number(m[3])];
+}
+
+/**
+ * Release gating: a Sheet is judged only by the rules of the release it
+ * declares. A rule is skipped when the Sheet's `release` is lower than
+ * the rule's `appliesFrom`, and on a legacy Sheet (`format_version`, no
+ * `release`) unless the rule is flagged `appliesToLegacy`. A Sheet whose
+ * release cannot be read as a semver, or that declares neither field,
+ * cannot be gated and gets every rule.
+ */
+function ruleApplies(rule: Rule, sheet: Sheet): boolean {
+  if (sheet.release === undefined && sheet.format_version !== undefined) {
+    return rule.appliesToLegacy === true;
+  }
+  const declared = semver(sheet.release);
+  const from = semver(rule.appliesFrom);
+  if (declared === null || from === null) return true;
+  for (let i = 0; i < 3; i++) {
+    if (declared[i] !== from[i]) return declared[i] > from[i];
+  }
+  return true;
 }
 
 /** The release a sheet declares: `release`, else a legacy `format_version`. */
@@ -75,6 +104,7 @@ export function lint(
   const checkedAt = options.checkedAt ?? new Date().toISOString();
 
   for (const rule of catalogue.rules) {
+    if (!ruleApplies(rule, sheet)) continue;
     const nodes = query(rule.target, sheet as Parameters<typeof query>[1]);
     const allMatches: RuleMatch[] = nodes.nodes.map((node) => ({
       path: node.path,

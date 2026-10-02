@@ -27,5 +27,7 @@ export const pdpW039: Rule = {
   remediation:
     "If the merchant states the advice in the sizing dimension's system, add a `sizeAdjustment` in that system. If it does not, no action: do not convert between systems.",
   introduced: "v0.9 (2026-10-01 revision)",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "product.md#size-guidance-pagefrontsizechart-and-pagefrontsizerecommendation",
 };

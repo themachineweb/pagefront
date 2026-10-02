@@ -1,6 +1,6 @@
 {
-  "$schema": "https://themachineweb.org/pagefront/spec/commerce/product/v0.9.0.json",
-  "release": "0.3.0",
+  "$schema": "https://themachineweb.org/pagefront/spec/commerce/product/v0.10.0.json",
+  "release": "0.4.0",
   "schema_org_version": "30.0",
   "canonical_url": "https://merchant.example/products/product-12345",
   "sheet_url": "https://merchant.example/products/product-12345.pagefront.json",

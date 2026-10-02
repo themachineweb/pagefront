@@ -11,5 +11,7 @@ export const pdpE016: Rule = {
   ...BOTH_VERSION_FIELDS,
   check: bothVersionFields,
   introduced: "release 0.3.0",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "product.md#the-envelope",
 };

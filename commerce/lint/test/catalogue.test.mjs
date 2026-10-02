@@ -3,7 +3,8 @@ import assert from "node:assert/strict";
 import { lintSheet } from "../dist/index.js";
 
 const baseSheet = {
-  release: "0.3.0",
+  $schema: "https://themachineweb.org/pagefront/spec/commerce/product/v0.10.0.json",
+  release: "0.4.0",
   canonical_url: "https://merchant.example/widget",
   sheet_url: "https://merchant.example/widget.pagefront.json",
   generated_at: "2026-08-10T00:00:00Z",
@@ -39,9 +40,9 @@ test("PDP-W-001 fires exactly once on a sheet without images", () => {
     info: 0,
     rules_fired: ["PDP-W-001"],
   });
-  assert.equal(report.catalogue_version, "0.15.0");
-  assert.equal(report.release, "0.3.0");
-  assert.equal(report.sheet_spec_version, null);
+  assert.equal(report.catalogue_version, "0.16.0");
+  assert.equal(report.release, "0.4.0");
+  assert.equal(report.sheet_spec_version, "0.10.0");
 });
 
 test("PDP-W-001 does not fire when an image array is present", () => {

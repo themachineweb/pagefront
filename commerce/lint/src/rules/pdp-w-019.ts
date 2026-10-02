@@ -46,5 +46,7 @@ export const pdpW019: Rule = {
   remediation:
     "Supply a real, dereferenceable identifier — a URL-shaped `@id`, or a non-empty `sku`, `gtin`, `gtin13`, or `mpn`. If no structured identifier is available for this reference, it does not meet `pagefront:relatedProduct`'s requirement: move it to Schema.org's native `isRelatedTo` (which carries no identifier requirement) and drop the `relationship` typing.",
   introduced: "v0.7",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "product.md#the-structured-identifier-requirement",
 };

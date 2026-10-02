@@ -49,5 +49,7 @@ export const pdpW027: Rule = {
   remediation:
     "Populate `acceptedAnswer.text` with the answer prose, or remove the `acceptedAnswer` (and consider whether an unanswered question belongs in the sheet at all).",
   introduced: "v0.8",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "product.md#product-qa",
 };

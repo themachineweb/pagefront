@@ -28,7 +28,7 @@ The `Link` response header on the page is the primary carrier:
 Link: <https://merchant.example/api/sheets/anorak.en.json>;
       rel="describedby";
       type="application/json";
-      profile="https://themachineweb.org/pagefront/spec/commerce/product/v0.9.0.json";
+      profile="https://themachineweb.org/pagefront/spec/commerce/product/v0.10.0.json";
       title="Pagefront product sheet"
 ```
 
@@ -57,7 +57,7 @@ own domain.
 
 ## 3. Read the envelope
 
-Every sheet carries `release`, `schema_org_version`, `canonical_url`,
+Every sheet carries `$schema`, `release`, `schema_org_version`, `canonical_url`,
 `sheet_url`, `generated_at` and `data`. `expires_at` is recommended and often
 present.
 

@@ -28,5 +28,7 @@ export const orgW001: Rule = {
   remediation:
     "Add the `Brand` node with `@id` and `name` — the `Brand.@id` is the identity Product Sheets resolve via `Product.brand`.",
   introduced: "v0.9",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "organization.md#role-discriminator--pagefrontcommercerole",
 };

@@ -17,5 +17,7 @@ export const orgE001: Rule = {
   remediation:
     'Declare the prefix: `"@context": ["https://schema.org", {"pagefront": "https://themachineweb.org/pagefront/vocabulary/"}]`.',
   introduced: "v0.9",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "vocabulary.md#how-to-use-this-vocabulary",
 };

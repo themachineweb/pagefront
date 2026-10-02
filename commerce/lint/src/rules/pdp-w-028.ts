@@ -29,5 +29,7 @@ export const pdpW028: Rule = {
   remediation:
     "Add a `UnitPriceSpecification` entry mirroring `price` with `valueAddedTaxIncluded` set to `true` or `false`; on an Offer that already uses `priceSpecification`, set the flag on each entry.",
   introduced: "v0.9",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "product.md#tax-inclusion",
 };

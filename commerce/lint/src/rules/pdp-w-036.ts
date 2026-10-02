@@ -28,5 +28,7 @@ export const pdpW036: Rule = {
   remediation:
     "Replace the value with a lowercase identifier without spaces (`yellow_gold`, `0.5`) and move the label to `description`. Put a unit in the dimension's `note`. Update the pricing block's keys, `baseConfiguration`, `when` and `exclusions` to the new value.",
   introduced: "v0.9 (2026-10-01 revision)",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "product.md#configurator-pricing-and-price-bands",
 };

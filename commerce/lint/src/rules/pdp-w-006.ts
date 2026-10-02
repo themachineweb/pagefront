@@ -32,5 +32,7 @@ export const pdpW006: Rule = {
   remediation:
     "Add a `PropertyValue` to `additionalProperty` with name `scope` and a value drawn from the conventional vocabulary (`yarn`, `fabric`, `finished_product`, `diamond`, `gemstone`, etc.).",
   introduced: "v0.6",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "vocabulary.md#certification-scope",
 };

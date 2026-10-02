@@ -25,5 +25,7 @@ export const pdpW029: Rule = {
   remediation:
     "Declare `areaServed` (or `eligibleRegion`) for the market whose displayed price this is. Where the market cannot be determined from the storefront, stating the tax basis via `valueAddedTaxIncluded` is the higher priority; see \"Tax inclusion.\"",
   introduced: "v0.9",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "product.md#tax-inclusion",
 };

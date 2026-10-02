@@ -36,5 +36,7 @@ export const orgW004: Rule = {
   remediation:
     "Declare `seller` in `pagefront:commerceRole`, or move the store-wide terms to the seller's own sheet.",
   introduced: "v0.9",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "organization.md#seller-block-seller",
 };

@@ -10,20 +10,24 @@ import { validateAndLint, KNOWN_RELEASES, RELEASE_MANIFEST } from "@pagefront/li
 import type { Report, SchemaError } from "@pagefront/lint-commerce";
 
 /**
- * The one page type this validator covers, on both lines. The schemas
- * in scope are derived from the linter's release manifest, the same one
- * its Layer 1 dispatch uses: the Product Sheet schema of every release
- * it lists, the legacy draft line's schema, and the identifier that
- * schema carried before 2026-09-08. No version is written here by hand.
+ * The one page type this validator covers, on both lines. Everything
+ * below derives from the linter's release manifest, the one its own
+ * Layer 1 resolution uses; no version is written here by hand.
+ *
+ * - Release line: a sheet is judged by the release it declares, so the
+ *   scope question is whether that release is one the linter knows. The
+ *   linter then validates against the schema the release bundles, and
+ *   reports a `$schema` that disagrees (PDP-E-002).
+ * - Legacy line: the legacy format, and the legacy product schema or the
+ *   identifier it carried before 2026-09-08.
  */
-const PRODUCT_SCHEMAS: readonly string[] = [
-  ...RELEASE_MANIFEST.releases.map((r) =>
-    RELEASE_MANIFEST.schema_url_template.replace("{sheet}", "product").replace("{version}", r.sheets.product)
-  ),
+const LEGACY_PRODUCT_SCHEMAS: readonly string[] = [
   RELEASE_MANIFEST.legacy.schemas.product,
   "https://themachineweb.org/pagefront/commerce/schemas/product/v0.9.json",
 ];
 const LEGACY_FORMATS: readonly string[] = RELEASE_MANIFEST.legacy.format_versions;
+/** A `$schema` that names another page type's schema: out of scope here. */
+const OTHER_PAGE_TYPE = /\/pagefront\/(spec\/commerce|commerce\/schemas)\/(?!product\/)[a-z]+\//;
 
 export type RenderModel =
   /** Paste input that isn't JSON. */
@@ -61,26 +65,26 @@ export function buildResult(
   // Declared-version pre-check (page-side by design, not library): a
   // sheet for another page type, or one declaring a release or a legacy
   // format this validator does not cover, would otherwise hit a product
-  // schema and produce a wall of misleading structural errors. The
-  // dispatch is on `$schema`: the product schemas of both lines are in
-  // scope, and the library validates against the one the sheet names.
+  // schema and produce a wall of misleading structural errors.
   if (typeof parsed === "object" && parsed !== null) {
     const envelope = parsed as Record<string, unknown>;
     const declaredSchema = envelope["$schema"];
-    if (typeof declaredSchema === "string" && !PRODUCT_SCHEMAS.includes(declaredSchema)) {
+    const declaredRelease = envelope["release"];
+    const declaredFormat = envelope["format_version"];
+    if (typeof declaredSchema === "string" && OTHER_PAGE_TYPE.test(declaredSchema)) {
       return { kind: "scope-error", declared: declaredSchema };
     }
-    const declaredRelease = envelope["release"];
-    if (typeof declaredRelease === "string" && !KNOWN_RELEASES.includes(declaredRelease)) {
-      return { kind: "scope-error", declared: `release ${declaredRelease}` };
-    }
-    const declaredFormat = envelope["format_version"];
-    if (
-      declaredRelease === undefined &&
-      typeof declaredFormat === "string" &&
-      !LEGACY_FORMATS.includes(declaredFormat)
-    ) {
-      return { kind: "scope-error", declared: `format_version ${declaredFormat}` };
+    if (typeof declaredRelease === "string") {
+      if (!KNOWN_RELEASES.includes(declaredRelease)) {
+        return { kind: "scope-error", declared: `release ${declaredRelease}` };
+      }
+    } else if (declaredRelease === undefined && typeof declaredFormat === "string") {
+      if (!LEGACY_FORMATS.includes(declaredFormat)) {
+        return { kind: "scope-error", declared: `format_version ${declaredFormat}` };
+      }
+      if (typeof declaredSchema === "string" && !LEGACY_PRODUCT_SCHEMAS.includes(declaredSchema)) {
+        return { kind: "scope-error", declared: declaredSchema };
+      }
     }
   }
 

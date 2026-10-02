@@ -40,8 +40,8 @@ test("library entry is free of Node built-ins (browser consumers bundle it)", as
 
 test("lintSheet defaults linter_version to the lint-commerce package version", () => {
   const report = lintSheet({
-    $schema: "https://themachineweb.org/pagefront/spec/commerce/product/v0.9.0.json",
-    release: "0.3.0",
+    $schema: "https://themachineweb.org/pagefront/spec/commerce/product/v0.10.0.json",
+    release: "0.4.0",
     canonical_url: "https://merchant.example/products/aurora-lamp",
     sheet_url: "https://merchant.example/products/aurora-lamp.pagefront.json",
     generated_at: "2026-08-01T00:00:00Z",

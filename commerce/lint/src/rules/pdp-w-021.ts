@@ -55,5 +55,7 @@ export const pdpW021: Rule = {
   remediation:
     "Add `sheet_url` with the target's Sheet URL — the variant's Sheet URL on a parent `hasVariant` entry, or the parent's Sheet URL on a variant's `isVariantOf`. If you do not emit a separate Sheet for the target (the family is modeled inline in one ProductGroup Sheet), no cross-Sheet link exists and `sheet_url` does not apply.",
   introduced: "v0.7",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "product.md#multi-sheet-variant-families",
 };

@@ -44,5 +44,7 @@ export const pdpW011: Rule = {
   remediation:
     "Add a `pagefront:availableLanguages` array listing the URLs of sibling sheets in other languages, with their BCP 47 language tags.",
   introduced: "v0.6",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "product.md#internationalization",
 };

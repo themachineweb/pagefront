@@ -29,5 +29,7 @@ export const orgW006: Rule = {
   remediation:
     "Declare `brand_owner` in `pagefront:commerceRole` if this is the brand's own sheet; otherwise remove the field — only the brand's sheet can state whom the brand authorizes.",
   introduced: "v0.9",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "organization.md#authorized-resellers",
 };

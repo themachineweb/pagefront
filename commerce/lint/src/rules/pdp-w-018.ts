@@ -32,5 +32,7 @@ export const pdpW018: Rule = {
   remediation:
     "Add a `url` to this variant matching its distinct addressable page state, consistent with its siblings. If this variant genuinely shares the exact same URL as the others with no parameter-based differentiation (case 1 in the spec), the per-variant `url` should instead be omitted from *all* entries so presence is uniform.",
   introduced: "v0.7",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "product.md#per-variant-urls",
 };

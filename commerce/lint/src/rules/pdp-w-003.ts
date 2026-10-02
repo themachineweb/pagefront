@@ -20,5 +20,7 @@ export const pdpW003: Rule = {
   remediation:
     "Add a `brand` field with a typed `Brand` or `Organization` value, including at minimum `name` and optionally `url`.",
   introduced: "v0.6",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "product.md#required-and-recommended-core-fields",
 };

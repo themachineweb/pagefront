@@ -27,5 +27,7 @@ export const pdpW009: Rule = {
   remediation:
     "Add variant entries to `hasVariant`. If the product genuinely has no variants, change `@type` to `Product`.",
   introduced: "v0.6",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "product.md#configurator-vs-productgroup-guidance",
 };

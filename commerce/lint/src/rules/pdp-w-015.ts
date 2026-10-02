@@ -33,5 +33,7 @@ export const pdpW015: Rule = {
   remediation:
     "Add the contact channel matching the declared method (e.g., `contactUrl` for `authorized_retailer` and `dealer_network`, `contactEmail` for `email`, `contactPhone` for `phone`, `contactUrl` for `quote_form`). If no such channel exists, change `method` to `unspecified`.",
   introduced: "v0.6",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "product.md#price-on-request-offers",
 };

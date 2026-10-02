@@ -1,6 +1,6 @@
 {
-  "$schema": "https://themachineweb.org/pagefront/spec/commerce/organization/v0.3.0.json",
-  "release": "0.3.0",
+  "$schema": "https://themachineweb.org/pagefront/spec/commerce/organization/v0.4.0.json",
+  "release": "0.4.0",
   "schema_org_version": "30.0",
   "canonical_url": "https://www.zalando.de",
   "sheet_url": "https://www.zalando.de/pagefront/commerce/organization/zalando.de.json",

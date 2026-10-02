@@ -53,5 +53,7 @@ export const pdpW017: Rule = {
   remediation:
     "Normalize the tag to canonical BCP 47 case. The semantic meaning is unchanged; only the case differs.",
   introduced: "v0.6",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "product.md#upstream-equivalent-forms",
 };

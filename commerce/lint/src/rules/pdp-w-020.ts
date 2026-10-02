@@ -77,5 +77,7 @@ export const pdpW020: Rule = {
   remediation:
     "Add at least one identifying field — `@id`, `url`, `name`, `sku`, `gtin`, `gtin13`, or `mpn` — so the reference is dereferenceable, displayable, or matchable. If the `@id` was meant to name an entity in this Sheet, correct it to match a declared `@id` or add that entity; if it was meant to point at another product, use the target's full URL.",
   introduced: "v0.7",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "product.md#five-patterns-for-product-to-product-relationships",
 };

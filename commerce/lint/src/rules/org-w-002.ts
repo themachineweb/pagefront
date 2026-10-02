@@ -34,5 +34,7 @@ export const orgW002: Rule = {
   remediation:
     "Add the store-wide terms the seller role promises: the return policy, fulfillment terms, payment methods, or physical locations.",
   introduced: "v0.9",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "organization.md#seller-block-seller",
 };

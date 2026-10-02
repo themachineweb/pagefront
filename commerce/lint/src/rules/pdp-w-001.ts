@@ -20,5 +20,7 @@ export const pdpW001: Rule = {
   remediation:
     "Add at least one `ImageObject` to the `data.image` array. The primary image should typically declare role `hero` or `packshot`.",
   introduced: "v0.6",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "product.md#image-roles",
 };

@@ -90,5 +90,7 @@ export const pdpE015: Rule = {
   remediation:
     "Carry every amount the same way. Decimal strings are recommended when amounts have fractional parts.",
   introduced: "v0.9 (2026-10-01 revision)",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "product.md#amounts",
 };

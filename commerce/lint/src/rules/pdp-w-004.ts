@@ -28,5 +28,7 @@ export const pdpW004: Rule = {
   remediation:
     "Add a `priceCurrency` field with the ISO 4217 currency code matching the offer's currency.",
   introduced: "v0.6",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "product.md#offers",
 };

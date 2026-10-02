@@ -1,8 +1,8 @@
 # Pagefront — draft a product sheet from a page
 
-- Targets the Product sheet, spec version 0.9.0, in commerce release 0.3.0. Source: https://themachineweb.org/pagefront/publish/assistant
+- Targets the Product sheet, spec version 0.10.0, in commerce release 0.4.0. Source: https://themachineweb.org/pagefront/publish/assistant
 - Spec: https://themachineweb.org/pagefront/spec/commerce/product
-- Schema: https://themachineweb.org/pagefront/spec/commerce/product/v0.9.0.json
+- Schema: https://themachineweb.org/pagefront/spec/commerce/product/v0.10.0.json
 
 You are helping a merchant draft their first Pagefront sheet.
 
@@ -124,7 +124,7 @@ field a sheet can carry and the exact shape of each: the envelope, the
 required and recommended core fields, variant families, image and video
 roles, offers, documents, legal entities, safety warnings and notices,
 materials and size guidance, and the pagefront: extensions. The JSON Schema
-at https://themachineweb.org/pagefront/spec/commerce/product/v0.9.0.json is
+at https://themachineweb.org/pagefront/spec/commerce/product/v0.10.0.json is
 the normative inventory of fields and shapes; read it too. Then read the
 page.
 

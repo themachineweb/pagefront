@@ -1,6 +1,6 @@
 # AFS Blackbird V3 — Case Study
 
-Commerce release 0.3.0. Sheets derived from the live site and verified against
+Commerce release 0.4.0. Sheets derived from the live site and verified against
 it on 2026-09-04; the product sheet re-verified on 2026-09-30.
 
 ## The merchant and the product
@@ -154,3 +154,5 @@ dealer addresses.
   the spec table's construction and box columns follow the page's current
   split; a fifth upsell added; the related items dropped, since the shop
   reshuffles them on every page load.
+- **2026-10-02** — sheets moved to commerce release 0.4.0 (`release` and
+  `$schema` only); no other value changed.

@@ -83,5 +83,7 @@ export const pdpW010: Rule = {
   remediation:
     "Choose one representation. Use the configurator for combinatorial spaces, made-to-order products, or continuous dimensions. Use `ProductGroup` + `hasVariant` for discrete SKU families that ship from inventory.",
   introduced: "v0.6",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "product.md#configurator-vs-productgroup-guidance",
 };

@@ -55,8 +55,10 @@ function legacyClean($schema = "https://themachineweb.org/pagefront/spec/commerc
 
 test("release-line report carries release and sheet_spec_version", () => {
   const model = buildResult(CLEAN, "paste");
-  assert.equal(model.report.release, "0.3.0");
-  assert.equal(model.report.sheet_spec_version, "0.9.0");
+  // The fixture is on the current release; the report states what it declares.
+  const declared = JSON.parse(CLEAN);
+  assert.equal(model.report.release, declared.release);
+  assert.equal(`v${model.report.sheet_spec_version}.json`, declared.$schema.replace(/^.*\//, ""));
 });
 
 test("legacy sheet (format_version 0.9, legacy $schema) → still validated and linted", () => {
@@ -77,26 +79,47 @@ test("wrong declared version → scope error, not schema errors", () => {
   });
 
   const sheet = JSON.parse(CLEAN);
-  sheet.release = "0.4.0";
+  sheet.release = "9.9.9";
   assert.deepEqual(buildResult(JSON.stringify(sheet), "paste"), {
     kind: "scope-error",
-    declared: "release 0.4.0",
+    declared: "release 9.9.9",
   });
 });
 
-test("release sheet pointing $schema at the legacy schema → in scope, and reported as a problem", () => {
-  // The legacy schema URL is a product schema, so the sheet is in scope.
-  // How the mismatch surfaces depends on the linter version: 0.10.0 lints
-  // it and fires PDP-E-002; from 0.11.0 the sheet is validated against the
-  // schema it names and fails Layer 1.
-  const sheet = JSON.parse(CLEAN);
-  sheet.$schema = "https://themachineweb.org/pagefront/spec/commerce/product/v0.9.json";
-  const model = buildResult(JSON.stringify(sheet), "paste");
-  if (model.kind === "report") {
-    assert.deepEqual(model.report.summary.rules_fired, ["PDP-E-002"]);
-  } else {
-    assert.equal(model.kind, "layer1");
+test("release sheet whose $schema disagrees with its release → report with PDP-E-002", () => {
+  // A sheet is judged by the release it declares: the linter validates
+  // it against the schema that release bundles and names the mismatch.
+  for (const $schema of [
+    "https://themachineweb.org/pagefront/spec/commerce/product/v0.9.json",
+    "https://themachineweb.org/pagefront/spec/commerce/product/v0.99.0.json",
+  ]) {
+    const sheet = JSON.parse(CLEAN);
+    sheet.$schema = $schema;
+    const model = buildResult(JSON.stringify(sheet), "paste");
+    assert.equal(model.kind, "report", $schema);
+    assert.deepEqual(model.report.summary.rules_fired, ["PDP-E-002"], $schema);
   }
+});
+
+test("release sheet without $schema → layer1 from the current schema, report on an earlier release", () => {
+  const current = JSON.parse(CLEAN);
+  delete current.$schema;
+  const failed = buildResult(JSON.stringify(current), "paste");
+  assert.equal(failed.kind, "layer1");
+  assert.deepEqual(failed.schemaErrors.map((e) => e.message), ["must have required property '$schema'"]);
+
+  const earlier = JSON.parse(CLEAN);
+  delete earlier.$schema;
+  earlier.release = "0.3.0";
+  const model = buildResult(JSON.stringify(earlier), "paste");
+  assert.equal(model.kind, "report");
+  assert.deepEqual(model.report.summary.rules_fired, []);
+});
+
+test("another page type's schema → scope error", () => {
+  const sheet = JSON.parse(CLEAN);
+  sheet.$schema = "https://themachineweb.org/pagefront/spec/commerce/organization/v0.4.0.json";
+  assert.equal(buildResult(JSON.stringify(sheet), "paste").kind, "scope-error");
 });
 
 test("sheet carrying both format_version and release → layer1", () => {
@@ -112,9 +135,8 @@ test("former $schema identifier (pre 2026-09-08) → still in scope, on the lega
   assert.equal(model.kind, "report");
 });
 
-test("foreign $schema → scope error", () => {
-  const sheet = JSON.parse(CLEAN);
-  sheet.$schema = "https://themachineweb.org/pagefront/commerce/schemas/product/v0.7.json";
+test("legacy sheet with a foreign $schema → scope error", () => {
+  const sheet = legacyClean("https://themachineweb.org/pagefront/commerce/schemas/product/v0.7.json");
   const model = buildResult(JSON.stringify(sheet), "paste");
   assert.equal(model.kind, "scope-error");
 });

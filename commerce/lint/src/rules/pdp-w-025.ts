@@ -34,5 +34,7 @@ export const pdpW025: Rule = {
   remediation:
     "Move the numeric part into `value`, express the unit as a `unitCode`, and if the merchant's display formatting matters, carry the original string in `pagefront:presentationValue`.",
   introduced: "v0.8",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "product.md#feature-groups",
 };

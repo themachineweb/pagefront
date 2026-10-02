@@ -29,5 +29,7 @@ export const pdpW026: Rule = {
   remediation:
     "Add the document's BCP 47 language tag as `inLanguage`. If the document is multilingual, declare the primary language.",
   introduced: "v0.8",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "product.md#documents",
 };

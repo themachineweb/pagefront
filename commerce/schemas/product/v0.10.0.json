@@ -1,0 +1,800 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://themachineweb.org/pagefront/spec/commerce/product/v0.10.0.json",
+  "title": "Pagefront Product Sheet 0.10.0",
+  "description": "Formal schema for the Pagefront Product Sheet, sheet spec version 0.10.0, a member of commerce release 0.4.0. Since 0.10.0 the envelope requires $schema. The envelope carries release in place of format_version: release names the commerce release the sheet is written against, and $schema, which is required, names this sheet-spec version. A sheet carrying format_version belongs to the legacy draft line and validates against the legacy schema at .../product/v0.9.json, which is otherwise identical. History, in legacy format versions: revision of 2026-10-01 (breaking, within v0.9): configurator pricing moves from pagefront:configurator to the offer. The configurator loses basePrice, basePriceCurrency and priceFormula, its options lose priceModifier and currency, and it gains an optional @id and an exclusions[] array; configurator dimensions gain affectsPrice, inputType (select or text, for free-text dimensions) and maxLength; Offer and AggregateOffer accept pagefront:configuratorPricing, which names the configurator it prices and carries baseConfiguration, basePrice, modifiers, optional adjustments[] and a pricing completeness flag; every amount field (Offer price, AggregateOffer lowPrice and highPrice, variant price hints, promotion discountAmount, and the pricing block's basePrice, modifiers and adjustment amounts) references a shared definition, a JSON number or a plain decimal string: nonNegativeAmount for prices, bounds, base prices, price hints and discount amounts, and the signed amount for modifiers and adjustment amounts. v0.9 sheets that carried prices inside the configurator no longer validate. v0.9 was otherwise an additive release on top of v0.8: the legalEntity entry's organization now also validates in reference-stub form (@type + @id, no name) so entries can reference a Commerce Organization Sheet; the inline form and all other constraints are unchanged, and v0.8 sheets remain valid once their format_version is updated. v0.8 is an additive release on top of v0.7: it adds a pagefront:featureGroup[] array for grouped, ordered technical specifications (groups of Schema.org PropertyValue entries, with an optional pagefront:presentationValue display variant per entry), a pagefront:productHighlights[] array of ordered publisher-authored selling-point strings, and a pagefront:legalEntity[] array for role-typed legal entities behind a product (closed role enum: brand_owner, licensee, authorized_representative, importer, manufacturer — EU GPSR responsible persons and similar). gtin and gtin13 now accept a string or an array of strings (regional packaging, re-releases); category now accepts the display string, a Schema.org CategoryCode object, or a mixed array of both. The pagefront:Document role enum gains repairability_index, recall_notice, and declaration_of_conformity; the pagefront:RelatedProduct relationship enum gains service. v0.8 also adds two GPSR-driven safety fields: a pagefront:safetyWarning[] array for typed, language-scoped safety warnings (text required; optional pictogram URL and open-vocabulary hazardCategory) and a pagefront:safetyNotice[] array for structured recall/safety notices (closed noticeType enum: recall, warning; closed remedy enum: repair, replacement, refund). v0.7 sheets remain valid under v0.8 once their format_version is updated. Validates the envelope and pagefront-namespaced extensions strictly; Schema.org-typed blocks permit additional unspecified properties.",
+  "type": "object",
+  "required": ["$schema", "release", "schema_org_version", "canonical_url", "sheet_url", "generated_at", "data"],
+  "properties": {
+    "$schema": {"type": "string", "format": "uri"},
+    "release": {"type": "string", "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$"},
+    "schema_org_version": {"type": "string", "pattern": "^\\d+(\\.\\d+)?$"},
+    "canonical_url": {"type": "string", "format": "uri"},
+    "sheet_url": {"type": "string", "format": "uri"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "expires_at": {"type": "string", "format": "date-time"},
+    "data": {"$ref": "#/$defs/dataBlock"}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "dataBlock": {
+      "type": "object",
+      "required": ["@context", "@type", "@id", "name", "inLanguage"],
+      "properties": {
+        "@context": {
+          "oneOf": [
+            {"const": "https://schema.org"},
+            {"type": "array", "items": {"oneOf": [{"type": "string", "format": "uri"}, {"type": "object"}]}, "minItems": 1}
+          ]
+        },
+        "@type": {"type": "string"},
+        "@id": {"type": "string", "format": "uri"},
+        "url": {"type": "string", "format": "uri"},
+        "name": {"type": "string", "minLength": 1},
+        "inLanguage": {"type": "string"},
+        "sku": {"type": "string"},
+        "gtin13": {"$ref": "#/$defs/gtin13Value"},
+        "gtin": {"$ref": "#/$defs/gtinValue"},
+        "mpn": {"type": "string"},
+        "productID": {"type": "string"},
+        "productGroupID": {"type": "string"},
+        "variesBy": {"type": "array", "items": {"type": "string"}},
+        "hasVariant": {"type": "array", "items": {"$ref": "#/$defs/variantEntry"}},
+        "brand": {"type": "object", "properties": {"pagefront:sheetUrl": {"type": "string", "format": "uri"}}},
+        "description": {"type": "string"},
+        "category": {
+          "oneOf": [
+            {"type": "string"},
+            {"$ref": "#/$defs/categoryCode"},
+            {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {"type": "string"},
+                  {"$ref": "#/$defs/categoryCode"}
+                ]
+              },
+              "minItems": 1
+            }
+          ]
+        },
+        "color": {"type": "string"},
+        "material": {"type": "string"},
+        "weight": {"type": "object"},
+        "height": {"type": "object"},
+        "width": {"type": "object"},
+        "depth": {"type": "object"},
+        "countryOfOrigin": {"type": "string", "pattern": "^[A-Z]{2}$"},
+        "image": {"type": "array", "items": {"$ref": "#/$defs/imageObject"}},
+        "video": {"type": "array", "items": {"$ref": "#/$defs/videoObject"}},
+        "additionalProperty": {"type": "array"},
+        "hasCertification": {"type": "array", "items": {"$ref": "#/$defs/certification"}},
+        "manufacturer": {"type": "object"},
+        "offers": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {"$ref": "#/$defs/offer"},
+              {"$ref": "#/$defs/aggregateOffer"}
+            ]
+          },
+          "minItems": 1
+        },
+        "aggregateRating": {"type": "object"},
+        "review": {"type": "array"},
+        "isVariantOf": {"type": "object"},
+        "isRelatedTo": {"type": "array"},
+        "isSimilarTo": {"type": "array"},
+        "isPartOf": {"oneOf": [{"type": "object"}, {"type": "array"}]},
+        "hasPart": {"oneOf": [{"type": "object"}, {"type": "array"}]},
+        "question": {"type": "array", "items": {"$ref": "#/$defs/questionObject"}},
+        "pagefront:document": {"type": "array", "items": {"$ref": "#/$defs/documentObject"}},
+        "pagefront:relatedProduct": {"type": "array", "items": {"$ref": "#/$defs/relatedProductObject"}},
+        "pagefront:featureGroup": {"type": "array", "items": {"$ref": "#/$defs/featureGroup"}, "minItems": 1},
+        "pagefront:productHighlights": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+        "pagefront:legalEntity": {"type": "array", "items": {"$ref": "#/$defs/legalEntity"}, "minItems": 1},
+        "pagefront:safetyWarning": {"type": "array", "items": {"$ref": "#/$defs/safetyWarning"}, "minItems": 1},
+        "pagefront:safetyNotice": {"type": "array", "items": {"$ref": "#/$defs/safetyNotice"}, "minItems": 1},
+        "pagefront:sizeChart": {"$ref": "#/$defs/sizeChart"},
+        "pagefront:sizeRecommendation": {"$ref": "#/$defs/sizeRecommendation"},
+        "pagefront:materialComposition": {"type": "array", "items": {"$ref": "#/$defs/material"}},
+        "pagefront:fabricComposition": {"type": "array", "items": {"$ref": "#/$defs/material"}},
+        "pagefront:construction": {"$ref": "#/$defs/construction"},
+        "pagefront:manufacturingChain": {"type": "array", "items": {"$ref": "#/$defs/manufacturingStage"}},
+        "pagefront:gemstone": {"$ref": "#/$defs/gemstone"},
+        "pagefront:configurator": {"$ref": "#/$defs/configurator"},
+        "pagefront:madeToOrderTerms": {"$ref": "#/$defs/madeToOrderTerms"},
+        "pagefront:manufacturerWarranty": {"type": "object"},
+        "pagefront:careInstructions": {"type": "array", "items": {"type": "string"}},
+        "pagefront:availableLanguages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["lang", "url"],
+            "properties": {
+              "lang": {"type": "string"},
+              "url": {"type": "string", "format": "uri"}
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "if": {
+        "properties": {"@type": {"const": "ProductGroup"}},
+        "required": ["@type"]
+      },
+      "then": {
+        "required": ["productGroupID"]
+      },
+      "else": {
+        "required": ["url"],
+        "anyOf": [
+          {"required": ["sku"]},
+          {"required": ["gtin13"]},
+          {"required": ["gtin"]},
+          {"required": ["mpn"]},
+          {"required": ["productID"]}
+        ]
+      },
+      "additionalProperties": true
+    },
+    "amount": {
+      "description": "A currency amount: a JSON number, or a decimal string with a dot as decimal point, no thousands separators and no currency symbol. A Sheet uses one of the two carriers for all its amounts.",
+      "oneOf": [
+        {"type": "number"},
+        {"type": "string", "pattern": "^-?\\d+(\\.\\d+)?$"}
+      ]
+    },
+    "nonNegativeAmount": {
+      "description": "An amount that is zero or positive: the same two carriers as amount, with no leading minus. Used for prices, price bounds, base prices, price hints and discount amounts; only modifiers and adjustment amounts are signed.",
+      "oneOf": [
+        {"type": "number", "minimum": 0},
+        {"type": "string", "pattern": "^\\d+(\\.\\d+)?$"}
+      ]
+    },
+    "variantEntry": {
+      "type": "object",
+      "required": ["@type"],
+      "properties": {
+        "@type": {"type": "string"},
+        "@id": {"type": "string", "format": "uri"},
+        "url": {"type": "string", "format": "uri"},
+        "sheet_url": {"type": "string", "format": "uri"},
+        "name": {"type": "string"},
+        "sku": {"type": "string"},
+        "gtin13": {"$ref": "#/$defs/gtin13Value"},
+        "gtin": {"$ref": "#/$defs/gtinValue"},
+        "mpn": {"type": "string"},
+        "productID": {"type": "string"},
+        "color": {"type": "string"},
+        "size": {"type": "string"},
+        "material": {"type": "string"},
+        "price": {"$ref": "#/$defs/nonNegativeAmount"},
+        "image": {"type": "string", "format": "uri"},
+        "additionalProperty": {"type": "array"}
+      },
+      "additionalProperties": true
+    },
+    "imageObject": {
+      "type": "object",
+      "required": ["@type", "url"],
+      "properties": {
+        "@type": {"const": "ImageObject"},
+        "url": {"type": "string", "format": "uri"},
+        "caption": {"type": "string"},
+        "additionalProperty": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "@type": {"const": "PropertyValue"},
+              "name": {"type": "string"},
+              "value": {"type": "string"}
+            },
+            "allOf": [{
+              "if": {"properties": {"name": {"const": "role"}}, "required": ["name"]},
+              "then": {"properties": {"value": {"enum": ["hero", "packshot", "lifestyle", "detail", "flatlay", "swatch", "size_chart", "context"]}}}
+            }]
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "videoObject": {
+      "type": "object",
+      "required": ["@type"],
+      "properties": {
+        "@type": {"const": "VideoObject"},
+        "url": {"type": "string", "format": "uri"},
+        "contentUrl": {"type": "string", "format": "uri"},
+        "embedUrl": {"type": "string", "format": "uri"},
+        "thumbnailUrl": {"type": "string", "format": "uri"},
+        "duration": {"type": "string", "pattern": "^P(?:\\d+Y)?(?:\\d+M)?(?:\\d+D)?(?:T(?:\\d+H)?(?:\\d+M)?(?:\\d+(?:\\.\\d+)?S)?)?$"},
+        "uploadDate": {"type": "string"},
+        "caption": {"type": "string"},
+        "transcript": {"type": "string"},
+        "description": {"type": "string"},
+        "name": {"type": "string"},
+        "additionalProperty": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "@type": {"const": "PropertyValue"},
+              "name": {"type": "string"},
+              "value": {"type": "string"}
+            },
+            "allOf": [{
+              "if": {"properties": {"name": {"const": "role"}}, "required": ["name"]},
+              "then": {"properties": {"value": {"enum": ["overview", "tutorial", "lifestyle", "construction", "demonstration", "comparison", "unboxing", "spin"]}}}
+            }]
+          }
+        }
+      },
+      "anyOf": [
+        {"required": ["url"]},
+        {"required": ["contentUrl"]},
+        {"required": ["embedUrl"]}
+      ],
+      "additionalProperties": true
+    },
+    "questionObject": {
+      "type": "object",
+      "required": ["@type", "name", "acceptedAnswer"],
+      "properties": {
+        "@type": {"const": "Question"},
+        "name": {"type": "string", "minLength": 1},
+        "acceptedAnswer": {
+          "type": "object",
+          "required": ["@type", "text"],
+          "properties": {
+            "@type": {"const": "Answer"},
+            "text": {"type": "string", "minLength": 1}
+          },
+          "additionalProperties": true
+        },
+        "suggestedAnswer": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["@type", "text"],
+            "properties": {
+              "@type": {"const": "Answer"},
+              "text": {"type": "string", "minLength": 1}
+            },
+            "additionalProperties": true
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "documentObject": {
+      "type": "object",
+      "required": ["@type", "url", "role"],
+      "properties": {
+        "@type": {"const": "pagefront:Document"},
+        "url": {"type": "string", "format": "uri"},
+        "role": {
+          "type": "string",
+          "enum": [
+            "manual",
+            "assembly",
+            "care_guide",
+            "spec_sheet",
+            "compatibility",
+            "warranty",
+            "certificate",
+            "environmental_declaration",
+            "audit_report",
+            "lab_test",
+            "safety_data_sheet",
+            "installation_guide",
+            "user_guide",
+            "quick_start",
+            "brochure",
+            "repairability_index",
+            "recall_notice",
+            "declaration_of_conformity"
+          ]
+        },
+        "name": {"type": "string"},
+        "inLanguage": {"type": "string"},
+        "description": {"type": "string"},
+        "encodingFormat": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "relatedProductObject": {
+      "type": "object",
+      "required": ["@type", "relationship"],
+      "properties": {
+        "@type": {"const": "pagefront:RelatedProduct"},
+        "relationship": {
+          "type": "string",
+          "enum": [
+            "accessory",
+            "consumable",
+            "required_part",
+            "spare_part",
+            "often_bought_with",
+            "recommended_with",
+            "replaces",
+            "replaced_by",
+            "bundle_component",
+            "compatible_with",
+            "service"
+          ]
+        },
+        "@id": {"type": "string", "format": "uri"},
+        "sku": {"type": "string"},
+        "gtin": {"type": "string"},
+        "gtin13": {"type": "string", "pattern": "^[0-9]{13}$"},
+        "mpn": {"type": "string"},
+        "name": {"type": "string"},
+        "url": {"type": "string", "format": "uri"},
+        "image": {"type": "string", "format": "uri"}
+      },
+      "anyOf": [
+        {"required": ["@id"]},
+        {"required": ["sku"]},
+        {"required": ["gtin"]},
+        {"required": ["gtin13"]},
+        {"required": ["mpn"]}
+      ],
+      "additionalProperties": false
+    },
+    "gtinValue": {
+      "oneOf": [
+        {"type": "string"},
+        {"type": "array", "items": {"type": "string"}, "minItems": 1}
+      ]
+    },
+    "gtin13Value": {
+      "oneOf": [
+        {"type": "string", "pattern": "^[0-9]{13}$"},
+        {"type": "array", "items": {"type": "string", "pattern": "^[0-9]{13}$"}, "minItems": 1}
+      ]
+    },
+    "categoryCode": {
+      "type": "object",
+      "required": ["@type", "codeValue"],
+      "properties": {
+        "@type": {"const": "CategoryCode"},
+        "codeValue": {"type": "string", "minLength": 1},
+        "inCodeSet": {
+          "oneOf": [
+            {"type": "string", "format": "uri"},
+            {"type": "object"}
+          ]
+        },
+        "name": {"type": "string"}
+      },
+      "additionalProperties": true
+    },
+    "featureGroup": {
+      "type": "object",
+      "required": ["@type", "name", "feature"],
+      "properties": {
+        "@type": {"const": "pagefront:FeatureGroup"},
+        "name": {"type": "string", "minLength": 1},
+        "sortOrder": {"type": "integer"},
+        "feature": {"type": "array", "items": {"$ref": "#/$defs/featureEntry"}, "minItems": 1}
+      },
+      "additionalProperties": false
+    },
+    "featureEntry": {
+      "type": "object",
+      "required": ["@type", "name", "value"],
+      "properties": {
+        "@type": {"const": "PropertyValue"},
+        "propertyID": {"type": "string"},
+        "name": {"type": "string", "minLength": 1},
+        "value": {"anyOf": [{"type": "string"}, {"type": "number"}, {"type": "boolean"}]},
+        "unitCode": {"type": "string"},
+        "description": {"type": "string"},
+        "pagefront:presentationValue": {"type": "string"}
+      },
+      "additionalProperties": true
+    },
+    "legalEntity": {
+      "type": "object",
+      "required": ["@type", "role", "organization"],
+      "properties": {
+        "@type": {"const": "pagefront:LegalEntity"},
+        "role": {
+          "type": "string",
+          "enum": ["brand_owner", "licensee", "authorized_representative", "importer", "manufacturer"]
+        },
+        "organization": {
+          "type": "object",
+          "required": ["@type"],
+          "anyOf": [
+            {"required": ["name"]},
+            {"required": ["@id"]}
+          ],
+          "properties": {
+            "@type": {"const": "Organization"},
+            "@id": {"type": "string", "format": "uri"},
+            "name": {"type": "string", "minLength": 1},
+            "address": {"type": "object"},
+            "url": {"type": "string", "format": "uri"},
+            "email": {"type": "string", "format": "email"},
+            "pagefront:sheetUrl": {"type": "string", "format": "uri"}
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "safetyWarning": {
+      "type": "object",
+      "required": ["@type", "text"],
+      "properties": {
+        "@type": {"const": "pagefront:SafetyWarning"},
+        "text": {"type": "string", "minLength": 1},
+        "pictogram": {"type": "string", "format": "uri"},
+        "hazardCategory": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "safetyNotice": {
+      "type": "object",
+      "required": ["@type", "noticeType"],
+      "properties": {
+        "@type": {"const": "pagefront:SafetyNotice"},
+        "noticeType": {"type": "string", "enum": ["recall", "warning"]},
+        "hazard": {"type": "string"},
+        "remedy": {"type": "string", "enum": ["repair", "replacement", "refund"]},
+        "description": {"type": "string"},
+        "reference": {"type": "string", "format": "uri"},
+        "datePublished": {"type": "string", "format": "date"},
+        "url": {"type": "string", "format": "uri"}
+      },
+      "additionalProperties": false
+    },
+    "certification": {
+      "type": "object",
+      "required": ["@type", "name"],
+      "properties": {
+        "@type": {"const": "Certification"},
+        "name": {"type": "string"},
+        "issuedBy": {"type": "object"},
+        "about": {"type": "string"},
+        "additionalProperty": {"type": "array"}
+      },
+      "additionalProperties": true
+    },
+    "offer": {
+      "type": "object",
+      "required": ["@type"],
+      "properties": {
+        "@type": {"const": "Offer"},
+        "@id": {"type": "string"},
+        "itemOffered": {"type": "object"},
+        "price": {"$ref": "#/$defs/nonNegativeAmount"},
+        "priceCurrency": {"type": "string", "pattern": "^[A-Z]{3}$"},
+        "priceSpecification": {
+          "oneOf": [
+            {"type": "object"},
+            {"type": "array", "items": {"type": "object"}}
+          ]
+        },
+        "availability": {"type": "string", "pattern": "^https?://schema\\.org/(InStock|OutOfStock|PreOrder|BackOrder|InStoreOnly|LimitedAvailability|MadeToOrder|OnlineOnly|SoldOut|Discontinued|Reserved)$"},
+        "itemCondition": {"type": "string", "pattern": "^https?://schema\\.org/(NewCondition|UsedCondition|RefurbishedCondition|DamagedCondition)$"},
+        "seller": {"type": "object", "properties": {"pagefront:sheetUrl": {"type": "string", "format": "uri"}}},
+        "shippingDetails": {
+          "oneOf": [
+            {"type": "object"},
+            {"type": "array", "items": {"type": "object"}}
+          ]
+        },
+        "hasMerchantReturnPolicy": {"type": "object"},
+        "warranty": {"type": "object"},
+        "areaServed": {},
+        "eligibleRegion": {"type": "array"},
+        "acceptedPaymentMethod": {"type": "array"},
+        "pagefront:estimatedDelivery": {"$ref": "#/$defs/deliveryEstimate"},
+        "pagefront:promotions": {"type": "array", "items": {"$ref": "#/$defs/promotion"}},
+        "pagefront:priceOnRequest": {"$ref": "#/$defs/priceOnRequest"},
+        "pagefront:configuratorPricing": {"$ref": "#/$defs/configuratorPricing"}
+      },
+      "anyOf": [
+        {"required": ["price", "priceCurrency"]},
+        {"required": ["priceSpecification"]},
+        {"required": ["pagefront:priceOnRequest"]}
+      ],
+      "dependentRequired": {
+        "pagefront:configuratorPricing": ["price", "priceCurrency"]
+      },
+      "additionalProperties": true
+    },
+    "aggregateOffer": {
+      "type": "object",
+      "required": ["@type", "lowPrice", "highPrice", "priceCurrency"],
+      "properties": {
+        "@type": {"const": "AggregateOffer"},
+        "@id": {"type": "string"},
+        "lowPrice": {"$ref": "#/$defs/nonNegativeAmount"},
+        "highPrice": {"$ref": "#/$defs/nonNegativeAmount"},
+        "priceCurrency": {"type": "string", "pattern": "^[A-Z]{3}$"},
+        "offerCount": {"type": "integer"},
+        "availability": {"type": "string", "pattern": "^https?://schema\\.org/(InStock|OutOfStock|PreOrder|BackOrder|InStoreOnly|LimitedAvailability|MadeToOrder|OnlineOnly|SoldOut|Discontinued|Reserved)$"},
+        "itemCondition": {"type": "string", "pattern": "^https?://schema\\.org/(NewCondition|UsedCondition|RefurbishedCondition|DamagedCondition)$"},
+        "eligibleRegion": {"type": "array"},
+        "areaServed": {},
+        "validFrom": {"type": "string"},
+        "validThrough": {"type": "string"},
+        "seller": {"type": "object"},
+        "pagefront:configuratorPricing": {"$ref": "#/$defs/configuratorPricing"}
+      },
+      "additionalProperties": true
+    },
+    "priceOnRequest": {
+      "type": "object",
+      "required": ["@type", "method"],
+      "properties": {
+        "@type": {"const": "pagefront:PriceOnRequest"},
+        "method": {"type": "string", "enum": ["authorized_retailer", "dealer_network", "quote_form", "email", "phone", "unspecified"]},
+        "contactUrl": {"type": "string", "format": "uri"},
+        "contactEmail": {"type": "string", "format": "email"},
+        "contactPhone": {"type": "string"},
+        "note": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "sizeChart": {
+      "type": "object",
+      "required": ["@type", "unitCode", "sizes", "measurements"],
+      "properties": {
+        "@type": {"const": "pagefront:SizeChart"},
+        "unitCode": {"type": "string"},
+        "sizes": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+        "measurements": {"type": "array", "items": {"$ref": "#/$defs/measurement"}, "minItems": 1},
+        "modelReferences": {"type": "array", "items": {"$ref": "#/$defs/modelReference"}}
+      },
+      "additionalProperties": false
+    },
+    "measurement": {
+      "type": "object",
+      "required": ["@type", "name", "values"],
+      "properties": {
+        "@type": {"const": "pagefront:Measurement"},
+        "name": {"type": "string"},
+        "values": {"type": "object", "additionalProperties": {"type": "number"}}
+      },
+      "additionalProperties": false
+    },
+    "modelReference": {
+      "type": "object",
+      "required": ["@type", "name"],
+      "properties": {
+        "@type": {"const": "pagefront:ModelReference"},
+        "name": {"type": "string"},
+        "heightCm": {"type": "number", "minimum": 0},
+        "wearsSize": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "sizeRecommendation": {
+      "type": "object",
+      "required": ["@type"],
+      "properties": {
+        "@type": {"const": "pagefront:SizeRecommendation"},
+        "fitProfile": {"type": "string", "enum": ["runs_small", "true_to_size", "runs_large"]},
+        "sizeAdjustment": {"$ref": "#/$defs/sizeAdjustment"},
+        "description": {"type": "string"},
+        "appliesTo": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "sizeAdjustment": {
+      "type": "object",
+      "required": ["@type", "direction", "magnitude"],
+      "properties": {
+        "@type": {"const": "pagefront:SizeAdjustment"},
+        "direction": {"type": "string", "enum": ["up", "down"]},
+        "magnitude": {"type": "number", "minimum": 0},
+        "sizeSystem": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "material": {
+      "type": "object",
+      "required": ["@type", "material"],
+      "properties": {
+        "@type": {"const": "pagefront:Material"},
+        "material": {"type": "string"},
+        "percentage": {"type": "number", "minimum": 0, "maximum": 100},
+        "purity": {"type": "string"},
+        "purityPercentage": {"type": "number", "minimum": 0, "maximum": 100},
+        "provenance": {"type": "string", "enum": ["virgin", "recycled", "fair_mined", "lab_grown", "reclaimed", "deadstock"]},
+        "weightGrams": {"type": "number", "minimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "construction": {
+      "type": "object",
+      "required": ["@type"],
+      "properties": {
+        "@type": {"const": "pagefront:Construction"},
+        "stitch": {"type": "string"},
+        "gauge": {"type": "number"},
+        "machine": {"type": "string"},
+        "constructionNotes": {"type": "string"}
+      },
+      "additionalProperties": true
+    },
+    "manufacturingStage": {
+      "type": "object",
+      "required": ["@type", "stage", "country"],
+      "properties": {
+        "@type": {"const": "pagefront:ManufacturingStage"},
+        "stage": {"type": "string"},
+        "country": {"type": "string", "pattern": "^[A-Z]{2}$"},
+        "facility": {"type": "string"},
+        "facilityCountry": {"type": "string", "pattern": "^[A-Z]{2}$"}
+      },
+      "additionalProperties": false
+    },
+    "gemstone": {
+      "type": "object",
+      "required": ["@type", "type"],
+      "properties": {
+        "@type": {"const": "pagefront:Gemstone"},
+        "type": {"type": "string"},
+        "origin": {"type": "string", "enum": ["natural_mined", "lab_grown", "treated", "synthetic"]},
+        "shape": {"type": "string"},
+        "caratWeight": {"type": "number", "minimum": 0},
+        "colorGrade": {"type": "string"},
+        "clarityGrade": {"type": "string"},
+        "cutGrade": {"type": "string"},
+        "certifyingBody": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "configurator": {
+      "type": "object",
+      "required": ["@type", "dimensions"],
+      "properties": {
+        "@type": {"const": "pagefront:Configurator"},
+        "@id": {"type": "string", "minLength": 1},
+        "dimensions": {"type": "array", "items": {"$ref": "#/$defs/configuratorDimension"}, "minItems": 1},
+        "exclusions": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/configurationSelection", "type": "object", "minProperties": 1}
+        }
+      },
+      "additionalProperties": false
+    },
+    "configuratorDimension": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": {"type": "string"},
+        "options": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["value"],
+            "properties": {
+              "value": {"anyOf": [{"type": "string"}, {"type": "number"}, {"type": "boolean"}]},
+              "description": {"type": "string"},
+              "priceModifier": false,
+              "currency": false
+            },
+            "additionalProperties": true
+          }
+        },
+        "affectsPrice": {"type": "boolean", "default": true},
+        "inputType": {"type": "string", "enum": ["select", "text"], "default": "select"},
+        "maxLength": {"type": "integer", "minimum": 1},
+        "system": {"type": "string"},
+        "note": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "configurationSelection": {
+      "type": "object",
+      "additionalProperties": {"anyOf": [{"type": "string"}, {"type": "number"}, {"type": "boolean"}]}
+    },
+    "configuratorPricing": {
+      "type": "object",
+      "required": ["@type", "configurator", "baseConfiguration", "basePrice", "modifiers"],
+      "properties": {
+        "@type": {"const": "pagefront:ConfiguratorPricing"},
+        "configurator": {
+          "type": "object",
+          "required": ["@id"],
+          "properties": {
+            "@type": {"const": "pagefront:Configurator"},
+            "@id": {"type": "string", "minLength": 1}
+          },
+          "additionalProperties": false
+        },
+        "baseConfiguration": {"$ref": "#/$defs/configurationSelection"},
+        "basePrice": {"$ref": "#/$defs/nonNegativeAmount"},
+        "modifiers": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": {"$ref": "#/$defs/amount"}
+          }
+        },
+        "adjustments": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["when", "priceModifier"],
+            "properties": {
+              "when": {"$ref": "#/$defs/configurationSelection", "type": "object", "minProperties": 1},
+              "priceModifier": {"$ref": "#/$defs/amount"}
+            },
+            "additionalProperties": false
+          }
+        },
+        "pricing": {"type": "string", "enum": ["complete", "partial"], "default": "complete"}
+      },
+      "additionalProperties": false
+    },
+    "madeToOrderTerms": {
+      "type": "object",
+      "required": ["@type"],
+      "properties": {
+        "@type": {"const": "pagefront:MadeToOrderTerms"},
+        "productionLeadTime": {"$ref": "#/$defs/duration"},
+        "cancellationPolicy": {"type": "string"},
+        "returnsExceptions": {"type": "array", "items": {"type": "string"}},
+        "aftermarketServices": {"type": "array", "items": {"$ref": "#/$defs/aftermarketService"}}
+      },
+      "additionalProperties": false
+    },
+    "duration": {
+      "type": "object",
+      "required": ["@type"],
+      "properties": {
+        "@type": {"const": "pagefront:Duration"},
+        "minDays": {"type": "integer", "minimum": 0},
+        "maxDays": {"type": "integer", "minimum": 0},
+        "description": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "deliveryEstimate": {
+      "type": "object",
+      "required": ["@type"],
+      "properties": {
+        "@type": {"const": "pagefront:DeliveryEstimate"},
+        "earliest": {"type": "string", "format": "date"},
+        "latest": {"type": "string", "format": "date"},
+        "description": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "aftermarketService": {
+      "type": "object",
+      "required": ["@type", "service"],
+      "properties": {
+        "@type": {"const": "pagefront:AftermarketService"},
+        "service": {"type": "string"},
+        "limit": {"type": "string"},
+        "description": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "promotion": {
+      "type": "object",
+      "required": ["@type", "scope"],
+      "properties": {
+        "@type": {"const": "pagefront:Promotion"},
+        "code": {"type": "string"},
+        "discountPercentage": {"type": "number", "minimum": 0, "maximum": 100},
+        "discountAmount": {"$ref": "#/$defs/nonNegativeAmount"},
+        "discountCurrency": {"type": "string", "pattern": "^[A-Z]{3}$"},
+        "scope": {"type": "string", "enum": ["product", "category", "site_wide"]},
+        "occasion": {"type": "string"},
+        "validUntil": {"type": "string", "format": "date-time"}
+      },
+      "additionalProperties": false
+    }
+  }
+}

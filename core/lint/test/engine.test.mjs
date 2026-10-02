@@ -29,6 +29,8 @@ const ruleFlagged = {
   messageTemplate: "Item {label} ({count}) flagged at {path}.",
   remediation: "Unflag the item.",
   introduced: "v0.8",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "spec.md#flags",
 };
 
@@ -41,6 +43,8 @@ const ruleEveryItem = {
   messageTemplate: "Item at {path}.",
   remediation: "None.",
   introduced: "v0.8",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "spec.md#items",
 };
 
@@ -121,7 +125,7 @@ test("options inject checked_at and linter_version; defaults otherwise", () => {
   assert.equal(injected.catalogue_version, "0.0.1");
 
   const defaulted = lint(sheet, catalogue);
-  assert.equal(defaulted.linter_version, "0.2.0"); // package version
+  assert.equal(defaulted.linter_version, "0.3.0"); // package version
   assert.ok(!Number.isNaN(Date.parse(defaulted.checked_at)));
 });
 
@@ -190,4 +194,20 @@ test("release falls back to a legacy format_version; both report fields are null
 
   const unversioned = lint({ ...bare, release: "0.3.0", $schema: "https://example.org/schema.json" }, catalogue, OPTS);
   assert.equal(unversioned.sheet_spec_version, null);
+});
+
+test("release gating: a rule runs from its appliesFrom release, and on legacy sheets only when flagged", () => {
+  const { release: _r, ...bare } = sheet;
+  const gated = { ...ruleEveryItem, id: "X-003", appliesFrom: "0.4.0", appliesToLegacy: false };
+  const cat = { ...catalogue, rules: [ruleFlagged, gated] };
+  const fired = (s) => lint(s, cat, OPTS).summary.rules_fired;
+
+  assert.deepEqual(fired({ ...bare, release: "0.3.0" }), ["X-002"]); // below appliesFrom
+  assert.deepEqual(fired({ ...bare, release: "0.4.0" }), ["X-002", "X-003"]);
+  assert.deepEqual(fired({ ...bare, release: "0.10.0" }), ["X-002", "X-003"]); // numeric, not lexical
+  assert.deepEqual(fired({ ...bare, release: "1.0.0" }), ["X-002", "X-003"]);
+  assert.deepEqual(fired({ ...bare, format_version: "0.9" }), ["X-002"]); // legacy: flagged rules only
+  // A sheet that cannot be gated (no declaration, or not a semver) gets every rule.
+  assert.deepEqual(fired(bare), ["X-002", "X-003"]);
+  assert.deepEqual(fired({ ...bare, release: "next" }), ["X-002", "X-003"]);
 });

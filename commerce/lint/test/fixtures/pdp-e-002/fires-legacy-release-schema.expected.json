@@ -3,8 +3,8 @@
   "checked_at": "2026-01-01T00:00:00Z",
   "linter_version": "0.0.0-test",
   "release": "0.9",
-  "sheet_spec_version": "0.9.0",
-  "catalogue_version": "0.15.0",
+  "sheet_spec_version": "0.10.0",
+  "catalogue_version": "0.16.0",
   "findings": [
     {
       "rule": "PDP-E-002",
@@ -12,10 +12,11 @@
       "path": "$['format_version']",
       "values": {
         "declared": "`format_version` is `0.9`",
+        "found": "`$schema` URL declares version `0.10.0`",
         "format_version": "0.9",
-        "schema_version": "0.9.0"
+        "schema_version": "0.10.0"
       },
-      "message": "`format_version` is `0.9` but `$schema` URL declares version `0.9.0`.",
+      "message": "`format_version` is `0.9` but `$schema` URL declares version `0.10.0`.",
       "remediation": "Point `$schema` at the sheet-spec version the declared release bundles (see releases.md), or declare the release that bundles the schema the sheet was written against. On a legacy sheet, align `format_version` and the `$schema` version."
     }
   ],

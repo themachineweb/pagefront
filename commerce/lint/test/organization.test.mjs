@@ -101,7 +101,10 @@ test("the envelope is strict: release must be a semver, and format_version is no
   sheet.release = "0.3";
   let result = validateOrganizationSheet(sheet);
   assert.equal(result.valid, false);
-  assert.ok(result.schemaErrors.some((e) => e.keyword === "pattern" && e.instancePath === "/release"));
+  // "0.3" names no release: no schema can be resolved for it.
+  assert.deepEqual(result.schemaErrors, [
+    { instancePath: "/release", message: "names no release this linter knows: 0.3", keyword: "release" },
+  ]);
 
   const both = loadNitto();
   both.format_version = "0.9";
@@ -165,7 +168,7 @@ test("the three corpus organization sheets lint clean end to end", () => {
       { errors: 0, warnings: 0, info: 0, rules_fired: [] },
       `${file} should have zero findings`
     );
-    assert.equal(result.report.catalogue_version, "0.15.0");
+    assert.equal(result.report.catalogue_version, "0.16.0");
   }
 });
 
@@ -188,13 +191,24 @@ test("sheet-type dispatch: product rules never run on org sheets and vice versa"
   assert.equal(detectSheetType(product), "product");
   assert.equal(detectSheetType(loadNitto()), "organization");
 
-  // Fallback detection: no $schema, org-shaped data block.
+  // Fallback detection: no $schema, org-shaped data block. The rules
+  // are quiet on an absent $schema; requiring it is the schema's job.
+  const OPTS = { checkedAt: "2026-01-01T00:00:00Z", linterVersion: "0.0.0-test" };
   const bare = loadNitto();
   delete bare.$schema;
   assert.equal(detectSheetType(bare), "organization");
-  const report = lintSheet(bare, {
-    checkedAt: "2026-01-01T00:00:00Z",
-    linterVersion: "0.0.0-test",
-  });
-  assert.deepEqual(report.summary.rules_fired, []);
+  assert.deepEqual(lintSheet(bare, OPTS).summary.rules_fired, []);
+  // Layer 1 still resolves the organization schema for it, from the
+  // release and the data-block shape, and reports the missing $schema.
+  const bareResult = validateOrganizationSheet(bare);
+  assert.equal(bareResult.valid, false);
+  assert.ok(bareResult.schemaErrors.some((e) => e.keyword === "required" && /\$schema/.test(e.message)));
+
+  // On the legacy line $schema is optional, and the same sheet is clean.
+  const legacyBare = loadNitto();
+  delete legacyBare.$schema;
+  delete legacyBare.release;
+  legacyBare.format_version = "0.9";
+  assert.equal(detectSheetType(legacyBare), "organization");
+  assert.deepEqual(lintSheet(legacyBare, OPTS).summary.rules_fired, []);
 });

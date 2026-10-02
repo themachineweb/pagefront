@@ -1,6 +1,6 @@
 {
-  "$schema": "https://themachineweb.org/pagefront/spec/commerce/organization/v0.3.0.json",
-  "release": "0.3.0",
+  "$schema": "https://themachineweb.org/pagefront/spec/commerce/organization/v0.4.0.json",
+  "release": "0.4.0",
   "format_version": "0.9",
   "schema_org_version": "30.0",
   "canonical_url": "https://merchant.example/pages/about",

@@ -31,5 +31,7 @@ export const pdpE014: Rule = {
   remediation:
     "State the adjustment in the sizing dimension's system if the merchant states it there. If the merchant's advice is in another system, remove `sizeAdjustment` and keep the merchant's wording in `description`.",
   introduced: "v0.9 (2026-10-01 revision)",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "product.md#size-guidance-pagefrontsizechart-and-pagefrontsizerecommendation",
 };

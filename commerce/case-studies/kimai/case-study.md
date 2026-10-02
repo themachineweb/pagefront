@@ -1,6 +1,6 @@
 # Kimaï — Case Study
 
-Commerce release 0.3.0. Sheets derived from the live site and verified against
+Commerce release 0.4.0. Sheets derived from the live site and verified against
 it on 2026-09-04; the product sheet re-derived on 2026-10-01, with its
 options and prices taken from Kimaï's store data.
 
@@ -272,3 +272,5 @@ that day.
   values; UK sizes; the ring sizer out of the options; engraving added;
   the European half-size adjustment dropped beside UK sizes, the advice
   kept as written.
+- **2026-10-02** — sheets moved to commerce release 0.4.0 (`release` and
+  `$schema` only); no other value changed.

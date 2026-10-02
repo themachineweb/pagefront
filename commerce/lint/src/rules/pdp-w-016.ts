@@ -29,5 +29,7 @@ export const pdpW016: Rule = {
   remediation:
     "Add `price` (and confirm `priceCurrency`) if the price was missed during extraction. If the merchant intentionally publishes no price, declare `pagefront:priceOnRequest` with an appropriate `method` and contact channel.",
   introduced: "v0.6",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "product.md#price-on-request-offers",
 };

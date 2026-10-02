@@ -1,8 +1,8 @@
 # Commerce Organization Sheet
 
 Status: normative spec. Ratified 2026-08-14 from the initial sketch, in legacy format version 0.9.
-Organization Sheet spec version: 0.3.0
-Commerce release: 0.3.0
+Organization Sheet spec version: 0.4.0
+Commerce release: 0.4.0
 Schema.org version targeted: 30.0 (2026-03-19)
 
 The Commerce Organization Sheet is the Pagefront Sheet that describes the entity *behind* products: the brand that owns them, the company that makes them, the store that sells them. The Product Sheet describes an individual product. The organization sheet is the dereference target of the `brand` and `Offer.seller` links every Product Sheet already carries.
@@ -23,8 +23,8 @@ Identical to every Pagefront Sheet. `canonical_url` is the human-facing brand, c
 
 ```json
 {
-  "$schema": "https://themachineweb.org/pagefront/spec/commerce/organization/v0.3.0.json",
-  "release": "0.3.0",
+  "$schema": "https://themachineweb.org/pagefront/spec/commerce/organization/v0.4.0.json",
+  "release": "0.4.0",
   "schema_org_version": "30.0",
   "canonical_url": "https://www.nittoknitwear.com/pages/atelier",
   "sheet_url": "https://www.nittoknitwear.com/pagefront/commerce/organization/nitto-knitwear.fr.json",
@@ -34,7 +34,7 @@ Identical to every Pagefront Sheet. `canonical_url` is the human-facing brand, c
 }
 ```
 
-`release` is the commerce release the sheet is written against, as a full semver; it replaces `format_version`, the field of the legacy draft line. `$schema` names this sheet spec's own version, with the full semver in its last segment: `organization/v0.3.0.json` for Organization Sheet spec 0.3.0. The release and the sheet type resolve to exactly one sheet-spec version through the release table in [`releases.md`](releases.md), and `$schema` MUST name it (linter rule ORG-E-003). A sheet carrying both `format_version` and `release` is invalid (ORG-E-002). A sheet carrying `format_version` alone belongs to the legacy draft line and validates against the legacy schema, which stays served at `https://themachineweb.org/pagefront/spec/commerce/organization/v0.9.json`. The full rules are in "The envelope" in the Pagefront Spec ([`product.md`](product.md)).
+`release` is the commerce release the sheet is written against, as a full semver; it replaces `format_version`, the field of the legacy draft line. `$schema` names this sheet spec's own version, with the full semver in its last segment: `organization/v0.4.0.json` for Organization Sheet spec 0.4.0. `$schema` is REQUIRED on every sheet carrying `release`, and optional only on the legacy draft line. The release and the sheet type resolve to exactly one sheet-spec version through the release table in [`releases.md`](releases.md), and `$schema` MUST name it (linter rule ORG-E-003). A sheet carrying both `format_version` and `release` is invalid (ORG-E-002). A sheet carrying `format_version` alone belongs to the legacy draft line and validates against the legacy schema, which stays served at `https://themachineweb.org/pagefront/spec/commerce/organization/v0.9.json`. The full rules are in "The envelope" in the Pagefront Spec ([`product.md`](product.md)).
 
 Organization data changes slowly. `expires_at` MAY sit days out, unlike a product sheet carrying live price.
 
@@ -458,7 +458,7 @@ One read travels the product-to-organization links beyond identity confirmation:
 
 ## Versioning
 
-This sheet spec has its own semver, 0.3.0, and is a member of commerce release 0.3.0. It reached 0.3.0 in three minors: the ratified text of 2026-08-14 (0.1.0), `pagefront:authorizedResellers` on 2026-08-31 (0.2.0) and `pagefront:sheetUrl` on 2026-09-30 (0.3.0). A sheet declares the release in its envelope (`release`) and names this spec version in `$schema`. Before 1.0 a breaking or an additive change bumps the minor and a fix or clarification bumps the patch; the release bumps with its members. The scheme, the release table and the legacy draft line are in [`releases.md`](releases.md); the stability policy that applies from release 1.0.0 is in "Versioning and stability" in [`vocabulary.md`](vocabulary.md). The rule catalogue keeps its own semver.
+This sheet spec has its own semver, 0.4.0, and is a member of commerce release 0.4.0. It reached 0.3.0 in three minors: the ratified text of 2026-08-14 (0.1.0), `pagefront:authorizedResellers` on 2026-08-31 (0.2.0) and `pagefront:sheetUrl` on 2026-09-30 (0.3.0). 0.4.0, on 2026-10-02, makes `$schema` required. A sheet declares the release in its envelope (`release`) and names this spec version in `$schema`. Before 1.0 a breaking or an additive change bumps the minor and a fix or clarification bumps the patch; the release bumps with its members. The scheme, the release table and the legacy draft line are in [`releases.md`](releases.md); the stability policy that applies from release 1.0.0 is in "Versioning and stability" in [`vocabulary.md`](vocabulary.md). The rule catalogue keeps its own semver.
 
 This spec plans no breaking change of its own. The `@context` prefix constraint listed under "Planned breaking changes" in the Pagefront Spec will apply to the organization schema as well.
 
@@ -466,7 +466,8 @@ The next paragraph is history, in legacy format versions. Commerce format 0.9 br
 
 ## References
 
-- Organization schema, spec version 0.3.0: `https://themachineweb.org/pagefront/spec/commerce/organization/v0.3.0.json` (published file: [`../schemas/organization/v0.3.0.json`](../schemas/organization/v0.3.0.json); the editable head for the next version is [`organization.json`](organization.json))
+- Organization schema, spec version 0.4.0: `https://themachineweb.org/pagefront/spec/commerce/organization/v0.4.0.json` (published file: [`../schemas/organization/v0.4.0.json`](../schemas/organization/v0.4.0.json); the editable head for the next version is [`organization.json`](organization.json))
+- Organization schema, spec version 0.3.0, for sheets declaring release 0.3.0: `https://themachineweb.org/pagefront/spec/commerce/organization/v0.3.0.json` (published file: [`../schemas/organization/v0.3.0.json`](../schemas/organization/v0.3.0.json))
 - Legacy organization schema, format 0.9: `https://themachineweb.org/pagefront/spec/commerce/organization/v0.9.json` (published file: [`../schemas/organization/v0.9.json`](../schemas/organization/v0.9.json))
 - Commerce releases and the versioning scheme: [`releases.md`](releases.md)
 - Pagefront Spec (Product Sheet): [`product.md`](product.md)
@@ -480,6 +481,10 @@ _Entries dated before 2026-10-01 were written under the legacy scheme, in which 
 ### Unreleased
 
 _Nothing yet. Changes land here and are versioned at the next release; see "Releasing" in [`../../CONTRIBUTING.md`](../../CONTRIBUTING.md)._
+
+### 0.4.0 — 2026-10-02
+
+Released in commerce release 0.4.0. `$schema` is required on sheets carrying `release` (breaking: a release-line sheet without `$schema` no longer validates); it stays optional on the legacy draft line. The schema's `$id` is `https://themachineweb.org/pagefront/spec/commerce/organization/v0.4.0.json`, and the 0.3.0 schema stays published, unchanged, for sheets declaring release 0.3.0. A sheet is judged by the release it declares: one declaring release 0.3.0 keeps validating without `$schema`. Linter rule ORG-E-003 compares a present `$schema` with the schema the release bundles, and ORG-E-004 flags a `release` the release manifest does not list. See "The envelope."
 
 ### 2026-10-01 — Versioning scheme replaced
 

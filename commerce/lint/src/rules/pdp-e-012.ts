@@ -31,5 +31,7 @@ export const pdpE012: Rule = {
   remediation:
     "Keep one pricing block per configurator. Publish each further market's price list in that market's own Sheet.",
   introduced: "v0.9 (2026-10-01 revision)",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "product.md#configurator-pricing-and-price-bands",
 };

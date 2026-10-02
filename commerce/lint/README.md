@@ -26,11 +26,11 @@ lint with their own catalogue, dispatched by sheet type.
 
 ## Catalogue
 
-Catalogue 0.15.0, supporting commerce release 0.3.0 (Product Sheet spec
-0.9.0, Organization Sheet spec 0.3.0) and the legacy draft line (format
-0.9): 56 product rules (`PDP-E-001` to `PDP-E-016`, `PDP-W-001` to
-`PDP-W-039`, `PDP-I-001`) and 9 organization rules (`ORG-E-001` to
-`ORG-E-003`, `ORG-W-001` to `ORG-W-006`), each defined in
+Catalogue 0.16.0, supporting commerce releases 0.4.0 (Product Sheet spec
+0.10.0, Organization Sheet spec 0.4.0) and 0.3.0, and the legacy draft line
+(format 0.9): 58 product rules (`PDP-E-001` to `PDP-E-018`, `PDP-W-001` to
+`PDP-W-039`, `PDP-I-001`) and 10 organization rules (`ORG-E-001` to
+`ORG-E-004`, `ORG-W-001` to `ORG-W-006`), each defined in
 [`rules.md`](https://github.com/themachineweb/pagefront/blob/main/commerce/spec/rules.md)
 with its target, check, message and remediation. Every report carries the
 `catalogue_version` it was produced with.
@@ -155,6 +155,26 @@ Changed in 0.11.0 (catalogue 0.15.0, unchanged):
   it now fails Layer 1 against the schema it names.
 - New exports: `CURRENT_RELEASE`, `schemaUrlFor`, `BUNDLED_SCHEMA_IDS`.
 
+Added in 0.12.0 (catalogue 0.16.0), with commerce release 0.4.0. Requires
+`@pagefront/lint-core` 0.3.0.
+
+- **A sheet is judged by the release it declares.** Layer 1 validates it
+  against the schema its `release` bundles for its type (release 0.4.0:
+  `product/v0.10.0.json`, `organization/v0.4.0.json`, which require
+  `$schema`; release 0.3.0: the 0.3.0 schemas). Legacy sheets keep
+  resolving through `$schema`.
+- **Rules are gated by release.** Every rule has an `appliesFrom` release
+  and the engine skips it on a sheet declaring a lower one. All earlier
+  rules apply from 0.3.0 and to legacy sheets.
+- `PDP-E-002` and `ORG-E-003` compare a present `$schema` with the URL of
+  the schema the release bundles, and are quiet when `$schema` is absent.
+- `PDP-E-017` (applies from release 0.4.0) — an exclusion, or an
+  adjustment's `when`, names a dimension the configurator does not declare
+  or an option the dimension does not list. Values are compared strictly:
+  `1` is not `"1"`.
+- `PDP-E-018` and `ORG-E-004` — the sheet declares a `release` the release
+  manifest does not list. At Layer 1 this is a single error at `/release`.
+
 ## API
 
 The public surface — everything importable from the package root, and
@@ -163,16 +183,16 @@ internal):
 
 - `validateAndLint(input: unknown, options?: LintOptions)` — the CLI's
   own pipeline as a function: Layer 1 against the published schema the
-  document's `$schema` names, then Layer 2 against its page type's
-  catalogue (see `detectSheetType`). Returns
+  document's declared release bundles for its page type, then Layer 2
+  against that page type's catalogue (see `detectSheetType`), with the
+  rules that apply from that release. Returns
   `{ layer: 1, schemaErrors: SchemaError[] }` or
   `{ layer: 2, report: Report }`. The package bundles every published
-  schema, on both lines: the sheet-spec versions of each release and the
-  legacy format 0.9 schemas. A `$schema` naming a version the package
-  does not bundle fails Layer 1 with a single error at `/$schema`
-  (keyword `$schema`); the document is not validated against another
-  version. A document with no `$schema` is validated against the schema
-  its `release` or `format_version` leads to.
+  schema, on both lines. A `release` the manifest does not list fails
+  Layer 1 with a single error at `/release` (keyword `release`). A
+  `$schema` that disagrees with the release is a Layer 2 finding. Legacy
+  sheets (`format_version`) are validated against the schema their
+  `$schema` names, or the legacy schema when it is absent.
   Layer 1 runs validators compiled ahead of time at
   package build, so the pipeline needs no runtime code generation and
   runs under Cloudflare Workers and strict Content Security Policies.

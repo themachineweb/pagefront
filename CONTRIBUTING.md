@@ -215,7 +215,13 @@ document changes only at release time, in the release pull request.
 
 ### Branches
 
-- `main` is protected. Changes land by pull request only.
+- Changes land on `main` by pull request only. `main` is not protected on
+  GitHub yet, so this holds by convention: nobody pushes to `main`
+  directly, and a pull request merges once its checks pass. There are
+  two: `frozen-schemas`, and the site's preview build
+  (`Workers Builds: themachineweb`), which reports a little later. Branch
+  protection, with the `frozen-schemas` check required, is to be enabled
+  when the repository becomes public or its plan allows it.
 - Work happens on short-lived topic branches, named by what they touch:
   `spec/<topic>`, `fix/<topic>`, `lint/<topic>`, `site/<topic>`. A branch
   is deleted after it merges.

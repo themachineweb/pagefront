@@ -42,5 +42,7 @@ export const pdpW035: Rule = {
   remediation:
     "Confirm that `basePrice` is what a buyer pays for the whole of `baseConfiguration`. If it is the price of one part, replace it with the configured total and recompute the modifiers as differences from that total.",
   introduced: "v0.9 (2026-10-01 revision)",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "product.md#configurator-pricing-and-price-bands",
 };

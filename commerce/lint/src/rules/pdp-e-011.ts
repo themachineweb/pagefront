@@ -57,5 +57,7 @@ export const pdpE011: Rule = {
   remediation:
     "Correct the bound, or correct the price list: a missing adjustment, a missing exclusion and a wrong modifier each move the computed band. If the price list is known to have gaps, declare `pricing: \"partial\"`.",
   introduced: "v0.9 (2026-10-01 revision)",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "product.md#configurator-pricing-and-price-bands",
 };

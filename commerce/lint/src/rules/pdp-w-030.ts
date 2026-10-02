@@ -48,5 +48,7 @@ export const pdpW030: Rule = {
   remediation:
     "State the warranty as written in `description`, and add `durationOfWarranty` where a finite length is stated. A lifetime warranty carries `description` (and optionally `name`) with no `durationOfWarranty`.",
   introduced: "v0.9",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "product.md#warranty",
 };

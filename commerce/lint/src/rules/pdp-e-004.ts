@@ -43,5 +43,7 @@ export const pdpE004: Rule = {
   remediation:
     "Make the two amounts equal, or remove the duplicated amount from the specification entry and keep `valueAddedTaxIncluded` (and `priceCurrency`) on it.",
   introduced: "v0.9",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "product.md#tax-inclusion",
 };

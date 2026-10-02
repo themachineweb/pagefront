@@ -2,7 +2,7 @@
 
 Namespace: `https://themachineweb.org/pagefront/vocabulary/`
 Prefix: `pagefront:`
-Vocabulary version: 0.3.0 (the vocabulary carries the commerce release version; see [`releases.md`](releases.md))
+Vocabulary version: 0.4.0 (the vocabulary carries the commerce release version; see [`releases.md`](releases.md))
 Schema.org version targeted: 30.0
 
 This document defines the **pagefront vocabulary**, a small set of typed extensions to Schema.org used in pagefront product sheets. The vocabulary fills gaps in Schema.org's coverage for commerce-specific concerns: structured size charts, multi-stage manufacturing provenance, configurable products, made-to-order economics, gemstone grading, videos with structured role classification, typed product documents, typed product relationships, and a few others.
@@ -68,7 +68,7 @@ The option space of a product whose configuration is determined by user choice a
 **Properties:**
 - `@id` *(optional; required when any offer prices this configurator)*: same-document identifier, e.g. the Sheet's `@id` with `#configurator` appended. It is what a pricing block's `configurator` reference points at.
 - `dimensions` *(required)*: array of `pagefront:ConfiguratorDimension` objects.
-- `exclusions` *(optional)*: array of partial configurations that cannot be ordered together. Each entry is an object mapping dimension names to option values. A configuration that matches every pair in an entry is excluded, and its total price is undefined.
+- `exclusions` *(optional)*: array of partial configurations that cannot be ordered together. Each entry is an object mapping dimension names to option values. A configuration that matches every pair in an entry is excluded, and its total price is undefined. From release 0.4.0, every pair MUST name a declared dimension and, where that dimension lists `options`, one of their values, written as the option writes it.
 
 Used via the `pagefront:configurator` property on `Product`. The rules are in "Configurator pricing and price bands" in the Pagefront Spec.
 
@@ -97,7 +97,7 @@ A market's price list for a configurator's option space, carried by the offer th
 - `baseConfiguration` *(required)*: object mapping every priced dimension name to exactly one of that dimension's option values. It is a complete, orderable configuration. A `text` dimension has no key: the base configuration leaves it empty.
 - `basePrice` *(required)*: the total price of `baseConfiguration`, as an amount, in the offer's `priceCurrency`, under the offer's tax-inclusion statement. A component price (one part of a product assembled from several priced parts) is never a base price.
 - `modifiers` *(required)*: object keyed by priced dimension name; each value is an object keyed by option value giving that option's modifier as an amount. A modifier MAY be negative. The option named in `baseConfiguration` MUST have a modifier of zero. A dimension declared `affectsPrice: false` has no entry. A `text` dimension whose `affectsPrice` is left at its default of `true` MUST have a single modifier under its name, keyed `"*"`, meaning any non-empty input.
-- `adjustments` *(optional)*: array of `{ "when": { dimension: value, … }, "priceModifier": … }`, the `priceModifier` an amount. An adjustment applies when the configuration matches every pair in `when`. Use it when one option's price depends on another dimension. Any price grid can be expressed with adjustments; producers MUST verify that prices are additive before omitting them.
+- `adjustments` *(optional)*: array of `{ "when": { dimension: value, … }, "priceModifier": … }`, the `priceModifier` an amount. An adjustment applies when the configuration matches every pair in `when`. From release 0.4.0, every pair in `when` MUST name a dimension of the configurator and, where that dimension lists `options`, one of their values, written as the option writes it. Use an adjustment when one option's price depends on another dimension. Any price grid can be expressed with adjustments; producers MUST verify that prices are additive before omitting them.
 - `pricing` *(optional)*: closed enum: `complete`, `partial`; default `complete`. `partial` declares that at least one priced option has no modifier. A missing modifier states nothing about the option's price and is never read as zero. Consumers MUST NOT compute totals from a `partial` pricing.
 
 The total price of a configuration is `basePrice`, plus the modifier of each selected option, plus the `"*"` modifier of each priced `text` dimension given a non-empty input, plus the `priceModifier` of every applicable adjustment. Totals for configurations excluded by the configurator's `exclusions` are undefined. Currency and tax inclusion come only from the enclosing offer (`priceCurrency`, `priceSpecification.valueAddedTaxIncluded`); the pricing block carries no currency of its own. An amount is a JSON number or a decimal string; a Sheet uses one of the two for all its amounts, and amounts are compared numerically whatever the carrier ("Amounts" in the Pagefront Spec).
@@ -763,7 +763,7 @@ The versioning scheme, the release table and the release notes are in [`releases
 
 - **Sheet specs.** Each sheet spec (product, organization, and future ones) has its own semver and evolves independently. Before 1.0, a breaking or an additive change bumps the minor and a fix or clarification bumps the patch.
 - **Releases.** A commerce release is a named, versioned bundle of member versions: each sheet spec and this vocabulary. Its bump follows its members: major if any member bumps major, else minor if any member bumps minor, else patch. A new sheet type joining is a minor. 1.0.0 is a release like any other.
-- **This vocabulary.** It has no independent version and carries the release version: this is vocabulary 0.3.0, the vocabulary of commerce release 0.3.0.
+- **This vocabulary.** It has no independent version and carries the release version: this is vocabulary 0.4.0, the vocabulary of commerce release 0.4.0.
 - **On the wire.** A sheet's envelope carries `release`, and its `$schema` names the sheet-spec version that release bundles for the sheet's type. Sheets carrying `format_version` belong to the legacy draft line (format versions 0.9 and earlier), which stays valid against the legacy schemas.
 - **Rule catalogue and linter.** Each has its own semver, independent of the release and of the sheet specs.
 
@@ -783,7 +783,7 @@ Before release 1.0.0, terms may still change. Every change is recorded in the ch
 
 ### Term history
 
-This is vocabulary 0.3.0. The versions named in this section are legacy format versions. `pagefront:Document` and `pagefront:RelatedProduct` were added in v0.7. `pagefront:FeatureGroup`, `pagefront:LegalEntity`, `pagefront:SafetyWarning`, `pagefront:SafetyNotice`, `pagefront:featureGroup`, `pagefront:feature`, `pagefront:presentationValue`, `pagefront:productHighlights`, `pagefront:legalEntity`, `pagefront:safetyWarning`, and `pagefront:safetyNotice` were added in v0.8. `pagefront:commerceRole`, `pagefront:fulfillmentTerms`, `pagefront:SocialAccount`, `pagefront:socialAccount`, `pagefront:AuthorizedResellers`, `pagefront:authorizedResellers`, (2026-09-24) `pagefront:manufacturerWarranty`, (2026-09-30) `pagefront:sheetUrl`, and (2026-10-01) `pagefront:ConfiguratorPricing` and `pagefront:configuratorPricing` were added in v0.9. No term is added in release 0.3.0. From release 1.0.0 the stability policy above applies to every term.
+This is vocabulary 0.4.0. The versions named in this section are legacy format versions. `pagefront:Document` and `pagefront:RelatedProduct` were added in v0.7. `pagefront:FeatureGroup`, `pagefront:LegalEntity`, `pagefront:SafetyWarning`, `pagefront:SafetyNotice`, `pagefront:featureGroup`, `pagefront:feature`, `pagefront:presentationValue`, `pagefront:productHighlights`, `pagefront:legalEntity`, `pagefront:safetyWarning`, and `pagefront:safetyNotice` were added in v0.8. `pagefront:commerceRole`, `pagefront:fulfillmentTerms`, `pagefront:SocialAccount`, `pagefront:socialAccount`, `pagefront:AuthorizedResellers`, `pagefront:authorizedResellers`, (2026-09-24) `pagefront:manufacturerWarranty`, (2026-09-30) `pagefront:sheetUrl`, and (2026-10-01) `pagefront:ConfiguratorPricing` and `pagefront:configuratorPricing` were added in v0.9. No term is added in release 0.3.0 or in release 0.4.0. From release 1.0.0 the stability policy above applies to every term.
 
 Note: v0.5 made envelope/structural changes (the `sheet_url` rename, internationalization model, and URL convention) without adding new vocabulary terms, which is why the vocabulary jumped from 0.4 to 0.6. v0.7 adds two new types (`pagefront:Document`, `pagefront:RelatedProduct`) and adopts Schema.org-native vocabulary for product Q&A without minting a parallel `pagefront:` term. v0.8 adds four new types (`pagefront:FeatureGroup`, `pagefront:LegalEntity`, `pagefront:SafetyWarning`, `pagefront:SafetyNotice`) and five new data-block properties (`pagefront:featureGroup`, `pagefront:productHighlights`, `pagefront:legalEntity`, `pagefront:safetyWarning`, `pagefront:safetyNotice`), and adopts Schema.org-native vocabulary for machine-readable categories (`CategoryCode`) and multiple GTINs without minting parallel terms. v0.9 adds four new properties: `pagefront:commerceRole`, the role discriminator on the Commerce Organization Sheet, with its closed Commerce roles enum; `pagefront:fulfillmentTerms`, the org-level attachment point for store-wide shipping defaults carried as Schema.org-native `OfferShippingDetails`; `pagefront:socialAccount`, the typed home for official social accounts, with the `pagefront:SocialAccount` type, landed together with the tightening of `sameAs` on that sheet to identity authority records only; and `pagefront:authorizedResellers`, the brand's authorization claim over its distribution, with the `pagefront:AuthorizedResellers` type, added 2026-08-31 within the 0.9 draft. v0.9 also adds one certification scope value (`organization`), adopts Schema.org-native vocabulary for company registration identity (a ladder of machine keys, `leiCode` when the entity has an LEI, else `iso6523Code` where the register has an ICD, plus an `identifier` `PropertyValue` for the display form) without minting a term, and relaxes the `pagefront:LegalEntity` `organization.name` requirement in the JSON Schema so reference stubs (`@type` + `@id`) validate. All of this is additive: no term is renamed or removed, and existing v0.8 sheets stay valid. The 2026-10-01 revision is the exception: it removes the price properties of `pagefront:Configurator` and of its options, and a sheet that carried them needs re-emission.
 
@@ -792,6 +792,10 @@ Note: v0.5 made envelope/structural changes (the `sheet_url` rename, internation
 ### Unreleased
 
 _Nothing yet. Changes land here and are versioned at the next release; see "Releasing" in [`../../CONTRIBUTING.md`](../../CONTRIBUTING.md)._
+
+### 0.4.0 — 2026-10-02
+
+The vocabulary of commerce release 0.4.0. No term is added, renamed or removed. The release makes `$schema` required on sheets carrying `release`, in the Product Sheet spec (0.10.0) and the Organization Sheet spec (0.4.0), and requires the pairs of a configurator's `exclusions` and of an adjustment's `when` to resolve to a declared dimension and option. The vocabulary takes the release version.
 
 ### 2026-10-01 — Versioning scheme replaced
 
@@ -824,8 +828,8 @@ Policy and prose only; no term, schema or sheet changes conformance. Releases be
 ## References
 
 - Commerce releases and the versioning scheme: [`releases.md`](releases.md)
-- Product Sheet schema, spec version 0.9.0: `https://themachineweb.org/pagefront/spec/commerce/product/v0.9.0.json` (published file: [`../schemas/product/v0.9.0.json`](../schemas/product/v0.9.0.json))
-- Organization Sheet schema, spec version 0.3.0: `https://themachineweb.org/pagefront/spec/commerce/organization/v0.3.0.json` (published file: [`../schemas/organization/v0.3.0.json`](../schemas/organization/v0.3.0.json))
+- Product Sheet schema, spec version 0.10.0: `https://themachineweb.org/pagefront/spec/commerce/product/v0.10.0.json` (published file: [`../schemas/product/v0.10.0.json`](../schemas/product/v0.10.0.json))
+- Organization Sheet schema, spec version 0.4.0: `https://themachineweb.org/pagefront/spec/commerce/organization/v0.4.0.json` (published file: [`../schemas/organization/v0.4.0.json`](../schemas/organization/v0.4.0.json))
 - Schema.org vocabulary: `https://schema.org/`
 - JSON-LD 1.1: `https://www.w3.org/TR/json-ld11/`
 - RFC 8288 (Web Linking): `https://www.rfc-editor.org/rfc/rfc8288`

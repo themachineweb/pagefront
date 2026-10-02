@@ -40,5 +40,7 @@ export const pdpW008: Rule = {
   remediation:
     "Set `expires_at` to a sensible window after `generated_at`. For static product catalogs, hours to days; for sheets with live pricing or inventory signals, minutes.",
   introduced: "v0.6",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "product.md#the-envelope",
 };

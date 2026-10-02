@@ -95,7 +95,7 @@ test("legacy line: a format_version sheet validates against the frozen v0.9 sche
   assert.ok(failed.schemaErrors.some((e) => e.keyword === "const" && e.instancePath === "/format_version"));
 });
 
-test("release line: a sheet carrying both fields fails Layer 1; release must be a full semver", () => {
+test("release line: a sheet carrying both fields fails Layer 1", () => {
   const both = load("clean.json");
   both.format_version = "0.9";
   const result = validateAndLint(both, OPTIONS);
@@ -103,65 +103,141 @@ test("release line: a sheet carrying both fields fails Layer 1; release must be 
   assert.ok(result.schemaErrors.some((e) => e.keyword === "additionalProperties"));
   // Layer 2 alone reports the same condition as a finding.
   assert.deepEqual(lintSheet(both, OPTIONS).summary.rules_fired, ["PDP-E-016"]);
-
-  const short = load("clean.json");
-  short.release = "0.3";
-  const failed = validateAndLint(short, OPTIONS);
-  assert.equal(failed.layer, 1);
-  assert.ok(failed.schemaErrors.some((e) => e.keyword === "pattern" && e.instancePath === "/release"));
 });
 
-test("release 0.3.0 sheet: validated against the frozen schema its $schema names", () => {
+test("unknown release: Layer 1 fails with one error naming the release; Layer 2 alone fires PDP-E-018", () => {
+  for (const release of ["0.5.0", "0.3", "9.9.9"]) {
+    const sheet = load("clean.json");
+    sheet.release = release;
+    assert.deepEqual(validateAndLint(sheet, OPTIONS), {
+      layer: 1,
+      schemaErrors: [
+        { instancePath: "/release", message: `names no release this linter knows: ${release}`, keyword: "release" },
+      ],
+    });
+    assert.deepEqual(lintSheet(sheet, OPTIONS).summary.rules_fired, ["PDP-E-018"]);
+  }
+});
+
+/** clean.json rewritten as a release 0.3.0 sheet (Product Sheet spec 0.9.0). */
+function release030() {
   const sheet = load("clean.json");
-  assert.equal(sheet.$schema, "https://themachineweb.org/pagefront/spec/commerce/product/v0.9.0.json");
+  sheet.release = "0.3.0";
+  sheet.$schema = "https://themachineweb.org/pagefront/spec/commerce/product/v0.9.0.json";
+  return sheet;
+}
+
+test("current release sheet: validated against the schema its release bundles", () => {
+  const sheet = load("clean.json");
+  assert.equal(sheet.$schema, "https://themachineweb.org/pagefront/spec/commerce/product/v0.10.0.json");
   const result = validateAndLint(sheet, OPTIONS);
+  assert.equal(result.layer, 2);
+  assert.equal(result.report.release, "0.4.0");
+  assert.equal(result.report.sheet_spec_version, "0.10.0");
+  assert.deepEqual(result.report.summary.rules_fired, []);
+});
+
+test("release 0.3.0 sheet: still validated against its own frozen schema", () => {
+  const result = validateAndLint(release030(), OPTIONS);
   assert.equal(result.layer, 2);
   assert.equal(result.report.release, "0.3.0");
   assert.equal(result.report.sheet_spec_version, "0.9.0");
   assert.deepEqual(result.report.summary.rules_fired, []);
 });
 
-test("unknown schema version: Layer 1 fails with one error naming the $schema, no other schema is tried", () => {
-  const sheet = load("clean.json");
-  sheet.$schema = "https://themachineweb.org/pagefront/spec/commerce/product/v0.10.0.json";
-  assert.deepEqual(validateAndLint(sheet, OPTIONS), {
+test("a sheet is judged by the release it declares: a $schema that disagrees is PDP-E-002, at Layer 2", () => {
+  // The schema is resolved from `release` and the sheet type, so the
+  // sheet passes Layer 1 against the schema its release bundles, and
+  // the rule names the disagreement.
+  const cases = [
+    // still pointing at the legacy schema
+    ["https://themachineweb.org/pagefront/spec/commerce/product/v0.9.json",
+      "`release` `0.4.0` bundles Product Sheet spec `0.10.0` but `$schema` URL declares version `0.9`."],
+    // the previous release's schema
+    ["https://themachineweb.org/pagefront/spec/commerce/product/v0.9.0.json",
+      "`release` `0.4.0` bundles Product Sheet spec `0.10.0` but `$schema` URL declares version `0.9.0`."],
+    // a version that was never published
+    ["https://themachineweb.org/pagefront/spec/commerce/product/v0.99.0.json",
+      "`release` `0.4.0` bundles Product Sheet spec `0.10.0` but `$schema` URL declares version `0.99.0`."],
+    // the right version at another URL
+    ["https://merchant.example/schemas/product/v0.10.0.json",
+      "`release` `0.4.0` bundles Product Sheet spec `0.10.0` but `$schema` is not that schema's URL, `https://themachineweb.org/pagefront/spec/commerce/product/v0.10.0.json`."],
+  ];
+  for (const [$schema, message] of cases) {
+    const sheet = load("clean.json");
+    sheet.$schema = $schema;
+    const result = validateAndLint(sheet, OPTIONS);
+    assert.equal(result.layer, 2, $schema);
+    assert.deepEqual(result.report.summary.rules_fired, ["PDP-E-002"], $schema);
+    assert.equal(result.report.findings[0].message, message);
+  }
+});
+
+test("$schema absent: required by the schema from release 0.4.0, never by a rule", () => {
+  // Release 0.4.0 (Product Sheet spec 0.10.0): the schema requires
+  // $schema, so the failure is a Layer 1 error and nothing else.
+  const current = load("clean.json");
+  delete current.$schema;
+  assert.deepEqual(validateAndLint(current, OPTIONS), {
+    layer: 1,
+    schemaErrors: [
+      { instancePath: "", message: "must have required property '$schema'", keyword: "required" },
+    ],
+  });
+  // PDP-E-002 is quiet on it: requiredness is the schema's statement.
+  assert.deepEqual(lintSheet(current, OPTIONS).summary.rules_fired, []);
+
+  // Release 0.3.0 (spec 0.9.0) does not require $schema: the sheet is
+  // valid and gets no finding.
+  const earlier = release030();
+  delete earlier.$schema;
+  const linted = validateAndLint(earlier, OPTIONS);
+  assert.equal(linted.layer, 2);
+  assert.deepEqual(linted.report.summary.rules_fired, []);
+
+  // The legacy line keeps $schema optional, at both layers.
+  const legacy = load("clean.json");
+  delete legacy.$schema;
+  delete legacy.release;
+  legacy.format_version = "0.9";
+  const legacyResult = validateAndLint(legacy, OPTIONS);
+  assert.equal(legacyResult.layer, 2);
+  assert.deepEqual(legacyResult.report.summary.rules_fired, []);
+});
+
+test("legacy sheets resolve through $schema: an unpublished one fails Layer 1 at /$schema", () => {
+  const legacy = load("clean.json");
+  delete legacy.release;
+  legacy.format_version = "0.9";
+  legacy.$schema = "https://themachineweb.org/pagefront/spec/commerce/product/v0.7.json";
+  assert.deepEqual(validateAndLint(legacy, OPTIONS), {
     layer: 1,
     schemaErrors: [
       {
         instancePath: "/$schema",
-        message:
-          "names no schema this linter bundles: https://themachineweb.org/pagefront/spec/commerce/product/v0.10.0.json",
+        message: "names no schema this linter bundles: https://themachineweb.org/pagefront/spec/commerce/product/v0.7.json",
         keyword: "$schema",
       },
     ],
   });
 });
 
-test("a sheet is validated against the schema it names, whatever line its envelope field suggests", () => {
-  // A release sheet still pointing at the legacy schema is judged by the
-  // legacy schema: it lacks format_version and carries an unknown field.
-  const sheet = load("clean.json");
-  sheet.$schema = "https://themachineweb.org/pagefront/spec/commerce/product/v0.9.json";
-  const result = validateAndLint(sheet, OPTIONS);
-  assert.equal(result.layer, 1);
-  assert.ok(result.schemaErrors.some((e) => e.keyword === "required" && /format_version/.test(e.message)));
-  // Layer 2 alone names the mismatch.
-  assert.equal(
-    lintSheet(sheet, OPTIONS).findings[0].message,
-    "`release` `0.3.0` bundles Product Sheet spec `0.9.0` but `$schema` URL declares version `0.9`."
-  );
-});
+test("release gating: PDP-E-017 applies from release 0.4.0", () => {
+  const withBadExclusion = (sheet) => {
+    sheet.data["pagefront:configurator"] = {
+      "@type": "pagefront:Configurator",
+      dimensions: [{ name: "finish", affectsPrice: false, options: [{ value: "matte" }, { value: "gloss" }] }],
+      exclusions: [{ finish: "satin" }],
+    };
+    return sheet;
+  };
+  const current = validateAndLint(withBadExclusion(load("clean.json")), OPTIONS);
+  assert.equal(current.layer, 2);
+  assert.ok(current.report.summary.rules_fired.includes("PDP-E-017"));
 
-test("no $schema: the schema is the one the sheet's release or format_version leads to", () => {
-  const release = load("clean.json");
-  delete release.$schema;
-  assert.equal(validateAndLint(release, OPTIONS).layer, 2);
-
-  const legacy = load("clean.json");
-  delete legacy.$schema;
-  delete legacy.release;
-  legacy.format_version = "0.9";
-  assert.equal(validateAndLint(legacy, OPTIONS).layer, 2);
+  const earlier = validateAndLint(withBadExclusion(release030()), OPTIONS);
+  assert.equal(earlier.layer, 2);
+  assert.ok(!earlier.report.summary.rules_fired.includes("PDP-E-017"));
 });
 
 test("the pre-2026-09-08 legacy identifier still resolves to the legacy schema", () => {

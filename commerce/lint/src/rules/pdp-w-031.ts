@@ -30,5 +30,7 @@ export const pdpW031: Rule = {
     "Seller at `{path}` has an `@id` but no `pagefront:sheetUrl`, and the Offer states no return or shipping terms of its own.",
   remediation: "Add `pagefront:sheetUrl` to the seller reference, or state the terms on the Offer.",
   introduced: "v0.9",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "organization.md#linking-contract-identity-only",
 };

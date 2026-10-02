@@ -51,5 +51,7 @@ export const pdpW012: Rule = {
   remediation:
     "Add a `caption` field with a 1–3 sentence summary of the video's content, or a `transcript` field with the full spoken content. For overview and tutorial videos, at least one is strongly recommended.",
   introduced: "v0.6",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "product.md#accessibility",
 };

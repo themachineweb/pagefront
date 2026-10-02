@@ -21,5 +21,7 @@ export const pdpW002: Rule = {
   remediation:
     "Add a `description` field with a 1–3 paragraph prose description of the product. The description should match the Sheet's `inLanguage`.",
   introduced: "v0.6",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "product.md#required-and-recommended-core-fields",
 };

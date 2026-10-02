@@ -35,5 +35,7 @@ export const pdpE005: Rule = {
     "Seller sheet URL at `{path}` is on host `{sheetUrlHost}`; the product sheet is on `{sheetHost}`.",
   remediation: "Publish the seller's organization sheet on the storefront host.",
   introduced: "v0.9",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "organization.md#linking-contract-identity-only",
 };

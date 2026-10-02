@@ -33,5 +33,7 @@ export const pdpE006: Rule = {
   remediation:
     "Point `pagefront:sheetUrl` at the sheet the brand publishes on its own host, or remove it.",
   introduced: "v0.9",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "organization.md#linking-contract-identity-only",
 };

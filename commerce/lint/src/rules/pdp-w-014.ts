@@ -72,5 +72,7 @@ export const pdpW014: Rule = {
   remediation:
     "For each variant entry in `hasVariant`, add a `url` field with the variant's addressable URL — its own page (case 3) or the shared page with its variant-selecting query parameter (case 2). If all variants share the exact same URL with no parameter-based differentiation (case 1), the per-variant `url` field can be omitted.",
   introduced: "v0.6",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "product.md#per-variant-urls",
 };

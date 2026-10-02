@@ -2,21 +2,22 @@
   "sheet": "https://merchant.example/pages/about",
   "checked_at": "2026-01-01T00:00:00Z",
   "linter_version": "0.0.0-test",
-  "release": "0.3.0",
+  "release": "0.4.0",
   "sheet_spec_version": "0.9",
-  "catalogue_version": "0.15.0",
+  "catalogue_version": "0.16.0",
   "findings": [
     {
       "rule": "ORG-E-003",
       "severity": "error",
       "path": "$['release']",
       "values": {
-        "declared": "`release` `0.3.0` bundles Organization Sheet spec `0.3.0`",
-        "release": "0.3.0",
-        "expected": "0.3.0",
+        "declared": "`release` `0.4.0` bundles Organization Sheet spec `0.4.0`",
+        "found": "`$schema` URL declares version `0.9`",
+        "release": "0.4.0",
+        "expected": "0.4.0",
         "schema_version": "0.9"
       },
-      "message": "`release` `0.3.0` bundles Organization Sheet spec `0.3.0` but `$schema` URL declares version `0.9`.",
+      "message": "`release` `0.4.0` bundles Organization Sheet spec `0.4.0` but `$schema` URL declares version `0.9`.",
       "remediation": "Point `$schema` at the sheet-spec version the declared release bundles (see releases.md), or declare the release that bundles the schema the sheet was written against. On a legacy sheet, align `format_version` and the `$schema` version."
     }
   ],

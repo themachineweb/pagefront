@@ -28,7 +28,10 @@ catalogue; this package runs it.
 This package has its own semver. 0.2.0 changes the report shape: `Report`
 carries `release` and `sheet_spec_version` in place of `spec_version`,
 `Sheet` carries `release` or a legacy `format_version`, and `Catalogue`
-carries `releases` in place of `formatVersion`. See "Versioning" in
+carries `releases` in place of `formatVersion`. 0.3.0 adds release gating:
+`Rule` gains `appliesFrom` (required) and `appliesToLegacy`, and the engine
+skips a rule on a Sheet whose declared release is lower than `appliesFrom`,
+and on legacy Sheets unless the rule is flagged. See "Versioning" in
 [`linter.md`](https://github.com/themachineweb/pagefront/blob/main/core/spec/linter.md).
 
 Pre-1.0: minor versions may break the API. The surface above is what

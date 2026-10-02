@@ -11,5 +11,7 @@ export const orgE003: Rule = {
   ...RELEASE_SCHEMA_MISMATCH,
   check: releaseSchemaMismatch("organization"),
   introduced: "release 0.3.0",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "organization.md#the-envelope",
 };

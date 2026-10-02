@@ -1,5 +1,5 @@
 import type { CheckFn, CheckHit, Rule } from "@pagefront/lint-core";
-import { sheetSpecVersionFor } from "../releases.js";
+import { KNOWN_RELEASES, schemaUrlFor, sheetSpecVersionFor } from "../releases.js";
 import type { SheetType } from "../sheet-type.js";
 
 /**
@@ -17,41 +17,61 @@ const SHEET_LABEL: Record<SheetType, string> = {
 };
 
 /**
- * Release / schema mismatch. On the release line the `$schema` version
- * segment must be the sheet-spec version the release manifest maps the
- * declared `release` and the sheet type to; a release the manifest does
- * not list has no mapping and the rule is silent. On the legacy line
- * the segment must equal `format_version`, as before. Quiet when
- * `$schema` is absent or names no version, and when the sheet carries
- * both fields (the both-fields rule reports that).
+ * Release / schema mismatch. The rule reads `$schema` and is quiet
+ * whenever it is absent, on both lines: whether `$schema` is required is
+ * the schema's own statement (Product Sheet spec 0.10.0 and Organization
+ * Sheet spec 0.4.0 onward), not this rule's. On the release line a
+ * present `$schema` must be the URL of the sheet-spec schema the release
+ * manifest maps the declared `release` and the sheet type to; a release
+ * the manifest does not list has no mapping (the unknown-release rule
+ * reports it). On the legacy line the `$schema` version segment must
+ * equal `format_version`, as before. Quiet when the sheet carries both
+ * fields (the both-fields rule reports that).
  */
 export function releaseSchemaMismatch(sheetType: SheetType): CheckFn {
   return (_match, ctx): CheckHit | null => {
     const { release, format_version: formatVersion, $schema: schema } = ctx.sheet;
     if (typeof schema !== "string") return null;
-    const schemaVersion = SCHEMA_VERSION.exec(schema)?.[1];
-    if (schemaVersion === undefined) return null;
     if (release !== undefined && formatVersion !== undefined) return null;
+    const schemaVersion = SCHEMA_VERSION.exec(schema)?.[1];
     if (typeof release === "string") {
       const expected = sheetSpecVersionFor(release, sheetType);
-      if (expected === undefined || expected === schemaVersion) return null;
+      if (expected === undefined) return null;
+      const expectedUrl = schemaUrlFor(sheetType, expected);
+      if (schema === expectedUrl) return null;
+      const declared = `\`release\` \`${release}\` bundles ${SHEET_LABEL[sheetType]} spec \`${expected}\``;
+      if (schemaVersion !== undefined && schemaVersion !== expected) {
+        return {
+          path: "$['release']",
+          values: {
+            declared,
+            found: `\`$schema\` URL declares version \`${schemaVersion}\``,
+            release,
+            expected,
+            schema_version: schemaVersion,
+          },
+        };
+      }
       return {
         path: "$['release']",
         values: {
-          declared: `\`release\` \`${release}\` bundles ${SHEET_LABEL[sheetType]} spec \`${expected}\``,
+          declared,
+          found: `\`$schema\` is not that schema's URL, \`${expectedUrl}\``,
           release,
           expected,
-          schema_version: schemaVersion,
+          expected_url: expectedUrl,
         },
       };
     }
     if (formatVersion !== undefined) {
+      if (schemaVersion === undefined) return null;
       const declared = String(formatVersion);
       if (declared === schemaVersion) return null;
       return {
         path: "$['format_version']",
         values: {
           declared: `\`format_version\` is \`${declared}\``,
+          found: `\`$schema\` URL declares version \`${schemaVersion}\``,
           format_version: declared,
           schema_version: schemaVersion,
         },
@@ -65,7 +85,7 @@ export const RELEASE_SCHEMA_MISMATCH: Pick<Rule, "title" | "severity" | "target"
   title: "Release / schema mismatch",
   severity: "error",
   target: "$",
-  messageTemplate: "{declared} but `$schema` URL declares version `{schema_version}`.",
+  messageTemplate: "{declared} but {found}.",
   remediation:
     "Point `$schema` at the sheet-spec version the declared release bundles (see releases.md), or declare the release that bundles the schema the sheet was written against. On a legacy sheet, align `format_version` and the `$schema` version.",
 };
@@ -82,4 +102,26 @@ export const BOTH_VERSION_FIELDS: Pick<Rule, "title" | "severity" | "target" | "
     "Sheet carries both `format_version` and `release`; a sheet declares one.",
   remediation:
     "Keep `release` and remove `format_version`. A sheet on the legacy draft line keeps `format_version` alone and its legacy `$schema`.",
+};
+
+/**
+ * Unknown release: the sheet declares a `release` the release manifest
+ * does not list, so no sheet-spec version and no schema can be resolved
+ * for it. Only a string `release` is judged; another JSON type is
+ * Layer 1's concern.
+ */
+export const unknownRelease: CheckFn = (_match, ctx) => {
+  const { release } = ctx.sheet;
+  if (typeof release !== "string" || KNOWN_RELEASES.includes(release)) return null;
+  return { path: "$['release']", values: { release, known: KNOWN_RELEASES.join(", ") } };
+};
+
+export const UNKNOWN_RELEASE: Pick<Rule, "title" | "severity" | "target" | "messageTemplate" | "remediation"> = {
+  title: "Unknown release",
+  severity: "error",
+  target: "$",
+  messageTemplate:
+    "`release` at `{path}` is `{release}`, which is not a release this catalogue knows ({known}).",
+  remediation:
+    "Declare a published commerce release (see releases.md). If the release is newer than this linter, update the linter.",
 };

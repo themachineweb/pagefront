@@ -53,5 +53,7 @@ export const pdpE001: Rule = {
   remediation:
     "Either correct the reference to match an existing `@id`, or add the referenced entity to the Sheet. Same-document references (fragments, bare tokens, or full URLs on this Sheet's own base) must resolve within the Sheet, by exact string match. A pricing block's `configurator.@id` must equal the `@id` declared on the Sheet's `pagefront:configurator`. A full-URL `@id` on another document's base in `isVariantOf` or a `hasVariant` entry is a legitimate cross-Sheet reference (multi-Sheet variant family) and is validated for URL shape only — see PDP-W-021 for the traversal-hint recommendation that accompanies it.",
   introduced: "v0.6",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "product.md#itemoffered-references",
 };

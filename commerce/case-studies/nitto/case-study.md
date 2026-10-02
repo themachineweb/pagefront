@@ -1,6 +1,6 @@
 # Nitto Knitwear — Case Study
 
-Commerce release 0.3.0. Sheets derived from the live site and verified against
+Commerce release 0.4.0. Sheets derived from the live site and verified against
 it on 2026-09-30.
 
 ## The merchant and the product
@@ -167,3 +167,5 @@ is the one the page's cart summary shows.
 - **2026-09-30** — the Vahé long-sleeve in indigo left the catalogue; the
   case moved to the Youri turtleneck in orange and both sheets were
   re-derived; the stockist list grew to 148. The Vahé sheet is archived.
+- **2026-10-02** — sheets moved to commerce release 0.4.0 (`release` and
+  `$schema` only); no other value changed.

@@ -43,5 +43,7 @@ export const pdpW005: Rule = {
   remediation:
     "Verify the composition data. If a material is missing, add it. If the values are correct but the publisher's source data uses percentages for a different denominator, omit `percentage` rather than use a value that doesn't represent a fraction of total composition.",
   introduced: "v0.6",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "product.md#materials-material-and-pagefrontmaterialcomposition",
 };

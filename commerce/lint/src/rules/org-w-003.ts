@@ -27,5 +27,7 @@ export const orgW003: Rule = {
   remediation:
     "Declare `brand_owner` in `pagefront:commerceRole`, or remove the `brand` node if this sheet is not the brand's sheet.",
   introduced: "v0.9",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "organization.md#role-discriminator--pagefrontcommercerole",
 };

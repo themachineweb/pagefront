@@ -38,5 +38,7 @@ export const pdpE008: Rule = {
   remediation:
     "Set the base option's modifier to zero and express the other options of the dimension as differences from it. If the modifier is right, `basePrice` is the total of another configuration: correct `baseConfiguration` or `basePrice`.",
   introduced: "v0.9 (2026-10-01 revision)",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "product.md#configurator-pricing-and-price-bands",
 };

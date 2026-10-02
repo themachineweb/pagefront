@@ -28,5 +28,7 @@ export const pdpW038: Rule = {
   remediation:
     "Restate the note as a fact in the third person: what the merchant offers or recommends, with no \"you\" and no instruction.",
   introduced: "v0.9 (2026-10-01 revision)",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "product.md#configurator-pricing-and-price-bands",
 };

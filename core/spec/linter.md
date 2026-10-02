@@ -57,9 +57,26 @@ Each rule is defined by a small set of fields:
 - **message_template**: The human-readable message produced when the rule fires, with placeholders for the matched path and any relevant values. Placeholders use `{name}` syntax.
 - **remediation**: What the publisher should do to resolve the finding. One or two sentences.
 - **introduced**: What the rule was added in: a release of its vertical (e.g., `release 0.3.0`), or a legacy format version for rules that predate releases (e.g., `v0.6`).
+- **applies_from**: The first release of its vertical the rule applies to, as a semver (e.g., `0.4.0`). A linter skips the rule on a Sheet whose declared release is lower. See "Release gating" below.
+- **applies_to_legacy**: Whether the rule also runs on Sheets of the legacy draft line (those carrying `format_version` and no `release`). A linter skips a rule without this flag on legacy Sheets.
 - **spec_reference**: URL or path to the spec section that motivates the rule. Allows publishers to read the broader context.
 - **deprecated_in**: Optional. The catalogue version in which this rule was deprecated, if applicable. Deprecated rules continue to fire (so existing reports remain interpretable) but documentation indicates they should not be relied upon for new work.
 - **superseded_by**: Optional. The rule ID that replaces this one, if applicable.
+
+### Release gating
+
+A Sheet is judged only by the rules of the release it declares. A requirement that a later release introduces does not reach back to Sheets written against an earlier one: such a Sheet conformed when it was written and conforms still.
+
+- A linter skips a rule when the Sheet's declared `release` is lower than the rule's `applies_from`, comparing the two as semvers.
+- On a Sheet of the legacy draft line, a linter runs only the rules flagged `applies_to_legacy`.
+- A Sheet whose release cannot be read as a semver, or that declares neither `release` nor `format_version`, cannot be gated and gets every rule.
+
+The policy for a catalogue follows from it:
+
+- An **error** rule added after a vertical's first release applies only from the release that introduces its requirement. The requirement is stated in that release's sheet spec, and the release notes list it.
+- **Warning** and **info** rules may apply to every release, since they never change whether a Sheet conforms.
+
+The same principle governs Layer 1: a Sheet is validated against the schema of the sheet-spec version its declared release bundles.
 
 ## Severity levels
 
@@ -185,7 +202,9 @@ Catalogue-specific pending work (scoring rubric integration, case-study validati
 
 ### Unreleased
 
-_Nothing yet. Changes land here and are versioned at the next release; see "Releasing" in [`../../CONTRIBUTING.md`](../../CONTRIBUTING.md)._
+Changes land here and are versioned at the next release; see "Releasing" in [`../../CONTRIBUTING.md`](../../CONTRIBUTING.md).
+
+- **Release gating.** The rule structure gains `applies_from` and `applies_to_legacy`, and a linter skips a rule on a Sheet whose declared release is lower than `applies_from`, or on a legacy Sheet unless the rule is flagged. Policy: an error rule added after a vertical's first release applies only from the release that introduces its requirement; warning and info rules may apply to every release. Layer 1 follows the same principle: the schema is the one the declared release bundles. Implemented in `@pagefront/lint-core` 0.3.0.
 
 ### 2026-10-01 — Versioning scheme replaced
 

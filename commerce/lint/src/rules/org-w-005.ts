@@ -54,5 +54,7 @@ export const orgW005: Rule = {
   remediation:
     "Correct the machine key: `iso6523Code` is `NNNN:register-number` (e.g. `0002:808641435` for a SIREN), `leiCode` is a 20-character ISO 17442 LEI. If no well-formed machine key exists for this register, drop the field and keep the display-form `identifier` — absence is conformant.",
   introduced: "v0.9",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "organization.md#company-registration-identity",
 };

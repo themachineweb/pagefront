@@ -1,0 +1,32 @@
+{
+  "sheet": "https://merchant.example/products/aurora-lamp",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.4.0",
+  "sheet_spec_version": "0.10.0",
+  "catalogue_version": "0.16.0",
+  "findings": [
+    {
+      "rule": "PDP-E-002",
+      "severity": "error",
+      "path": "$['release']",
+      "values": {
+        "declared": "`release` `0.4.0` bundles Product Sheet spec `0.10.0`",
+        "found": "`$schema` is not that schema's URL, `https://themachineweb.org/pagefront/spec/commerce/product/v0.10.0.json`",
+        "release": "0.4.0",
+        "expected": "0.10.0",
+        "expected_url": "https://themachineweb.org/pagefront/spec/commerce/product/v0.10.0.json"
+      },
+      "message": "`release` `0.4.0` bundles Product Sheet spec `0.10.0` but `$schema` is not that schema's URL, `https://themachineweb.org/pagefront/spec/commerce/product/v0.10.0.json`.",
+      "remediation": "Point `$schema` at the sheet-spec version the declared release bundles (see releases.md), or declare the release that bundles the schema the sheet was written against. On a legacy sheet, align `format_version` and the `$schema` version."
+    }
+  ],
+  "summary": {
+    "errors": 1,
+    "warnings": 0,
+    "info": 0,
+    "rules_fired": [
+      "PDP-E-002"
+    ]
+  }
+}

@@ -194,6 +194,21 @@ export interface Rule {
    * legacy format version for rules that predate releases (e.g. "v0.8").
    */
   introduced: string;
+  /**
+   * The first release the rule applies to, as a semver ("0.3.0"). The
+   * engine skips the rule on a Sheet whose declared `release` is lower:
+   * a Sheet is judged only by the rules of the release it declares. An
+   * error rule added after a release applies from the release that
+   * introduces its requirement; warning and info rules may apply from
+   * the first release, since they never change conformance.
+   */
+  appliesFrom: string;
+  /**
+   * Whether the rule also runs on Sheets of the legacy draft line (those
+   * carrying `format_version` and no `release`). Omitted or false: the
+   * engine skips the rule on legacy Sheets.
+   */
+  appliesToLegacy?: boolean;
   /** Path/URL of the motivating spec section. */
   specReference: string;
   /** Deprecated rules continue to fire; this flags them. */

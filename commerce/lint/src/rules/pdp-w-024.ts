@@ -57,5 +57,7 @@ export const pdpW024: Rule = {
   remediation:
     "Add the entity's postal address to the `organization`. If no address is available, the entry still identifies the organization but should not be relied on as a regulatory responsible-person declaration.",
   introduced: "v0.8",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "product.md#legal-entities",
 };

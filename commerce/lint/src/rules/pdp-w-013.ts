@@ -25,5 +25,7 @@ export const pdpW013: Rule = {
   remediation:
     "Change `http://schema.org/...` to `https://schema.org/...`. The value is otherwise unchanged.",
   introduced: "v0.6",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "product.md#offers",
 };

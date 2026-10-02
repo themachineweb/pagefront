@@ -42,5 +42,7 @@ export const pdpW023: Rule = {
   remediation:
     "Update the offer's `availability` to reflect the corrective measure (typically `Discontinued` or `OutOfStock`). If the recall has been resolved and the product legitimately relisted, remove the stale `pagefront:safetyNotice` entry instead.",
   introduced: "v0.8",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "product.md#safety-notices",
 };

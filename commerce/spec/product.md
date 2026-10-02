@@ -1,11 +1,11 @@
 # Pagefront Product Sheet
 
 Status: normative spec.
-Product Sheet spec version: 0.9.0
-Commerce release: 0.3.0
+Product Sheet spec version: 0.10.0
+Commerce release: 0.4.0
 Schema.org version targeted: 30.0 (2026-03-19)
 
-**Versioning.** This sheet spec has its own semver, 0.9.0, and is a member of commerce release 0.3.0. A sheet declares the release in its envelope (`release`) and names this spec version in `$schema`. Before 1.0 a breaking or an additive change bumps the minor and a fix or clarification bumps the patch; the release bumps with its members. The scheme, the release table and the legacy draft line (sheets carrying `format_version`) are in [`releases.md`](releases.md). The "v0.7", "v0.9" and similar version names throughout this document are legacy format versions, kept as history.
+**Versioning.** This sheet spec has its own semver, 0.10.0, and is a member of commerce release 0.4.0. A sheet declares the release in its envelope (`release`) and names this spec version in `$schema`. Before 1.0 a breaking or an additive change bumps the minor and a fix or clarification bumps the patch; the release bumps with its members. The scheme, the release table and the legacy draft line (sheets carrying `format_version`) are in [`releases.md`](releases.md). The "v0.7", "v0.9" and similar version names throughout this document are legacy format versions, kept as history.
 
 ## Design principles
 
@@ -52,8 +52,8 @@ Unchanged from v0.5.
 
 ```json
 {
-  "$schema": "https://themachineweb.org/pagefront/spec/commerce/product/v0.9.0.json",
-  "release": "0.3.0",
+  "$schema": "https://themachineweb.org/pagefront/spec/commerce/product/v0.10.0.json",
+  "release": "0.4.0",
   "schema_org_version": "30.0",
   "canonical_url": "https://merchant.com/product/widget-123",
   "sheet_url": "https://merchant.com/api/sheets/widget-123.json",
@@ -67,13 +67,14 @@ Unchanged from v0.5.
 }
 ```
 
-Envelope fields are project-defined. `release`, `schema_org_version`, `canonical_url`, `sheet_url`, `generated_at`, and `data` are required on every sheet. `expires_at` is recommended: publishers SHOULD declare it when they have a meaningful expiry policy, and MAY omit it when the sheet has no defined expiry.
+Envelope fields are project-defined. `$schema`, `release`, `schema_org_version`, `canonical_url`, `sheet_url`, `generated_at`, and `data` are required on every sheet that carries `release`. On the legacy draft line, `format_version` stands in for `release` and `$schema` is optional. `expires_at` is recommended: publishers SHOULD declare it when they have a meaningful expiry policy, and MAY omit it when the sheet has no defined expiry.
 
 `release` and `$schema` are the sheet's two version statements:
 
-- `release` is the commerce release the sheet is written against, as a full semver (`"0.3.0"`). The name is generic because the envelope is shared across verticals; the vertical is identified by `$schema`. It replaces `format_version`, the field of the legacy draft line.
-- `$schema` is the URL of the JSON Schema for the sheet's own sheet-spec version, with the full semver in its last segment: `https://themachineweb.org/pagefront/spec/commerce/product/v0.9.0.json` for Product Sheet spec 0.9.0. It names the sheet spec; the release has no schema of its own.
-- The release and the sheet type resolve to exactly one sheet-spec version through the release table in [`releases.md`](releases.md) (machine-readable in [`releases.json`](releases.json)). `$schema` MUST name that version: a Product Sheet declaring release 0.3.0 points `$schema` at `product/v0.9.0.json` (linter rule PDP-E-002).
+- `release` is the commerce release the sheet is written against, as a full semver (`"0.4.0"`). The name is generic because the envelope is shared across verticals; the vertical is identified by `$schema`. It replaces `format_version`, the field of the legacy draft line.
+- `$schema` is the URL of the JSON Schema for the sheet's own sheet-spec version, with the full semver in its last segment: `https://themachineweb.org/pagefront/spec/commerce/product/v0.10.0.json` for Product Sheet spec 0.10.0. It names the sheet spec; the release has no schema of its own. `$schema` is REQUIRED on every sheet carrying `release`: it is what identifies the vertical and the sheet type, and what the release is checked against. It is optional only on the legacy draft line.
+- The release and the sheet type resolve to exactly one sheet-spec version through the release table in [`releases.md`](releases.md) (machine-readable in [`releases.json`](releases.json)). `$schema` MUST name that version: a Product Sheet declaring release 0.4.0 points `$schema` at `product/v0.10.0.json`, and one declaring release 0.3.0 at `product/v0.9.0.json` (linter rule PDP-E-002).
+- A sheet is judged by the release it declares: it is validated against the schema of the sheet-spec version that release bundles, and by the rules that apply from that release. A requirement introduced by a later release does not apply to it. Whether `$schema` is required is itself such a requirement: the schema of Product Sheet spec 0.10.0 requires it, and the schema of 0.9.0 does not.
 - A sheet carrying both `format_version` and `release` is invalid (PDP-E-016).
 
 A sheet carrying `format_version` and no `release` belongs to the legacy draft line, format versions 0.9 and earlier. It validates against the legacy schema, which stays served at `https://themachineweb.org/pagefront/spec/commerce/product/v0.9.json`, and it gains nothing from later releases. See "The legacy draft line" in [`releases.md`](releases.md).
@@ -439,6 +440,7 @@ A configurator carries no prices. `pagefront:configurator` describes the product
 - **A free-text dimension has one modifier.** A dimension declared `inputType: "text"` (engraving, monogram, custom inscription) has no `options`, and MAY state the number of characters accepted in `maxLength`. The base configuration leaves it empty, so it has no key in `baseConfiguration`. When its `affectsPrice` is left at the default of `true`, it MUST have a single modifier under its name, keyed `"*"`, which applies to any non-empty input. Free engraving is `affectsPrice: false` and has no modifier.
 - **Adjustments carry what is not additive.** When one option's price depends on the choice made in another dimension, `adjustments` lists the difference: each entry has a `when` (a partial configuration) and a `priceModifier`, and applies to every configuration that matches every pair in its `when`. Any price grid can be expressed this way. Producers MUST verify that the prices are additive before omitting `adjustments`.
 - **Excluded configurations have no total.** A configuration that matches every pair of an entry in the configurator's `exclusions` cannot be ordered, and its total is undefined.
+- **References resolve.** Every pair in an exclusion, and in an adjustment's `when`, MUST name a dimension the configurator declares. Where that dimension lists `options`, the pair's value MUST be the `value` of one of them, written as the option writes it, with the same JSON type (`"1"` for an option whose value is `"1"`). A dimension that lists no options takes any value. A pair that resolves to nothing would exclude no configuration, or never apply, without any sign of it. This requirement is new in Product Sheet spec 0.10.0 (linter rule PDP-E-017, which applies from release 0.4.0).
 - **Currency and tax basis come from the offer.** Every amount in the block is in the enclosing offer's `priceCurrency`, under that offer's tax-inclusion statement (`priceSpecification.valueAddedTaxIncluded`, see "Tax inclusion"). The block carries no currency of its own.
 - **Amounts use the Sheet's carrier.** `basePrice`, every modifier and every adjustment's `priceModifier` are amounts, carried as the rest of the Sheet's amounts are: all JSON numbers, or all decimal strings. See "Amounts" under "Common pricing patterns."
 
@@ -2026,7 +2028,7 @@ Discovery uses HTTP `Link` response headers per RFC 8288 as the primary mechanis
 Link: <https://merchant.example/api/sheets/anorak.en.json>;
       rel="describedby";
       type="application/json";
-      profile="https://themachineweb.org/pagefront/spec/commerce/product/v0.9.0.json";
+      profile="https://themachineweb.org/pagefront/spec/commerce/product/v0.10.0.json";
       title="Pagefront product sheet"
 ```
 
@@ -2146,13 +2148,13 @@ These are deferred to later versions when concrete consumer needs justify the co
 
 ## Planned breaking changes
 
-Breaking changes follow semver: each of the changes below would make a conforming sheet non-conforming, and ships in a future minor of this spec under the 0.x rules, with the release bumping accordingly ([`releases.md`](releases.md)). None ships in Product Sheet spec 0.9.0. Planned as of 2026-10-01:
+Breaking changes follow semver: each of the changes below would make a conforming sheet non-conforming, and ships in a future minor of this spec under the 0.x rules, with the release bumping accordingly ([`releases.md`](releases.md)). None ships in Product Sheet spec 0.10.0. Planned as of 2026-10-02:
 
 - **`@context` must declare the `pagefront` prefix wherever a `pagefront:` term is used.** Stated as prose in "Required and recommended core fields" and enforced by the linter (PDP-E-003, ORG-E-001); the JSON Schemas still accept the bare `"https://schema.org"` string beside `pagefront:` terms. A future schema version adds the constraint: when any data-block property name begins with `pagefront:`, `@context` is an array containing an object mapping `pagefront` to `https://themachineweb.org/pagefront/vocabulary/`. The top-level form does not see terms nested inside other objects, such as `pagefront:priceOnRequest` in an offer; the linter rules do.
 
 ## Status
 
-Normative spec: Product Sheet spec 0.9.0, a member of commerce release 0.3.0. The versioning scheme is in [`releases.md`](releases.md): the spec has its own semver, breaking changes follow it, and the envelope carries `release` in place of `format_version`. The 2026-10-01 revisions move configurator pricing from `pagefront:configurator` into the offer; sheets that carried prices inside the configurator need re-emission. The 2026-09-02 revision removes the recommended Sheet URL convention and states the follow-the-link discovery rule as a standalone normative requirement; no conformance requirement changes, no sheet becomes invalid, and none needs to move. The paragraphs below describe the legacy format versions this spec grew through.
+Normative spec: Product Sheet spec 0.10.0, a member of commerce release 0.4.0. The versioning scheme is in [`releases.md`](releases.md): the spec has its own semver, breaking changes follow it, and the envelope carries `release` in place of `format_version`. The 2026-10-01 revisions move configurator pricing from `pagefront:configurator` into the offer; sheets that carried prices inside the configurator need re-emission. The 2026-09-02 revision removes the recommended Sheet URL convention and states the follow-the-link discovery rule as a standalone normative requirement; no conformance requirement changes, no sheet becomes invalid, and none needs to move. The paragraphs below describe the legacy format versions this spec grew through.
 
 v0.9 was an additive release on top of v0.8, with no breaking changes to the data model. v0.8 Sheets remain structurally valid under v0.9 once their `format_version` envelope field is updated from `"0.8"` to `"0.9"`. Three changes land together, keeping the Product Sheet consistent with the new Commerce Organization Sheet ([`organization.md`](organization.md)): the `commerce/` segment in the Sheet URL convention, return and shipping policy as seller-sheet defaults with per-product overrides, and reference-capable `pagefront:legalEntity`. The `pagefront:commerceRole` and `pagefront:fulfillmentTerms` terms, the `organization` certification scope value, and the v0.9 schema updates are tracked with the Commerce Organization Sheet's own landing.
 
@@ -2174,6 +2176,16 @@ Changes land under "Unreleased" and are versioned at the next release, when the 
 ### Unreleased
 
 _Nothing yet. Changes land here and are versioned at the next release; see "Releasing" in [`../../CONTRIBUTING.md`](../../CONTRIBUTING.md)._
+
+### 0.10.0 — 2026-10-02
+
+Released in commerce release 0.4.0.
+
+- **`$schema` is required on sheets carrying `release`.** Breaking: a release-line sheet without `$schema` no longer validates. `$schema` identifies the vertical and the sheet type and is what the declared release is checked against, so a sheet that omits it cannot be placed. It stays optional on the legacy draft line. See "The envelope."
+- **(schema)** `$schema` joins `required`; `$id` at `https://themachineweb.org/pagefront/spec/commerce/product/v0.10.0.json`. The 0.9.0 schema stays published, unchanged, for sheets declaring release 0.3.0.
+- **Configurator references must resolve.** Breaking: every pair in an exclusion and in an adjustment's `when` names a dimension the configurator declares and, where that dimension lists options, one of its option values, written exactly. See "Configurator pricing and price bands." The schema does not express this; the linter checks it.
+- **A sheet is judged by the release it declares.** It is validated against the schema that release bundles and by the rules that apply from that release. A sheet declaring release 0.3.0 is held to neither requirement above.
+- **(linter)** Layer 1 resolves the schema from `release` and the sheet type. PDP-E-002 compares a present `$schema` with that schema's URL and is quiet when `$schema` is absent, which the schema itself reports from 0.10.0. PDP-E-017 is new and applies from release 0.4.0: an unresolved reference in an exclusion or an adjustment. PDP-E-018 is new: a `release` the release manifest does not list. Catalogue 0.16.0.
 
 ## Changelog — 2026-10-01: Versioning scheme replaced
 

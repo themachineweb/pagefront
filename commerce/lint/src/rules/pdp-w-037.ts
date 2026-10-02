@@ -34,5 +34,7 @@ export const pdpW037: Rule = {
   remediation:
     "Remove the entry if it is a service, and describe the service in the dimension's `note` or in `pagefront:madeToOrderTerms.aftermarketServices`. If it is a size, write it as the system writes it, without the system's name.",
   introduced: "v0.9 (2026-10-01 revision)",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "product.md#configurator-pricing-and-price-bands",
 };

@@ -15,8 +15,8 @@ they offer — without any platform's permission required.
 
 ## Status
 
-Commerce release 0.3.0 is the current release. It bundles the Product Sheet
-spec 0.9.0, the Organization Sheet spec 0.3.0 and the vocabulary. Category,
+Commerce release 0.4.0 is the current release. It bundles the Product Sheet
+spec 0.10.0, the Organization Sheet spec 0.4.0 and the vocabulary. Category,
 collection and catalog sheets are to come, each joining in a later release.
 The format is suitable for experimentation and feedback today; the stability
 policy applies from release 1.0.0.
@@ -40,12 +40,12 @@ What this repository contains today:
   the rule engine, the commerce catalogue, and the `pagefront-lint-commerce`
   CLI.
 - [`commerce/case-studies/`](commerce/case-studies/) — worked examples
-  against real merchants, all with release 0.3.0 sheets. Nitto (apparel), Kimaï
+  against real merchants, all with release 0.4.0 sheets. Nitto (apparel), Kimaï
   (jewelry, made-to-order) and AFS Blackbird V3 (sports equipment, multi-SKU)
   each carry a product sheet and an organization sheet; Zalando / Friboo
   (multi-brand retailer) carries organization sheets only.
 - [`commerce/schemas/`](commerce/schemas/) — every published JSON Schema,
-  one file per version (`product/v0.9.0.json`, `organization/v0.3.0.json`,
+  one file per version (`product/v0.10.0.json`, `organization/v0.4.0.json`,
   and the legacy `v0.9.json` files). Frozen and append-only: the site serves
   these files verbatim, so a published schema URL never changes or
   disappears.
@@ -65,6 +65,7 @@ Not yet: category and collection sheets, and verticals beyond commerce
 pagefront/
 ├── manifesto.md                  Why this exists
 ├── CONTRIBUTING.md               How to contribute
+├── CLAUDE.md                     Working rules for Claude in this repository
 ├── GOVERNANCE.md                 How decisions are made
 ├── LICENSE                       CC BY 4.0 (the specification)
 ├── package.json                  npm workspaces root (lint packages)
@@ -85,8 +86,8 @@ pagefront/
 │   │   ├── scoring.md              Completeness dimensions (non-normative)
 │   │   └── registry/               Machine-readable property registry
 │   ├── schemas/                    Published JSON Schemas, frozen, one per version
-│   │   ├── product/                  v0.9.0.json, and the legacy v0.9.json
-│   │   └── organization/             v0.3.0.json, and the legacy v0.9.json
+│   │   ├── product/                  v0.10.0.json, v0.9.0.json, and the legacy v0.9.json
+│   │   └── organization/             v0.4.0.json, v0.3.0.json, and the legacy v0.9.json
 │   ├── lint/                       @pagefront/lint-commerce (catalogue + CLI)
 │   ├── case-studies/               Worked examples against real merchants
 │   │   ├── nitto/                    Apparel (Nitto Knitwear)

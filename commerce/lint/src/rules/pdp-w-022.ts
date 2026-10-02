@@ -24,5 +24,7 @@ export const pdpW022: Rule = {
   remediation:
     "Populate the entry with the highlight text from the merchant's page, or remove the entry. If the pipeline cannot recover the text, drop the entry rather than emitting a placeholder — a shorter honest list beats a ranked list with blanks.",
   introduced: "v0.8",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "product.md#product-highlights",
 };

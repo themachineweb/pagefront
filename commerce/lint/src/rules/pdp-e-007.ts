@@ -50,5 +50,7 @@ export const pdpE007: Rule = {
   remediation:
     "Name exactly one option for every priced dimension, spelled as the configurator's `options` spell it. If a dimension never changes the price, declare `affectsPrice: false` on it and leave it out.",
   introduced: "v0.9 (2026-10-01 revision)",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "product.md#configurator-pricing-and-price-bands",
 };

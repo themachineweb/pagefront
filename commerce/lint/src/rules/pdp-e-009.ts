@@ -58,5 +58,7 @@ export const pdpE009: Rule = {
   remediation:
     "Spell dimension names and option values as the configurator spells them. Remove modifiers for dimensions that do not change the price, or remove `affectsPrice: false` from a dimension that does.",
   introduced: "v0.9 (2026-10-01 revision)",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "product.md#configurator-pricing-and-price-bands",
 };

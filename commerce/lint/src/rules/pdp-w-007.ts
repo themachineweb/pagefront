@@ -27,5 +27,7 @@ export const pdpW007: Rule = {
   remediation:
     "Either add the missing variants to `hasVariant`, or change `@type` to `Product` and model the single variant directly. The `productGroupID` field should be replaced with `productID` or `sku` if switching to Product.",
   introduced: "v0.6",
+  appliesFrom: "0.3.0",
+  appliesToLegacy: true,
   specReference: "product.md#configurator-vs-productgroup-guidance",
 };

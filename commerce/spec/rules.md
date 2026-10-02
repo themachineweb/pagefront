@@ -1,16 +1,31 @@
 # Pagefront Commerce Linter — Rule Catalogue
 
 Status: draft / design document, not yet a published normative artifact.
-Catalogue version: 0.15.0
-Supports: commerce release 0.3.0 (Product Sheet spec 0.9.0, Organization Sheet spec 0.3.0), and the legacy draft line (format 0.9)
+Catalogue version: 0.16.0
+Supports: commerce releases 0.4.0 (Product Sheet spec 0.10.0, Organization Sheet spec 0.4.0) and 0.3.0 (Product Sheet spec 0.9.0, Organization Sheet spec 0.3.0), and the legacy draft line (format 0.9)
 
 This document is the normative linter rule catalogue for Pagefront commerce Sheets. Its version is a semver of its own, independent of the commerce release and of the sheet specs ([`releases.md`](releases.md)); the "Supports" line above states which releases this catalogue version applies to. It implements the rule structure, severity levels, and output format defined in the vertical-agnostic linter design at [`../../core/spec/linter.md`](../../core/spec/linter.md).
 
-Within the commerce vertical, this document carries two page-type rule sets: the **product catalogue** (the `PDP-` rules below) and the **Commerce Organization Sheet catalogue** (the `ORG-` rules, in their own section). Rule IDs follow the namespace convention `{sheet-type prefix}-{severity}-{number}`, so future page types (`catalog`, `article`, …) get their own prefixes without colliding with existing IDs. The product rules originally carried unprefixed `E-`/`W-`/`I-` IDs from the era when this was the only catalogue. They were renamed to `PDP-` in one pre-1.0, pre-publication move (catalogue 0.4.0), taken while no published consumer depended on the old IDs. That rename is the single sanctioned exception to ID permanence; the unprefixed IDs are retired and will not be reassigned. The linter dispatches by sheet type: a sheet is an organization sheet when its envelope `$schema` path contains `/spec/commerce/organization/` (or the `/schemas/organization/` path schemas were identified by before 2026-09-08), falling back (when `$schema` names neither type) to a data block whose `@type` is `Organization` / `OnlineStore` / `OnlineBusiness` with `pagefront:commerceRole` present. Product rules do not run on organization sheets, and organization rules do not run on product sheets. The linter also places each sheet on a line: a sheet carrying `release` is on the release line and a sheet carrying `format_version` and no `release` is on the legacy draft line. Layer 1 validates each sheet against the published schema its `$schema` names, from the frozen store [`../schemas/`](../schemas/), on either line; a `$schema` naming no published schema fails Layer 1. The same rules run on both lines.
+Within the commerce vertical, this document carries two page-type rule sets: the **product catalogue** (the `PDP-` rules below) and the **Commerce Organization Sheet catalogue** (the `ORG-` rules, in their own section). Rule IDs follow the namespace convention `{sheet-type prefix}-{severity}-{number}`, so future page types (`catalog`, `article`, …) get their own prefixes without colliding with existing IDs. The product rules originally carried unprefixed `E-`/`W-`/`I-` IDs from the era when this was the only catalogue. They were renamed to `PDP-` in one pre-1.0, pre-publication move (catalogue 0.4.0), taken while no published consumer depended on the old IDs. That rename is the single sanctioned exception to ID permanence; the unprefixed IDs are retired and will not be reassigned. The linter dispatches by sheet type: a sheet is an organization sheet when its envelope `$schema` path contains `/spec/commerce/organization/` (or the `/schemas/organization/` path schemas were identified by before 2026-09-08), falling back (when `$schema` names neither type) to a data block whose `@type` is `Organization` / `OnlineStore` / `OnlineBusiness` with `pagefront:commerceRole` present. Product rules do not run on organization sheets, and organization rules do not run on product sheets. The linter also places each sheet on a line: a sheet carrying `release` is on the release line and a sheet carrying `format_version` and no `release` is on the legacy draft line. A sheet is judged by the release it declares. On the release line, Layer 1 validates it against the published schema of the sheet-spec version its `release` bundles for its type, from the frozen store [`../schemas/`](../schemas/), whatever `$schema` says; a `release` the release manifest does not list fails Layer 1. On the legacy line, Layer 1 validates against the schema `$schema` names (the legacy schema when `$schema` is absent). Layer 2 then runs the rules that apply to that release; see "Which rules apply to a Sheet" below.
 
 ## Rule catalogue
 
 The catalogue began with Pagefront v0.6 and grows as case studies and real-merchant validation surface new well-formedness concerns. Each rule's **Introduced** field records what it was added in: a commerce release for rules added from 2026-10-01 (`release 0.3.0`), and a legacy format version for earlier rules (`v0.6`, `v0.9`), kept as history. The catalogue's own version above is its independent semver. Once added, rule IDs are stable (the `PDP-` rename above is the one exception). A subset of this catalogue, the envelope and generic-content rules, is expected to be re-homed as commerce-common rules shared across page-type catalogues; rule IDs will not change when that happens.
+
+### Which rules apply to a Sheet
+
+Every rule has an **Applies from** release. The linter skips a rule on a Sheet whose declared `release` is lower, and on a Sheet of the legacy draft line unless the rule is marked as applying to it (the structure and the gating are defined in "Release gating" in the linter design).
+
+- Every rule in this catalogue applies from release 0.3.0 and to the legacy line, unless its entry carries an **Applies from** line saying otherwise.
+- An error rule added after release 0.3.0 applies only from the release that introduces its requirement: that release's sheet spec states the requirement and its release notes list it. A Sheet declaring an earlier release is not judged by it.
+- Warning and info rules may apply to every release, since they never change whether a Sheet conforms.
+
+Rules that do not follow the default:
+
+| Rule | Applies from | Legacy line |
+|---|---|---|
+| PDP-E-017 | release 0.4.0 | no |
+| PDP-E-018, ORG-E-004 | every declared release (they judge the declared release itself) | no (a legacy Sheet declares no release) |
 
 ### Definitions
 
@@ -27,7 +42,7 @@ Terms shared across rules; where a rule uses one of these phrases, the definitio
 - **resolves**: a same-document `@id` reference resolves when the same `@id` is declared somewhere in the Sheet, by exact string match: a reference and its declaration must agree on the exact string. The candidate set for resolution is every *declaration* of the `@id`: entities in non-reference positions and inline declarations anywhere, including at reference-carrying positions. A reference-form entry never declares and never resolves anything. So an inline declaration at a reference position counts, and a reference-form entry never does (per PDP-E-001 and PDP-W-020).
 - **amount**: a currency amount, carried as a JSON number or as a decimal string matching `^-?\d+(\.\d+)?$`. The *amount fields* of a product Sheet are, within `data`: `price`, `lowPrice` and `highPrice` on an `offers` entry; `price`, `minPrice` and `maxPrice` on a `priceSpecification` entry; `value`, `minValue` and `maxValue` on any object whose `@type` is `MonetaryAmount`, wherever it appears; `price` on a `hasVariant` entry; `discountAmount` on a `pagefront:promotions` entry; and `basePrice`, every value in `modifiers` and every `adjustments[].priceModifier` in a pricing block. The linter compares all amounts numerically whatever the carrier: `349`, `349.0` and `"349.00"` are equal.
 - **release line** and **legacy line**: a Sheet carrying the envelope field `release` is on the release line. A Sheet carrying `format_version` and no `release` is on the legacy draft line (format versions 0.9 and earlier). The **release manifest** is [`releases.json`](releases.json): it maps a release and a sheet type to the one sheet-spec version that release bundles.
-- **schema version segment**: the trailing `v<version>.json` of the `$schema` URL, a full semver on the release line (`v0.9.0.json`) and a two-part version on the legacy line (`v0.9.json`).
+- **schema version segment**: the trailing `v<version>.json` of the `$schema` URL, a full semver on the release line (`v0.10.0.json`) and a two-part version on the legacy line (`v0.9.json`).
 - **pricing block**: the value of `pagefront:configuratorPricing` on an `offers` entry (an `Offer` or an `AggregateOffer`). An offer *prices* the configurator its pricing block's `configurator.@id` names.
 - **priced dimension**: an entry of `pagefront:configurator.dimensions` whose `affectsPrice` is not `false`.
 - **text dimension**: an entry of `pagefront:configurator.dimensions` whose `inputType` is `text`. Every other dimension is a *select dimension*. A text dimension takes part in a configuration as an input that is empty or non-empty; its one modifier is keyed `*` and applies to any non-empty input.
@@ -36,7 +51,7 @@ Terms shared across rules; where a rule uses one of these phrases, the definitio
 - **option key**: the string form of an option value, used wherever a pricing block or an exclusion names an option: a string value is its own key, and a number or boolean value is keyed by its JSON serialization (`0.5`, `1`, `true`). Two option values are the same option when their option keys are equal, by exact string match.
 - **computed total**: for a configuration (one option for each select dimension that enumerates `options`, and an empty or a non-empty input for each priced text dimension), the pricing block's `basePrice`, plus `modifiers[dimension][option key]` for each selected option of a priced dimension, plus `modifiers[dimension]['*']` for each priced text dimension given a non-empty input, plus the `priceModifier` of each `adjustments` entry whose `when` pairs all match the configuration. A configuration that matches every pair of an entry in the configurator's `exclusions` is *excluded* and has no computed total. Amounts are read whatever their carrier (see *amount*): a decimal string as the decimal it writes, a JSON number as the decimal its shortest JSON serialization denotes (`349`, `0.1`). Amounts are summed and compared in exact decimal arithmetic on those values, so `0.1` plus `0.2` is `0.3`. The *computed band* is the minimum and the maximum computed total over all non-excluded configurations. Dimensions named in no modifier, adjustment or exclusion cannot change a total, so an implementation may leave them out of the enumeration.
 
-The Product Sheet JSON Schema of the supported release (`../schemas/product/v0.9.0.json`; `product.json` is its editable head) is the normative property inventory for PDP-E-001 and PDP-I-001. The Property Registry is the propertyID vocabulary for variant dimensions and feature rows; it is not a field inventory.
+The Product Sheet JSON Schema of the latest supported release (`../schemas/product/v0.10.0.json`; `product.json` is its editable head) is the normative property inventory for PDP-E-001 and PDP-I-001. The Property Registry is the propertyID vocabulary for variant dimensions and feature rows; it is not a field inventory.
 
 When a placeholder's source field is absent from the matched content, the rendered fallback is a fixed literal specified in the rule's definition.
 
@@ -58,9 +73,9 @@ When a placeholder's source field is absent from the matched content, the render
 **Severity:** error
 **Target:** `$` (the Sheet; the finding sits at the envelope field it reads)
 **Description:** A Sheet states its version twice: `release` names the commerce release it is written against, and `$schema` names the version of its own sheet spec. The release manifest maps a release and a sheet type to exactly one sheet-spec version, so the two statements either agree or contradict each other. A Product Sheet declaring release 0.3.0 while pointing `$schema` at another Product Sheet spec version is internally inconsistent: a consumer routing on `release` and a consumer routing on `$schema` validate it against different schemas. On the legacy line the same check compares `format_version` with the `$schema` version, as this rule did before releases existed. Until catalogue 0.15.0 the rule was titled "Format version / schema mismatch".
-**Check:** Reads the schema version segment of `$schema` (see Definitions). On the release line, fires when the segment is not the Product Sheet spec version the release manifest maps the declared `release` to (`0.9.0` for release `0.3.0`); the finding sits at `$['release']`. On the legacy line, fires when the segment differs from the value of `format_version`; the finding sits at `$['format_version']`. The rule is silent when `$schema` is absent or carries no schema version segment, when the declared `release` is not in the release manifest (there is no mapping to check against), and when the Sheet carries both `release` and `format_version` (PDP-E-016 reports that).
-**Message:** {declared} but `$schema` URL declares version `{schema_version}`.
-The `{declared}` placeholder carries `` `release` `{release}` bundles Product Sheet spec `{expected}` `` on the release line, and `` `format_version` is `{format_version}` `` on the legacy line.
+**Check:** The rule reads `$schema` and is silent whenever it is absent, on both lines: whether `$schema` is required is stated by the schema of the sheet spec (Product Sheet spec 0.10.0 onward requires it), and enforced at Layer 1. On the release line, fires when `$schema` is not the URL of the Product Sheet schema the release manifest maps the declared `release` to (`…/product/v0.10.0.json` for release `0.4.0`, `…/product/v0.9.0.json` for release `0.3.0`); the finding sits at `$['release']`. On the legacy line, fires when the schema version segment of `$schema` (see Definitions) differs from the value of `format_version`, at `$['format_version']`, and is silent when `$schema` carries no schema version segment. Silent when the declared `release` is not in the release manifest (PDP-E-018 reports that) and when the Sheet carries both `release` and `format_version` (PDP-E-016 reports that).
+**Message:** {declared} but {found}.
+The placeholders carry: on the release line, `` `release` `{release}` bundles Product Sheet spec `{expected}` `` and, when the `$schema` URL names another version, `` `$schema` URL declares version `{schema_version}` ``, otherwise `` `$schema` is not that schema's URL, `{expected_url}` ``; on the legacy line, `` `format_version` is `{format_version}` `` and `` `$schema` URL declares version `{schema_version}` ``.
 **Remediation:** Point `$schema` at the sheet-spec version the declared release bundles (see releases.md), or declare the release that bundles the schema the sheet was written against. On a legacy sheet, align `format_version` and the `$schema` version.
 **Introduced:** v0.6
 **Spec reference:** `product.md#the-envelope`
@@ -233,6 +248,31 @@ The paths of the first field of each type are carried in the finding's values, a
 **Message:** Sheet carries both `format_version` and `release`; a sheet declares one.
 **Remediation:** Keep `release` and remove `format_version`. A sheet on the legacy draft line keeps `format_version` alone and its legacy `$schema`.
 **Introduced:** release 0.3.0
+**Spec reference:** `product.md#the-envelope`
+
+#### PDP-E-017 — Configurator reference does not resolve
+
+**Severity:** error
+**Target:** `$.data` (the findings sit at each unresolved pair)
+**Description:** An exclusion and an adjustment's `when` are partial configurations: each pair names a dimension of the configurator and one of its options. A pair that names a dimension the configurator does not declare, or an option the dimension does not list, refers to nothing a buyer can select. The exclusion then excludes no configuration and the adjustment never applies, silently: the computed band and every computed total come out as if the entry were absent. The usual causes are a renamed dimension, a re-spelled option, an option removed from the product, or a value written with another JSON type than the option's.
+**Check:** Reads every pair of every entry of `pagefront:configurator.exclusions`, and every pair of the `when` of every `adjustments` entry of a pricing block whose `configurator.@id` equals the configurator's `@id` (a block naming another `@id` is PDP-E-001's finding, and its references are not checked). A pair fires when its key equals the `name` of no entry of the configurator's `dimensions`. Otherwise, when that dimension enumerates `options`, it fires when its value equals the `value` of none of them. Values are compared by strict equality, with no type coercion: the number `1` and the string `"1"` are different values. This is stricter than the option-key matching the totals use (see Definitions): a reference is written exactly as the option's `value` is written. When the dimension declares no `options` (continuous, system-defined or free text; an empty array counts), the value is not checked. One finding per unresolved pair, at the pair's path.
+**Message:** Configuration reference at `{path}` (dimension `{dimension}`, option `{option}`) does not resolve: {problem}.
+The `{option}` placeholder renders the pair's value as JSON, so a string shows its quotes (`"walnut"`) and a number does not (`1`). The `{problem}` placeholder carries either ``the configurator declares no dimension `{dimension}` `` or `` `{dimension}` lists no option `{option}` ``.
+**Remediation:** Name a dimension the configurator declares, and write the option exactly as its `value` is written in that dimension's `options`, including its JSON type. Remove an exclusion or adjustment that refers to an option the product no longer offers.
+**Introduced:** release 0.4.0
+**Applies from:** release 0.4.0. Product Sheet spec 0.10.0 introduces the requirement ("Configurator pricing and price bands"); a Sheet declaring release 0.3.0, or a legacy Sheet, is not judged by this rule.
+**Spec reference:** `product.md#configurator-pricing-and-price-bands`
+
+#### PDP-E-018 — Unknown release
+
+**Severity:** error
+**Target:** `$` (the finding sits at `$['release']`)
+**Description:** A Sheet is judged by the release it declares: the release selects the schema it is validated against and the rules that apply to it. A `release` that the release manifest does not list selects nothing. The usual causes are a typo, a release number confused with a sheet-spec version (`0.10.0` is a Product Sheet spec version; the release that bundles it is `0.4.0`), or a Sheet written against a release newer than the linter. At Layer 1 the same condition is reported as a single error at `/release`; this rule reports it for callers that lint without validating.
+**Check:** The envelope's `release` is a string and equals no release in the release manifest. A `release` of another JSON type is Layer 1's concern. `{known}` lists the manifest's releases.
+**Message:** `release` at `{path}` is `{release}`, which is not a release this catalogue knows ({known}).
+**Remediation:** Declare a published commerce release (see releases.md). If the release is newer than this linter, update the linter.
+**Introduced:** release 0.4.0
+**Applies from:** every declared release. The rule judges the declared release itself, so it is not gated by it; it never fires on a Sheet of a published release, and so changes the conformance of none. It does not run on legacy Sheets, which declare no release.
 **Spec reference:** `product.md#the-envelope`
 
 ### Warnings
@@ -687,7 +727,7 @@ The `{problem}` placeholder carries one of: `states no modifier for option `{opt
 **Severity:** info
 **Target:** `$.data.*`
 **Description:** The Sheet uses a Schema.org property that Pagefront does not explicitly model. The property is valid Schema.org and consumers will parse it correctly. Pagefront tracks these uses for vocabulary-evolution signal: properties that appear frequently in real Sheets are candidates for explicit modeling in future versions.
-**Check:** A property on the data block does not appear among the properties defined in the Pagefront JSON Schema targeted by *this catalogue version* (currently Product Sheet spec 0.9.0, `product.json`), including the `pagefront:` extension properties it defines, regardless of the release or format version the Sheet declares. Unknown means: not present in that schema. The current catalogue's schema is used whatever the Sheet declares because the linter's operating premise is the current catalogue applied to version-drifted input; the shipped implementation does the same.
+**Check:** A property on the data block does not appear among the properties defined in the Pagefront JSON Schema targeted by *this catalogue version* (currently Product Sheet spec 0.10.0, `product.json`), including the `pagefront:` extension properties it defines, regardless of the release or format version the Sheet declares. Unknown means: not present in that schema. The current catalogue's schema is used whatever the Sheet declares because the linter's operating premise is the current catalogue applied to version-drifted input; the shipped implementation does the same.
 **Message:** Property `{property}` at `{path}` is valid Schema.org but is not explicitly modeled by Pagefront.
 **Remediation:** No action required. This finding is informational. If you find yourself using a Schema.org property frequently and would value formal Pagefront modeling for it, consider opening a spec proposal.
 **Introduced:** v0.6
@@ -695,7 +735,7 @@ The `{problem}` placeholder carries one of: `states no modifier for option `{opt
 
 ## Commerce Organization Sheet rules
 
-The organization-sheet catalogue, applying to Commerce Organization Sheets ([`organization.md`](organization.md)) only, per the sheet-type dispatch described at the top of this document. Layer 1 for this sheet type is the published organization JSON Schema the sheet names (`../schemas/organization/`); these rules assume a schema-valid sheet. The six warning rules implement organization.md's role-scoped-content guidance ("each declared role SHOULD have its corresponding content present … and content SHOULD NOT appear without its role declared": ORG-W-001–004, and ORG-W-006 for the brand-owner-only authorized-resellers statement) plus a shape check on the registration machine keys (ORG-W-005). Per the registration-identity rules in organization.md, **no rule in this catalogue warns on absent registration identifiers** (`leiCode`, `iso6523Code`, `identifier`, `sameAs`): absence is jurisdiction-dependent and carries no quality signal. Two further error rules, ORG-E-002 and ORG-E-003, check the envelope's version fields and are the counterparts of PDP-E-016 and PDP-E-002.
+The organization-sheet catalogue, applying to Commerce Organization Sheets ([`organization.md`](organization.md)) only, per the sheet-type dispatch described at the top of this document. Layer 1 for this sheet type is the published organization JSON Schema the sheet names (`../schemas/organization/`); these rules assume a schema-valid sheet. The six warning rules implement organization.md's role-scoped-content guidance ("each declared role SHOULD have its corresponding content present … and content SHOULD NOT appear without its role declared": ORG-W-001–004, and ORG-W-006 for the brand-owner-only authorized-resellers statement) plus a shape check on the registration machine keys (ORG-W-005). Per the registration-identity rules in organization.md, **no rule in this catalogue warns on absent registration identifiers** (`leiCode`, `iso6523Code`, `identifier`, `sameAs`): absence is jurisdiction-dependent and carries no quality signal. Three further error rules, ORG-E-002, ORG-E-003 and ORG-E-004, check the envelope's version fields and are the counterparts of PDP-E-016, PDP-E-002 and PDP-E-018.
 
 #### ORG-E-001 — `pagefront:` term without the vocabulary prefix in `@context`
 
@@ -724,11 +764,23 @@ The organization-sheet catalogue, applying to Commerce Organization Sheets ([`or
 **Severity:** error
 **Target:** `$` (the Sheet; the finding sits at the envelope field it reads)
 **Description:** The organization-sheet counterpart of PDP-E-002, with the same rationale: the release manifest maps the declared `release` to exactly one Organization Sheet spec version, and `$schema` must name it. An Organization Sheet declaring release 0.3.0 points `$schema` at `organization/v0.3.0.json`; pointing it at the Product Sheet spec's number, `v0.9.0.json`, is the likely slip, since the two sheet specs version independently.
-**Check:** As PDP-E-002, with the Organization Sheet spec version the release manifest gives (`0.3.0` for release `0.3.0`). On the release line, fires when the schema version segment is not that version, at `$['release']`. On the legacy line, fires when the segment differs from `format_version`, at `$['format_version']`. Silent when `$schema` is absent or carries no schema version segment, when the declared `release` is not in the release manifest, and when the Sheet carries both fields (ORG-E-002 reports that).
-**Message:** {declared} but `$schema` URL declares version `{schema_version}`.
-The `{declared}` placeholder carries `` `release` `{release}` bundles Organization Sheet spec `{expected}` `` on the release line, and `` `format_version` is `{format_version}` `` on the legacy line.
+**Check:** As PDP-E-002, with the Organization Sheet schema the release manifest gives (`…/organization/v0.4.0.json` for release `0.4.0`, `…/organization/v0.3.0.json` for release `0.3.0`). Silent whenever `$schema` is absent. On the release line, fires when `$schema` is not that schema's URL, at `$['release']`. On the legacy line, fires when the schema version segment differs from `format_version`, at `$['format_version']`. Silent when the declared `release` is not in the release manifest (ORG-E-004 reports that) and when the Sheet carries both fields (ORG-E-002 reports that).
+**Message:** {declared} but {found}.
+The placeholders carry the same texts as in PDP-E-002, with `Organization Sheet spec` in place of `Product Sheet spec`.
 **Remediation:** Point `$schema` at the sheet-spec version the declared release bundles (see releases.md), or declare the release that bundles the schema the sheet was written against. On a legacy sheet, align `format_version` and the `$schema` version.
 **Introduced:** release 0.3.0
+**Spec reference:** `organization.md#the-envelope`
+
+#### ORG-E-004 — Unknown release
+
+**Severity:** error
+**Target:** `$` (the finding sits at `$['release']`)
+**Description:** The organization-sheet counterpart of PDP-E-018, with the same rationale: a `release` the release manifest does not list selects no schema and no rules.
+**Check:** The envelope's `release` is a string and equals no release in the release manifest.
+**Message:** `release` at `{path}` is `{release}`, which is not a release this catalogue knows ({known}).
+**Remediation:** Declare a published commerce release (see releases.md). If the release is newer than this linter, update the linter.
+**Introduced:** release 0.4.0
+**Applies from:** every declared release, as PDP-E-018.
 **Spec reference:** `organization.md#the-envelope`
 
 #### ORG-W-001 — brand_owner declared without a brand node
@@ -800,13 +852,23 @@ The `{declared}` placeholder carries `` `release` `{release}` bundles Organizati
 ## Status
 
 1. **Scoring rubric integration.** Resolved: [`scoring.md`](scoring.md) (in this directory) is the non-normative dimension taxonomy. Weighted rubrics are consumer-side and reference rule IDs at their own discretion; no catalogue work is pending on scoring.
-2. **Case study validation.** The three case studies (Nitto, Kimaï, AFS Blackbird) are at release 0.3.0, re-derived from the live sites on 2026-09-04, and each writeup records its linter result. Linting the case studies on every catalogue change is the loop that surfaces missing rules.
+2. **Case study validation.** The three case studies (Nitto, Kimaï, AFS Blackbird) are at release 0.4.0, re-derived from the live sites on 2026-09-04, and each writeup records its linter result. Linting the case studies on every catalogue change is the loop that surfaces missing rules.
 
 ## Changelog
 
 ### Unreleased
 
 _Nothing yet. Changes land here and are versioned at the next release; see "Releasing" in [`../../CONTRIBUTING.md`](../../CONTRIBUTING.md)._
+
+### 0.16.0 — 2026-10-02
+
+Minor. Released with commerce release 0.4.0; the catalogue supports releases 0.4.0 and 0.3.0 and the legacy draft line.
+
+- **Release gating.** Every rule has an "Applies from" release, and a Sheet is judged only by the rules of the release it declares. Every existing rule applies from release 0.3.0 and to the legacy line. An error rule added after release 0.3.0 applies only from the release that introduces its requirement; warning and info rules may apply to every release. See "Which rules apply to a Sheet".
+- **Layer 1 by release.** The schema a Sheet is validated against is the one its declared `release` bundles for its type; legacy Sheets keep resolving through `$schema`.
+- **PDP-E-002 and ORG-E-003** are silent whenever `$schema` is absent, on both lines: requiring `$schema` is the schema's statement, from Product Sheet spec 0.10.0 and Organization Sheet spec 0.4.0. On the release line they compare `$schema` with the URL of the schema the release bundles. Their message template becomes `{declared} but {found}`; the rendered text of the version-mismatch cases is unchanged.
+- **PDP-E-017** is new and applies from release 0.4.0: a pair in an exclusion or in an adjustment's `when` that names a dimension the configurator does not declare, or an option the dimension does not list, compared by strict equality.
+- **PDP-E-018 and ORG-E-004** are new: a `release` the release manifest does not list.
 
 ### 2026-10-01 — Versioning scheme replaced
 

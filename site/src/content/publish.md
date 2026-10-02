@@ -30,8 +30,8 @@ it was made, and a `data` block that carries the Schema.org description.
 
 ```json
 {
-  "$schema": "https://themachineweb.org/pagefront/spec/commerce/product/v0.9.0.json",
-  "release": "0.3.0",
+  "$schema": "https://themachineweb.org/pagefront/spec/commerce/product/v0.10.0.json",
+  "release": "0.4.0",
   "schema_org_version": "30.0",
   "canonical_url": "https://your-shop.example/product/anorak",
   "sheet_url": "https://your-shop.example/product/anorak.en.json",
@@ -194,4 +194,4 @@ sheet, serve it, link it, check it. You will know within an hour whether this
 is worth doing for the rest of the catalogue, and if it is not, you have lost
 an hour and a file.
 
-Commerce release 0.3.0 · the current release. Breaking changes follow semver; the stability policy applies from release 1.0.0.
+Commerce release 0.4.0 · the current release. Breaking changes follow semver; the stability policy applies from release 1.0.0.
