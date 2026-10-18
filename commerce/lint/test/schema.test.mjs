@@ -68,10 +68,10 @@ test("bundled release manifest matches commerce/spec/releases.json", () => {
 });
 
 test("the editable heads equal the latest frozen schemas while nothing is unreleased", () => {
-  // commerce/spec/{product,organization}.json are the heads: their $id
-  // names the version they will next be released as. When that version
-  // is already frozen, the head must be that file, byte for byte.
-  for (const type of ["product", "organization"]) {
+  // commerce/spec/{product,organization,collection}.json are the heads:
+  // their $id names the version they will next be released as. When that
+  // version is already frozen, the head must be that file, byte for byte.
+  for (const type of ["product", "organization", "collection"]) {
     const headText = readFileSync(join(commerce, "spec", `${type}.json`), "utf8");
     const file = JSON.parse(headText).$id.replace(/^.*\//, "");
     let frozenText;

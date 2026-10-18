@@ -1,15 +1,15 @@
 # Pagefront Product Sheet
 
 Status: normative spec.
-Product Sheet spec version: 0.10.0
-Commerce release: 0.4.0
+Product Sheet spec version: 0.11.0
+Commerce release: 0.5.0
 Schema.org version targeted: 30.0 (2026-03-19)
 
-**Versioning.** This sheet spec has its own semver, 0.10.0, and is a member of commerce release 0.4.0. A sheet declares the release in its envelope (`release`) and names this spec version in `$schema`. Before 1.0 a breaking or an additive change bumps the minor and a fix or clarification bumps the patch; the release bumps with its members. The scheme, the release table and the legacy draft line (sheets carrying `format_version`) are in [`releases.md`](releases.md). The "v0.7", "v0.9" and similar version names throughout this document are legacy format versions, kept as history.
+**Versioning.** This sheet spec has its own semver, 0.11.0, and is a member of commerce release 0.5.0. A sheet declares the release in its envelope (`release`) and names this spec version in `$schema`. Before 1.0 a breaking or an additive change bumps the minor and a fix or clarification bumps the patch; the release bumps with its members. The scheme, the release table and the legacy draft line (sheets carrying `format_version`) are in [`releases.md`](releases.md). The "v0.7", "v0.9" and similar version names throughout this document are legacy format versions, kept as history.
 
 ## Design principles
 
-Unchanged from v0.6. Pagefront defines the structure of the published Sheet; what's inside the Sheet is the publisher's authoritative statement. The Sheet is JSON-LD, served at a stable URL on the publisher's domain, discoverable via `Link: rel="describedby"`. Schema.org is the data vocabulary; `pagefront:` extensions cover what Schema.org under-specifies for commerce. The format prioritizes Schema.org compatibility: consumers ignoring `pagefront:` extensions parse the Sheet as clean Schema.org JSON-LD.
+Unchanged from v0.6. Pagefront defines the structure of the published Sheet; what's inside the Sheet is the publisher's authoritative statement. The Sheet is JSON-LD, served on the publisher's domain at the address the page declares, discoverable via `Link: rel="alternate"`. Schema.org is the data vocabulary; `pagefront:` extensions cover what Schema.org under-specifies for commerce. The format prioritizes Schema.org compatibility: consumers ignoring `pagefront:` extensions parse the Sheet as clean Schema.org JSON-LD.
 
 ### What the schema validates
 
@@ -48,12 +48,12 @@ The schema enforces structural validity; the linter expresses canonical preferen
 
 ## The envelope
 
-Unchanged from v0.5.
+Unchanged from v0.5, except that `sheet_url` became optional on 2026-10-13.
 
 ```json
 {
-  "$schema": "https://themachineweb.org/pagefront/spec/commerce/product/v0.10.0.json",
-  "release": "0.4.0",
+  "$schema": "https://themachineweb.org/pagefront/spec/commerce/product/v0.11.0.json",
+  "release": "0.5.0",
   "schema_org_version": "30.0",
   "canonical_url": "https://merchant.com/product/widget-123",
   "sheet_url": "https://merchant.com/api/sheets/widget-123.json",
@@ -67,13 +67,15 @@ Unchanged from v0.5.
 }
 ```
 
-Envelope fields are project-defined. `$schema`, `release`, `schema_org_version`, `canonical_url`, `sheet_url`, `generated_at`, and `data` are required on every sheet that carries `release`. On the legacy draft line, `format_version` stands in for `release` and `$schema` is optional. `expires_at` is recommended: publishers SHOULD declare it when they have a meaningful expiry policy, and MAY omit it when the sheet has no defined expiry.
+Envelope fields are project-defined. `$schema`, `release`, `schema_org_version`, `canonical_url`, `generated_at`, and `data` are required on every sheet that carries `release`. On the legacy draft line, `format_version` stands in for `release` and `$schema` is optional. `expires_at` is recommended: publishers SHOULD declare it when they have a meaningful expiry policy, and MAY omit it when the sheet has no defined expiry.
+
+`sheet_url` *(optional)*: an address this Sheet is served from, as known to the publisher at generation time. It is informational. The authoritative location of a Sheet is whatever the canonical page currently declares; a publisher whose platform assigns or changes the address after generation MAY omit this field. A consumer that holds a Sheet already knows where it fetched it from, and a consumer looking for one follows the page's declaration (see "Discovery", which points at Pagefront Discovery). Sheets written before 2026-10-13 carry it, and nothing in them changes.
 
 `release` and `$schema` are the sheet's two version statements:
 
-- `release` is the commerce release the sheet is written against, as a full semver (`"0.4.0"`). The name is generic because the envelope is shared across verticals; the vertical is identified by `$schema`. It replaces `format_version`, the field of the legacy draft line.
-- `$schema` is the URL of the JSON Schema for the sheet's own sheet-spec version, with the full semver in its last segment: `https://themachineweb.org/pagefront/spec/commerce/product/v0.10.0.json` for Product Sheet spec 0.10.0. It names the sheet spec; the release has no schema of its own. `$schema` is REQUIRED on every sheet carrying `release`: it is what identifies the vertical and the sheet type, and what the release is checked against. It is optional only on the legacy draft line.
-- The release and the sheet type resolve to exactly one sheet-spec version through the release table in [`releases.md`](releases.md) (machine-readable in [`releases.json`](releases.json)). `$schema` MUST name that version: a Product Sheet declaring release 0.4.0 points `$schema` at `product/v0.10.0.json`, and one declaring release 0.3.0 at `product/v0.9.0.json` (linter rule PDP-E-002).
+- `release` is the commerce release the sheet is written against, as a full semver (`"0.5.0"`). The name is generic because the envelope is shared across verticals; the vertical is identified by `$schema`. It replaces `format_version`, the field of the legacy draft line.
+- `$schema` is the URL of the JSON Schema for the sheet's own sheet-spec version, with the full semver in its last segment: `https://themachineweb.org/pagefront/spec/commerce/product/v0.11.0.json` for Product Sheet spec 0.11.0. It names the sheet spec; the release has no schema of its own. `$schema` is REQUIRED on every sheet carrying `release`: it is what identifies the vertical and the sheet type, and what the release is checked against. It is optional only on the legacy draft line.
+- The release and the sheet type resolve to exactly one sheet-spec version through the release table in [`releases.md`](releases.md) (machine-readable in [`releases.json`](releases.json)). `$schema` MUST name that version: a Product Sheet declaring release 0.5.0 points `$schema` at `product/v0.11.0.json`, one declaring release 0.4.0 at `product/v0.10.0.json`, and one declaring release 0.3.0 at `product/v0.9.0.json` (linter rule PDP-E-002).
 - A sheet is judged by the release it declares: it is validated against the schema of the sheet-spec version that release bundles, and by the rules that apply from that release. A requirement introduced by a later release does not apply to it. Whether `$schema` is required is itself such a requirement: the schema of Product Sheet spec 0.10.0 requires it, and the schema of 0.9.0 does not.
 - A sheet carrying both `format_version` and `release` is invalid (PDP-E-016).
 
@@ -93,7 +95,7 @@ Required:
 - `@id`: stable URL-shaped identifier
 - `name`: product name as displayed to humans
 - `inLanguage`: BCP 47 language tag (`fr`, `fr-CA`, `en-GB`, etc.); the language of all prose fields and language-scoped media in this sheet
-- `url` (canonical URL of the human page), conditional on `@type`: required for `Product` and subtypes, and optional for `ProductGroup`. A parent `ProductGroup` Sheet with no backing family page omits `url` and is located by `sheet_url` (see "Multi-Sheet variant families").
+- `url` (canonical URL of the human page), conditional on `@type`: required for `Product` and subtypes, and optional for `ProductGroup`. A parent `ProductGroup` Sheet with no backing family page omits `url` and is reached by the `sheet_url` hint on its variants' `isVariantOf` (see "Multi-Sheet variant families").
 - One identifier, conditional on `@type`:
   - For `Product` (and product subtypes): one of `sku`, `gtin13`, `gtin`, `mpn`, or `productID`.
   - For `ProductGroup`: `productGroupID`. Per-variant SKUs SHOULD also be declared on each entry in `hasVariant`.
@@ -104,6 +106,7 @@ Recommended:
 - `brand`: typed Brand or Organization
 - `description`: prose description in `inLanguage`
 - `category`: hierarchical category string (e.g., "Apparel > Knitwear > Sweaters")
+- `isPartOf`: an array of `Collection` member entries, one per set whose direct members include the product, each in the member entry shape of the Commerce Collection Sheet (`@type`, `@id`, `url`, `pagefront:sheetUrl`, `name`, `pagefront:collectionKind`; see "The product side" in [`collection.md`](collection.md)). The `category` string is unchanged: it is the human path and `isPartOf` is the machine link; the two SHOULD agree where both are present, and the linter does not compare them.
 - `image`: array of ImageObject (see image roles below)
 - `video`: array of VideoObject (see video roles below)
 - `offers`: array of Offer (see offers section)
@@ -170,19 +173,21 @@ When variants have their own pages carrying substantial per-variant content (the
 
 The structure is N+1 Sheets:
 
-- **One parent ProductGroup Sheet** at the family's canonical URL. Its `hasVariant` array enumerates every variant, each entry linking to that variant's own Sheet. When the family has no backing page of its own (the variants are the only human-facing pages and there is no family landing page), the parent is page-less: it omits the data-block `url` (there is no family page to point at) and carries only `sheet_url` as its location. Consumers reach a page-less parent by `sheet_url`, typically by following `isVariantOf.sheet_url` from a variant Sheet.
+- **One parent ProductGroup Sheet** at the family's canonical URL. Its `hasVariant` array enumerates every variant, each entry linking to that variant's own Sheet. When the family has no backing page of its own (the variants are the only human-facing pages and there is no family landing page), the parent is page-less: it omits the data-block `url` (there is no family page to point at) and is reached by reference only. Consumers reach a page-less parent by following `isVariantOf.sheet_url` from a variant Sheet.
 - **One Product Sheet per variant**, each carrying `isVariantOf` pointing at the parent's `@id`.
 
-This gives bidirectional traversal. A variant Sheet reaches its parent via `isVariantOf`; the parent reaches its variants via `hasVariant`. An agent landing on a variant page reaches that variant's Sheet via `Link: rel="describedby"`, follows `isVariantOf` to the parent Sheet, and reads the parent's `hasVariant` to enumerate sibling variants. An agent landing on the family page reads the parent's `hasVariant` to reach each variant directly.
+This gives bidirectional traversal. A variant Sheet reaches its parent via `isVariantOf`; the parent reaches its variants via `hasVariant`. An agent landing on a variant page reaches that variant's Sheet via `Link: rel="alternate"`, follows `isVariantOf` to the parent Sheet, and reads the parent's `hasVariant` to enumerate sibling variants. An agent landing on the family page reads the parent's `hasVariant` to reach each variant directly.
+
+**Traversal hints.** `sheet_url` on a `hasVariant` entry and on `isVariantOf`, `pagefront:sheetUrl` on an organization reference and on a collection reference (an `isPartOf`, `hasPart` or `hasOfferCatalog` entry), and the `url` of a `pagefront:availableLanguages` entry are traversal hints under "Traversal hints" in Pagefront Discovery ([`../../core/spec/discovery.md`](../../core/spec/discovery.md#traversal-hints-normative)): each MAY be stale, and a consumer reaches the target through its page and the Sheet that page declares. A page-less parent has no page of its own, so the hint on its variants' `isVariantOf` is the only path to it; a publisher that moves a page-less parent re-emits the variant Sheets that point at it.
 
 Each parent `hasVariant` entry carries:
 
 - `@id` *(required)*: matches exactly the `@id` in the variant's own Sheet. The exact-string match is what lets a consumer recognize the parent's reference and the variant's self-description as the same product; see "Product identity and deduplication" for the `@id` contract.
 - `url` *(required)*: the variant's page.
-- `sheet_url` *(recommended)*: the URL of the variant's Sheet. It lets a consumer fetch the variant Sheet directly without first loading the variant page and reading its `describedby` link. A producer emitting both the parent and the variant Sheets knows this URL and SHOULD populate it. When `sheet_url` is absent, a consumer reaches the variant Sheet via `url` + `describedby`. When `sheet_url` is present but unresolvable, the consumer falls back to `url` + `describedby`.
+- `sheet_url` *(recommended)*: the URL of the variant's Sheet. It lets a consumer fetch the variant Sheet directly without first loading the variant page and reading its `alternate` link. A producer emitting both the parent and the variant Sheets knows this URL and SHOULD populate it. It is a traversal hint under the rule above: it MAY be stale, and when it is absent or does not resolve the consumer reaches the variant Sheet via `url` + `alternate`.
 - `name`, the axis value (e.g. `color`), `price`, and an `image` render-hint: *optional*, but enough together to render a family picker without fetching every variant Sheet.
 
-Each variant Sheet carries `isVariantOf` with the parent's `@id`, and SHOULD carry the parent's `sheet_url` so traversal to the parent is symmetric: a consumer on the variant Sheet can fetch the parent directly, without resolving it through the variant page.
+Each variant Sheet carries `isVariantOf` with the parent's `@id`, and SHOULD carry the parent's `sheet_url` so traversal to the parent is symmetric: a consumer on the variant Sheet can fetch the parent directly, without resolving it through the variant page. This `sheet_url` is a traversal hint under the rule above: it MAY be stale, and when the parent has a page the consumer falls back to that page and the Sheet it declares.
 
 A parent ProductGroup Sheet, with two `hasVariant` entries each linking to a variant Sheet:
 
@@ -255,7 +260,7 @@ The corresponding variant Product Sheet for the Onyx colorway, pointing back at 
 }
 ```
 
-A **page-less parent** ProductGroup: a family whose variants each have their own page but that has no family landing page of its own. Its data block omits `url` and is located by `sheet_url`, as described at the start of this section. The `productGroupID` identifier requirement still holds; only `url` is dropped. Each variant entry still carries its own page `url`:
+A **page-less parent** ProductGroup: a family whose variants each have their own page but that has no family landing page of its own. Its data block omits `url` and is reached by the `sheet_url` hint on its variants' `isVariantOf`, as described at the start of this section. The `productGroupID` identifier requirement still holds; only `url` is dropped. Each variant entry still carries its own page `url`:
 
 ```json
 {
@@ -295,7 +300,7 @@ Each variant Sheet points back at this page-less parent as in the Onyx example a
 
 Each entry in `hasVariant` MAY declare a `url` field. The ProductGroup's top-level `url` remains the canonical URL of the product family (typically the merchant's primary listing page or the page from which variant discovery began). The variant's `@id` remains the primary identifier for the variant; the per-variant `url` is supplementary metadata that carries addressability information: consumers can use it to construct direct links to variant-specific page states. Agents recommending specific variants to users, link sharing, and any consumer that needs to address a variant individually rely on it.
 
-When the parent ProductGroup has no family page (the page-less parent of a multi-Sheet variant family, see "Multi-Sheet variant families"), its top-level `url` is absent and the family is located by `sheet_url` instead. The per-variant `url` fields on `hasVariant` entries are unaffected: each variant still declares its own page `url` under the same guidance above.
+When the parent ProductGroup has no family page (the page-less parent of a multi-Sheet variant family, see "Multi-Sheet variant families"), its top-level `url` is absent and the family is reached by the `sheet_url` hint on its variants' `isVariantOf` instead. The per-variant `url` fields on `hasVariant` entries are unaffected: each variant still declares its own page `url` under the same guidance above.
 
 Three patterns govern whether to populate it:
 
@@ -349,7 +354,7 @@ Normative guidance:
 
 #### Registry governance
 
-The Pagefront Property Registry's lifecycle is modeled on IANA's link-relation registry (see RFC 8288 §6.2.1, already referenced in "Discovery" below): entries move through three states.
+The Pagefront Property Registry's lifecycle is modeled on IANA's link-relation registry (see RFC 8288 §6.2.1, referenced in Pagefront Discovery): entries move through three states.
 
 - **`proposed`**: a candidate identifier, observed in real-merchant use but not yet broadly converged on.
 - **`stable`**: an identifier with enough independent-producer adoption that the spec recommends it without reservation.
@@ -440,7 +445,7 @@ A configurator carries no prices. `pagefront:configurator` describes the product
 - **A free-text dimension has one modifier.** A dimension declared `inputType: "text"` (engraving, monogram, custom inscription) has no `options`, and MAY state the number of characters accepted in `maxLength`. The base configuration leaves it empty, so it has no key in `baseConfiguration`. When its `affectsPrice` is left at the default of `true`, it MUST have a single modifier under its name, keyed `"*"`, which applies to any non-empty input. Free engraving is `affectsPrice: false` and has no modifier.
 - **Adjustments carry what is not additive.** When one option's price depends on the choice made in another dimension, `adjustments` lists the difference: each entry has a `when` (a partial configuration) and a `priceModifier`, and applies to every configuration that matches every pair in its `when`. Any price grid can be expressed this way. Producers MUST verify that the prices are additive before omitting `adjustments`.
 - **Excluded configurations have no total.** A configuration that matches every pair of an entry in the configurator's `exclusions` cannot be ordered, and its total is undefined.
-- **References resolve.** Every pair in an exclusion, and in an adjustment's `when`, MUST name a dimension the configurator declares. Where that dimension lists `options`, the pair's value MUST be the `value` of one of them, written as the option writes it, with the same JSON type (`"1"` for an option whose value is `"1"`). A dimension that lists no options takes any value. A pair that resolves to nothing would exclude no configuration, or never apply, without any sign of it. This requirement is new in Product Sheet spec 0.10.0 (linter rule PDP-E-017, which applies from release 0.4.0).
+- **References resolve.** Every pair in an exclusion, and in an adjustment's `when`, MUST name a dimension the configurator declares. Where that dimension lists `options`, the pair's value MUST be the `value` of one of them. The two are compared by JSON value equality, type included, with no conversion: the number `1` and the string `"1"` are different values, and `1` and `1.0` are the same number. A dimension that lists no options takes any value. A pair that resolves to nothing would exclude no configuration, or never apply, without any sign of it. This requirement is new in Product Sheet spec 0.10.0 (linter rule PDP-E-017, which applies from release 0.4.0).
 - **Currency and tax basis come from the offer.** Every amount in the block is in the enclosing offer's `priceCurrency`, under that offer's tax-inclusion statement (`priceSpecification.valueAddedTaxIncluded`, see "Tax inclusion"). The block carries no currency of its own.
 - **Amounts use the Sheet's carrier.** `basePrice`, every modifier and every adjustment's `priceModifier` are amounts, carried as the rest of the Sheet's amounts are: all JSON numbers, or all decimal strings. See "Amounts" under "Common pricing patterns."
 
@@ -864,7 +869,7 @@ Pagefront does not require captions or transcripts. The validator's linter (rule
 
 #### Video and internationalization
 
-Video is language-scoped. A French-language sheet's `video` array contains French-language videos; an English-language sheet's contains English-language videos. Cross-language navigation between sheets is via the `Link` header's `hreflang` parameter (per v0.5's internationalization model). A single sheet's video array does not mix languages.
+Video is language-scoped. A French-language sheet's `video` array contains French-language videos; an English-language sheet's contains English-language videos. Cross-language navigation between sheets is via `pagefront:availableLanguages` (see "Internationalization"). A single sheet's video array does not mix languages.
 
 When a video is language-agnostic (silent construction footage, instrument demonstrations without spoken content), publishers MAY include the same video file in multiple language sheets. The `caption` and `transcript` fields, if present, SHOULD match the sheet's `inLanguage`.
 
@@ -1135,7 +1140,7 @@ When a `legalEntity` entry's organization has its own Commerce Organization Shee
 }
 ```
 
-The `@id` resolves to the organization sheet the same identity way as `Product.brand` and `Offer.seller`: exact-string `@id` match, per "Product identity and deduplication." `pagefront:sheetUrl` states where that sheet is; the rules for following it are the linking contract in [`organization.md`](organization.md#linking-contract-identity-only). This removes the drift-prone duplication of stable organization data across every product the brand sells.
+The `@id` resolves to the organization sheet the same identity way as `Product.brand` and `Offer.seller`: exact-string `@id` match, per "Product identity and deduplication." `pagefront:sheetUrl` states where that sheet is, as a traversal hint that MAY be stale (see "Traversal hints" in Pagefront Discovery); the rules for following it are the linking contract in [`organization.md`](organization.md#linking-contract-identity-only). This removes the drift-prone duplication of stable organization data across every product the brand sells.
 
 When the entity is a third party with no sheet, or varies by product or market, it stays fully inline with `name` and `address`. An `authorized_representative` or `importer` (the GPSR responsible person, the importer of record) is the typical case. There is nothing to reference, and GPSR Art. 19 wants the responsible entity resolvable at the listing itself; compliance-grade data stays on the product.
 
@@ -1360,7 +1365,7 @@ Product-to-product relationships in Pagefront Sheets come in five recognizable p
 
 **Pattern 2: Schema.org `isSimilarTo`.** For products the publisher asserts are similar: same kind, same use case, same general category. Schema.org defines `isSimilarTo` as products "of approximately the same kind." Use when the merchant surfaces "similar styles" or "alternatives" (products that could substitute for the source product).
 
-**Pattern 3: Schema.org `isPartOf` / `hasPart` for family or collection membership.** When the source product belongs to a named collection or family and the relationship being expressed is "siblings within that family," the right model is the family itself as a first-class entity. Use `isPartOf` to declare the source product's membership in the family; the family entity carries `hasPart` pointing at sibling members. These siblings belong to the same family. A plain "related" reference to the source product would lose that membership. The family entity can be modeled as a Schema.org `Collection` or `ProductGroup` with `name`, `url`, and `hasPart` entries. A future collection sheet type would address this case more directly; none is defined in 0.9.
+**Pattern 3: Schema.org `isPartOf` / `hasPart` for family or collection membership.** When the source product belongs to a named collection or family and the relationship being expressed is "siblings within that family," the right model is the family itself as a first-class entity. Use `isPartOf` to declare the source product's membership in the family; the family entity carries `hasPart` pointing at sibling members. These siblings belong to the same family. A plain "related" reference to the source product would lose that membership. The family entity can be modeled as a Schema.org `Collection` or `ProductGroup` with `name`, `url`, and `hasPart` entries. Where the publisher emits Commerce Collection Sheets ([`collection.md`](collection.md)), the family and the series are sheets of their own: the product's `isPartOf` entry references the set in the member entry shape and nests no `isPartOf` of its own, since the hierarchy lives in the sheets. The inline nesting shown here stays valid for a publisher without collection sheets.
 
 Pattern 3 also covers **named family and series hierarchies**: a brand whose catalog is organized as family → series → product, the way Apple's iPod family contained the Touch series. The hierarchy is expressed by nesting: the product declares `isPartOf` its series, and the series entity itself declares `isPartOf` the family. Two levels of `isPartOf` carry the full lineage; consumers walk up as far as the Sheet nests. Each level is a `Collection` (a curated grouping of distinct products) or a `ProductGroup` (when that level's members are variants of one product):
 
@@ -1534,13 +1539,13 @@ Reserve `bundle_component` for components that ship WITH the product being descr
 A "bundled with" component sometimes can't be resolved to a structured identifier: the page names and prices it but exposes no link or SKU, and the producer can't resolve it via catalog lookup, platform API, or sitemap. Because `pagefront:relatedProduct` requires an identifier, such a component can't be a `bundle_component`. Keep it in the Sheet, because the buyer still receives it. Use Schema.org's `hasPart`, which has no identifier requirement; a `hasPart` entry with only a `name` is valid (add price via `additionalProperty` or an embedded `Offer` if the page shows it). The resolution order for "included with" components is: (1) resolve to an identifier → `pagefront:relatedProduct` with `bundle_component`; (2) resolution fails → Schema.org `hasPart` with the name (and price if shown); (3) in either case the component stays in the Sheet.
 ### Offers
 
-Offer core shape: `price`, `priceCurrency`, `availability`, `itemCondition`, `seller`, `areaServed` / `eligibleRegion`, `acceptedPaymentMethod`, and `warranty` when the page states one. (v0.9 removes `hasMerchantReturnPolicy` and `shippingDetails` from this routine list; see "Return policy" below. Both fields remain valid as per-product overrides of the seller sheet's store-wide terms.)
+Offer core shape: `url` (the page where the offer is bought), `price`, `priceCurrency`, `availability`, `itemCondition`, `seller`, `areaServed` / `eligibleRegion`, `acceptedPaymentMethod`, `warranty` when the page states one, and `checkoutPageURLTemplate` when the merchant states a checkout link (optional; see "Where to buy"). (v0.9 removes `hasMerchantReturnPolicy` and `shippingDetails` from this routine list; see "Return policy" below. Both fields remain valid as per-product overrides of the seller sheet's store-wide terms.)
 
 `price` on a consumer Offer is the **displayed consumer price for the offer's declared region**: the unit amount a consumer in that region is shown and pays for the item itself, in `priceCurrency`, at the moment the sheet was generated. Where that region's consumer-protection law requires displayed prices to include value-added tax, `price` includes it. Where the prevailing convention displays prices before sales tax added at checkout, `price` excludes it. In both cases `price` excludes shipping, which is declared on `shippingDetails` or resolved from the seller sheet's `pagefront:fulfillmentTerms`.
 
 The meaning follows EU price-indication law, which defines the price a trader must display to a consumer as the final unit price including VAT and all other taxes: Directive 98/6/EC, Article 2(a) ("selling price shall mean the final price for a unit of the product, or a given quantity of the product, including VAT and all other taxes"), as amended by Directive (EU) 2019/2161, consolidated text in force since 28 May 2022. The shipping exclusion follows Directive 2011/83/EU, Article 6(1)(e), under which freight, delivery and postal charges are disclosed as additional charges beside the total price. That article governs the checkout-time total price, and it is cited here for the shipping exclusion alone.
 
-A producer MUST NOT publish, as `price`, an amount the consumer is never shown. In particular, a tax-exclusive amount obtained from a platform API whose store is configured to display prices excluding tax fails this rule in a region where the displayed price must include VAT. This is a producer obligation. A linter can detect a missing tax-basis statement (PDP-W-028); whether a stated basis is true lies beyond what any linter can check. "Tax inclusion" under "Common pricing patterns" says how to state the basis.
+A producer MUST NOT publish, as `price`, an amount the consumer is never shown. `price` is taken from the price rendered on the merchant's product page; an amount from the page's structured data or from a platform API is used only to check it. This is a producer obligation. A linter can detect a missing tax-basis statement (PDP-W-028); whether a stated basis is true lies beyond what any linter can check. "Tax inclusion" under "Common pricing patterns" gives the sources of the price and of its basis, and says how to state the basis.
 
 The `availability` and `itemCondition` values are canonical Schema.org URIs (`InStock`, `OutOfStock`, `PreOrder`, `NewCondition`, `UsedCondition`, etc.). Both `http://schema.org/` and `https://schema.org/` scheme variants are accepted; consumers SHOULD treat them as semantically equivalent. The HTTPS form is canonical and recommended for new sheets.
 
@@ -1641,6 +1646,40 @@ A fact the strip states that none of these can hold stays in the product's prose
 Pages describe how the customer receives an item as "delivery". Schema.org files delivery cost, destination and timing under `shippingDetails` (`OfferShippingDetails`: `shippingDestination`, `shippingRate`, `deliveryTime` with handling and transit time); the property name is Schema.org's and is used unchanged.
 
 The delivery **mode** is a separate fact. Offers state the modes available with Schema.org's `availableDeliveryMethod`, whose value is a `DeliveryMethod`, and a pickup location with `availableAtOrFrom`, whose value is a `Place`. The `DeliveryMethod` enumeration has three members (Schema.org 30.1): `https://schema.org/ParcelService`, `https://schema.org/OnSitePickup`, and `https://schema.org/LockerDelivery`. Click-and-collect and in-store pickup are `OnSitePickup`; locker delivery is `LockerDelivery`. These are delivery modes and are declared there; they are never approximated in `shippingDetails`.
+
+#### Where to buy
+
+An Offer states where the shopper can buy it with two Schema.org properties. Both are Schema.org's own, so this section mints no `pagefront:` term and the Offer block admits them without a schema change; it is added in release 0.5.0.
+
+- **`url`**: the page on which the shopper buys this offer: the product page, or the variant's page for a variant offer (see "Per-variant URLs"). An Offer without `url` is bought on the product's page, the data block's `url`. A sheet carrying more than one Offer SHOULD give each its `url`, since offers for different markets are often bought on different pages. When present, `url` MUST be an absolute URL.
+- **`checkoutPageURLTemplate`**: a URL template (RFC 6570) that takes the shopper directly to the merchant's checkout for this offer. Optional. It hands the shopper to the merchant: the cart, payment and order confirmation happen on the merchant's site. Expanded with `quantity` set to 1, the template MUST yield an absolute `https` URL.
+
+```json
+{
+  "@type": "Offer",
+  "url": "https://shop.example/products/aurora-lamp?variant=4521",
+  "price": "149.00",
+  "priceCurrency": "EUR",
+  "areaServed": "FR",
+  "checkoutPageURLTemplate": "https://shop.example/cart/4521:{quantity}"
+}
+```
+
+**Template variables.** A checkout template uses only the variables Pagefront defines, so that a consumer can fill every placeholder. The set is one variable:
+
+- `quantity`: the number of units, a positive integer.
+
+The offer itself identifies the item; a template does not take a product or variant identifier. A template with no variable is valid and checks out one unit.
+
+**Source.** A producer publishes `checkoutPageURLTemplate` only when the merchant states it: in the merchant's own structured data on the page, or through a checkout-link feature the merchant has enabled on its platform. A producer MUST NOT construct a checkout URL from a platform's URL pattern or from any other pattern the merchant has not stated, for the same reason it does not construct sheet URLs.
+
+**Region.** Checkout depends on the market. Each region-scoped Offer carries the checkout template for its own market. An Offer without a declared region (`areaServed` or `eligibleRegion`) MUST NOT carry a checkout template, since the shopper could be sent to another market's checkout.
+
+**Consumers.** A checkout template is a hand-off to the shopper. Following it can create a cart. Consumers MUST NOT follow it to complete a purchase without the shopper's confirmation, and MUST fill `quantity` with the quantity the shopper chose.
+
+**Out of scope.** Programmatic purchase, an endpoint a program calls to place an order, as described by Schema.org's `potentialAction` with a `BuyAction`, involves authentication, payment and order creation. It is a transaction protocol, and Pagefront describes offers, so Pagefront does not specify it. An Offer may carry it; consumers act on it under that protocol's terms, and this document says nothing about them. Where an item is not sold on the page at all, as on a manufacturer's own product page, there is no Offer and no checkout; directing shoppers to the retailers that sell it is not covered here.
+
+The validator's linter checks the template (rule PDP-E-019: a template that is not valid RFC 6570, that names a variable Pagefront does not define, or that does not expand to an absolute `https` URL), the region (rule PDP-E-020: a template on an Offer with neither `areaServed` nor `eligibleRegion`), and the offer's `url` (rule PDP-E-021: a `url` that is not an absolute URL; rule PDP-W-040: an Offer without `url` on a sheet carrying several). All four apply from release 0.5.0.
 
 #### itemOffered references
 
@@ -1804,9 +1843,22 @@ Producers SHOULD state whether `price` includes value-added tax, using Schema.or
 
 When the flag is absent, consumers read `price` as the displayed consumer price per the rule above and cannot tell whether tax was included.
 
-**Establishing the tax basis.** A producer reading a platform API must establish the basis of the amount it receives; the basis is usually determinable even when the region is not. In order of strength: explicit URL or route signals (a country query parameter, a locale path segment, a ccTLD, `hreflang` alternates); a merchant statement ("all prices include VAT", a tax or shipping page, terms and conditions); a platform store-level tax-display setting where exposed; currency as a proxy for the basis alone (a euro storefront implies the inclusive convention and leaves the member state, and so the rate, open); the seller's establishment market, defensible for a single-market storefront only.
+**Source of the price.** `price` is taken from the price rendered on the merchant's product page: the amount the shopper pays for the item as presented on the page. When a sale is shown, `price` is the sale price, and the crossed-out price is the regular price (see "Sale pricing"). `price` is the full price of the item: an instalment, a per-unit amount and a "from" amount are other figures and are never published as `price`. Where the page shows the price only after scripts run, the producer renders the page as a browser does; a producer that cannot obtain the rendered price has no price and publishes no offer.
 
-**When the basis cannot be established.** Publish what is known and mark what is not, in this order of preference. Basis known and region unknown: publish the offer with the flag set and no `areaServed`. Neither known, and the merchant's page shows a rendered price: prefer the rendered storefront price over any API amount, publish it, omit the flag. Only a platform amount of unknown basis available: do not publish it as `price`. Publish the sheet without an offer, which is a valid state, or route the offer to review. An offer-less sheet is preferable to an offer of unknown basis: the first is honestly incomplete, the second is silently wrong.
+The merchant's structured data on the page and any amount obtained from a platform API are not sources of `price`. They are used only to check it. Where the page carries a structured-data price for the same offer and it differs from the rendered price, the producer does not publish the offer: it SHOULD surface the discrepancy to the merchant or route the offer to review. A rendered price is published only when it agrees with the structured-data price, or when the page carries none.
+
+**Source of the VAT basis.** `valueAddedTaxIncluded` is set only when the merchant states the basis, in one of these forms:
+
+- text on the page stating it, next to the price or applying to the page's prices ("TTC", "incl. VAT", "prices include VAT");
+- a statement in the merchant's terms of sale covering the prices shown on its product pages ("prices are indicated inclusive of all taxes");
+- the VAT flag in the merchant's own structured data on the page;
+- the store's tax-display setting, where the platform exposes it.
+
+Producers MUST NOT infer the VAT basis from the URL, the domain, the currency, the market or the seller's country. When the merchant does not state the basis, the producer publishes the price without `valueAddedTaxIncluded`; the missing flag records that the basis was not stated.
+
+A rendered price is the price for the market the page was served for, and the producer declares a region only where the merchant states it, under the same no-inference rule.
+
+**When a price cannot be published.** A sheet without an offer is a valid state. It is preferable to an offer whose price is not the rendered price, or whose rendered price disagrees with the merchant's structured data: the first is honestly incomplete, the second may be silently wrong. An unstated VAT basis is not a reason to withhold the offer; it is published without the flag.
 
 **Prices that cannot state a basis.** `hasVariant[].price` render hints carry no region and no `priceSpecification`, so they cannot state a tax basis. A `pagefront:configurator` carries no prices; the amounts in a `pagefront:configuratorPricing` block sit inside an offer and take their currency, region and tax basis from it, so they are as authoritative as that offer's `price`. Render hints are non-authoritative display hints: consumers MUST NOT use them for computation or for quoting a price to a buyer, and MUST resolve the region-matched `Offer` for an authoritative amount. `AggregateOffer` is an offer type and carries its own `areaServed` and `priceSpecification` like any other offer.
 
@@ -2002,50 +2054,19 @@ The structured fields are what a consumer acts on: an agent that knows the custo
 ```
 ## Internationalization
 
-Unchanged from v0.5. Pagefront Sheets are language-scoped: one `inLanguage` per sheet, multi-currency handled inline via multiple `Offer` entries with `areaServed`. Cross-language navigation via `Link: rel="describedby"` with `hreflang` parameters.
+Pagefront Sheets are language-scoped: one `inLanguage` per sheet, multi-currency handled inline via multiple `Offer` entries with `areaServed`. Each language variant of a resource is its own sheet, declared by its own page; the discovery link carries no language attribute, and `inLanguage` states the sheet's language.
+
+Cross-language navigation is declared in the sheet. A publisher with more than one language variant of a sheet SHOULD list the siblings in `pagefront:availableLanguages`, one `{lang, url}` entry per sibling (see the vocabulary). Each entry is a traversal hint under "Traversal hints" in Pagefront Discovery: it MAY be stale, and a consumer reaches a sibling through the sibling's own page when the entry does not resolve.
 
 v0.6 extends this to video: the `video` array's contents are language-scoped to the sheet's `inLanguage`. See the "Video and internationalization" subsection above for details.
 
 ## Sheet filename convention
 
-The standard recommends a filename. Where a Sheet lives is the publisher's choice; the discovery declaration says where that is.
+The recommended filename shape, `{id}.{lang}.json`, is "Filename convention" in Pagefront Discovery ([`../../core/spec/discovery.md`](../../core/spec/discovery.md#filename-convention)). It is a convenience for publishers; it is not a discovery mechanism, and a Sheet is located by the declaration its page carries.
 
-Recommended shape: `{id}.{lang}.json`
+## Discovery
 
-- **`{id}`**: a stable identifier for the resource. Publishers may use a slug, a SKU, a UUID or any other durable identifier; the standard does not constrain its shape. It MUST remain stable for the life of the resource. Publishers using slug-derived ids SHOULD either freeze the slug at first publication or maintain HTTP 301 redirects from old Sheet URLs to new ones, as they would for page URL migrations.
-- **`{lang}`**: the BCP 47 tag matching the Sheet's `inLanguage`. Single-language publishers MAY omit this segment; `inLanguage` remains authoritative. Adding a language adds a file; removing one is a publication event the publisher SHOULD handle with 410 Gone or a redirect to the closest remaining variant.
-- **`.json`**: fixed. Future serializations use distinct extensions and are announced as separate declarations.
-
-The directory is the publisher's. `/pagefront/commerce/product/…`, `/apps/pagefront/…`, `/wp-json/pagefront/v1/…` and any other location are equally conformant.
-
-This convention exists for publisher convenience and inspectability. It is not a discovery mechanism, and it is not sufficient to locate a Sheet; see Discovery.
-
-## Discovery (RFC 8288 / RFC 9727)
-
-Discovery uses HTTP `Link` response headers per RFC 8288 as the primary mechanism, with HTML `<link>` element fallback. Per-page sheet links use `rel="describedby"` (the sheet is a structured description of the resource; it is not a different rendering of it).
-
-```
-Link: <https://merchant.example/api/sheets/anorak.en.json>;
-      rel="describedby";
-      type="application/json";
-      profile="https://themachineweb.org/pagefront/spec/commerce/product/v0.10.0.json";
-      title="Pagefront product sheet"
-```
-
-```html
-<link rel="describedby"
-      type="application/json"
-      href="https://merchant.example/api/sheets/anorak.en.json"
-      title="Pagefront product sheet">
-```
-
-**Discovery principle (normative).** A Sheet is located by publisher declaration. The publisher states where the Sheet is; the consumer follows that statement. A consumer MUST NOT construct a Sheet URL from the shape of a page URL, from the recommended filename convention, or from any other pattern the publisher has not declared, even where the construction would succeed.
-
-**Sheets reached by reference.** Page-based discovery (`describedby`) finds the Sheet for the page being read. A Sheet reached by reference from another Sheet is located by the URL the referencing Sheet declares: organization sheets by `pagefront:sheetUrl` on the organization reference (`Offer.seller`, `Product.brand`, a reference-form `pagefront:legalEntity`; see the linking contract in [`organization.md`](organization.md#linking-contract-identity-only)), and page-less parent ProductGroup Sheets by `sheet_url` on a variant Sheet's `isVariantOf` (variant Sheets likewise by `sheet_url` on the parent's `hasVariant` entries). The prohibition on constructing Sheet URLs is unchanged: a reference that declares no URL leaves its Sheet undiscovered.
-
-**Carriers (non-exhaustive).** At v0.9 the declaration is carried by `Link: rel="describedby"` on the canonical page response, with the HTML `<link>` element as fallback; both together are recommended. Later versions may register additional carriers. A carrier is conformant if the declaration originates from the publisher's origin.
-
-Non-normative serving recommendation: publishers SHOULD serve sheets with `Access-Control-Allow-Origin: *`. Sheets are machine-facing public documents, and open CORS lets browser-based consumers (including the hosted validator at `/pagefront/commerce/product/validate`) read them directly.
+Discovery is specified in Pagefront Discovery ([`../../core/spec/discovery.md`](../../core/spec/discovery.md)): the discovery principle, the page-based carriers (`Link: rel="alternate"; type="application/pagefront+json"` and the HTML `<link>` element), the entry point, the traversal-hint rule and the filename convention. Product-specific traversal hints are `sheet_url` on `hasVariant` entries and `isVariantOf`, `pagefront:sheetUrl` on organization references (`Offer.seller`, `Product.brand`, a reference-form `pagefront:legalEntity`; see the linking contract in [`organization.md`](organization.md#linking-contract-identity-only)) and on `isPartOf` entries (see [`collection.md`](collection.md)), and the `url` of `pagefront:availableLanguages` entries; the traversal-hint rule in Discovery governs all of them.
 
 ## Why completeness is not in the sheet
 
@@ -2175,7 +2196,23 @@ Changes land under "Unreleased" and are versioned at the next release, when the 
 
 ### Unreleased
 
-_Nothing yet. Changes land here and are versioned at the next release; see "Releasing" in [`../../CONTRIBUTING.md`](../../CONTRIBUTING.md)._
+Changes land here and are versioned at the next release; see "Releasing" in [`../../CONTRIBUTING.md`](../../CONTRIBUTING.md).
+
+### 0.11.0 — 2026-10-18
+
+Released in commerce release 0.5.0. A minor: every change is additive or a relaxation, and a sheet valid at 0.10.0 stays valid.
+
+- **Addition (minor): where to buy.** `Offer.url` is the page where the offer is bought; `checkoutPageURLTemplate` (Schema.org) may carry a merchant-stated direct-to-checkout link, with `quantity` as the only template variable, one link per region-scoped offer, and no link on an offer without a region; consumers do not complete a purchase without the shopper's confirmation; programmatic purchase is out of scope. A checkout template must expand, with `quantity` set to 1, to an absolute `https` URL; an Offer without `url` is bought on the product page; several offers should each carry `url`, an absolute URL. See "Where to buy" under "Offers". New linter rules applying from release 0.5.0: errors PDP-E-019 (invalid checkout template), PDP-E-020 (template without a region) and PDP-E-021 (offer `url` not absolute), and warning PDP-W-040 (offer without `url` among several). No schema change, no `pagefront:` term, no sheet becomes non-conforming.
+- **Editorial: Discovery moves to the format level.** Discovery, the traversal-hint rule and the filename convention move to [`../../core/spec/discovery.md`](../../core/spec/discovery.md); this document points to them. No normative change.
+- **Clarification (patch): carrier precedence.** The Selection paragraph under "Discovery" states the lookup order the primary-and-fallback arrangement implies: a consumer reads the `Link` header first, and a HEAD request on the canonical page is enough when the header is present; it fetches the page and parses its head only when no header declares the sheet, and where both carriers are present the header is authoritative. Publishers that emit the header SHOULD return it on HEAD responses as well as GET responses. The Carriers paragraph says in words that a publisher who cannot set response headers declares the sheet with the `<link>` element alone, and that this carrier conforms on its own. No sheet changes shape.
+- **Editorial: hosted checker address.** The serving recommendation under "Discovery" names the hosted checker at `/pagefront/commerce/validate`, which reads a page's declaration and judges the sheet it points at, for every sheet type the published linter bundles. No normative change.
+- **Addition (minor): collection references.** `isPartOf` is a recommended core field: an array of `Collection` member entries, one per set whose direct members include the product, in the member entry shape of the Commerce Collection Sheet ([`collection.md`](collection.md)); `category` is unchanged and the two are not compared. Pattern 3 under "Related products" points at the collection sheet and keeps the inline nesting valid for a publisher without one. "Sheets reached by reference" under "Discovery" and the traversal-hint list under "Multi-Sheet variant families" name the collection references (`pagefront:sheetUrl` on `isPartOf`, `hasPart` and `hasOfferCatalog` entries). No schema change: `product.json` already accepts `isPartOf` as an object or an array of untyped objects, and the member entry shape is typed in `collection.json`.
+- **Change (minor): sheet media type.** Sheet media type is `application/pagefront+json`. The discovery link's `type` attribute identifies the sheet; served `Content-Type` may remain `application/json`. The Discovery section gains the selection rule (`rel` and `type` together; never `title`, `href` shape, or being the only JSON alternate; at most one such link per page) and the serving note. The `rel` and the `profile` parameter are unchanged. No sheet changes shape.
+- **Correction (minor): discovery link relation.** Discovery link relation corrected from `describedby` to `alternate` to match the first-party model adopted at v0.4. `hreflang` removed from the discovery link; `pagefront:availableLanguages` is the language-variant mechanism. The media type and the `profile` parameter are unchanged. No sheet changes shape: the change is to the declaration a page carries, and the schema heads stay at the versions they name.
+- **Relaxation (minor, compatible).** `sheet_url` is optional. It is redefined as an address the Sheet is served from, as known to the publisher at generation time, and it is informational: the authoritative location of a Sheet is whatever the canonical page currently declares, and a publisher whose platform assigns or changes the address after generation MAY omit it. Every sheet that was valid stays valid. **(schema)** `sheet_url` leaves the envelope's required list; the editable head names 0.11.0. **(linter)** No rule requires `sheet_url`; PDP-E-005 compares the seller sheet URL with the canonical page's host (catalogue 0.17.0). See "The envelope."
+- **Clarification (patch): traversal hints.** A field whose value is another Sheet's URL (`sheet_url` on `hasVariant` entries and `isVariantOf`, `pagefront:sheetUrl` on organization references, the `url` of a `pagefront:availableLanguages` entry) is a traversal hint. It MAY be stale; a consumer MUST be able to reach the target through its page, the entry's `url` and then the Sheet that page declares, SHOULD treat the hint as an optimisation over that path, and MUST NOT cache a Sheet URL across the target's page changes. The rule is stated once under "Traversal hints" in "Multi-Sheet variant families", and the per-field notes refer to it. "Design principles" no longer describes the Sheet as served at a stable URL.
+- **2026-10-02 — Price and VAT basis are no longer inferred.** `price` comes from the rendered product page; structured-data and platform amounts only check it, and a mismatch withholds the offer for review. `valueAddedTaxIncluded` is set only from a merchant statement (page text, the merchant's terms of sale, the merchant's structured data, or an exposed store tax-display setting); otherwise the price is published without it. The list of signals for working out the basis is removed. A region is declared only where the merchant states it. No schema change; no sheet becomes non-conforming, though case-study flags resting on inference are removed. See "Tax inclusion."
+- **Clarification (patch).** Exclusion and adjustment references match option `value`s by JSON value equality, type included: `1` and `"1"` are different values, and `1` and `1.0` are the same number. The requirement itself is unchanged from 0.10.0; see "Configurator pricing and price bands." The linter's PDP-E-017 finding now names the two types when a reference and a declared option differ only by type.
 
 ### 0.10.0 — 2026-10-02
 
@@ -2277,7 +2314,7 @@ _Additive: every conforming 0.9 sheet stays conforming. One `pagefront:` term is
 _Documentation and linter only: no schema change, no `pagefront:` term minted. Every conforming 0.9 sheet stays conforming._
 
 - **`price` on a consumer Offer is defined.** It is the displayed consumer price for the offer's declared region: tax inclusion is determined by that region's law (Directive 98/6/EC, Article 2(a), for the meaning) and shipping is excluded (Directive 2011/83/EU, Article 6(1)(e), for the exclusion alone). A producer MUST NOT publish, as `price`, an amount the consumer is never shown. See "Offers."
-- **Producers SHOULD state the tax basis.** Schema.org's `valueAddedTaxIncluded` goes on a `UnitPriceSpecification` entry: on each existing `priceSpecification` entry, or on one mirroring entry added to an Offer that carries only `price`. The tax basis is a property of the (offer, region) pair; the section also gives the order of signals for establishing it and what to publish when it cannot be established. See "Tax inclusion."
+- **Producers SHOULD state the tax basis.** Schema.org's `valueAddedTaxIncluded` goes on a `UnitPriceSpecification` entry: on each existing `priceSpecification` entry, or on one mirroring entry added to an Offer that carries only `price`. The tax basis is a property of the (offer, region) pair; the price is taken from the rendered page and the basis only from the merchant's statement; neither is inferred. See "Tax inclusion."
 - **Variant render hints and configurator prices are non-authoritative.** `hasVariant[].price` and `pagefront:configurator` prices carry no region and cannot state a basis; consumers resolve the region-matched Offer for an authoritative amount.
 - **Sale-pricing example retyped.** Its entries are `UnitPriceSpecification`, the type Schema.org defines `priceType` on.
 - **(linter)** PDP-W-028 warns on an Offer price without a tax-inclusion statement, PDP-W-029 on an Offer price without a declared region, and PDP-E-004 on a mirroring entry whose `price` disagrees with the Offer's `price`.

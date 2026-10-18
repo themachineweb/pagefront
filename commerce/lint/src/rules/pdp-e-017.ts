@@ -10,11 +10,29 @@ import { asObject, own, pricedConfiguratorId, pricingBlock, seg } from "./config
  * are partial configurations: each pair names a dimension and one of its
  * options. A pair fires when the configurator declares no dimension of
  * that name, or when the dimension lists `options` and none has that
- * `value`. Values are compared strictly, with no coercion (`1` is not
- * `"1"`). A dimension that declares no `options` (continuous,
+ * `value`. Values are compared by JSON value equality, type included,
+ * with no coercion: `1` is not `"1"`, and `1` and `1.0` are the same
+ * number. A dimension that declares no `options` (continuous,
  * system-defined, free text) has nothing to check the value against.
  * One finding per unresolved pair, at the pair.
+ *
+ * Type hint: when the pair matches no option but a declared option has
+ * the same text once both are converted to strings, the finding says so
+ * and carries the two types and the declared value in `values`. It
+ * stays an error; nothing is coerced.
  */
+type Scalar = string | number | boolean;
+
+function isScalar(value: unknown): value is Scalar {
+  return typeof value === "string" || typeof value === "number" || typeof value === "boolean";
+}
+
+/** The declared option that equals `value` after string conversion, if any. */
+function sameTextOption(value: unknown, declared: unknown[]): Scalar | undefined {
+  if (!isScalar(value)) return undefined;
+  return declared.find((v): v is Scalar => isScalar(v) && String(v) === String(value));
+}
+
 interface DeclaredDimension {
   /** The option values as written; null when the dimension lists none. */
   values: unknown[] | null;
@@ -47,14 +65,32 @@ function unresolved(
   for (const [dimension, value] of Object.entries(asObject(pairs) ?? {})) {
     const option = JSON.stringify(value);
     const declared = dimensions.get(dimension);
-    let problem: string | null = null;
+    const at = `${path}${seg(dimension)}`;
     if (declared === undefined) {
-      problem = `the configurator declares no dimension \`${dimension}\``;
+      const problem = `the configurator declares no dimension \`${dimension}\``;
+      hits.push({ path: at, values: { dimension, option, problem } });
     } else if (declared.values !== null && !declared.values.some((v) => v === value)) {
-      problem = `\`${dimension}\` lists no option \`${option}\``;
-    }
-    if (problem !== null) {
-      hits.push({ path: `${path}${seg(dimension)}`, values: { dimension, option, problem } });
+      const near = sameTextOption(value, declared.values);
+      if (near === undefined) {
+        const problem = `\`${dimension}\` lists no option \`${option}\``;
+        hits.push({ path: at, values: { dimension, option, problem } });
+      } else {
+        const declaredOption = JSON.stringify(near);
+        const referenceType = typeof value;
+        const declaredType = typeof near;
+        const problem = `it references \`${option}\` (${referenceType}); dimension \`${dimension}\` declares \`${declaredOption}\` (${declaredType})`;
+        hits.push({
+          path: at,
+          values: {
+            dimension,
+            option,
+            problem,
+            reference_type: referenceType,
+            declared_option: declaredOption,
+            declared_type: declaredType,
+          },
+        });
+      }
     }
   }
   return hits;

@@ -11,6 +11,7 @@ import { readdirSync, readFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { lintSheet } from "../dist/index.js";
+import { installTestManifest, clearTestManifest } from "../dist/test-hooks.js";
 
 /** Fixed options making expected reports byte-stable. */
 const FIXED_OPTIONS = {
@@ -18,7 +19,19 @@ const FIXED_OPTIONS = {
   linterVersion: "0.0.0-test",
 };
 
-const fixturesDir = join(dirname(fileURLToPath(import.meta.url)), "fixtures");
+const here = dirname(fileURLToPath(import.meta.url));
+const fixturesDir = join(here, "fixtures");
+
+// The collection fixtures (and ORG-W-007's and the "Where to buy" rules') declare release 0.5.0, the
+// release that bundles Collection Sheet spec 0.1.0 and has not landed:
+// they run against the test manifest (test/manifest/releases.json),
+// which adds that row to the bundled manifest. Every other fixture runs
+// against the bundled manifest, as production does. See test/README.md.
+const TEST_MANIFEST = JSON.parse(readFileSync(join(here, "manifest", "releases.json"), "utf8"));
+// The "Where to buy" rules (product.md), all applying from release 0.5.0.
+const WHERE_TO_BUY = new Set(["pdp-e-019", "pdp-e-020", "pdp-e-021", "pdp-w-040"]);
+const runsAgainstTestManifest = (ruleDir) =>
+  ruleDir.startsWith("col-") || ruleDir === "org-w-007" || WHERE_TO_BUY.has(ruleDir);
 
 const ruleDirs = readdirSync(fixturesDir, { withFileTypes: true })
   .filter((entry) => entry.isDirectory())
@@ -38,7 +51,13 @@ for (const ruleDir of ruleDirs) {
     test(`${ruleDir}: ${inputFile} matches ${expectedFile}`, () => {
       const input = JSON.parse(readFileSync(join(dir, inputFile), "utf8"));
       const expected = readFileSync(join(dir, expectedFile), "utf8");
-      const actual = lintSheet(input, FIXED_OPTIONS);
+      if (runsAgainstTestManifest(ruleDir)) installTestManifest({ manifest: TEST_MANIFEST });
+      let actual;
+      try {
+        actual = lintSheet(input, FIXED_OPTIONS);
+      } finally {
+        clearTestManifest();
+      }
       // Compare pretty-printed JSON strings: on mismatch, the assertion
       // error renders a readable line-by-line diff of the two reports.
       assert.equal(

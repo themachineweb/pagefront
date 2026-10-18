@@ -4,15 +4,15 @@
   "linter_version": "0.0.0-test",
   "release": "0.4.0",
   "sheet_spec_version": "0.10.0",
-  "catalogue_version": "0.16.0",
+  "catalogue_version": "0.17.0",
   "findings": [
     {
       "rule": "PDP-W-031",
       "severity": "warning",
       "path": "$['data']['offers'][0]['seller']",
       "values": {},
-      "message": "Seller at `$['data']['offers'][0]['seller']` has an `@id` but no `pagefront:sheetUrl`, and the Offer states no return or shipping terms of its own.",
-      "remediation": "Add `pagefront:sheetUrl` to the seller reference, or state the terms on the Offer."
+      "message": "Seller at `$['data']['offers'][0]['seller']` has an `@id` but neither `pagefront:sheetUrl` nor `url`, and the Offer states no return or shipping terms of its own.",
+      "remediation": "Add `url` or `pagefront:sheetUrl` to the seller reference, or state the terms on the Offer."
     }
   ],
   "summary": {

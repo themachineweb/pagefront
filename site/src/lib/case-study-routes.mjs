@@ -7,7 +7,7 @@
  * source→route map). Descriptions are hardcoded here, not read from the
  * markdown; keep them in step when a writeup changes meaning. `sheets`
  * names the JSON files in the case folder that the site serves alongside
- * the writeup (product sheets also get a validator link). `unlinked`
+ * the writeup, each with a Check link. `unlinked`
  * keeps a case on the index without a link, greyed: the page still
  * renders at its route, the index just does not point at it.
  */

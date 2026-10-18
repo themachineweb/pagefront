@@ -1,0 +1,74 @@
+{
+  "$schema": "https://themachineweb.org/pagefront/spec/commerce/organization/v0.5.0.json",
+  "release": "0.5.0",
+  "schema_org_version": "30.0",
+  "canonical_url": "https://merchant.example/pages/about",
+  "sheet_url": "https://merchant.example/pagefront/commerce/organization/maison-example.fr.json",
+  "generated_at": "2026-08-01T00:00:00Z",
+  "data": {
+    "@context": [
+      "https://schema.org",
+      {
+        "pagefront": "https://themachineweb.org/pagefront/vocabulary/"
+      }
+    ],
+    "@type": "Organization",
+    "@id": "https://merchant.example/#org",
+    "name": "Maison Example",
+    "inLanguage": "fr",
+    "url": "https://merchant.example",
+    "pagefront:commerceRole": [
+      "brand_owner"
+    ],
+    "brand": {
+      "@type": "Brand",
+      "@id": "https://merchant.example/#brand",
+      "name": "Maison Example"
+    },
+    "pagefront:authorizedResellers": {
+      "@type": "pagefront:AuthorizedResellers",
+      "exhaustive": true,
+      "reseller": [
+        {
+          "organization": {
+            "@type": "Organization",
+            "@id": "https://reseller.example/#org"
+          },
+          "areaServed": {
+            "@type": "Country",
+            "name": "FR"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Boutique Example",
+            "url": "https://boutique.example"
+          }
+        }
+      ]
+    },
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Catalogue Maison Example",
+      "itemListElement": [
+        {
+          "@type": "Collection",
+          "@id": "https://merchant.example/collections/femme#collection",
+          "url": "https://merchant.example/collections/femme",
+          "pagefront:sheetUrl": "https://sheets.elsewhere.example/pagefront/commerce/collection/femme.fr.json",
+          "name": "Femme",
+          "pagefront:collectionKind": "category"
+        },
+        {
+          "@type": "Collection",
+          "@id": "https://merchant.example/collections/nouveautes#collection",
+          "url": "https://merchant.example/collections/nouveautes",
+          "pagefront:sheetUrl": "https://merchant.example/pagefront/commerce/collection/nouveautes.fr.json",
+          "name": "Nouveautés",
+          "pagefront:collectionKind": "collection"
+        }
+      ]
+    }
+  }
+}

@@ -1,7 +1,7 @@
 # Pagefront Linter — Design
 
 Status: draft / design document, not yet a published normative artifact.
-Design version: 0.2 (draft)
+Design version: 0.3 (draft)
 
 This document defines the **Pagefront linter**, the Layer 2 validation tool that checks Pagefront Sheets for well-formedness beyond what the JSON Schema (Layer 1) catches. It establishes the contract that any conforming linter implementation must meet: rule structure, severity levels, output format, and naming conventions. The rule catalogues themselves are maintained per vertical; the commerce rule catalogue is the [Pagefront Commerce Linter Rule Catalogue](../../commerce/spec/rules.md).
 
@@ -137,7 +137,7 @@ The reference implementation is a CLI tool published as `@pagefront/lint-commerc
 
 The CLI factors its rule logic into two packages: `@pagefront/lint-core`, the vertical-agnostic engine (rule runner, report emitter, renderers), and the commerce rule catalogue implementation in `@pagefront/lint-commerce` itself. Both packages are developed in the Pagefront monorepo (`core/lint/` and `commerce/lint/` respectively) at github.com/themachineweb/pagefront; the npm package names are the canonical identifiers, and the repository paths are informational. Other implementations are welcome and should produce structurally identical reports for the same input. The rule catalogue is the standard; the library is one implementation of it.
 
-Hosted validators are per page type, at `https://themachineweb.org/pagefront/{vertical}/{type}/validate`. Each validates exactly one page type of one vertical, so the route says what the machinery covers. The commerce product validator (`/pagefront/commerce/product/validate`) is the first: a fully client-side page wrapping the library. The visitor's browser fetches the sheet, and the service holds no data and performs no crawling. Anyone can enter a Sheet URL or paste sheet JSON and see the report rendered in a browser. The hosted validators are a non-normative convenience for ad-hoc inspection.
+The hosted checker is one page, `https://themachineweb.org/pagefront/commerce/validate`, for every page type the pinned library bundles a schema for. It reads the sheet type from the document, the `$schema` URL first and the data block's `@type` with its discriminator second, and names it in the result; a document that resolves to neither is reported as such and never judged as a product sheet. Given a page URL it reads the declaration the page carries (both carriers, selected by `rel` and `type` together), fetches the sheet the page declares, compares the envelope with where the page and the sheet actually were, and then runs the conformance report; given a sheet URL or a pasted sheet it runs the conformance report alone. URL inputs are fetched by the service, because a page's `Link` header is not readable cross-origin; the service returns the report only, never the fetched bytes, holds no data and performs no crawling. A JSON endpoint beside the page (`validate.json`) returns the same result for callers that cannot run a page. The hosted checker is a non-normative convenience for ad-hoc inspection.
 
 A production pipeline with its own validation layer is expected to embed `@pagefront/lint-commerce` (or a conforming reimplementation of the catalogue); maintaining a parallel rule set is the outcome this design avoids.
 
@@ -170,7 +170,7 @@ Implementations declare `linter_version`, `catalogue_version`, `release` and `sh
 
 Each vertical maintains its own rule catalogue, with rule identifiers disjoint from every other vertical's. Rule IDs are permanent: an assigned ID keeps its meaning across catalogue moves and reorganizations, and a retired number is never reassigned. Future verticals must adopt visibly distinct identifier prefixes so reports from different verticals can be aggregated without collision.
 
-The disjointness convention extends one level down: within a vertical, rule identifiers are disjoint across page-type catalogues too, and every page-type catalogue carries a visibly distinct identifier prefix so reports from different page types of one vertical aggregate without collision. The commerce vertical has two: the product catalogue's `PDP-` prefix (`PDP-E-001`, `PDP-W-001`…, `PDP-I-001`) and the Commerce Organization Sheet catalogue's `ORG-` prefix (`ORG-E-001`…, `ORG-W-001`…); the implementation dispatches by sheet type so neither page type's rules run on the other's sheets (see the commerce catalogue). The product rules originally carried unprefixed `E-`/`W-`/`I-` IDs from the era when the product catalogue was the only one. They were renamed to `PDP-` in one pre-1.0, pre-publication move (commerce catalogue 0.4.0), taken while no published consumer depended on the old IDs. That rename is the single sanctioned exception to ID permanence; the unprefixed IDs are retired.
+The disjointness convention extends one level down: within a vertical, rule identifiers are disjoint across page-type catalogues too, and every page-type catalogue carries a visibly distinct identifier prefix so reports from different page types of one vertical aggregate without collision. The commerce vertical has three: the product catalogue's `PDP-` prefix (`PDP-E-001`, `PDP-W-001`…, `PDP-I-001`), the Commerce Organization Sheet catalogue's `ORG-` prefix (`ORG-E-001`…, `ORG-W-001`…) and the Commerce Collection Sheet catalogue's `COL-` prefix (`COL-E-001`…, `COL-W-001`…); the implementation dispatches by sheet type so no page type's rules run on another page type's sheets (see the commerce catalogue). The product rules originally carried unprefixed `E-`/`W-`/`I-` IDs from the era when the product catalogue was the only one. They were renamed to `PDP-` in one pre-1.0, pre-publication move (commerce catalogue 0.4.0), taken while no published consumer depended on the old IDs. That rename is the single sanctioned exception to ID permanence; the unprefixed IDs are retired.
 
 ## Open design questions
 
@@ -194,7 +194,7 @@ Implementation status:
 
 1. **Reference implementation.** Implemented: the vertical-agnostic engine (`@pagefront/lint-core`, in `core/lint/`), the commerce catalogue and CLI (`@pagefront/lint-commerce`, in `commerce/lint/`), and the terminal, HTML, and GitHub Actions renderers. TypeScript (Node.js), for ecosystem alignment with JSON Schema and JSONPath tooling. Both packages are published on npm.
 2. **Test suite.** Implemented: the conformance fixture suite in `commerce/lint/test/fixtures/` covers every rule with at least one positive (rule fires) and one negative (rule does not fire) case, with byte-stable expected reports; `commerce/lint/test/cli-fixtures/` adds schema-valid sheets exercising the CLI's Layer 1 → Layer 2 sequencing.
-3. **Hosted service.** Implemented for the commerce product page type: `https://themachineweb.org/pagefront/commerce/product/validate`, a client-side page wrapping the library (the visitor's browser fetches the sheet; no server code). Future page types take sibling routes under `/pagefront/{vertical}/{type}/validate`.
+3. **Hosted service.** Implemented: `https://themachineweb.org/pagefront/commerce/validate`, covering the product and organization page types, with the page check (discovery, the hop, coherence) ahead of the conformance report. A page type joins it when a published library version bundles its schema; the collection sheet is detected and reported as awaiting its release.
 
 Catalogue-specific pending work (scoring rubric integration, case-study validation) is tracked in each vertical's rule catalogue.
 
@@ -202,9 +202,13 @@ Catalogue-specific pending work (scoring rubric integration, case-study validati
 
 ### Unreleased
 
-Changes land here and are versioned at the next release; see "Releasing" in [`../../CONTRIBUTING.md`](../../CONTRIBUTING.md).
+_Nothing yet. Changes land here and are versioned at the next release; see "Releasing" in [`../../CONTRIBUTING.md`](../../CONTRIBUTING.md)._
 
-- **Release gating.** The rule structure gains `applies_from` and `applies_to_legacy`, and a linter skips a rule on a Sheet whose declared release is lower than `applies_from`, or on a legacy Sheet unless the rule is flagged. Policy: an error rule added after a vertical's first release applies only from the release that introduces its requirement; warning and info rules may apply to every release. Layer 1 follows the same principle: the schema is the one the declared release bundles. Implemented in `@pagefront/lint-core` 0.3.0.
+- **Hosted checker.** One page at `/pagefront/commerce/validate` replaces the product-only validator at `/pagefront/commerce/product/validate`. It covers every page type the pinned library bundles a schema for, reads the type from the document and never defaults to product, and given a page URL checks discovery, the hop to the sheet and the envelope's coherence with the page before the conformance report. The JSON endpoint keeps answering at its former paths.
+- **Rule namespaces.** The commerce vertical's third page-type catalogue, the Commerce Collection Sheet catalogue with the `COL-` prefix, is named beside `PDP-` and `ORG-`. No change to the rule structure or the report shape.
+### 2026-10-02 — Release gating
+
+The rule structure gains `applies_from` and `applies_to_legacy`, and a linter skips a rule on a Sheet whose declared release is lower than `applies_from`, or on a legacy Sheet unless the rule is flagged. Policy: an error rule added after a vertical's first release applies only from the release that introduces its requirement; warning and info rules may apply to every release. Layer 1 follows the same principle: the schema is the one the declared release bundles. Implemented in `@pagefront/lint-core` 0.3.0. This document is design version 0.3.
 
 ### 2026-10-01 — Versioning scheme replaced
 

@@ -88,9 +88,20 @@ Follow "Releasing" in `CONTRIBUTING.md`. The parts that go wrong:
 
 ## Case studies
 
-- Derive a sheet's values from the merchant's own store data where the
-  platform exposes it, and use the rendered page for prose and for checking
-  totals. A rendered price can be one component of the real one.
+- An offer's price is the price the product page renders, read in a
+  browser: the full price of the item as the shopper sees it, the sale
+  price when a sale is shown. The page's structured data and the
+  merchant's store data only check it; where they disagree with the
+  rendered price, the offer is not published. A figure on the page can be
+  one component of the price, so read the one presented as the price of
+  the item.
+- Set `valueAddedTaxIncluded` and `areaServed` only from a merchant
+  statement: text on the page, the terms of sale, the merchant's
+  structured data, or a store setting the platform exposes. Never infer
+  them from the URL, the domain, the currency or the seller's country.
+  See "Tax inclusion" in `commerce/spec/product.md`.
+- Other values, such as configurator options and their price differences,
+  come from the merchant's own store data where the platform exposes it.
 - Quote legal and safety statements as written, in the sheet's language.
   Restate descriptive fields, such as configurator notes, as facts.
 - Verify against the live source on the day, and say in the case study

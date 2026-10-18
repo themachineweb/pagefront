@@ -37,6 +37,18 @@ export const SPEC_DOCS = {
     blurb:
       'The publisher’s own statement of who they are — the entity behind the products.',
   },
+  'commerce/spec/collection': {
+    route: 'commerce/collection',
+    source: 'commerce/spec/collection.md',
+    // No schemaType: the schema is an editable head until a release
+    // freezes it, and the chip links to released schemas only.
+    title: 'Collection sheet',
+    status: 'normative',
+    statusLine:
+      `Normative. Collection Sheet spec ${currentSheetSpec('collection')}, in commerce release ${CURRENT_RELEASE}: ${MATURITY}`,
+    blurb:
+      'The listing page: categories, curated collections and brand collections, with their members, their parents and the catalogue entry point.',
+  },
   'commerce/spec/vocabulary': {
     route: 'commerce/vocabulary',
     source: 'commerce/spec/vocabulary.md',
@@ -74,6 +86,15 @@ export const SPEC_DOCS = {
     statusLine: 'Non-normative. Defines no conformance requirement.',
     blurb:
       'A shared vocabulary for discussing how complete a sheet is. Dimensions only — no weights, no score.',
+  },
+  'core/spec/discovery': {
+    route: 'core/discovery',
+    source: 'core/spec/discovery.md',
+    title: 'Discovery',
+    status: 'normative',
+    statusLine: `Normative. Discovery spec 0.1.0; ${MATURITY}`,
+    blurb:
+      'How a consumer locates a sheet: the page-based carriers, the entry point for an origin, the traversal-hint rule and the filename convention. Every sheet type, every vertical.',
   },
   'core/spec/linter': {
     route: 'core/linter',

@@ -1,0 +1,26 @@
+{
+  "sheet": "https://merchant.example/collections/knitwear",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.5.0",
+  "sheet_spec_version": "0.1.0",
+  "catalogue_version": "0.17.0",
+  "findings": [
+    {
+      "rule": "COL-W-001",
+      "severity": "warning",
+      "path": "$['data']['hasPart']",
+      "values": {},
+      "message": "`hasPart` at `$['data']['hasPart']` is empty: the set declares no direct members.",
+      "remediation": "Confirm the set has no direct members (its products all live in subcategories, or it holds nothing). If the storefront assigns products or subcategories to this node, list them."
+    }
+  ],
+  "summary": {
+    "errors": 0,
+    "warnings": 1,
+    "info": 0,
+    "rules_fired": [
+      "COL-W-001"
+    ]
+  }
+}

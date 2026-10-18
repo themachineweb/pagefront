@@ -1,21 +1,31 @@
 import type { Sheet } from "@pagefront/lint-core";
 
 /**
- * Sheet-type detection for page-type dispatch: organization sheets are
- * a different page type from product sheets, and each page type's
- * rules must never run on the other's sheets.
+ * Sheet-type detection for page-type dispatch: product sheets,
+ * organization sheets and collection sheets are three page types, and
+ * each page type's rules must never run on another's sheets.
  *
  * The envelope `$schema` is authoritative when it names a page type:
- * `/spec/commerce/organization/` or `/spec/commerce/product/` in its
- * path, or the `/schemas/organization/` and `/schemas/product/` paths
- * the schemas were identified by before 2026-09-08. The
- * data-block fallback — `@type` of `Organization` / `OnlineStore` /
- * `OnlineBusiness` with `pagefront:commerceRole` present — applies
- * only when `$schema` is absent or names neither, so a declared schema
- * always wins over shape heuristics. The default is `product`, the
- * page type the catalogue predates dispatch with.
+ * `/spec/commerce/organization/`, `/spec/commerce/product/` or
+ * `/spec/commerce/collection/` in its path, or the
+ * `/schemas/organization/` and `/schemas/product/` paths the schemas
+ * were identified by before 2026-09-08 (the collection schema never
+ * had such a path). The data-block fallbacks — `@type` of
+ * `Organization` / `OnlineStore` / `OnlineBusiness` with
+ * `pagefront:commerceRole` present, and `@type` of `Collection` with
+ * `pagefront:collectionKind` present — apply only when `$schema` is
+ * absent or names no type, so a declared schema always wins over shape
+ * heuristics. The default is `product`, the page type the catalogue
+ * predates dispatch with.
  */
-export type SheetType = "product" | "organization";
+export type SheetType = "product" | "organization" | "collection";
+
+/** The sheet types as the rule messages name them. */
+export const SHEET_LABEL: Record<SheetType, string> = {
+  product: "Product Sheet",
+  organization: "Organization Sheet",
+  collection: "Collection Sheet",
+};
 
 /**
  * The two lines a sheet can belong to. A sheet on the *release* line
@@ -55,6 +65,7 @@ export function detectSheetType(sheet: Sheet): SheetType {
   if (typeof schema === "string") {
     if (schema.includes("/spec/commerce/organization/")) return "organization";
     if (schema.includes("/spec/commerce/product/")) return "product";
+    if (schema.includes("/spec/commerce/collection/")) return "collection";
     if (schema.includes("/schemas/organization/")) return "organization";
     if (schema.includes("/schemas/product/")) return "product";
   }
@@ -67,6 +78,9 @@ export function detectSheetType(sheet: Sheet): SheetType {
       d["pagefront:commerceRole"] !== undefined
     ) {
       return "organization";
+    }
+    if (d["@type"] === "Collection" && d["pagefront:collectionKind"] !== undefined) {
+      return "collection";
     }
   }
   return "product";

@@ -106,7 +106,7 @@ test("release line: a sheet carrying both fields fails Layer 1", () => {
 });
 
 test("unknown release: Layer 1 fails with one error naming the release; Layer 2 alone fires PDP-E-018", () => {
-  for (const release of ["0.5.0", "0.3", "9.9.9"]) {
+  for (const release of ["0.6.0", "0.3", "9.9.9"]) {
     const sheet = load("clean.json");
     sheet.release = release;
     assert.deepEqual(validateAndLint(sheet, OPTIONS), {

@@ -1,0 +1,29 @@
+{
+  "sheet": "https://merchant.example/pages/about",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.5.0",
+  "sheet_spec_version": "0.5.0",
+  "catalogue_version": "0.17.0",
+  "findings": [
+    {
+      "rule": "ORG-W-007",
+      "severity": "warning",
+      "path": "$['data']['hasOfferCatalog']['itemListElement'][0]['pagefront:sheetUrl']",
+      "values": {
+        "sheetUrlHost": "sheets.elsewhere.example",
+        "host": "merchant.example"
+      },
+      "message": "Catalogue entry sheet URL at `$['data']['hasOfferCatalog']['itemListElement'][0]['pagefront:sheetUrl']` is on host `sheets.elsewhere.example`; the canonical page is on `merchant.example`.",
+      "remediation": "Point `pagefront:sheetUrl` at the collection sheet on this organization sheet's own host. A root in another language is reached through `pagefront:availableLanguages` on the root sheet, never through a second host here."
+    }
+  ],
+  "summary": {
+    "errors": 0,
+    "warnings": 1,
+    "info": 0,
+    "rules_fired": [
+      "ORG-W-007"
+    ]
+  }
+}

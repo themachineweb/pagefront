@@ -1,0 +1,28 @@
+{
+  "sheet": "https://merchant.example/collections/knitwear",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.5.0",
+  "sheet_spec_version": "0.1.0",
+  "catalogue_version": "0.17.0",
+  "findings": [
+    {
+      "rule": "COL-E-002",
+      "severity": "error",
+      "path": "$['data']",
+      "values": {
+        "problem": "absent"
+      },
+      "message": "`pagefront:collectionKind` at `$['data']` is absent.",
+      "remediation": "Declare `pagefront:collectionKind` as `category` (a node of the storefront's navigation tree), `collection` (a set outside the tree) or `brand` (the products sold under one label). Additional values require a spec amendment."
+    }
+  ],
+  "summary": {
+    "errors": 1,
+    "warnings": 0,
+    "info": 0,
+    "rules_fired": [
+      "COL-E-002"
+    ]
+  }
+}

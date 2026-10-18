@@ -20,17 +20,21 @@ pagefront-lint-commerce <sheet-url-or-path> [options]
 The CLI validates Layer 1 (JSON Schema) first; a failing Sheet gets its
 schema errors on stderr and no report. Exit codes: `0` nothing
 blocking, `1` Layer 1 failure or blocking findings, `2` operational
-failure. Both commerce page types are handled: product sheets and
-Commerce Organization Sheets each validate against their own schema and
-lint with their own catalogue, dispatched by sheet type.
+failure. The three commerce page types are handled: product sheets,
+Commerce Organization Sheets and Commerce Collection Sheets each validate
+against their own schema and lint with their own catalogue, dispatched by
+sheet type.
 
 ## Catalogue
 
-Catalogue 0.16.0, supporting commerce releases 0.4.0 (Product Sheet spec
-0.10.0, Organization Sheet spec 0.4.0) and 0.3.0, and the legacy draft line
-(format 0.9): 58 product rules (`PDP-E-001` to `PDP-E-018`, `PDP-W-001` to
-`PDP-W-039`, `PDP-I-001`) and 10 organization rules (`ORG-E-001` to
-`ORG-E-004`, `ORG-W-001` to `ORG-W-006`), each defined in
+Catalogue 0.17.0, supporting commerce releases 0.5.0 (Product Sheet spec
+0.11.0, Organization Sheet spec 0.5.0, Collection Sheet spec 0.1.0), 0.4.0
+(Product Sheet spec 0.10.0, Organization Sheet spec 0.4.0) and 0.3.0, and the
+legacy draft line (format 0.9): 62 product rules (`PDP-E-001` to `PDP-E-021`, `PDP-W-001` to
+`PDP-W-040`, `PDP-I-001`), 11 organization rules (`ORG-E-001` to
+`ORG-E-004`, `ORG-W-001` to `ORG-W-007`) and 10 collection rules
+(`COL-E-001` to `COL-E-005`, `COL-W-001`, `COL-W-002`, `COL-W-004` to
+`COL-W-006`; `COL-W-003` is reserved), each defined in
 [`rules.md`](https://github.com/themachineweb/pagefront/blob/main/commerce/spec/rules.md)
 with its target, check, message and remediation. Every report carries the
 `catalogue_version` it was produced with.
@@ -174,6 +178,44 @@ Added in 0.12.0 (catalogue 0.16.0), with commerce release 0.4.0. Requires
   `1` is not `"1"`.
 - `PDP-E-018` and `ORG-E-004` — the sheet declares a `release` the release
   manifest does not list. At Layer 1 this is a single error at `/release`.
+- `PDP-E-019`, `PDP-E-020`, `PDP-E-021` and `PDP-W-040` (apply from release
+  0.5.0) — "Where to buy" in the Product Sheet spec: an Offer's
+  `checkoutPageURLTemplate` that is not a string, is not a valid RFC 6570
+  template, names a variable other than `quantity`, or does not expand
+  (with `quantity` set to 1) to an absolute https URL; a template on an
+  Offer with neither `areaServed` nor `eligibleRegion`; an Offer `url` that
+  is not an absolute http or https URL; and an Offer without `url` on a
+  sheet carrying several offers.
+
+Added in catalogue 0.17.0, released with commerce release 0.5.0, with the
+Commerce Collection Sheet spec
+([`collection.md`](https://github.com/themachineweb/pagefront/blob/main/commerce/spec/collection.md)):
+
+- A third page type. A sheet whose `$schema` path contains
+  `/spec/commerce/collection/`, or whose data block is a `Collection`
+  carrying `pagefront:collectionKind`, lints with the collection catalogue:
+  `COL-E-001` (member entry without `@id`), `COL-E-002` (kind absent or
+  outside the enum), `COL-E-003` and `COL-E-004` (the envelope's version
+  fields), `COL-E-005` (a `hasPart`, `isPartOf` or `brand` sheet URL off its
+  edge's host), `COL-W-001` (empty `hasPart`), `COL-W-002` (member without
+  `pagefront:sheetUrl`), `COL-W-004` (brand reference and brand kind
+  disagree), `COL-W-005` (parent of another kind), `COL-W-006` (duplicate
+  member).
+- `ORG-W-007` — a `hasOfferCatalog` entry whose `pagefront:sheetUrl` is on
+  another host than the canonical host.
+- Until a release bundles the Collection Sheet spec, Layer 1 reports that
+  the declared release bundles no Collection Sheet schema (one error at
+  `/release`), and a legacy-line sheet of that type that the legacy line has
+  no such schema (at `/format_version`).
+- New export: `collectionCatalogue`. `SheetType` gains `"collection"`.
+
+Changed in 0.12.1 (catalogue 0.16.1):
+
+- `PDP-E-017` adds a type hint. When a reference matches no option but a
+  declared option has the same text under another JSON type, the message
+  names both types, and the finding's `values` carry `reference_type`,
+  `declared_option` and `declared_type`. Comparison is unchanged and the
+  finding stays an error.
 
 ## API
 
@@ -208,11 +250,13 @@ internal):
   `/spec/commerce/product/` or `/schemas/product/` path likewise wins
   for `"product"`), falling back to a data block whose `@type` is
   `Organization`/`OnlineStore`/`OnlineBusiness` with
-  `pagefront:commerceRole` present; `"product"` otherwise.
-- `commerceCatalogue`, `organizationCatalogue` — the per-page-type
-  catalogue objects (read-only), for direct engine use or
-  introspection. Product rules never run on organization sheets and
-  vice versa.
+  `pagefront:commerceRole` present, or `"collection"` for a
+  `/spec/commerce/collection/` path or a `Collection` data block with
+  `pagefront:collectionKind` present; `"product"` otherwise.
+- `commerceCatalogue`, `organizationCatalogue`, `collectionCatalogue` —
+  the per-page-type catalogue objects (read-only), for direct engine use
+  or introspection. No page type's rules run on another page type's
+  sheets.
 - Types: `SchemaError`, `ValidateAndLintResult`,
   `ValidateOrganizationResult`, `SheetType`, and the core types the
   signatures mention — `Report`, `Finding`, `Summary`, `Severity`,

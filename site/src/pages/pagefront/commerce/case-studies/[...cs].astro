@@ -41,7 +41,7 @@ const sheets = meta.sheets.map((s) => ({
   ...s,
   href: `${base}/${s.file}`,
   size: kb(bytes(meta.folder, s.file)),
-  validate: s.kind === 'product' ? `${LINKS.validator}?url=${encodeURIComponent(`https://themachineweb.org${base}/${s.file}`)}` : null,
+  validate: `${LINKS.validator}?url=${encodeURIComponent(`https://themachineweb.org${base}/${s.file}`)}`,
 }));
 ---
 
@@ -63,7 +63,7 @@ const sheets = meta.sheets.map((s) => ({
         <li>
           <a href={s.href}>{s.label}</a>
           <span class="cs-size">{s.size}</span>
-          {s.validate && <a class="cs-validate" href={s.validate}>Validate</a>}
+          <a class="cs-validate" href={s.validate}>Check</a>
         </li>
       ))}
     </ul>

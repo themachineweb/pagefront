@@ -4,8 +4,9 @@
   "compatibility_date": "2025-04-01",
   // Serve on the custom domain only; no *.workers.dev twin of the site.
   "workers_dev": false,
-  // The Worker serves one route, the validator endpoint; every other
-  // request goes straight to the assets (see worker/index.ts).
+  // The Worker serves one route, the Check endpoint, at its path and its
+  // two former paths; every other request goes straight to the assets
+  // (see worker/index.ts).
   "main": "./worker/index.ts",
   // json-p3 (lint-core's JSONPath engine) publishes a `browser` field
   // pointing at its IIFE bundle, which has no named exports; the
@@ -15,7 +16,7 @@
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS",
-    "run_worker_first": ["/pagefront/commerce/product/validate.json"]
+    "run_worker_first": ["/pagefront/commerce/validate.json", "/pagefront/validate.json", "/pagefront/commerce/product/validate.json"]
   },
   // Rate limits for the validator endpoint, per target host and in
   // total. Provisional values, to be confirmed against real traffic;

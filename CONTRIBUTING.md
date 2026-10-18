@@ -25,7 +25,7 @@ weakness in it has been found the same way.
 
 Start from the normative spec, [`commerce/spec/product.md`](commerce/spec/product.md),
 check your output against the
-[validator](https://themachineweb.org/pagefront/commerce/product/validate),
+[Check](https://themachineweb.org/pagefront/commerce/validate),
 and tell us what happened, including if you gave up. A report that says
 "this was harder than it should have been, here is where" is a contribution.
 
@@ -206,7 +206,8 @@ Four principles govern where things live:
 ### Changelogs
 
 Every spec document (`product.md`, `organization.md`, `vocabulary.md`,
-`rules.md`, `core/spec/linter.md`) has an `### Unreleased` heading at the
+`rules.md`, `core/spec/discovery.md`, `core/spec/linter.md`) has an
+`### Unreleased` heading at the
 top of its changelog. A change to a document lands with an entry there, in
 the same pull request.
 

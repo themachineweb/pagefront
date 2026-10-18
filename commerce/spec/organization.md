@@ -1,8 +1,8 @@
 # Commerce Organization Sheet
 
 Status: normative spec. Ratified 2026-08-14 from the initial sketch, in legacy format version 0.9.
-Organization Sheet spec version: 0.4.0
-Commerce release: 0.4.0
+Organization Sheet spec version: 0.5.0
+Commerce release: 0.5.0
 Schema.org version targeted: 30.0 (2026-03-19)
 
 The Commerce Organization Sheet is the Pagefront Sheet that describes the entity *behind* products: the brand that owns them, the company that makes them, the store that sells them. The Product Sheet describes an individual product. The organization sheet is the dereference target of the `brand` and `Offer.seller` links every Product Sheet already carries.
@@ -19,12 +19,12 @@ One sheet type carries all three because the sheet MUST declare its role(s) expl
 
 ## The envelope
 
-Identical to every Pagefront Sheet. `canonical_url` is the human-facing brand, company, or store page the sheet describes.
+Identical to every Pagefront Sheet. `canonical_url` is the human-facing brand, company, or store page the sheet describes. `sheet_url` is optional since 2026-10-13: an address the sheet is served from, as known to the publisher at generation time, and informational; the page's `alternate` declaration is what locates the sheet, and a publisher whose platform assigns or changes the address after generation MAY omit it (see "The envelope" in the Pagefront Spec).
 
 ```json
 {
-  "$schema": "https://themachineweb.org/pagefront/spec/commerce/organization/v0.4.0.json",
-  "release": "0.4.0",
+  "$schema": "https://themachineweb.org/pagefront/spec/commerce/organization/v0.5.0.json",
+  "release": "0.5.0",
   "schema_org_version": "30.0",
   "canonical_url": "https://www.nittoknitwear.com/pages/atelier",
   "sheet_url": "https://www.nittoknitwear.com/pagefront/commerce/organization/nitto-knitwear.fr.json",
@@ -40,7 +40,7 @@ Organization data changes slowly. `expires_at` MAY sit days out, unlike a produc
 
 ## Sheet URL and stability
 
-The sheet URL is the publisher's choice: any URL on the publisher's domain that the described page's `Link: rel="describedby"` header points to. Consumers MUST follow the link and never parse the path (see "Discovery" in the Pagefront Spec). What the spec asks of the URL is stability: stable for the life of the resource, the same contract as the Product Sheet URL, with renames answered by a `301` redirect and an updated `Link` target. The organization's domain, a registration number, or a stable slug all make good identifier material for whatever shape the publisher chooses; none is prescribed.
+The sheet URL is the publisher's choice: any URL on the publisher's domain that the described page's `Link: rel="alternate"` header points to. Consumers MUST follow the link and never parse the path (see Pagefront Discovery, [`../../core/spec/discovery.md`](../../core/spec/discovery.md)). The page is the identity, and the sheet lives wherever the page's link says today. A stable URL is desirable: consumers that cached the address keep finding the sheet, and the `pagefront:sheetUrl` hints that product sheets carry stay correct for longer. A publisher that can keep the URL for the life of the resource SHOULD do so, and SHOULD answer a rename with an updated `Link` target and, where possible, a `301` redirect from the old address. The organization's domain, a registration number, or a stable slug all make good identifier material for whatever shape the publisher chooses; none is prescribed.
 
 ## data — Schema.org JSON-LD
 
@@ -177,7 +177,7 @@ The nested `Brand` node attached via `Organization.brand`, as in "Base type and 
 
 ### Authorized resellers
 
-`pagefront:authorizedResellers` is the brand's statement of which sellers it authorizes to sell its products. It is an **authorization claim**. It is admitted on this sheet, as the one exception to the no-enumeration rule that otherwise governs it (see "What this spec does not address"), on two grounds. First, it is the brand exercising authority over its own distribution: a statement only the brand can make, for which the brand is the sole source. Second, brands already publish and maintain this list (a "Revendeurs" page, a stockists page, a where-to-buy page), so the sheet types an existing publisher statement and imposes no new maintenance burden. It is the one outbound organization→organization edge on the sheet, and it sets no precedent for enumeration: still no products, no collections, no carried brands.
+`pagefront:authorizedResellers` is the brand's statement of which sellers it authorizes to sell its products. It is an **authorization claim**. It is admitted on this sheet, which otherwise enumerates neither products nor carried brands (see "What this spec does not address"), on two grounds. First, it is the brand exercising authority over its own distribution: a statement only the brand can make, for which the brand is the sole source. Second, brands already publish and maintain this list (a "Revendeurs" page, a stockists page, a where-to-buy page), so the sheet types an existing publisher statement and imposes no new maintenance burden. It is the one outbound organization→organization edge on the sheet, and it sets no precedent for enumeration: still no products and no carried brands. The sheet's other outbound edge, `hasOfferCatalog`, points at the storefront's root collections and is admitted on its own grounds (see "Catalogue entry point").
 
 The field answers two consumer questions, and each kind of entry serves one of them:
 
@@ -322,6 +322,56 @@ There is no per-store sheet: stores are inline entries on the seller's sheet, an
 ]
 ```
 
+### Catalogue entry point (any role)
+
+`hasOfferCatalog`, Schema.org's own property, is where the storefront's catalogue begins: the roots of the collection tree the Commerce Collection Sheets ([`collection.md`](collection.md)) describe. A consumer holding a product sheet or a listing page can enter the tree from there, and nothing else gives it the roots. The value is one flat `OfferCatalog`:
+
+```json
+"hasOfferCatalog": {
+  "@type": "OfferCatalog",
+  "name": "Merchant catalogue",
+  "itemListElement": [
+    {
+      "@type": "Collection",
+      "@id": "https://merchant.com/collections/women#collection",
+      "url": "https://merchant.com/collections/women",
+      "pagefront:sheetUrl": "https://merchant.com/pagefront/commerce/collection/women.en.json",
+      "name": "Women",
+      "pagefront:collectionKind": "category"
+    },
+    {
+      "@type": "Collection",
+      "@id": "https://merchant.com/collections/new-in#collection",
+      "url": "https://merchant.com/collections/new-in",
+      "pagefront:sheetUrl": "https://merchant.com/pagefront/commerce/collection/new-in.en.json",
+      "name": "New in",
+      "pagefront:collectionKind": "collection"
+    },
+    {
+      "@type": "Collection",
+      "@id": "https://merchant.com/collections/meridian-gear#collection",
+      "url": "https://merchant.com/collections/meridian-gear",
+      "pagefront:sheetUrl": "https://merchant.com/pagefront/commerce/collection/meridian-gear.en.json",
+      "name": "Meridian Gear",
+      "pagefront:collectionKind": "brand"
+    }
+  ]
+}
+```
+
+The rules, as "Entry point" in the Commerce Collection Sheet spec states them:
+
+- `itemListElement` holds `Collection` entries in the member entry shape of that spec (`@type`, `@id` and `url` required; `pagefront:sheetUrl`, `name` and `pagefront:collectionKind` recommended), in display order. Every root category (a `category` sheet with no `isPartOf`) appears here, every top-level collection (a `collection` sheet with no `isPartOf`) SHOULD, and every `brand` collection SHOULD. A nested `OfferCatalog` is not permitted; the list is flat.
+- Any `pagefront:commerceRole` may carry it. A manufacturer's range is organised in categories as a retailer's is.
+- The referenced sheets are on this sheet's host, in this sheet's `inLanguage`. A root in another language is reached through `pagefront:availableLanguages` on the root sheet. Linter rule ORG-W-007 warns on an entry whose `pagefront:sheetUrl` is on another host.
+- The field is this sheet's second admitted outbound edge, after `pagefront:authorizedResellers` (see "Linking contract"). The freshness objection that keeps enumeration off this sheet does not apply to it: roots are few and change rarely, and what changes daily, membership, lives in the collection sheets. Each `pagefront:sheetUrl` is a traversal hint under "Traversal hints" in Pagefront Discovery: it MAY be stale, and a consumer reaches the root through the entry's `url` and the Sheet that page declares when it does not resolve.
+
+No separate catalog sheet exists and none is planned. A Sheet describes a page, a catalog has no page, and the enumeration a catalog sheet would have carried is `hasOfferCatalog` plus the tree below it.
+
+### Entry point (commerce binding)
+
+In the commerce vertical, the root Sheet reached through the entry point of Pagefront Discovery ([`../../core/spec/discovery.md`](../../core/spec/discovery.md#entry-point)) is the Commerce Organization Sheet. From it, `hasOfferCatalog` leads to the root collections, their `hasPart` to the members, and `pagefront:availableLanguages` to the same root in other languages. A consumer can traverse an origin's commerce Sheets from here without fetching a page. A multi-language origin points the entry point at one root. An organization sheet reached by DNS delegation ("Delegation by DNS" in Pagefront Discovery) is authoritative for the domain that published the record even when it is served from another host; the host checks of PDP-E-005 and PDP-E-006 apply to the organization references a product sheet carries, and the root sheet's own location is outside their scope.
+
 ## Certifications
 
 Certifications reuse the Product Sheet pattern: Schema.org `hasCertification` with a `scope` `PropertyValue`. Org-level certifications (B-Corp, ISO 14001, company-wide Fair Trade) carry the scope value **`organization`**: the certification attaches to the entity.
@@ -355,7 +405,9 @@ The whole cross-sheet story is identity resolution by exact-string `@id` match. 
 - `Product.brand.@id` resolves to the `Brand` node inside a Commerce Organization Sheet whose `commerceRole` includes `brand_owner`.
 - `Offer.seller.@id` resolves to the top-level `Organization` `@id` of a Commerce Organization Sheet whose `commerceRole` includes `seller`.
 
-A reference to an organization (`Offer.seller`, `Product.brand`, or a reference-form `pagefront:legalEntity`) carries `@id` as its identity and SHOULD carry `pagefront:sheetUrl`, the URL of the organization sheet describing that entity. Producers that publish the organization sheet SHOULD set it on every reference. `@id` identifies the entity and `pagefront:sheetUrl` locates its sheet, the same split as `@id` and `sheet_url` on variant entries in the Pagefront Spec.
+A reference to an organization (`Offer.seller`, `Product.brand`, or a reference-form `pagefront:legalEntity`) carries `@id` as its identity and SHOULD carry `pagefront:sheetUrl`, the URL of the organization sheet describing that entity. Producers that publish the organization sheet SHOULD set it on every reference. The reference MAY also carry `url`, the entity's own page, from which a consumer reaches the organization sheet through that page's `alternate` declaration. `@id` identifies the entity, `pagefront:sheetUrl` locates its sheet, and `url` locates its page: the same split as `@id`, `sheet_url` and `url` on variant entries in the Pagefront Spec.
+
+`pagefront:sheetUrl` is a traversal hint under "Traversal hints" in Pagefront Discovery ([`../../core/spec/discovery.md`](../../core/spec/discovery.md#traversal-hints-normative)). It MAY be stale: the organization sheet's address can change between updates of the product sheet that carries the reference. A consumer MUST be able to reach the organization sheet through the entity's page, the reference's `url` and then the Sheet that page declares, and SHOULD treat the hint as an optimisation over that path. A consumer MUST NOT cache an organization sheet's URL across the entity's page changes. The host check and the identity check below apply to whichever URL the consumer follows.
 
 ```json
 "brand": {
@@ -368,9 +420,9 @@ A reference to an organization (`Offer.seller`, `Product.brand`, or a reference-
 
 A consumer resolving a reference:
 
-1. Reads `pagefront:sheetUrl`. If absent, the organization sheet is not discoverable from this reference; the consumer MUST NOT construct a URL from the `@id` or from any pattern, and treats terms it would have inherited as unknown.
-2. Checks the host of `pagefront:sheetUrl` according to the edge:
-   - `Offer.seller`: the host of the product sheet carrying the reference. The seller is the publisher of the offer, so its terms come from where it publishes. The seller's `@id` may be minted on another domain the organization controls.
+1. Reads `pagefront:sheetUrl`. When it is absent or does not resolve, the consumer reaches the organization sheet through the entity's page when the reference carries a `url`: it fetches that page and follows the Sheet it declares. With neither a hint nor a page, the organization sheet is not discoverable from this reference; the consumer MUST NOT construct a URL from the `@id` or from any pattern, and treats terms it would have inherited as unknown.
+2. Checks the host of the sheet URL it follows, the hint or the one the page declares, according to the edge:
+   - `Offer.seller`: the host of the product sheet's canonical page (the envelope `canonical_url`). The seller is the publisher of the offer, so its terms come from where it publishes. The seller's `@id` may be minted on another domain the organization controls.
    - `Product.brand`: the host of the reference's `@id`. The brand may be a third party, and its statements, `pagefront:authorizedResellers` among them, count only when served from its own origin.
    - `pagefront:legalEntity` (reference form): either of the above. It is the product publisher's own declaration; resolving it grants no inherited trust.
 
@@ -383,13 +435,13 @@ A consumer resolving a reference:
 
 Because a seller sheet always resolves on the product sheet's host, return and shipping terms inherited along `Offer.seller` are always the publisher's own statement.
 
-When a seller's `@id` host differs from its sheet's host, the organization's identity is asserted by the publisher, and the identity domain has not confirmed it. Consumers MUST NOT treat such a seller identity as origin-verified. A domain-association mechanism, by which an identity domain confirms the storefront domains it controls, is deferred to the site-level entry point planned with the catalog sheet. That entry point will also name a site's organization and catalog sheets; `pagefront:sheetUrl` remains the direct path from a reference once it exists.
+When a seller's `@id` host differs from its sheet's host, the organization's identity is asserted by the publisher, and the identity domain has not confirmed it. Consumers MUST NOT treat such a seller identity as origin-verified. A domain-association mechanism, by which an identity domain confirms the storefront domains it controls, is deferred; no catalog sheet is planned, and the catalogue entry point is `hasOfferCatalog` on this sheet (see "Catalogue entry point"). `pagefront:sheetUrl` remains the direct path from a reference.
 
 Brand `@id`s SHOULD be minted on the host that serves the brand's organization sheet, since brand references are checked against the `@id`'s host.
 
 Step 3 relies on one brand per organization sheet (see "Cardinality"), so `data.brand` is a single node. If multi-brand organization sheets are ever permitted, this rule must be revisited.
 
-The organization sheet's own anchor, its `canonical_url` and the `describedby` link on that page, is unchanged. `pagefront:sheetUrl` is how a sheet is reached by reference; page-based discovery continues to find it from its own page.
+The organization sheet's own anchor, its `canonical_url` and the `alternate` link on that page, is unchanged. `pagefront:sheetUrl` is how a sheet is reached by reference; page-based discovery continues to find it from its own page.
 
 **Worked example: a retailer and a brand on two hosts.** A department store on `www.grand-magasin.example` sells a headlamp made by Meridian Gear, whose own site is `meridiangear.com`. The store's product sheet carries:
 
@@ -439,7 +491,7 @@ The organization sheet's own anchor, its `canonical_url` and the `describedby` l
 
 The seller reference passes step 2 on the product sheet's host, `boards.example`; the brand reference passes on its `@id`'s host, also `boards.example`. The sheet declares `https://boardco.example/#org` as its data block `@id` and `https://boards.example/#brand` at `data.brand`. The seller's return and shipping terms are inherited; the seller identity on `boardco.example` is publisher-asserted, and the consumer does not treat it as origin-verified. The AFS Blackbird case study has this shape.
 
-Nothing points *down*: the organization sheet does not list its products or its carried brands. The graph closes on the identifiers products already emit. The one outbound edge the organization sheet carries is `pagefront:authorizedResellers`, a brand's sheet naming the seller organizations it authorizes (see "Authorized resellers" for why it is admitted); where a named reseller has its own sheet, the edge resolves by the same exact-string `@id` match.
+The organization sheet does not list its products or its carried brands: the graph closes on the identifiers products already emit. It carries two outbound edges, each admitted on its own grounds. `pagefront:authorizedResellers` is a brand's sheet naming the seller organizations it authorizes (see "Authorized resellers"); where a named reseller has its own sheet, the edge resolves by the same exact-string `@id` match. `hasOfferCatalog` is the catalogue entry point (see "Catalogue entry point"): the storefront's root collections, each a Commerce Collection Sheet reached by `pagefront:sheetUrl` and confirmed by exact-string `@id` match at the data block of the fetched sheet.
 
 One read travels the product-to-organization links beyond identity confirmation: return- and shipping-policy resolution (product-else-seller) walks the `Offer.seller` link when a product is silent. It reuses that existing link, locates the seller sheet by the reference's `pagefront:sheetUrl` under the steps above, and is the one accepted exception to self-containment (see "Return policy").
 
@@ -451,14 +503,14 @@ One read travels the product-to-organization links beyond identity confirmation:
 
 ## What this spec does not address
 
-- **Catalog and carried-brand enumeration.** No `hasPart`, no product list, no brand list on the organization sheet. "What does this store sell" is a catalog-enumeration query; it belongs to the deferred catalog work (Pagefront Spec open question #11), which also carries the freshness burden a maintained list would impose here. This rule still holds with `pagefront:authorizedResellers` on the sheet: that field is an authorization claim, admitted on the grounds given in "Authorized resellers", and it answers "is this seller authorized?" only; "what is sold where" remains a catalog query. A retailer's sheet still does not enumerate the brands it carries: that a retailer is authorized is stated on each brand's sheet only. No precedent for enumeration is set.
+- **Product and carried-brand enumeration.** No product list and no brand list on the organization sheet: "what does this store sell" is answered by `hasOfferCatalog` and the Commerce Collection Sheets below it, where membership lives and carries its own freshness, and that a retailer is authorized is stated on each brand's sheet only.
 - **Policy inheritance beyond return and shipping.** Return and shipping inheritance is in scope (default + override, above). Broader inheritance of arbitrary fields from org to product is out of scope; org-level and product-level statements are otherwise independent.
 - **Ownership and governance beyond Schema.org.** `parentOrganization` / `subOrganization` and `ownershipFundingInfo` cover the common cases. A typed `pagefront:` ownership-structure extension (independent / PE-owned / public / cooperative) is a candidate only if real consumer demand surfaces.
 - **Marketplace partner-seller modeling.** A marketplace listing where a third-party partner is the `Offer.seller` needs no new vocabulary: the partner is another organization, referenced by `@id` like any seller and eligible for its own sheet. No case study has exercised the shape yet, so the gap is noted here as a gap rather than as a design question.
 
 ## Versioning
 
-This sheet spec has its own semver, 0.4.0, and is a member of commerce release 0.4.0. It reached 0.3.0 in three minors: the ratified text of 2026-08-14 (0.1.0), `pagefront:authorizedResellers` on 2026-08-31 (0.2.0) and `pagefront:sheetUrl` on 2026-09-30 (0.3.0). 0.4.0, on 2026-10-02, makes `$schema` required. A sheet declares the release in its envelope (`release`) and names this spec version in `$schema`. Before 1.0 a breaking or an additive change bumps the minor and a fix or clarification bumps the patch; the release bumps with its members. The scheme, the release table and the legacy draft line are in [`releases.md`](releases.md); the stability policy that applies from release 1.0.0 is in "Versioning and stability" in [`vocabulary.md`](vocabulary.md). The rule catalogue keeps its own semver.
+This sheet spec has its own semver, 0.5.0, and is a member of commerce release 0.5.0. It reached 0.3.0 in three minors: the ratified text of 2026-08-14 (0.1.0), `pagefront:authorizedResellers` on 2026-08-31 (0.2.0) and `pagefront:sheetUrl` on 2026-09-30 (0.3.0). 0.4.0, on 2026-10-02, makes `$schema` required; 0.5.0, on 2026-10-18, admits `hasOfferCatalog` as the catalogue entry point and makes `sheet_url` optional. A sheet declares the release in its envelope (`release`) and names this spec version in `$schema`. Before 1.0 a breaking or an additive change bumps the minor and a fix or clarification bumps the patch; the release bumps with its members. The scheme, the release table and the legacy draft line are in [`releases.md`](releases.md); the stability policy that applies from release 1.0.0 is in "Versioning and stability" in [`vocabulary.md`](vocabulary.md). The rule catalogue keeps its own semver.
 
 This spec plans no breaking change of its own. The `@context` prefix constraint listed under "Planned breaking changes" in the Pagefront Spec will apply to the organization schema as well.
 
@@ -466,7 +518,8 @@ The next paragraph is history, in legacy format versions. Commerce format 0.9 br
 
 ## References
 
-- Organization schema, spec version 0.4.0: `https://themachineweb.org/pagefront/spec/commerce/organization/v0.4.0.json` (published file: [`../schemas/organization/v0.4.0.json`](../schemas/organization/v0.4.0.json); the editable head for the next version is [`organization.json`](organization.json))
+- Organization schema, spec version 0.5.0: `https://themachineweb.org/pagefront/spec/commerce/organization/v0.5.0.json` (published file: [`../schemas/organization/v0.5.0.json`](../schemas/organization/v0.5.0.json); the editable head for the next version is [`organization.json`](organization.json))
+- Organization schema, spec version 0.4.0, for sheets declaring release 0.4.0: `https://themachineweb.org/pagefront/spec/commerce/organization/v0.4.0.json` (published file: [`../schemas/organization/v0.4.0.json`](../schemas/organization/v0.4.0.json))
 - Organization schema, spec version 0.3.0, for sheets declaring release 0.3.0: `https://themachineweb.org/pagefront/spec/commerce/organization/v0.3.0.json` (published file: [`../schemas/organization/v0.3.0.json`](../schemas/organization/v0.3.0.json))
 - Legacy organization schema, format 0.9: `https://themachineweb.org/pagefront/spec/commerce/organization/v0.9.json` (published file: [`../schemas/organization/v0.9.json`](../schemas/organization/v0.9.json))
 - Commerce releases and the versioning scheme: [`releases.md`](releases.md)
@@ -480,7 +533,19 @@ _Entries dated before 2026-10-01 were written under the legacy scheme, in which 
 
 ### Unreleased
 
-_Nothing yet. Changes land here and are versioned at the next release; see "Releasing" in [`../../CONTRIBUTING.md`](../../CONTRIBUTING.md)._
+Changes land here and are versioned at the next release; see "Releasing" in [`../../CONTRIBUTING.md`](../../CONTRIBUTING.md).
+
+### 0.5.0 — 2026-10-18
+
+Released in commerce release 0.5.0. A minor: `hasOfferCatalog` is admitted and `sheet_url` becomes optional; a sheet valid at 0.4.0 stays valid.
+
+- **Addition: commerce binding of the entry point.** The Commerce Organization Sheet is the root Sheet reached through the carriers in Pagefront Discovery ([`../../core/spec/discovery.md`](../../core/spec/discovery.md#entry-point)), `/.well-known/pagefront` and the `Pagefront:` line in `/robots.txt`; "Entry point (commerce binding)" under "Catalogue entry point" states the traversal from it. Pointers to "Discovery" and "Traversal hints" now name that document.
+- **Addition: DNS-delegated root.** An organization sheet reached by DNS delegation ("Delegation by DNS" in Pagefront Discovery) is authoritative for the domain that published the record even when it is served from another host; the host checks of PDP-E-005 and PDP-E-006 apply to the organization references a product sheet carries, and the root sheet's own location is outside their scope.
+- **Addition (minor): catalogue entry point.** `hasOfferCatalog` is admitted on the sheet, for any commerce role, as the catalogue entry point: one flat `OfferCatalog` whose `itemListElement` lists the storefront's root collections as `Collection` member entries in display order, each on this sheet's host and in its `inLanguage`, referencing Commerce Collection Sheets ([`collection.md`](collection.md)). It is the sheet's second admitted outbound edge after `pagefront:authorizedResellers`; the linking contract names both, "Authorized resellers" no longer calls that field the one exception, the catalog-enumeration item leaves "What this spec does not address" (enumeration lives in `hasOfferCatalog` and the collection sheets), and the sentence deferring domain association no longer promises a catalog sheet. **(schema)** `hasOfferCatalog` added as an optional property with the member entry shape (`memberEntry` in `$defs`); the editable head already named 0.5.0 and keeps it. **(linter)** ORG-W-007 warns on an entry whose `pagefront:sheetUrl` is on another host than the canonical host.
+- **Correction (minor): discovery link relation.** Discovery link relation corrected from `describedby` to `alternate` to match the first-party model adopted at v0.4, as in the Pagefront Spec. "Sheet URL and stability" and the linking contract name the `alternate` link. No sheet changes shape.
+- **Relaxation (minor, compatible).** `sheet_url` is optional, with the definition the Pagefront Spec gives it: an address the sheet is served from as known at generation time, informational, omittable by a publisher whose platform assigns or changes the address after generation. Every sheet that was valid stays valid. **(schema)** `sheet_url` leaves the envelope's required list; the editable head names 0.5.0. "Sheet URL and stability" now states that the page is the identity and that a stable sheet URL is desirable; it no longer requires one.
+- **Clarification (patch): seller references.** An organization reference MAY carry `url`, the entity's own page, beside `@id` and `pagefront:sheetUrl`; a consumer reaches the organization sheet from it through the page's `alternate` declaration. The seller edge's host check names the product sheet's canonical page (`canonical_url`) as the host a seller sheet must be on. Linter rule PDP-W-031 now accepts a seller reference carrying `url`, and PDP-E-005 compares the seller sheet URL with the canonical page's host.
+- **Clarification (patch): traversal hints.** `pagefront:sheetUrl` on an organization reference is a traversal hint that MAY be stale. A consumer MUST be able to reach the organization sheet through the entity's page (the reference's `url`, then the Sheet that page declares), SHOULD treat the hint as an optimisation over that path, and MUST NOT cache the sheet's URL across the page's changes. The linking contract's step 1 follows the page when the hint is absent or does not resolve, and the host check of step 2 applies to whichever URL is followed. The general rule is stated under "Traversal hints" in the Pagefront Spec.
 
 ### 0.4.0 — 2026-10-02
 

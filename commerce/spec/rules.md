@@ -1,12 +1,12 @@
 # Pagefront Commerce Linter — Rule Catalogue
 
 Status: draft / design document, not yet a published normative artifact.
-Catalogue version: 0.16.0
-Supports: commerce releases 0.4.0 (Product Sheet spec 0.10.0, Organization Sheet spec 0.4.0) and 0.3.0 (Product Sheet spec 0.9.0, Organization Sheet spec 0.3.0), and the legacy draft line (format 0.9)
+Catalogue version: 0.17.0
+Supports: commerce releases 0.5.0 (Product Sheet spec 0.11.0, Organization Sheet spec 0.5.0, Collection Sheet spec 0.1.0), 0.4.0 (Product Sheet spec 0.10.0, Organization Sheet spec 0.4.0) and 0.3.0 (Product Sheet spec 0.9.0, Organization Sheet spec 0.3.0), and the legacy draft line (format 0.9).
 
 This document is the normative linter rule catalogue for Pagefront commerce Sheets. Its version is a semver of its own, independent of the commerce release and of the sheet specs ([`releases.md`](releases.md)); the "Supports" line above states which releases this catalogue version applies to. It implements the rule structure, severity levels, and output format defined in the vertical-agnostic linter design at [`../../core/spec/linter.md`](../../core/spec/linter.md).
 
-Within the commerce vertical, this document carries two page-type rule sets: the **product catalogue** (the `PDP-` rules below) and the **Commerce Organization Sheet catalogue** (the `ORG-` rules, in their own section). Rule IDs follow the namespace convention `{sheet-type prefix}-{severity}-{number}`, so future page types (`catalog`, `article`, …) get their own prefixes without colliding with existing IDs. The product rules originally carried unprefixed `E-`/`W-`/`I-` IDs from the era when this was the only catalogue. They were renamed to `PDP-` in one pre-1.0, pre-publication move (catalogue 0.4.0), taken while no published consumer depended on the old IDs. That rename is the single sanctioned exception to ID permanence; the unprefixed IDs are retired and will not be reassigned. The linter dispatches by sheet type: a sheet is an organization sheet when its envelope `$schema` path contains `/spec/commerce/organization/` (or the `/schemas/organization/` path schemas were identified by before 2026-09-08), falling back (when `$schema` names neither type) to a data block whose `@type` is `Organization` / `OnlineStore` / `OnlineBusiness` with `pagefront:commerceRole` present. Product rules do not run on organization sheets, and organization rules do not run on product sheets. The linter also places each sheet on a line: a sheet carrying `release` is on the release line and a sheet carrying `format_version` and no `release` is on the legacy draft line. A sheet is judged by the release it declares. On the release line, Layer 1 validates it against the published schema of the sheet-spec version its `release` bundles for its type, from the frozen store [`../schemas/`](../schemas/), whatever `$schema` says; a `release` the release manifest does not list fails Layer 1. On the legacy line, Layer 1 validates against the schema `$schema` names (the legacy schema when `$schema` is absent). Layer 2 then runs the rules that apply to that release; see "Which rules apply to a Sheet" below.
+Within the commerce vertical, this document carries three page-type rule sets: the **product catalogue** (the `PDP-` rules below), the **Commerce Organization Sheet catalogue** (the `ORG-` rules, in their own section) and the **Commerce Collection Sheet catalogue** (the `COL-` rules, in their own section). Rule IDs follow the namespace convention `{sheet-type prefix}-{severity}-{number}`, so future page types (`catalog`, `article`, …) get their own prefixes without colliding with existing IDs. The product rules originally carried unprefixed `E-`/`W-`/`I-` IDs from the era when this was the only catalogue. They were renamed to `PDP-` in one pre-1.0, pre-publication move (catalogue 0.4.0), taken while no published consumer depended on the old IDs. That rename is the single sanctioned exception to ID permanence; the unprefixed IDs are retired and will not be reassigned. The linter dispatches by sheet type: a sheet is an organization sheet when its envelope `$schema` path contains `/spec/commerce/organization/` (or the `/schemas/organization/` path schemas were identified by before 2026-09-08), and a collection sheet when that path contains `/spec/commerce/collection/`, falling back (when `$schema` names no type) to the data block: `@type` of `Organization` / `OnlineStore` / `OnlineBusiness` with `pagefront:commerceRole` present is an organization sheet, and `@type` of `Collection` with `pagefront:collectionKind` present is a collection sheet. No page type's rules run on another page type's sheets. The linter also places each sheet on a line: a sheet carrying `release` is on the release line and a sheet carrying `format_version` and no `release` is on the legacy draft line. A sheet is judged by the release it declares. On the release line, Layer 1 validates it against the published schema of the sheet-spec version its `release` bundles for its type, from the frozen store [`../schemas/`](../schemas/), whatever `$schema` says; a `release` the release manifest does not list fails Layer 1. On the legacy line, Layer 1 validates against the schema `$schema` names (the legacy schema when `$schema` is absent). Layer 2 then runs the rules that apply to that release; see "Which rules apply to a Sheet" below.
 
 ## Rule catalogue
 
@@ -25,7 +25,10 @@ Rules that do not follow the default:
 | Rule | Applies from | Legacy line |
 |---|---|---|
 | PDP-E-017 | release 0.4.0 | no |
-| PDP-E-018, ORG-E-004 | every declared release (they judge the declared release itself) | no (a legacy Sheet declares no release) |
+| PDP-E-018, ORG-E-004, COL-E-004 | every declared release (they judge the declared release itself) | no (a legacy Sheet declares no release) |
+| PDP-E-019, PDP-E-020, PDP-E-021, PDP-W-040 | release 0.5.0, whose Product Sheet spec 0.11.0 adds "Where to buy" | no |
+| COL-E-001, COL-E-002, COL-E-003, COL-E-005, COL-W-001 to COL-W-006 | release 0.5.0, the release that bundles Collection Sheet spec 0.1.0 | no (the Collection Sheet spec has no legacy draft line) |
+| ORG-W-007 | release 0.5.0, which admits `hasOfferCatalog` | no |
 
 ### Definitions
 
@@ -37,7 +40,7 @@ Terms shared across rules; where a rule uses one of these phrases, the definitio
 - **inline declaration**: an object carrying `@id` plus at least one substantive property beyond `@id`/`@type` (`name`, `offers`, `url`, …). An inline declaration *declares* its `@id` at the position where it appears, regardless of that position being reference-carrying.
 - **empty or whitespace-only**: absent, an empty string, a string containing only whitespace, an empty array, or an object with no members.
 - **whole token**: a value appearing in a string delimited on both sides by one of `/`, `-`, `_`, `.`, `?`, `=`, `&`, `#`, or by the start or end of the string (per PDP-W-014).
-- **host**: the host component of a full absolute URL as a WHATWG URL parser yields it: lowercased, with its port unless the port is the scheme's default (`https://Merchant.example:443/x` and `https://merchant.example/y` share the host `merchant.example`). A value that is not a full absolute URL, or that parses with an empty host (`urn:…`), has no host. The *Sheet's host* is the host of the envelope `sheet_url`.
+- **host**: the host component of a full absolute URL as a WHATWG URL parser yields it: lowercased, with its port unless the port is the scheme's default (`https://Merchant.example:443/x` and `https://merchant.example/y` share the host `merchant.example`). A value that is not a full absolute URL, or that parses with an empty host (`urn:…`), has no host. The *canonical host* is the host of the envelope `canonical_url`, the page the Sheet describes; the envelope `sheet_url`, which is optional and informational, plays no part.
 - **time of linting**: the report's `checked_at` value, per PDP-W-008. Implementations do not use their own wall clock.
 - **resolves**: a same-document `@id` reference resolves when the same `@id` is declared somewhere in the Sheet, by exact string match: a reference and its declaration must agree on the exact string. The candidate set for resolution is every *declaration* of the `@id`: entities in non-reference positions and inline declarations anywhere, including at reference-carrying positions. A reference-form entry never declares and never resolves anything. So an inline declaration at a reference position counts, and a reference-form entry never does (per PDP-E-001 and PDP-W-020).
 - **amount**: a currency amount, carried as a JSON number or as a decimal string matching `^-?\d+(\.\d+)?$`. The *amount fields* of a product Sheet are, within `data`: `price`, `lowPrice` and `highPrice` on an `offers` entry; `price`, `minPrice` and `maxPrice` on a `priceSpecification` entry; `value`, `minValue` and `maxValue` on any object whose `@type` is `MonetaryAmount`, wherever it appears; `price` on a `hasVariant` entry; `discountAmount` on a `pagefront:promotions` entry; and `basePrice`, every value in `modifiers` and every `adjustments[].priceModifier` in a pricing block. The linter compares all amounts numerically whatever the carrier: `349`, `349.0` and `"349.00"` are equal.
@@ -106,10 +109,10 @@ The placeholders carry: on the release line, `` `release` `{release}` bundles Pr
 
 **Severity:** error
 **Target:** `$.data.offers[*]`
-**Description:** A seller reference locates the seller's Commerce Organization Sheet by `pagefront:sheetUrl`. The seller is the publisher of the offer, so the linking contract in `organization.md` accepts a seller sheet only on the product sheet's own host; return and shipping terms are inherited from that sheet alone. A seller sheet URL on another host is rejected by every consumer, so the reference locates nothing and the terms it would supply are unknown.
-**Check:** An Offer's `seller` is an object carrying `pagefront:sheetUrl`, and the *host* of that value differs from the *host* of the Sheet's `sheet_url` (see Definitions). A value that is not a full absolute URL has no host and fires. The seller's `@id` plays no part: it may be minted on another domain the organization controls. One finding per Offer, at the `pagefront:sheetUrl` path.
-**Message:** Seller sheet URL at `{path}` is on host `{sheetUrlHost}`; the product sheet is on `{sheetHost}`.
-The `{sheetUrlHost}` placeholder renders `(none)` when the value has no host; `{sheetHost}` renders `(none)` when `sheet_url` has none, which is unreachable on Layer-1-valid input.
+**Description:** A seller reference locates the seller's Commerce Organization Sheet by `pagefront:sheetUrl`. The seller is the publisher of the offer, so the linking contract in `organization.md` accepts a seller sheet only on the host of the product sheet's canonical page; return and shipping terms are inherited from that sheet alone. A seller sheet URL on another host is rejected by every consumer, so the reference locates nothing and the terms it would supply are unknown.
+**Check:** An Offer's `seller` is an object carrying `pagefront:sheetUrl`, and the *host* of that value differs from the *canonical host* (see Definitions). A value that is not a full absolute URL has no host and fires. The seller's `@id` plays no part: it may be minted on another domain the organization controls. One finding per Offer, at the `pagefront:sheetUrl` path.
+**Message:** Seller sheet URL at `{path}` is on host `{sheetUrlHost}`; the canonical page is on `{host}`.
+The `{sheetUrlHost}` placeholder renders `(none)` when the value has no host; `{host}` renders `(none)` when `canonical_url` has no host, which is unreachable on Layer-1-valid input.
 **Remediation:** Publish the seller's organization sheet on the storefront host.
 **Introduced:** v0.9
 **Spec reference:** `organization.md#linking-contract-identity-only`
@@ -255,9 +258,10 @@ The paths of the first field of each type are carried in the finding's values, a
 **Severity:** error
 **Target:** `$.data` (the findings sit at each unresolved pair)
 **Description:** An exclusion and an adjustment's `when` are partial configurations: each pair names a dimension of the configurator and one of its options. A pair that names a dimension the configurator does not declare, or an option the dimension does not list, refers to nothing a buyer can select. The exclusion then excludes no configuration and the adjustment never applies, silently: the computed band and every computed total come out as if the entry were absent. The usual causes are a renamed dimension, a re-spelled option, an option removed from the product, or a value written with another JSON type than the option's.
-**Check:** Reads every pair of every entry of `pagefront:configurator.exclusions`, and every pair of the `when` of every `adjustments` entry of a pricing block whose `configurator.@id` equals the configurator's `@id` (a block naming another `@id` is PDP-E-001's finding, and its references are not checked). A pair fires when its key equals the `name` of no entry of the configurator's `dimensions`. Otherwise, when that dimension enumerates `options`, it fires when its value equals the `value` of none of them. Values are compared by strict equality, with no type coercion: the number `1` and the string `"1"` are different values. This is stricter than the option-key matching the totals use (see Definitions): a reference is written exactly as the option's `value` is written. When the dimension declares no `options` (continuous, system-defined or free text; an empty array counts), the value is not checked. One finding per unresolved pair, at the pair's path.
+**Check:** Reads every pair of every entry of `pagefront:configurator.exclusions`, and every pair of the `when` of every `adjustments` entry of a pricing block whose `configurator.@id` equals the configurator's `@id` (a block naming another `@id` is PDP-E-001's finding, and its references are not checked). A pair fires when its key equals the `name` of no entry of the configurator's `dimensions`. Otherwise, when that dimension enumerates `options`, it fires when its value equals the `value` of none of them. Values are compared by JSON value equality, type included, with no coercion: the number `1` and the string `"1"` are different values, and `1` and `1.0` are the same number. This is stricter than the option-key matching the totals use (see Definitions): a reference is written exactly as the option's `value` is written. When the dimension declares no `options` (continuous, system-defined or free text; an empty array counts), the value is not checked. One finding per unresolved pair, at the pair's path.
+**Type hint:** When the pair's value equals no option but a declared option of that dimension has the same text once both are converted to strings (a string `"1"` against a number `1`, or the reverse), the finding names the two types. It remains an error and nothing is coerced. Where several options qualify, the first in document order is named.
 **Message:** Configuration reference at `{path}` (dimension `{dimension}`, option `{option}`) does not resolve: {problem}.
-The `{option}` placeholder renders the pair's value as JSON, so a string shows its quotes (`"walnut"`) and a number does not (`1`). The `{problem}` placeholder carries either ``the configurator declares no dimension `{dimension}` `` or `` `{dimension}` lists no option `{option}` ``.
+The `{option}` placeholder renders the pair's value as JSON, so a string shows its quotes (`"walnut"`) and a number does not (`1`). The `{problem}` placeholder carries ``the configurator declares no dimension `{dimension}` ``, or `` `{dimension}` lists no option `{option}` ``, or, with a type hint, ``it references `{option}` ({reference_type}); dimension `{dimension}` declares `{declared_option}` ({declared_type})``, for example ``it references `"1"` (string); dimension `ring_size` declares `1` (number)``. A finding with a type hint carries three further entries in its `values`, so a tool reads them without parsing the message: `reference_type` and `declared_type` (each `string`, `number` or `boolean`) and `declared_option` (the declared value as JSON). A finding without a hint carries none of the three.
 **Remediation:** Name a dimension the configurator declares, and write the option exactly as its `value` is written in that dimension's `options`, including its JSON type. Remove an exclusion or adjustment that refers to an option the product no longer offers.
 **Introduced:** release 0.4.0
 **Applies from:** release 0.4.0. Product Sheet spec 0.10.0 introduces the requirement ("Configurator pricing and price bands"); a Sheet declaring release 0.3.0, or a legacy Sheet, is not judged by this rule.
@@ -274,6 +278,44 @@ The `{option}` placeholder renders the pair's value as JSON, so a string shows i
 **Introduced:** release 0.4.0
 **Applies from:** every declared release. The rule judges the declared release itself, so it is not gated by it; it never fires on a Sheet of a published release, and so changes the conformance of none. It does not run on legacy Sheets, which declare no release.
 **Spec reference:** `product.md#the-envelope`
+
+#### PDP-E-019 — Invalid checkout template
+
+**Severity:** error
+**Target:** `$.data.offers[*]` (the finding sits at the Offer's `checkoutPageURLTemplate`)
+**Description:** A checkout template is filled by the consumer before the shopper follows it, so every placeholder it carries has to be one the consumer can fill. The Product Sheet spec defines one template variable, `quantity`; the offer itself identifies the item, so a template takes no product or variant identifier. A template naming any other variable cannot be filled, a string that is not a valid RFC 6570 template cannot be expanded at all, and a template that expands to anything other than an absolute `https` URL gives the shopper no page to land on. In every case the link is dead for every consumer.
+**Check:** Reads `checkoutPageURLTemplate` on each Offer. Fires when the value is not a string; when it is not a valid RFC 6570 template (an expression opened with `{` and never closed, a `}` outside an expression, an empty expression, an expression using one of the reserved operators `=`, `,`, `!`, `@` or `|`, a variable specifier outside the RFC's `varspec` grammar, a `%` not followed by two hexadecimal digits, or a literal character the RFC excludes: a control character, a space, `"`, `'`, `<`, `>`, `\`, `^`, `` ` `` or `|`); when any expression names a variable other than `quantity`, compared exactly (`Quantity` is another variable); or when the template, expanded per RFC 6570 with `quantity` set to `1`, does not yield an absolute `https` URL (see Definitions: *full absolute URL*, here with the scheme `https`). An empty template expands to an empty string and fails. The RFC's operators `+`, `#`, `.`, `/`, `;`, `?` and `&` and its prefix and explode modifiers are valid. Silent when the Offer carries no `checkoutPageURLTemplate`. Each Offer with a problem gets one finding, the first of the three checks in that order.
+**Message:** Checkout template at `{path}` {problem}.
+The `{problem}` placeholder carries `is not a string`, or ``is not a valid RFC 6570 template: {detail}``, or ``names {variables}, which Pagefront does not define; the one defined variable is `quantity` ``, where `{variables}` lists each undefined variable once, in order of appearance, as `the variable `x`` or `the variables `x` and `y``, or ``expands with `quantity` set to 1 to `{expansion}`, which is not an absolute https URL``, or `is empty` for an empty template.
+**Remediation:** Use only `quantity` and write the template so that it expands to an absolute `https` URL, or remove the template.
+**Introduced:** release 0.5.0
+**Applies from:** release 0.5.0. Product Sheet spec 0.11.0 introduces the requirement ("Where to buy"); a Sheet declaring release 0.4.0 or 0.3.0, or a legacy Sheet, is not judged by this rule.
+**Spec reference:** `product.md#where-to-buy`
+
+#### PDP-E-020 — Checkout template without a region
+
+**Severity:** error
+**Target:** `$.data.offers[*]` (the finding sits at the Offer)
+**Description:** Checkout depends on the market: a template takes the shopper to one market's checkout. The Product Sheet spec has each region-scoped Offer carry the template for its own market, and forbids a template on an Offer that declares no region, since a consumer cannot tell which shoppers the checkout serves and could send one to another market's checkout.
+**Check:** Fires when an Offer carries `checkoutPageURLTemplate` and neither `areaServed` nor `eligibleRegion`. A region property that is present but empty or whitespace-only (see Definitions) counts as absent. The template's own validity is PDP-E-019's concern; this rule fires on a region-less Offer whatever the template contains.
+**Message:** Offer at `{path}` carries `checkoutPageURLTemplate` and neither `areaServed` nor `eligibleRegion`.
+**Remediation:** Declare the region the checkout serves, or remove the template.
+**Introduced:** release 0.5.0
+**Applies from:** release 0.5.0. Product Sheet spec 0.11.0 introduces the requirement ("Where to buy"); a Sheet declaring release 0.4.0 or 0.3.0, or a legacy Sheet, is not judged by this rule.
+**Spec reference:** `product.md#where-to-buy`
+
+#### PDP-E-021 — Offer `url` is not an absolute URL
+
+**Severity:** error
+**Target:** `$.data.offers[*]` (the finding sits at the Offer's `url`)
+**Description:** An Offer's `url` is the page on which the shopper buys it ("Where to buy"). A consumer hands that address to a shopper or opens it, so it has to stand on its own: a relative path, a bare token or a fragment names no page outside the sheet that carries it.
+**Check:** Fires when an Offer carries `url` and the value is not a string, or is not a *full absolute URL* (see Definitions) with the scheme `http` or `https`, compared case-insensitively. Silent when the Offer carries no `url`; PDP-W-040 covers that case on a sheet with several offers.
+**Message:** Offer `url` at `{path}` is `{url}`, which is not an absolute `http` or `https` URL.
+The `{url}` placeholder renders the value as JSON.
+**Remediation:** Give the offer the absolute URL of the page where it is bought.
+**Introduced:** release 0.5.0
+**Applies from:** release 0.5.0. Product Sheet spec 0.11.0 introduces the requirement ("Where to buy"); a Sheet declaring release 0.4.0 or 0.3.0, or a legacy Sheet, is not judged by this rule.
+**Spec reference:** `product.md#where-to-buy`
 
 ### Warnings
 
@@ -394,7 +436,7 @@ The `{reason}` placeholder carries either `past` or `trivially close to generate
 **Severity:** warning
 **Target:** `$.data`
 **Description:** When a Sheet's canonical URL is part of a multi-language site (typically indicated by language-specific URL segments in the page URL or the Sheet URL, or by the merchant publishing parallel sheets in other languages), the Sheet should declare `pagefront:availableLanguages` listing the sibling sheets. Consumers reading one language variant should be able to discover the others without separate crawling.
-**Check:** The canonical URL or the Sheet's `sheet_url` contains a language segment (a lowercase two-letter language path segment with optional region subtag, e.g. `/fr/`, `/en-GB/`, or a two-letter dotted label, e.g. `.fr.`; the dotted-label form covers language-suffixed Sheet names such as `….en.json`) but the Sheet does not declare `pagefront:availableLanguages`. "Does not declare" covers both an absent field and an empty array. This check is heuristic; false positives are acceptable.
+**Check:** The canonical URL or the Sheet's `sheet_url`, when present, contains a language segment (a lowercase two-letter language path segment with optional region subtag, e.g. `/fr/`, `/en-GB/`, or a two-letter dotted label, e.g. `.fr.`; the dotted-label form covers language-suffixed Sheet names such as `….en.json`) but the Sheet does not declare `pagefront:availableLanguages`. "Does not declare" covers both an absent field and an empty array. This check is heuristic; false positives are acceptable.
 **Message:** Sheet at `{canonical_url}` appears to be part of a multi-language site but does not declare `pagefront:availableLanguages`.
 **Remediation:** Add a `pagefront:availableLanguages` array listing the URLs of sibling sheets in other languages, with their BCP 47 language tags.
 **Introduced:** v0.6
@@ -508,13 +550,13 @@ The `{problem}` placeholder carries either `has no identifying field (`@id`, `ur
 
 **Severity:** warning
 **Target:** `$.data['hasVariant','isVariantOf']` (one match per present field, covering both traversal directions: a parent ProductGroup's `hasVariant` entries, forward from parent to variant, and a variant Product Sheet's `isVariantOf` object, backward from variant to parent)
-**Description:** In the multi-Sheet variant family pattern, a variant family is split across N+1 Sheets, one parent `ProductGroup` Sheet plus one Product Sheet per variant, and traversal between them runs over `@id` references. The `sheet_url` field is the recommended traversal hint: it carries the *Sheet* URL of the link's target (distinct from `url`, the target's *page*), so a consumer can fetch the target Sheet directly instead of loading the target page and resolving its `Link: rel="describedby"`. A producer that emits both the parent and the variant Sheets knows both Sheet URLs and SHOULD populate `sheet_url`; when it is absent, traversal still works but costs an extra page fetch plus `describedby` resolution.
+**Description:** In the multi-Sheet variant family pattern, a variant family is split across N+1 Sheets, one parent `ProductGroup` Sheet plus one Product Sheet per variant, and traversal between them runs over `@id` references. The `sheet_url` field is the recommended traversal hint: it carries the *Sheet* URL of the link's target (distinct from `url`, the target's *page*), so a consumer can fetch the target Sheet directly instead of loading the target page and resolving its `Link: rel="alternate"`. A producer that emits both the parent and the variant Sheets knows both Sheet URLs and SHOULD populate `sheet_url`; when it is absent, traversal still works but costs an extra page fetch plus `alternate` resolution. The hint is an optimisation over that page path and MAY be stale ("Traversal hints" in `product.md`); the rule asks for its presence and never checks that it resolves.
 
 The schema types the *shape* of these fields but not the *recommendation* to populate them. The `variantEntry` item definition (`product.json#/$defs/variantEntry`) types `sheet_url`, `url`, and `@id` on each `hasVariant` entry as string URIs, so a non-string value fails Layer 1 before this rule runs (the `format: "uri"` shape check is annotation-only; see PDP-E-001). What the schema cannot express is that a *cross-Sheet* link (recognized by reference form and a non-same-document full-URL `@id`, as described below) SHOULD carry the traversal hint. That conditional recommendation is this rule's job.
 
-This rule fires when a cross-Sheet variant link omits `sheet_url`. A link is recognized as cross-Sheet by *form and base together*: the entry is in reference form (see Definitions), and its `@id` is a full absolute URL that is not a same-document `@id`, the same signal that exempts it from PDP-E-001's internal-resolution check. An inline declaration never fires, whatever its `@id`'s base: a fully-inlined parent `ProductGroup` under `isVariantOf`, or a fully-inlined variant entry, *declares* its entity in this document, even when its `@id` is based on another page's URL (a parent group minting its `@id` from the parent's own page while living inline in a variant's Sheet). A same-document `@id` never fires either: real producers routinely model a variant family inline in one Sheet while minting full-URL `@id`s on the Sheet's own base (`…#group`, `…#size-58`). An entry carrying inline `offers` is an inline declaration by the form test, since `offers` is a substantive property. False positives are acceptable: a consumer can always fall back to `url` + `describedby`, so the cost of a spurious warning is low.
+This rule fires when a cross-Sheet variant link omits `sheet_url`. A link is recognized as cross-Sheet by *form and base together*: the entry is in reference form (see Definitions), and its `@id` is a full absolute URL that is not a same-document `@id`, the same signal that exempts it from PDP-E-001's internal-resolution check. An inline declaration never fires, whatever its `@id`'s base: a fully-inlined parent `ProductGroup` under `isVariantOf`, or a fully-inlined variant entry, *declares* its entity in this document, even when its `@id` is based on another page's URL (a parent group minting its `@id` from the parent's own page while living inline in a variant's Sheet). A same-document `@id` never fires either: real producers routinely model a variant family inline in one Sheet while minting full-URL `@id`s on the Sheet's own base (`…#group`, `…#size-58`). An entry carrying inline `offers` is an inline declaration by the form test, since `offers` is a substantive property. False positives are acceptable: a consumer can always fall back to `url` + `alternate`, so the cost of a spurious warning is low.
 **Check:** The matched `hasVariant` value is an array of entries and the matched `isVariantOf` value is a single object; the shape variance is handled in the Check. Fires on (a) an `isVariantOf` object in reference form whose `@id` is a full absolute URL that is not a same-document `@id`, and whose `sheet_url` is absent, empty, or whitespace-only; or (b) a `hasVariant` entry in reference form whose `@id` is a full absolute URL that is not a same-document `@id`, and whose `sheet_url` is absent, empty, or whitespace-only. An inline declaration (see Definitions) never fires, whatever its `@id`'s base. An entry whose `@id` is a same-document `@id` (a fragment, a bare token, or a full URL on this Sheet's own base) never fires either, since it is not a separate Sheet.
-**Message:** Variant link `{name}` at `{path}` appears to reference a separate Sheet by `@id` but omits the recommended `sheet_url`; consumers must reach the target Sheet via `url` + `describedby`.
+**Message:** Variant link `{name}` at `{path}` appears to reference a separate Sheet by `@id` but omits the recommended `sheet_url`; consumers must reach the target Sheet via `url` + `alternate`.
 The `{name}` placeholder renders the entry's `name`; when absent, the fixed fallback `(unnamed)`.
 **Remediation:** Add `sheet_url` with the target's Sheet URL — the variant's Sheet URL on a parent `hasVariant` entry, or the parent's Sheet URL on a variant's `isVariantOf`. If you do not emit a separate Sheet for the target (the family is modeled inline in one ProductGroup Sheet), no cross-Sheet link exists and `sheet_url` does not apply.
 **Introduced:** v0.7
@@ -591,7 +633,7 @@ The `{name}` placeholder renders the parent question's `name`; the defensive fal
 
 **Severity:** warning
 **Target:** `$.data.offers[*]`
-**Description:** An Offer carries `price` (or `priceSpecification` entries) but no entry states `valueAddedTaxIncluded`. Consumers must then assume the displayed-consumer-price rule without confirmation, and a producer that lifted a tax-exclusive amount from a platform API cannot be told apart from one that lifted the displayed price. The rule detects missing disclosure; an Offer whose stated basis is wrong lints clean.
+**Description:** An Offer carries `price` (or `priceSpecification` entries) but no entry states `valueAddedTaxIncluded`. The flag is set only from a merchant statement (see "Tax inclusion"), so its absence reports that the merchant's VAT basis was not stated, or that the producer did not carry the statement over. Consumers then read `price` as the displayed consumer price without confirmation of its basis. The rule detects missing disclosure; an Offer whose stated basis is wrong lints clean.
 **Check:** An Offer has `price` or a non-empty `priceSpecification` (an object with members, or an array with at least one entry), and no `priceSpecification` entry has a boolean `valueAddedTaxIncluded`. Offers carrying `pagefront:priceOnRequest` are exempt.
 **Message:** Offer at `{path}` states a price but not whether value-added tax is included.
 **Remediation:** Add a `UnitPriceSpecification` entry mirroring `price` with `valueAddedTaxIncluded` set to `true` or `false`; on an Offer that already uses `priceSpecification`, set the flag on each entry.
@@ -624,10 +666,10 @@ The `{name}` placeholder renders the parent question's `name`; the defensive fal
 
 **Severity:** warning
 **Target:** `$.data.offers[*]`
-**Description:** An Offer that states no return or shipping terms of its own inherits them from its seller's Commerce Organization Sheet (product-else-seller resolution, "Return policy" in `product.md`). A consumer finds that sheet only through `pagefront:sheetUrl` on the seller reference and never constructs a URL from the `@id`, so a seller reference without it leaves the return and shipping terms unknown to every consumer, even when the seller publishes a sheet.
-**Check:** An Offer's `seller` is an object carrying `@id` and no `pagefront:sheetUrl`, and the Offer carries neither `hasMerchantReturnPolicy` nor `shippingDetails`. One finding per Offer, at the `seller` path.
-**Message:** Seller at `{path}` has an `@id` but no `pagefront:sheetUrl`, and the Offer states no return or shipping terms of its own.
-**Remediation:** Add `pagefront:sheetUrl` to the seller reference, or state the terms on the Offer.
+**Description:** An Offer that states no return or shipping terms of its own inherits them from its seller's Commerce Organization Sheet (product-else-seller resolution, "Return policy" in `product.md`). A consumer reaches that sheet through `pagefront:sheetUrl` on the seller reference, or through the seller's `url` and the link that page declares, and never from the `@id` (the linking contract in `organization.md`). A seller reference carrying neither leaves the return and shipping terms unknown to every consumer, even when the seller publishes a sheet.
+**Check:** An Offer's `seller` is an object carrying `@id` and neither `pagefront:sheetUrl` nor `url`, and the Offer carries neither `hasMerchantReturnPolicy` nor `shippingDetails`. One finding per Offer, at the `seller` path.
+**Message:** Seller at `{path}` has an `@id` but neither `pagefront:sheetUrl` nor `url`, and the Offer states no return or shipping terms of its own.
+**Remediation:** Add `url` or `pagefront:sheetUrl` to the seller reference, or state the terms on the Offer.
 **Introduced:** v0.9
 **Spec reference:** `organization.md#linking-contract-identity-only`
 
@@ -720,6 +762,18 @@ The `{problem}` placeholder carries one of: `states no modifier for option `{opt
 **Introduced:** v0.9 (2026-10-01 revision)
 **Spec reference:** `product.md#size-guidance-pagefrontsizechart-and-pagefrontsizerecommendation`
 
+#### PDP-W-040 — Offer without `url` among several offers
+
+**Severity:** warning
+**Target:** `$.data` (the finding sits at each Offer without `url`)
+**Description:** An Offer without `url` is bought on the product's page, the data block's `url`. That default serves a single offer. A sheet carrying several offers usually carries them for different markets or different variants, and those are often bought on different pages, so "Where to buy" has each offer state its own.
+**Check:** `$.data.offers` is an array with more than one entry, and an entry is an object that carries no `url`. One finding per such entry. Silent on a single offer, whether or not it carries `url`; the shape of a `url` that is present is PDP-E-021's concern.
+**Message:** Offer at `{path}` has no `url`, and the sheet carries several offers.
+**Remediation:** Give each offer the URL of the page where it is bought.
+**Introduced:** release 0.5.0
+**Applies from:** release 0.5.0, with "Where to buy" in Product Sheet spec 0.11.0; not the legacy line.
+**Spec reference:** `product.md#where-to-buy`
+
 ### Information
 
 #### PDP-I-001 — Property outside Pagefront's modeled set
@@ -735,7 +789,7 @@ The `{problem}` placeholder carries one of: `states no modifier for option `{opt
 
 ## Commerce Organization Sheet rules
 
-The organization-sheet catalogue, applying to Commerce Organization Sheets ([`organization.md`](organization.md)) only, per the sheet-type dispatch described at the top of this document. Layer 1 for this sheet type is the published organization JSON Schema the sheet names (`../schemas/organization/`); these rules assume a schema-valid sheet. The six warning rules implement organization.md's role-scoped-content guidance ("each declared role SHOULD have its corresponding content present … and content SHOULD NOT appear without its role declared": ORG-W-001–004, and ORG-W-006 for the brand-owner-only authorized-resellers statement) plus a shape check on the registration machine keys (ORG-W-005). Per the registration-identity rules in organization.md, **no rule in this catalogue warns on absent registration identifiers** (`leiCode`, `iso6523Code`, `identifier`, `sameAs`): absence is jurisdiction-dependent and carries no quality signal. Three further error rules, ORG-E-002, ORG-E-003 and ORG-E-004, check the envelope's version fields and are the counterparts of PDP-E-016, PDP-E-002 and PDP-E-018.
+The organization-sheet catalogue, applying to Commerce Organization Sheets ([`organization.md`](organization.md)) only, per the sheet-type dispatch described at the top of this document. Layer 1 for this sheet type is the published organization JSON Schema the sheet names (`../schemas/organization/`); these rules assume a schema-valid sheet. The warning rules implement organization.md's role-scoped-content guidance ("each declared role SHOULD have its corresponding content present … and content SHOULD NOT appear without its role declared": ORG-W-001–004, and ORG-W-006 for the brand-owner-only authorized-resellers statement), a shape check on the registration machine keys (ORG-W-005), and the host rule of the catalogue entry point (ORG-W-007). Per the registration-identity rules in organization.md, **no rule in this catalogue warns on absent registration identifiers** (`leiCode`, `iso6523Code`, `identifier`, `sameAs`): absence is jurisdiction-dependent and carries no quality signal. Three further error rules, ORG-E-002, ORG-E-003 and ORG-E-004, check the envelope's version fields and are the counterparts of PDP-E-016, PDP-E-002 and PDP-E-018.
 
 #### ORG-E-001 — `pagefront:` term without the vocabulary prefix in `@context`
 
@@ -849,16 +903,204 @@ The placeholders carry the same texts as in PDP-E-002, with `Organization Sheet 
 **Introduced:** v0.9
 **Spec reference:** `organization.md#authorized-resellers`
 
+#### ORG-W-007 — Catalogue entry off the sheet's host
+
+**Severity:** warning
+**Target:** `$.data.hasOfferCatalog` (the Check walks `itemListElement`)
+**Description:** `hasOfferCatalog` is the catalogue entry point ("Catalogue entry point" in `organization.md`): a flat `OfferCatalog` whose `itemListElement` lists the storefront's root collections as `Collection` member entries, each referencing a Commerce Collection Sheet by `pagefront:sheetUrl`. The referenced sheets are on the organization sheet's own host, in its `inLanguage`; a root in another language is reached through `pagefront:availableLanguages` on the root sheet. An entry whose `pagefront:sheetUrl` is on another host leads a consumer off the publisher's storefront, where the collection sheets it would find are not this publisher's statement. The rule reads the hint only and never fetches it.
+**Check:** `hasOfferCatalog` is an object whose `itemListElement` is an array, and an entry of that array is an object carrying `pagefront:sheetUrl` whose *host* differs from the *canonical host* (see Definitions). A value with no host, an empty or whitespace-only string among them, is treated as absent and skipped. One finding per entry, at the `pagefront:sheetUrl` path.
+**Message:** Catalogue entry sheet URL at `{path}` is on host `{sheetUrlHost}`; the canonical page is on `{host}`.
+The `{host}` placeholder renders `(none)` when `canonical_url` has no host, which is unreachable on Layer-1-valid input.
+**Remediation:** Point `pagefront:sheetUrl` at the collection sheet on this organization sheet's own host. A root in another language is reached through `pagefront:availableLanguages` on the root sheet, never through a second host here.
+**Introduced:** release 0.5.0
+**Applies from:** release 0.5.0; not the legacy line.
+**Fixtures:** `fires` (one entry on another host), `clean`; both declare release 0.5.0 and run against the test manifest, as the collection fixtures do.
+**Spec reference:** `organization.md#catalogue-entry-point-any-role`
+
+## Commerce Collection Sheet rules
+
+The collection-sheet catalogue, applying to Commerce Collection Sheets ([`collection.md`](collection.md)) only, per the sheet-type dispatch described at the top of this document. Layer 1 for this sheet type is the published collection JSON Schema the release bundles (`../schemas/collection/`, once a release publishes one; [`collection.json`](collection.json) is its editable head); these rules assume a schema-valid sheet. The schema enforces the array form of `@context` with the `pagefront` prefix, so this catalogue has no counterpart of PDP-E-003 and ORG-E-001. The error rules check the identity of member entries (COL-E-001), the kind discriminator (COL-E-002), the envelope's version fields (COL-E-003 and COL-E-004, the counterparts of ORG-E-003 and ORG-E-004) and the host of every sheet URL the sheet carries (COL-E-005). The warning rules cover membership (COL-W-001, COL-W-002, COL-W-006) and the kind rules (COL-W-004, COL-W-005). COL-W-003 is reserved and awaiting implementation. The rules apply from release 0.5.0, the release that bundles Collection Sheet spec 0.1.0, and never to the legacy draft line, which has no Collection Sheet; COL-E-004 judges the declared release itself and applies to every one. Until release 0.5.0 lands, the collection fixtures declare it and run against a test manifest, [`../lint/test/manifest/releases.json`](../lint/test/manifest/releases.json): the real manifest plus the 0.5.0 row, with Collection Sheet spec 0.1.0 resolved to the editable head [`collection.json`](collection.json) at Layer 1. The release pull request adds the 0.5.0 row to `commerce/spec/releases.json` and to the release table in `releases.md`, and freezes the head as `commerce/schemas/collection/v0.1.0.json`; the fixtures and their expected reports do not change.
+
+#### COL-E-001 — Member entry without `@id`
+
+**Severity:** error
+**Target:** `$.data['hasPart','isPartOf']` (one match per present field; the Check walks the entries)
+**Description:** `@id` is the identity every reference to a set or a product carries, matched by exact string ("Identity" in `collection.md`): a producer emits the identical `@id` for a set in its own sheet, in every `isPartOf` and `hasPart` entry that references it, in `hasOfferCatalog` and in every product sheet's `isPartOf`. An entry without `@id` names nothing a consumer can recognise, so the member or the parent it stands for is lost to every consumer, whatever else the entry carries. The schema requires `@id` on an entry and this rule reports the condition for callers that lint without validating, and for a present `@id` that is empty or whitespace-only.
+**Check:** An entry of `hasPart` or of `isPartOf` is an object whose `@id` is absent, or a string that is empty or whitespace-only. A non-object entry is skipped, since the schema types entries as objects. One finding per entry, at the entry's path.
+**Message:** Entry `{name}` at `{path}` in `{field}` carries no `@id`.
+The `{name}` placeholder renders the entry's `name`; when absent, the fixed fallback `(unnamed)`. `{field}` is `hasPart` or `isPartOf`.
+**Remediation:** Add `@id`, the exact `@id` string the member or parent declares in its own sheet. An entry that cannot name its target's identity does not belong in the array.
+**Introduced:** release 0.5.0
+**Applies from:** release 0.5.0; not the legacy line.
+**Fixtures:** `fires` (a `hasPart` entry and an `isPartOf` entry without `@id`), `clean`.
+**Spec reference:** `collection.md#members`
+
+#### COL-E-002 — Collection kind absent or outside the enum
+
+**Severity:** error
+**Target:** `$.data`
+**Description:** `pagefront:collectionKind` is the required, single-valued kind discriminator ("Kind discriminator" in `collection.md`): `category` for a node of the storefront's navigation tree, `collection` for a set outside the tree, `brand` for the products sold under one label. It is what tells a consumer whether it is walking a tree or reading a list, and the kind rules (COL-W-004, COL-W-005) read it. Additional values require a spec amendment. The schema requires the field and closes the enum; this rule reports the condition for callers that lint without validating.
+**Check:** The data block carries no `pagefront:collectionKind`, or carries one whose value is not one of `category`, `collection`, `brand`. The finding sits at `$['data']` when the field is absent and at the field when it is present.
+**Message:** `pagefront:collectionKind` at `{path}` is {problem}.
+The `{problem}` placeholder carries `absent`, or `` `{value}`, which is not one of `category`, `collection`, `brand` ``; a non-string value renders as its JSON serialization.
+**Remediation:** Declare `pagefront:collectionKind` as `category` (a node of the storefront's navigation tree), `collection` (a set outside the tree) or `brand` (the products sold under one label). Additional values require a spec amendment.
+**Introduced:** release 0.5.0
+**Applies from:** release 0.5.0; not the legacy line.
+**Fixtures:** `fires-absent`, `fires-outside-enum`, `clean`.
+**Spec reference:** `collection.md#kind-discriminator-pagefrontcollectionkind`
+
+#### COL-E-003 — Release / schema mismatch
+
+**Severity:** error
+**Target:** `$` (the Sheet; the finding sits at the envelope field it reads)
+**Description:** The collection-sheet counterpart of PDP-E-002 and ORG-E-003, with the same rationale: the release manifest maps the declared `release` to exactly one Collection Sheet spec version, and `$schema` must name it. A Collection Sheet declaring the release that bundles Collection Sheet spec 0.1.0 points `$schema` at `collection/v0.1.0.json`.
+**Check:** As PDP-E-002, with the Collection Sheet schema the release manifest gives. Silent whenever `$schema` is absent. On the release line, fires when `$schema` is not that schema's URL, at `$['release']`. Silent when the declared `release` is not in the release manifest (COL-E-004 reports that), when the release is listed but bundles no Collection Sheet spec (Layer 1 reports that), and when the Sheet carries both `release` and `format_version`. The rule does not run on the legacy line, which has no Collection Sheet.
+**Message:** {declared} but {found}.
+The placeholders carry the same texts as in PDP-E-002, with `Collection Sheet spec` in place of `Product Sheet spec`.
+**Remediation:** Point `$schema` at the sheet-spec version the declared release bundles (see releases.md), or declare the release that bundles the schema the sheet was written against. On a legacy sheet, align `format_version` and the `$schema` version.
+**Introduced:** release 0.5.0
+**Applies from:** release 0.5.0; not the legacy line.
+**Fixtures:** `fires` (a release 0.5.0 sheet whose `$schema` names `collection/v0.2.0.json`), `clean`, `clean-no-schema`; under the test manifest, which bundles Collection Sheet spec 0.1.0 in release 0.5.0.
+**Spec reference:** `collection.md#the-envelope`
+
+#### COL-E-004 — Unknown release
+
+**Severity:** error
+**Target:** `$` (the finding sits at `$['release']`)
+**Description:** The collection-sheet counterpart of PDP-E-018 and ORG-E-004, with the same rationale: a `release` the release manifest does not list selects no schema and no rules.
+**Check:** The envelope's `release` is a string and equals no release in the release manifest.
+**Message:** `release` at `{path}` is `{release}`, which is not a release this catalogue knows ({known}).
+**Remediation:** Declare a published commerce release (see releases.md). If the release is newer than this linter, update the linter.
+**Introduced:** release 0.5.0
+**Applies from:** every declared release, as PDP-E-018; not the legacy line.
+**Fixtures:** `fires` (release `9.9.9`), `clean`.
+**Spec reference:** `collection.md#the-envelope`
+
+#### COL-E-005 — Referenced sheet URL off its edge's host
+
+**Severity:** error
+**Target:** `$.data['hasPart','isPartOf','brand']` (one match per present field; the Check walks the entries of the two arrays)
+**Description:** A collection sheet and the sheets it references in `isPartOf` and `hasPart` share a host ("Identity" in `collection.md`): the members of a storefront's listing are the storefront's own products and sets, so a member's or a parent's `pagefront:sheetUrl` is on the *canonical host*, and a consumer rejects a hint on another host and falls back to the entry's `url`. The `brand` reference of a brand collection resolves under the brand edge of the linking contract in `organization.md`, as PDP-E-006 checks it on a product sheet: the brand may be a third party whose statements count only when served from its own origin, so its sheet URL is on the host of the brand's `@id`. A hint that fails its edge's check locates nothing.
+**Check:** An entry of `hasPart` or of `isPartOf` carries `pagefront:sheetUrl` whose *host* differs from the *canonical host* (see Definitions); or the data block's `brand` carries `pagefront:sheetUrl` whose *host* differs from the *host* of the brand's `@id`, including when the brand carries no `@id` or an `@id` that is not a full absolute URL. A `pagefront:sheetUrl` value with no host, an empty or whitespace-only string among them, is treated as absent ("Members" in `collection.md`) and skipped: a blank member hint is COL-W-002's finding alone. One finding per hint, at the `pagefront:sheetUrl` path.
+**Message:** Sheet URL at `{path}` is on host `{sheetUrlHost}`; {expected}.
+The `{expected}` placeholder carries `` the canonical page is on `{host}` `` for a member or parent entry and `` the brand's `@id` is on `{idHost}` `` for the brand reference. `{host}` and `{idHost}` render `(none)` when the value has no host.
+**Remediation:** Point `pagefront:sheetUrl` at the sheet on the host the edge requires: a member or parent sheet on the storefront host, a brand sheet on the host of the brand's `@id`. A consumer rejects a hint off that host and falls back to the entry's `url`.
+**Introduced:** release 0.5.0
+**Applies from:** release 0.5.0; not the legacy line.
+**Fixtures:** `fires-member` (a `hasPart` entry and an `isPartOf` entry on other hosts), `fires-brand` (a brand sheet URL on the storefront host while the brand's `@id` is on its own host), `clean`, `clean-brand` (a brand collection whose brand sheet URL is on the brand's host).
+**Spec reference:** `collection.md#identity`
+
+#### COL-W-001 — Empty `hasPart`
+
+**Severity:** warning
+**Target:** `$.data.hasPart`
+**Description:** `hasPart` is the set's direct membership, exhaustive at emission ("Members" in `collection.md`). An empty array is valid: a node whose assignments all live in its subcategories, or a node that holds nothing, has one. An emission pipeline that lost the members produces the same shape, so the warning asks for review and is no failure. An absent `hasPart` is Layer 1's concern.
+**Check:** `hasPart` is an array with no entries.
+**Message:** `hasPart` at `{path}` is empty: the set declares no direct members.
+**Remediation:** Confirm the set has no direct members (its products all live in subcategories, or it holds nothing). If the storefront assigns products or subcategories to this node, list them.
+**Introduced:** release 0.5.0
+**Applies from:** release 0.5.0; not the legacy line.
+**Fixtures:** `fires`, `clean`.
+**Spec reference:** `collection.md#members`
+
+#### COL-W-002 — Member entry without `pagefront:sheetUrl`
+
+**Severity:** warning
+**Target:** `$.data.hasPart` (the Check walks the entries)
+**Description:** `pagefront:sheetUrl` is recommended on every member entry ("Members" in `collection.md`): a producer that emits both sheets knows the member sheet's URL and SHOULD populate it, so a consumer can fetch the member sheet directly. When it is absent, traversal still works through the member's page: the consumer fetches `url` and follows the `alternate` link that page declares. The hint is a traversal hint that MAY be stale ("Traversal hints" in `product.md`); the rule asks for its presence and never checks that it resolves. A member that has no sheet legitimately carries none, which is why this is a warning.
+**Check:** An entry of `hasPart` is an object whose `pagefront:sheetUrl` is absent, or a string that is empty or whitespace-only, which "Members" in `collection.md` treats as absent. One finding per entry, at the entry's path. A blank value is this rule's finding alone: COL-E-005 skips a hint with no host.
+**Message:** Member `{name}` at `{path}` carries no `pagefront:sheetUrl`; consumers must reach its sheet via `url` + `alternate`.
+The `{name}` placeholder renders the entry's `name`; when absent, the fixed fallback `(unnamed)`.
+**Remediation:** Add `pagefront:sheetUrl` with the member's sheet URL when you emit that sheet. If the member has no sheet, the entry is complete as it stands.
+**Introduced:** release 0.5.0
+**Applies from:** release 0.5.0; not the legacy line.
+**Fixtures:** `fires` (two entries without the hint), `fires-whitespace` (one entry whose hint is whitespace-only, and no other finding), `clean`.
+**Spec reference:** `collection.md#members`
+
+#### COL-W-003 — Root category absent from the catalogue entry point (reserved)
+
+**Severity:** warning
+**Target:** `$.data`
+**Description:** Reserved and awaiting implementation. A `category` sheet with no `isPartOf` is a root, and every root category appears in the organization sheet's `hasOfferCatalog` ("Entry point" in `collection.md`). Checking it needs both sheets, the collection sheet and the organization sheet it belongs to, and this catalogue judges one sheet at a time. The number is reserved so that a two-sheet check, when one exists, keeps the ID the spec names; until then no implementation fires it and no fixture exists.
+**Check:** None. The rule has no implementation yet.
+**Message:** None.
+**Remediation:** None.
+**Introduced:** reserved with release 0.5.0
+**Applies from:** not applicable.
+**Fixtures:** none.
+**Spec reference:** `collection.md#entry-point`
+
+#### COL-W-004 — Brand reference and brand kind disagree
+
+**Severity:** warning
+**Target:** `$.data`
+**Description:** A `brand` collection is keyed on a `Brand` node and carries `brand`, a reference to it (`@type`, `@id`, `pagefront:sheetUrl`); a `category` or a `collection` is not keyed on a brand and carries none ("Kind discriminator" in `collection.md`). Either half missing is the kind-without-content or content-without-kind pattern the organization catalogue checks for roles (ORG-W-001 to ORG-W-004): a brand kind without the reference leaves a consumer unable to resolve the label, and a reference on another kind means either the kind is wrong or the reference belongs elsewhere.
+**Check:** Fires once when `pagefront:collectionKind` is `brand` and `brand` is absent or null; and once when `brand` is present and `pagefront:collectionKind` is a string other than `brand`. Silent when the kind is absent or not a string (COL-E-002 reports that). The finding sits at the data block.
+**Message:** Collection at `{path}` {problem}.
+The `{problem}` placeholder carries `` declares `pagefront:collectionKind` `brand` but carries no `brand` `` or `` carries `brand` but declares `pagefront:collectionKind` `{kind}` ``.
+**Remediation:** On a brand collection, add `brand`, the reference to the `Brand` node the set is keyed on (`@type`, `@id` and `pagefront:sheetUrl`). On a category or a collection, remove `brand`, or declare the kind `brand` if the set is the products sold under one label.
+**Introduced:** release 0.5.0
+**Applies from:** release 0.5.0; not the legacy line.
+**Fixtures:** `fires-missing` (kind `brand`, no `brand`), `fires-other-kind` (`brand` on a `category`), `clean` (a brand collection with its reference).
+**Spec reference:** `collection.md#kind-discriminator-pagefrontcollectionkind`
+
+#### COL-W-005 — Parent of another kind
+
+**Severity:** warning
+**Target:** `$.data` (the Check walks `isPartOf`)
+**Description:** The tree is made of categories: every `isPartOf` entry of a `category` resolves to another `category` sheet. A `collection` stands outside the tree: it MAY nest in another `collection` and MUST NOT point at a `category` ("Kind discriminator" in `collection.md`). The rule reads the kind each `isPartOf` entry declares in its own `pagefront:collectionKind`, which collection.md recommends on `Collection` entries so a consumer can tell a subcategory from a nested collection before fetching it; it never fetches the parent sheet, so an entry declaring no kind is not judged.
+**Check:** The data block's `pagefront:collectionKind` is `category` and an `isPartOf` entry declares a `pagefront:collectionKind` other than `category`; or the data block's kind is `collection` and an `isPartOf` entry declares `category`. Entries declaring no kind, and sheets of kind `brand` (which carry no `isPartOf`), never fire. One finding per entry, at the entry's path.
+**Message:** This `{kind}` sheet names parent `{name}` at `{path}`, whose entry declares kind `{parentKind}`.
+The `{name}` placeholder renders the entry's `name`; when absent, the fixed fallback `(unnamed)`.
+**Remediation:** A category's `isPartOf` entries are categories: the tree is made of categories only. A collection nests in a collection and never in a category. Correct the parent's declared kind, or move the set to the kind its parent implies.
+**Introduced:** release 0.5.0
+**Applies from:** release 0.5.0; not the legacy line.
+**Fixtures:** `fires-category` (a category whose parent entry declares `collection`), `fires-collection` (a collection whose parent entry declares `category`), `clean`, `clean-collection` (a collection nested in a collection).
+**Spec reference:** `collection.md#kind-discriminator-pagefrontcollectionkind`
+
+#### COL-W-006 — Duplicate member
+
+**Severity:** warning
+**Target:** `$.data.hasPart` (the Check walks the entries)
+**Description:** `hasPart` is the set's direct membership, read as exhaustive ("Members" in `collection.md`); one entry per tile the listing page renders. The same `@id` twice in the array is a duplicated tile or a merge error in the producer, and a consumer deduplicating on `@id` silently drops one. The first occurrence stands; every later one is reported.
+**Check:** An entry of `hasPart` carries an `@id` (a non-blank string) equal, by exact string, to the `@id` of an earlier entry in the array. One finding per repeated entry, at its path, naming the path of the first occurrence.
+**Message:** Member `{id}` at `{path}` repeats the entry at `{first}`.
+**Remediation:** Keep one entry per member. A product assigned to the set once appears once; a product in several sets appears once in each of them.
+**Introduced:** release 0.5.0
+**Applies from:** release 0.5.0; not the legacy line.
+**Fixtures:** `fires` (one member listed twice), `clean`.
+**Spec reference:** `collection.md#members`
+
 ## Status
 
 1. **Scoring rubric integration.** Resolved: [`scoring.md`](scoring.md) (in this directory) is the non-normative dimension taxonomy. Weighted rubrics are consumer-side and reference rule IDs at their own discretion; no catalogue work is pending on scoring.
-2. **Case study validation.** The three case studies (Nitto, Kimaï, AFS Blackbird) are at release 0.4.0, re-derived from the live sites on 2026-09-04, and each writeup records its linter result. Linting the case studies on every catalogue change is the loop that surfaces missing rules.
+2. **Case study validation.** The three case studies (Nitto, Kimaï, AFS Blackbird) are at release 0.5.0, re-derived from the live sites on 2026-09-04, and each writeup records its linter result. Linting the case studies on every catalogue change is the loop that surfaces missing rules.
 
 ## Changelog
 
 ### Unreleased
 
-_Nothing yet. Changes land here and are versioned at the next release; see "Releasing" in [`../../CONTRIBUTING.md`](../../CONTRIBUTING.md)._
+Changes land here and are versioned at the next release; see "Releasing" in [`../../CONTRIBUTING.md`](../../CONTRIBUTING.md).
+
+### 0.17.0 — 2026-10-18
+
+Minor. Released with commerce release 0.5.0; the catalogue supports releases 0.5.0, 0.4.0 and 0.3.0 and the legacy draft line.
+
+- **Minor (catalogue 0.17.0): the Commerce Collection Sheet catalogue.** A third page-type rule set, the `COL-` rules, for Commerce Collection Sheets ([`collection.md`](collection.md), spec 0.1.0): COL-E-001 (member entry without `@id`), COL-E-002 (kind absent or outside the enum), COL-E-003 and COL-E-004 (the envelope's version fields, as ORG-E-003 and ORG-E-004), COL-E-005 (a `hasPart`, `isPartOf` or `brand` sheet URL off its edge's host), COL-W-001 (empty `hasPart`), COL-W-002 (member without `pagefront:sheetUrl`), COL-W-004 (brand reference and brand kind disagree), COL-W-005 (parent of another kind) and COL-W-006 (duplicate member); COL-W-003 is reserved for a two-sheet check and awaits implementation. The linter dispatches a sheet to this catalogue when its `$schema` path contains `/spec/commerce/collection/`, or, absent a typed `$schema`, when its data block is a `Collection` carrying `pagefront:collectionKind`; no page type's rules run on another page type's sheets. The rules apply from release 0.5.0, the release that bundles the spec, and never to the legacy line, which has no Collection Sheet; COL-E-004 judges the declared release itself. The fixtures declare release 0.5.0 and run against a test manifest (`commerce/lint/test/manifest/releases.json`) that adds that row and resolves Collection Sheet spec 0.1.0 to the editable head, so COL-E-003 has its firing fixture and the fixtures validate at Layer 1 end to end; production keeps the bundled manifest and reports that a declared release bundles no Collection Sheet schema until 0.5.0 lands. The release pull request adds the 0.5.0 row to `commerce/spec/releases.json` and to the release table in `releases.md`, and freezes the head as `commerce/schemas/collection/v0.1.0.json`, and changes nothing in the fixtures.
+- **Minor (catalogue 0.17.0): where to buy.** Two product rules for the checkout template the Product Sheet spec admits under "Where to buy" (spec 0.11.0): PDP-E-019, a `checkoutPageURLTemplate` that is not a string, is not a valid RFC 6570 template, or names a variable other than `quantity`; PDP-E-020, a `checkoutPageURLTemplate` on an Offer with neither `areaServed` nor `eligibleRegion`. PDP-E-019 extended before release: it also fires when the template, expanded with `quantity` set to 1, does not yield an absolute `https` URL, and is retitled "Invalid checkout template". One error and one warning added: PDP-E-021, an Offer `url` that is not an absolute `http` or `https` URL; PDP-W-040, an Offer without `url` on a sheet carrying several offers. All four apply from release 0.5.0 and never run on the legacy line; no published sheet changes conformance.
+- **Minor: ORG-W-007.** A `hasOfferCatalog` entry whose `pagefront:sheetUrl` is on a host other than the canonical host, following the "Catalogue entry point" section added to the Organization Sheet spec; applies from release 0.5.0. Fixtures `fires` and `clean`, under the test manifest.
+- **Check change: blank hints.** A `pagefront:sheetUrl` that is empty or whitespace-only is treated as absent, as "Members" in the Collection Sheet spec states. COL-W-002 fires on an absent, empty or whitespace-only member hint; COL-E-005 and ORG-W-007 skip a value with no host under the *host* definition, so a blank hint yields COL-W-002 alone. Fixture `col-w-002/fires-whitespace` asserts it.
+- **Patch.** PDP-W-021's description and message name the `alternate` link relation in place of `describedby`, following the Discovery section of the Product Sheet spec; what the rule checks and its remediation are unchanged, and the fixtures' expected reports carry the new message. PDP-W-011 and PDP-W-031 need no change.
+- **Patch.** The *canonical host* (Definitions) is the host of the envelope `canonical_url`; it replaces the *Sheet's host*, which read `sheet_url`, now optional and informational in the Product Sheet spec. PDP-E-005 compares the seller sheet URL with the canonical host, whether or not the Sheet carries `sheet_url`; its message says "the canonical page is on `{host}`", and the finding's `values` carry `host` in place of `sheetHost`. Fixtures: `clean-no-sheet-url` and `fires-no-sheet-url` (no `sheet_url`), and `clean-sheet-url-elsewhere` (`sheet_url` on another host, the hint on the canonical host). PDP-W-011 reads `sheet_url` only when present, as its code already did.
+- **Check change.** PDP-W-031 fires when a seller reference carries `@id` and neither `pagefront:sheetUrl` nor `url`, and the Offer states no return or shipping terms of its own. A seller reference carrying `url` is locatable: the consumer reaches the seller sheet through the page's declared link (the linking contract admits `url` on organization references). The message names both fields and the remediation offers either; fixture `clean-url-only` added, the firing fixture unchanged in input.
+- **Patch.** The descriptions of PDP-W-021 and PDP-W-031 state that a Sheet URL carried by a reference is a traversal hint that may be stale, and that the page path is the one a consumer relies on; PDP-W-021's check, message and remediation are unchanged.
+- **Patch.** PDP-W-028's description follows the amended "Tax inclusion" section of the Product Sheet spec: the rule reports that the merchant's VAT basis was not stated. What the rule checks, its message and its remediation are unchanged.
+
+### 0.16.1 — 2026-10-02
+
+Patch. No commerce release; the catalogue supports releases 0.4.0 and 0.3.0 and the legacy draft line, as before.
+
+- PDP-E-017 adds a type hint: when a reference matches no option but a declared option has the same text under another JSON type, the message names both types, and the finding's `values` carry `reference_type`, `declared_option` and `declared_type`. What the rule checks is unchanged: comparison is by JSON value equality, type included, and the finding stays an error.
 
 ### 0.16.0 — 2026-10-02
 

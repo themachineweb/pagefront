@@ -1,0 +1,29 @@
+{
+  "sheet": "https://merchant.example/collections/knitwear",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.5.0",
+  "sheet_spec_version": "0.1.0",
+  "catalogue_version": "0.17.0",
+  "findings": [
+    {
+      "rule": "COL-W-006",
+      "severity": "warning",
+      "path": "$['data']['hasPart'][3]",
+      "values": {
+        "id": "https://merchant.example/products/harbor-vest#product",
+        "first": "$['data']['hasPart'][2]"
+      },
+      "message": "Member `https://merchant.example/products/harbor-vest#product` at `$['data']['hasPart'][3]` repeats the entry at `$['data']['hasPart'][2]`.",
+      "remediation": "Keep one entry per member. A product assigned to the set once appears once; a product in several sets appears once in each of them."
+    }
+  ],
+  "summary": {
+    "errors": 0,
+    "warnings": 1,
+    "info": 0,
+    "rules_fired": [
+      "COL-W-006"
+    ]
+  }
+}

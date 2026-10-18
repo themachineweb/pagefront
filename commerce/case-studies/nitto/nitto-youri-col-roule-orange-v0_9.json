@@ -1,6 +1,6 @@
 {
-  "$schema": "https://themachineweb.org/pagefront/spec/commerce/product/v0.10.0.json",
-  "release": "0.4.0",
+  "$schema": "https://themachineweb.org/pagefront/spec/commerce/product/v0.11.0.json",
+  "release": "0.5.0",
   "schema_org_version": "30.0",
   "canonical_url": "https://www.nittoknitwear.com/products/pull-col-roule-youri-orange",
   "sheet_url": "https://www.nittoknitwear.com/pagefront/commerce/product/pull-col-roule-youri-orange.fr.json",
@@ -342,6 +342,7 @@
       {
         "@type": "Offer",
         "@id": "https://www.nittoknitwear.com/products/pull-col-roule-youri-orange#offer-s",
+        "url": "https://www.nittoknitwear.com/products/pull-col-roule-youri-orange?variant=52076299714889",
         "itemOffered": {
           "@id": "https://www.nittoknitwear.com/products/pull-col-roule-youri-orange#size-s"
         },
@@ -383,6 +384,7 @@
       {
         "@type": "Offer",
         "@id": "https://www.nittoknitwear.com/products/pull-col-roule-youri-orange#offer-m",
+        "url": "https://www.nittoknitwear.com/products/pull-col-roule-youri-orange?variant=52076299813193",
         "itemOffered": {
           "@id": "https://www.nittoknitwear.com/products/pull-col-roule-youri-orange#size-m"
         },
@@ -424,6 +426,7 @@
       {
         "@type": "Offer",
         "@id": "https://www.nittoknitwear.com/products/pull-col-roule-youri-orange#offer-l",
+        "url": "https://www.nittoknitwear.com/products/pull-col-roule-youri-orange?variant=52076299911497",
         "itemOffered": {
           "@id": "https://www.nittoknitwear.com/products/pull-col-roule-youri-orange#size-l"
         },
@@ -465,6 +468,7 @@
       {
         "@type": "Offer",
         "@id": "https://www.nittoknitwear.com/products/pull-col-roule-youri-orange#offer-xl",
+        "url": "https://www.nittoknitwear.com/products/pull-col-roule-youri-orange?variant=52076300009801",
         "itemOffered": {
           "@id": "https://www.nittoknitwear.com/products/pull-col-roule-youri-orange#size-xl"
         },
@@ -506,6 +510,7 @@
       {
         "@type": "Offer",
         "@id": "https://www.nittoknitwear.com/products/pull-col-roule-youri-orange#offer-xxl",
+        "url": "https://www.nittoknitwear.com/products/pull-col-roule-youri-orange?variant=52076300108105",
         "itemOffered": {
           "@id": "https://www.nittoknitwear.com/products/pull-col-roule-youri-orange#size-xxl"
         },

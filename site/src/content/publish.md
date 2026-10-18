@@ -1,7 +1,7 @@
 # Publish
 
 Publishing a sheet takes three things: a few kilobytes of JSON on your own
-server, a stable URL to serve it from, and one line in the head of the page it
+server, a URL to serve it from, and one line in the head of the page it
 describes. There is no account to open, no registry to join, and nobody to ask.
 If this site disappeared tomorrow, the sheets already published would keep
 working.
@@ -30,8 +30,8 @@ it was made, and a `data` block that carries the Schema.org description.
 
 ```json
 {
-  "$schema": "https://themachineweb.org/pagefront/spec/commerce/product/v0.10.0.json",
-  "release": "0.4.0",
+  "$schema": "https://themachineweb.org/pagefront/spec/commerce/product/v0.11.0.json",
+  "release": "0.5.0",
   "schema_org_version": "30.0",
   "canonical_url": "https://your-shop.example/product/anorak",
   "sheet_url": "https://your-shop.example/product/anorak.en.json",
@@ -42,7 +42,8 @@ it was made, and a `data` block that carries the Schema.org description.
 
 The [Product sheet spec](/pagefront/spec/commerce/product) is the normative
 document: what belongs in `data`, which fields are required, which identifier
-you need.
+you need. `sheet_url` is optional: include it when you know the address at
+generation time. The link in step 3 is what tells consumers where the sheet is.
 
 There are three ways to write your first one. Pick the one that matches what
 you have.
@@ -80,24 +81,47 @@ people should see their first sheet.
 
 ## 2. Serve it
 
-The sheet lives at a stable URL **on your own domain**, not on ours or on a
-platform's. A sheet is your own statement about your own resource, and it
-carries weight because it comes from you.
+The sheet lives at a URL **on your own domain**, and nowhere else. A sheet is
+your own statement about your own resource, and it carries weight because it
+comes from you.
 
 Four things to get right:
 
-- **Stable.** The URL is an identity. It should survive
-  your next redesign and your next platform migration. Pick a shape you can
-  keep: alongside the page (`/product/anorak.en.json`) or under a path of your
-  own (`/sheets/anorak.en.json`).
-- **`Content-Type: application/json`.** Some static hosts guess wrong on
-  unusual extensions. Check what yours actually sends.
+- **Stable, if you can.** The page is the identity: the sheet lives wherever
+  the page's link says today, and a consumer that follows the link finds it
+  after a move. A URL that survives your next redesign and your next platform
+  migration is still worth having, because consumers that cached it keep
+  finding the sheet and the hints other sheets carry stay correct for longer.
+  Pick a shape you can keep: alongside the page (`/product/anorak.en.json`) or
+  under a path of your own (`/sheets/anorak.en.json`).
+- **`Content-Type`.** Serve the sheet as `application/pagefront+json` if you
+  control response headers; `application/json` is accepted too. Some static
+  hosts guess wrong on unusual extensions. Check what yours actually sends.
 - **Reachable by machines.** Not behind a login, not behind a bot challenge, and
   not blocked in `robots.txt`. If you serve consumers that run in a browser, allow
   cross-origin reads.
+- **Indexable.** Let search crawlers reach the sheet URLs and list them in your
+  sitemap, alongside the pages. Many assistants reach the web through a search
+  index and can only fetch what that index holds; in one test, a sheet the index
+  had never seen was out of reach for them even though the page linked it. So
+  send no `noindex` for sheets, in `X-Robots-Tag` or in a robots rule, and do
+  not disallow the crawlers you want reading them. The page's `alternate` link
+  already tells a crawler that the sheet is a representation of the page.
 - **One sheet per resource per language.** The `inLanguage` field says which
   one this is. Publish a second document for a second language rather than
   mixing them.
+
+Before you link it, check the URL from outside your admin, signed out:
+
+- It answers `200` with the sheet itself, byte for byte. A redirect, or your
+  theme's page around it, does not count.
+- It sends the content type above, and `Access-Control-Allow-Origin: *` if you
+  allow cross-origin reads.
+- It stays the same after you update the sheet. Edit one value, publish, and
+  load the same URL again: the new value is there.
+- It answers `404` when there is no sheet: a product you have unpublished, or
+  a language you have not written. A `200` page that says "not found" tells a
+  machine the sheet exists.
 
 How this lands on the platform you are on:
 
@@ -125,17 +149,19 @@ The page points at the sheet. Consumers follow the link and never guess the
 path.
 
 ```html
-<link rel="describedby"
-      type="application/json"
+<link rel="alternate"
+      type="application/pagefront+json"
       href="https://your-shop.example/product/anorak.en.json">
 ```
 
-In the `<head>` of the product page, one per sheet. If you can set response
+In the `<head>` of the product page, one per sheet. The `type` is what tells
+the sheet apart from the other `alternate` links a page carries, such as feeds,
+so keep it exactly as written. If you can set response
 headers, the same statement travels as an HTTP `Link` header, which reaches
 consumers that read headers without fetching the body:
 
 ```
-Link: <https://your-shop.example/product/anorak.en.json>; rel="describedby"; type="application/json"
+Link: <https://your-shop.example/product/anorak.en.json>; rel="alternate"; type="application/pagefront+json"
 ```
 
 Either carrier is enough. Most publishers should use the element, because most
@@ -145,13 +171,16 @@ publishers can edit a template and cannot edit headers.
 
 ## 4. Check it
 
-Paste the document into the [conformance validator](/pagefront/commerce/product/validate).
-It runs in your browser, keeps nothing, and asks for no account.
+[Check your page →](/pagefront/commerce/validate). Give it the product page's URL and it
+reads the link the page carries, fetches the sheet it points at, and judges the
+sheet. Paste the sheet itself to judge conformance alone. It keeps nothing and
+asks for no account.
 
-The validator checks conformance: whether the document is well-formed against
-the rule catalogue. It does not check truth. A sheet can pass every rule and
-still be wrong about your price, so the confirmation in step 1 is yours to do
-and cannot be automated away.
+Check judges conformance: whether the document is well-formed against the rule
+catalogue, and whether the page and the sheet agree on where things are. It does
+not check truth. A sheet can pass every rule and still be wrong about your
+price, so the confirmation in step 1 is yours to do and cannot be automated
+away.
 
 ---
 
@@ -194,4 +223,4 @@ sheet, serve it, link it, check it. You will know within an hour whether this
 is worth doing for the rest of the catalogue, and if it is not, you have lost
 an hour and a file.
 
-Commerce release 0.4.0 · the current release. Breaking changes follow semver; the stability policy applies from release 1.0.0.
+Commerce release 0.5.0 · the current release. Breaking changes follow semver; the stability policy applies from release 1.0.0.

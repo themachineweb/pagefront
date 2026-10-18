@@ -1,0 +1,37 @@
+{
+  "$schema": "https://themachineweb.org/pagefront/spec/commerce/collection/v0.1.0.json",
+  "release": "0.5.0",
+  "schema_org_version": "30.0",
+  "canonical_url": "https://merchant.example/collections/meridian-gear",
+  "sheet_url": "https://merchant.example/pagefront/commerce/collection/meridian-gear.en.json",
+  "generated_at": "2026-10-01T00:00:00Z",
+  "expires_at": "2026-10-02T00:00:00Z",
+  "data": {
+    "@context": [
+      "https://schema.org",
+      {
+        "pagefront": "https://themachineweb.org/pagefront/vocabulary/"
+      }
+    ],
+    "@type": "Collection",
+    "@id": "https://merchant.example/collections/meridian-gear#collection",
+    "name": "Meridian Gear",
+    "inLanguage": "en",
+    "url": "https://merchant.example/collections/meridian-gear",
+    "pagefront:collectionKind": "brand",
+    "hasPart": [
+      {
+        "@type": "Product",
+        "@id": "https://merchant.example/products/meridian-headlamp#product",
+        "url": "https://merchant.example/products/meridian-headlamp",
+        "pagefront:sheetUrl": "https://merchant.example/pagefront/commerce/product/meridian-headlamp.en.json",
+        "name": "Meridian Headlamp"
+      }
+    ],
+    "brand": {
+      "@type": "Brand",
+      "@id": "https://meridiangear.example/#brand",
+      "pagefront:sheetUrl": "https://meridiangear.example/pagefront/commerce/organization/meridian-gear.en.json"
+    }
+  }
+}

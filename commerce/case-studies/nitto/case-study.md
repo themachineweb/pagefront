@@ -79,10 +79,12 @@ which words become the category, and how to name identifiers.
 - **One language per sheet.** The French edition is the default, so the
   sheet is French; the English edition would be a second file.
 - **The category is the shop's own word.** "Pulls", from the navigation.
-- **Prices state their basis.** The terms of sale say the prices on
-  product pages are in euros including VAT, and the default storefront is
-  the shop's France market. Each offer says so with
-  `valueAddedTaxIncluded` and declares France with `areaServed`. The shop
+- **Prices state their basis.** The price is the one the page displays,
+  195 €, and the page's structured data gives the same figure. The terms
+  of sale say prices are shown including VAT ("les prix sont indiqués
+  ttc"), and the page's market selector shows "France - EUR €". Each offer
+  says so with `valueAddedTaxIncluded` and declares France with
+  `areaServed`. The shop
   also runs an EU storefront, which showed the same 195 € on 2026-09-30.
 - **Store-wide terms live once.** Return policy and shipping tariff sit on
   the organization sheet; the product sheet inherits them.
@@ -105,7 +107,8 @@ The markup the page carries today is a starting point: the sheet adds the
 panels' content and takes stock and weight from what the page states. A
 Shopify app or a small script that reads the product, writes the sheet,
 serves it at a stable URL on nittoknitwear.com, and adds one link tag to the
-product template. The organization sheet is one file, updated when the
+product template: `rel="alternate"` with `type="application/pagefront+json"`,
+the type being what tells the sheet apart from the page's other alternates. The organization sheet is one file, updated when the
 tariff or the stockists change. Both sheets validate clean against the
 public rule catalogue.
 
@@ -168,4 +171,10 @@ is the one the page's cart summary shows.
   case moved to the Youri turtleneck in orange and both sheets were
   re-derived; the stockist list grew to 148. The Vahé sheet is archived.
 - **2026-10-02** — sheets moved to commerce release 0.4.0 (`release` and
+  `$schema` only); no other value changed.
+- **2026-10-18** — each offer states the page where it is bought (`url`,
+  the size's own page); no other value changed. The page's structured data
+  states no checkout template; its `buy` link element names a single-unit
+  cart URL under a separate protocol, and is not carried.
+- **2026-10-18** — sheets moved to commerce release 0.5.0 (`release` and
   `$schema` only); no other value changed.

@@ -1,0 +1,28 @@
+{
+  "sheet": "https://merchant.example/collections/knitwear",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.5.0",
+  "sheet_spec_version": "0.1.0",
+  "catalogue_version": "0.17.0",
+  "findings": [
+    {
+      "rule": "COL-W-002",
+      "severity": "warning",
+      "path": "$['data']['hasPart'][2]",
+      "values": {
+        "name": "Harbor Vest"
+      },
+      "message": "Member `Harbor Vest` at `$['data']['hasPart'][2]` carries no `pagefront:sheetUrl`; consumers must reach its sheet via `url` + `alternate`.",
+      "remediation": "Add `pagefront:sheetUrl` with the member's sheet URL when you emit that sheet. If the member has no sheet, the entry is complete as it stands."
+    }
+  ],
+  "summary": {
+    "errors": 0,
+    "warnings": 1,
+    "info": 0,
+    "rules_fired": [
+      "COL-W-002"
+    ]
+  }
+}

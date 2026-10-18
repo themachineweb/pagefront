@@ -1,0 +1,40 @@
+{
+  "sheet": "https://merchant.example/collections/knitwear",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.5.0",
+  "sheet_spec_version": "0.1.0",
+  "catalogue_version": "0.17.0",
+  "findings": [
+    {
+      "rule": "COL-E-005",
+      "severity": "error",
+      "path": "$['data']['hasPart'][2]['pagefront:sheetUrl']",
+      "values": {
+        "sheetUrlHost": "sheets.elsewhere.example",
+        "expected": "the canonical page is on `merchant.example`"
+      },
+      "message": "Sheet URL at `$['data']['hasPart'][2]['pagefront:sheetUrl']` is on host `sheets.elsewhere.example`; the canonical page is on `merchant.example`.",
+      "remediation": "Point `pagefront:sheetUrl` at the sheet on the host the edge requires: a member or parent sheet on the storefront host, a brand sheet on the host of the brand's `@id`. A consumer rejects a hint off that host and falls back to the entry's `url`."
+    },
+    {
+      "rule": "COL-E-005",
+      "severity": "error",
+      "path": "$['data']['isPartOf'][0]['pagefront:sheetUrl']",
+      "values": {
+        "sheetUrlHost": "cdn.elsewhere.example",
+        "expected": "the canonical page is on `merchant.example`"
+      },
+      "message": "Sheet URL at `$['data']['isPartOf'][0]['pagefront:sheetUrl']` is on host `cdn.elsewhere.example`; the canonical page is on `merchant.example`.",
+      "remediation": "Point `pagefront:sheetUrl` at the sheet on the host the edge requires: a member or parent sheet on the storefront host, a brand sheet on the host of the brand's `@id`. A consumer rejects a hint off that host and falls back to the entry's `url`."
+    }
+  ],
+  "summary": {
+    "errors": 2,
+    "warnings": 0,
+    "info": 0,
+    "rules_fired": [
+      "COL-E-005"
+    ]
+  }
+}

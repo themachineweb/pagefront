@@ -1,4 +1,4 @@
-# Zalando / Friboo — Commerce Organization Sheet worked example (release 0.4.0; first worked at legacy format 0.9, sketch v0.1)
+# Zalando / Friboo — Commerce Organization Sheet worked example (release 0.5.0; first worked at legacy format 0.9, sketch v0.1)
  
 Second worked example, chosen to exercise everything the Nitto DTC case could not: the seller-only path, the multi-brand shared storefront, and the registration-identifier pattern outside France. Source page: the Friboo Stiefelette product (`zalando.de/friboo-stiefelette-taupe-f5713i0iv-n11.html`), plus live fetches of the Zalando Impressum, returns FAQ, and the Friboo brand page (2026-08-14). Companion files: `zalando-organization-v0_9.json` (seller sheet), `zalando-friboo-organization-v0_9.json` (brand sheet).
  

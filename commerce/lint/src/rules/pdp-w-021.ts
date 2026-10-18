@@ -51,7 +51,7 @@ export const pdpW021: Rule = {
     return hits;
   },
   messageTemplate:
-    "Variant link `{name}` at `{path}` appears to reference a separate Sheet by `@id` but omits the recommended `sheet_url`; consumers must reach the target Sheet via `url` + `describedby`.",
+    "Variant link `{name}` at `{path}` appears to reference a separate Sheet by `@id` but omits the recommended `sheet_url`; consumers must reach the target Sheet via `url` + `alternate`.",
   remediation:
     "Add `sheet_url` with the target's Sheet URL — the variant's Sheet URL on a parent `hasVariant` entry, or the parent's Sheet URL on a variant's `isVariantOf`. If you do not emit a separate Sheet for the target (the family is modeled inline in one ProductGroup Sheet), no cross-Sheet link exists and `sheet_url` does not apply.",
   introduced: "v0.7",

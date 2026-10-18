@@ -9,7 +9,7 @@ const manifesto = defineCollection({
 // repository markdown is the canonical source; which entries are
 // published (and where) is decided by src/lib/spec-routes.mjs.
 const spec = defineCollection({
-  loader: glob({ pattern: ['commerce/spec/*.md', 'core/spec/linter.md'], base: '..' }),
+  loader: glob({ pattern: ['commerce/spec/*.md', 'core/spec/*.md'], base: '..' }),
 });
 
 // The governance document, rendered at /pagefront/governance.

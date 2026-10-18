@@ -293,7 +293,8 @@ footer.colophon a{
   color:var(--ink);
 }
 .pf-pill-non-normative,
-.pf-pill-design{
+.pf-pill-design,
+.pf-pill-draft{
   border-style:dashed;
   border-color:var(--ink-soft);
   color:var(--ink-soft);

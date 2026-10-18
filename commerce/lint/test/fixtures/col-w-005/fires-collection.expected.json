@@ -1,0 +1,30 @@
+{
+  "sheet": "https://merchant.example/collections/new-in",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.5.0",
+  "sheet_spec_version": "0.1.0",
+  "catalogue_version": "0.17.0",
+  "findings": [
+    {
+      "rule": "COL-W-005",
+      "severity": "warning",
+      "path": "$['data']['isPartOf'][0]",
+      "values": {
+        "kind": "collection",
+        "name": "Women",
+        "parentKind": "category"
+      },
+      "message": "This `collection` sheet names parent `Women` at `$['data']['isPartOf'][0]`, whose entry declares kind `category`.",
+      "remediation": "A category's `isPartOf` entries are categories: the tree is made of categories only. A collection nests in a collection and never in a category. Correct the parent's declared kind, or move the set to the kind its parent implies."
+    }
+  ],
+  "summary": {
+    "errors": 0,
+    "warnings": 1,
+    "info": 0,
+    "rules_fired": [
+      "COL-W-005"
+    ]
+  }
+}

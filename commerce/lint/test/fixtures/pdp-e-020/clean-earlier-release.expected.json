@@ -1,0 +1,26 @@
+{
+  "sheet": "https://merchant.example/products/aurora-lamp",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.4.0",
+  "sheet_spec_version": "0.10.0",
+  "catalogue_version": "0.17.0",
+  "findings": [
+    {
+      "rule": "PDP-W-029",
+      "severity": "warning",
+      "path": "$['data']['offers'][0]",
+      "values": {},
+      "message": "Offer at `$['data']['offers'][0]` states a price but no region it applies to.",
+      "remediation": "Declare `areaServed` (or `eligibleRegion`) for the market whose displayed price this is. Where the market cannot be determined from the storefront, stating the tax basis via `valueAddedTaxIncluded` is the higher priority; see \"Tax inclusion.\""
+    }
+  ],
+  "summary": {
+    "errors": 0,
+    "warnings": 1,
+    "info": 0,
+    "rules_fired": [
+      "PDP-W-029"
+    ]
+  }
+}

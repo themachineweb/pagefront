@@ -4,7 +4,8 @@ import { readFileSync } from "node:fs";
 import { createServer } from "node:http";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { buildResult, loadFromUrl } from "../src/lib/validate-model.ts";
+import { buildResult, loadFromUrl, detectDeclaredType } from "../src/lib/validate-model.ts";
+import { CURRENT_RELEASE, schemaUrlFor, sheetSpecVersionFor } from "@pagefront/lint-commerce";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const fixture = (p) =>
@@ -13,13 +14,51 @@ const fixture = (p) =>
 const CLEAN = fixture("lint/test/cli-fixtures/clean.json");
 const BROKEN = fixture("lint/test/cli-fixtures/layer1-fails.json");
 const BLACKBIRD = fixture("case-studies/blackbird/blackbird-v3-v0_9.json");
+const ORGANIZATION = fixture("lint/test/fixtures/org-e-001/clean.json");
+const ORGANIZATION_WARNS = fixture("lint/test/fixtures/org-w-001/fires.json");
+const COLLECTION = fixture("lint/test/fixtures/col-e-001/clean.json");
 
 test("clean sheet → report with zero findings", () => {
   const model = buildResult(CLEAN, "paste");
   assert.equal(model.kind, "report");
+  assert.equal(model.sheet_type, "product");
   assert.deepEqual(model.report.summary, {
     errors: 0, warnings: 0, info: 0, rules_fired: [],
   });
+});
+
+test("organization sheet → judged as organization, under the organization catalogue", () => {
+  const clean = buildResult(ORGANIZATION, "paste");
+  assert.equal(clean.kind, "report");
+  assert.equal(clean.sheet_type, "organization");
+  assert.deepEqual(clean.report.summary.rules_fired, []);
+
+  const warns = buildResult(ORGANIZATION_WARNS, "paste");
+  assert.equal(warns.kind, "report");
+  assert.equal(warns.sheet_type, "organization");
+  assert.deepEqual(warns.report.summary.rules_fired, ["ORG-W-001"]);
+
+  // Schema errors come from the organization schema: the required
+  // property named is one a product sheet never carries.
+  const broken = JSON.parse(ORGANIZATION);
+  delete broken.data["pagefront:commerceRole"];
+  const layer1 = buildResult(JSON.stringify(broken), "paste");
+  assert.equal(layer1.kind, "layer1");
+  assert.equal(layer1.sheet_type, "organization");
+  assert.ok(layer1.schemaErrors.some((e) => e.message.includes("pagefront:commerceRole")), JSON.stringify(layer1.schemaErrors));
+});
+
+test("legacy organization sheet (format_version 0.9) → in scope, on the legacy line", () => {
+  const { release: _release, $schema: _schema, ...rest } = JSON.parse(ORGANIZATION);
+  for (const $schema of [
+    "https://themachineweb.org/pagefront/spec/commerce/organization/v0.9.json",
+    "https://themachineweb.org/pagefront/commerce/schemas/organization/v0.9.json",
+  ]) {
+    const model = buildResult(JSON.stringify({ $schema, format_version: "0.9", ...rest }), "paste");
+    assert.equal(model.kind, "report", $schema);
+    assert.equal(model.sheet_type, "organization");
+    assert.equal(model.report.release, "0.9");
+  }
 });
 
 test("schema-broken input → layer1 with mapped SchemaErrors", () => {
@@ -38,9 +77,15 @@ test("findings-bearing sheet (Blackbird) → report with PDP-W-014", () => {
   // buildResult lints at wall-clock time (a live validator should flag an
   // expired sheet), so the corpus artifact's fixed `expires_at` would add
   // PDP-W-008 once that date passes. Re-base it a week out to keep this
-  // test about the sheet's content finding, not the calendar.
+  // test about the sheet's content finding, not the calendar. Likewise
+  // the corpus moves to each new commerce release before the pinned,
+  // published linter knows it, so declare the release that linter
+  // bundles: the site runs the published package, whatever the
+  // repository's current release is.
   const sheet = JSON.parse(BLACKBIRD);
   sheet.expires_at = new Date(Date.now() + 7 * 24 * 3600 * 1000).toISOString();
+  sheet.release = CURRENT_RELEASE;
+  sheet.$schema = schemaUrlFor("product", sheetSpecVersionFor(CURRENT_RELEASE, "product"));
   const model = buildResult(JSON.stringify(sheet), "paste");
   assert.equal(model.kind, "report");
   assert.deepEqual(model.report.summary.rules_fired, ["PDP-W-014"]);
@@ -116,10 +161,55 @@ test("release sheet without $schema → layer1 from the current schema, report o
   assert.deepEqual(model.report.summary.rules_fired, []);
 });
 
-test("another page type's schema → scope error", () => {
+test("type detection: $schema first, then @type with its discriminator; nothing defaults to product", () => {
+  assert.equal(detectDeclaredType(JSON.parse(CLEAN)), "product");
+  assert.equal(detectDeclaredType(JSON.parse(ORGANIZATION)), "organization");
+  assert.equal(detectDeclaredType(JSON.parse(COLLECTION)), "collection");
+
+  // $schema wins over the data block.
+  const crossed = JSON.parse(CLEAN);
+  crossed.$schema = "https://themachineweb.org/pagefront/spec/commerce/organization/v0.4.0.json";
+  assert.equal(detectDeclaredType(crossed), "organization");
+
+  // Without $schema, the data block decides, and only with its discriminator.
+  const org = JSON.parse(ORGANIZATION);
+  delete org.$schema;
+  assert.equal(detectDeclaredType(org), "organization");
+  delete org.data["pagefront:commerceRole"];
+  assert.equal(detectDeclaredType(org), undefined);
+  const col = JSON.parse(COLLECTION);
+  delete col.$schema;
+  assert.equal(detectDeclaredType(col), "collection");
+  delete col.data["pagefront:collectionKind"];
+  assert.equal(detectDeclaredType(col), undefined);
+
+  assert.equal(detectDeclaredType({ release: "0.4.0", data: { "@type": "Thing" } }), undefined);
+  assert.equal(detectDeclaredType({ release: "0.4.0" }), undefined);
+  assert.equal(detectDeclaredType([1, 2]), undefined);
+  assert.equal(detectDeclaredType("x"), undefined);
+});
+
+test("unresolvable type → unknown-type, nothing judged", () => {
+  const sheet = { release: "0.4.0", canonical_url: "https://merchant.example/x", data: { "@type": "Thing" } };
+  assert.deepEqual(buildResult(JSON.stringify(sheet), "paste"), { kind: "unknown-type" });
+  assert.deepEqual(buildResult("[1,2]", "paste"), { kind: "unknown-type" });
+});
+
+test("a collection sheet → unsupported-type until a release bundles its schema", () => {
+  assert.deepEqual(buildResult(COLLECTION, "paste"), { kind: "unsupported-type", sheet_type: "collection" });
+  const byShape = JSON.parse(COLLECTION);
+  delete byShape.$schema;
+  assert.deepEqual(buildResult(JSON.stringify(byShape), "paste"), { kind: "unsupported-type", sheet_type: "collection" });
+});
+
+test("a product sheet declaring the organization schema → judged by its release, ORG-E-003 names the mismatch", () => {
+  // Both types are in scope, so this is no longer a scope error: the
+  // sheet is dispatched as the type its $schema names and judged there.
   const sheet = JSON.parse(CLEAN);
   sheet.$schema = "https://themachineweb.org/pagefront/spec/commerce/organization/v0.4.0.json";
-  assert.equal(buildResult(JSON.stringify(sheet), "paste").kind, "scope-error");
+  const model = buildResult(JSON.stringify(sheet), "paste");
+  assert.equal(model.sheet_type, "organization");
+  assert.equal(model.kind, "layer1");
 });
 
 test("sheet carrying both format_version and release → layer1", () => {

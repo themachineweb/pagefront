@@ -4,7 +4,7 @@
   "linter_version": "0.0.0-test",
   "release": "0.4.0",
   "sheet_spec_version": "0.10.0",
-  "catalogue_version": "0.16.0",
+  "catalogue_version": "0.17.0",
   "findings": [
     {
       "rule": "PDP-E-005",
@@ -12,9 +12,9 @@
       "path": "$['data']['offers'][0]['seller']['pagefront:sheetUrl']",
       "values": {
         "sheetUrlHost": "sheets.other.example",
-        "sheetHost": "merchant.example"
+        "host": "merchant.example"
       },
-      "message": "Seller sheet URL at `$['data']['offers'][0]['seller']['pagefront:sheetUrl']` is on host `sheets.other.example`; the product sheet is on `merchant.example`.",
+      "message": "Seller sheet URL at `$['data']['offers'][0]['seller']['pagefront:sheetUrl']` is on host `sheets.other.example`; the canonical page is on `merchant.example`.",
       "remediation": "Publish the seller's organization sheet on the storefront host."
     }
   ],

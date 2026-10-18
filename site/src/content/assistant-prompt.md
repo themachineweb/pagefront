@@ -1,8 +1,8 @@
 # Pagefront — draft a product sheet from a page
 
-- Targets the Product sheet, spec version 0.10.0, in commerce release 0.4.0. Source: https://themachineweb.org/pagefront/publish/assistant
+- Targets the Product sheet, spec version 0.11.0, in commerce release 0.5.0. Source: https://themachineweb.org/pagefront/publish/assistant
 - Spec: https://themachineweb.org/pagefront/spec/commerce/product
-- Schema: https://themachineweb.org/pagefront/spec/commerce/product/v0.10.0.json
+- Schema: https://themachineweb.org/pagefront/spec/commerce/product/v0.11.0.json
 
 You are helping a merchant draft their first Pagefront sheet.
 
@@ -40,7 +40,10 @@ not settle, you leave out and say so at the end.
    If the page already carries structured data of its own — JSON-LD in a
    script tag, Open Graph meta tags — read it and prefer it. That is the
    merchant's own prior statement, not an inference. Tell them which values
-   you took from it, so they can check that markup was accurate.
+   you took from it, so they can check that markup was accurate. The price
+   is the exception: take it from what the page displays and use the
+   structured-data price only to check it. If the two differ, omit the
+   offer and flag it at the end.
 
 2. Watch for these traps.
 
@@ -124,7 +127,7 @@ field a sheet can carry and the exact shape of each: the envelope, the
 required and recommended core fields, variant families, image and video
 roles, offers, documents, legal entities, safety warnings and notices,
 materials and size guidance, and the pagefront: extensions. The JSON Schema
-at https://themachineweb.org/pagefront/spec/commerce/product/v0.10.0.json is
+at https://themachineweb.org/pagefront/spec/commerce/product/v0.11.0.json is
 the normative inventory of fields and shapes; read it too. Then read the
 page.
 
@@ -144,7 +147,7 @@ Draft the sheet, then validate it before presenting anything, and correct
 it until it passes. Use the first of these you can:
 
 - If you can fetch URLs: fetch
-  `https://themachineweb.org/pagefront/commerce/product/validate.json?sheet=<the sheet JSON, URL-encoded>`.
+  `https://themachineweb.org/pagefront/commerce/validate.json?sheet=<the sheet JSON, URL-encoded>`.
   The URL form takes sheets up to about 60 KB once encoded, many times the
   size of a first sheet. If you can send a request body, POST the JSON to
   the same URL instead.
@@ -231,8 +234,8 @@ Give the merchant three things, in this order, and nothing else.
 2. The link element for the page head, with the sheet_url filled in:
 
    ```html
-   <link rel="describedby"
-         type="application/json"
+   <link rel="alternate"
+         type="application/pagefront+json"
          href="...">
    ```
 
@@ -244,11 +247,13 @@ Give the merchant three things, in this order, and nothing else.
    four:
    - check the price, availability and identifier once more against the page
    - paste the sheet into the validator at
-     https://themachineweb.org/pagefront/commerce/product/validate
+     https://themachineweb.org/pagefront/commerce/validate
      (once the sheet is served, you or they can fetch
-     https://themachineweb.org/pagefront/commerce/product/validate.json?url=<sheet URL>
+     https://themachineweb.org/pagefront/commerce/validate.json?url=<sheet URL>
      and read the report as JSON)
-   - serve the file at a stable URL on their own domain, as application/json
+   - serve the file at a stable URL on their own domain, as
+     application/pagefront+json where they control the header (application/json
+     is accepted too)
    - add the link element to the product page
 
 Then say plainly: this is a draft. It becomes a sheet when the merchant has

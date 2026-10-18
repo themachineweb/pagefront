@@ -9,11 +9,15 @@
 	Content-Type: text/markdown; charset=utf-8
 /pagefront/spec/commerce/organization.md
 	Content-Type: text/markdown; charset=utf-8
+/pagefront/spec/commerce/collection.md
+	Content-Type: text/markdown; charset=utf-8
 /pagefront/spec/commerce/vocabulary.md
 	Content-Type: text/markdown; charset=utf-8
 /pagefront/spec/commerce/rules.md
 	Content-Type: text/markdown; charset=utf-8
 /pagefront/spec/commerce/scoring.md
+	Content-Type: text/markdown; charset=utf-8
+/pagefront/spec/core/discovery.md
 	Content-Type: text/markdown; charset=utf-8
 /pagefront/spec/core/linter.md
 	Content-Type: text/markdown; charset=utf-8
@@ -33,3 +37,10 @@
 
 /pagefront/spec/commerce/releases.md
 	Content-Type: text/markdown; charset=utf-8
+
+# The case studies' sheets are Pagefront sheets served from this domain:
+# the sheet media type (the discovery link's type), with open CORS as the
+# spec's serving note asks of every publisher.
+/pagefront/commerce/case-studies/*.json
+	Content-Type: application/pagefront+json; charset=utf-8
+	Access-Control-Allow-Origin: *

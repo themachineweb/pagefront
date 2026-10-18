@@ -1,6 +1,6 @@
 {
-  "$schema": "https://themachineweb.org/pagefront/spec/commerce/product/v0.10.0.json",
-  "release": "0.4.0",
+  "$schema": "https://themachineweb.org/pagefront/spec/commerce/product/v0.11.0.json",
+  "release": "0.5.0",
   "schema_org_version": "30.0",
   "canonical_url": "https://afs-foiling.com/product/blackbird-v3",
   "sheet_url": "https://afs-foiling.com/pagefront/commerce/product/blackbird-v3.en.json",
@@ -911,6 +911,7 @@
       {
         "@type": "Offer",
         "@id": "https://afs-foiling.com/product/blackbird-v3#offer-7ft6-18in",
+        "url": "https://afs-foiling.com/product/blackbird-v3",
         "itemOffered": {
           "@id": "https://afs-foiling.com/product/blackbird-v3#size-7ft6-18in"
         },
@@ -954,15 +955,24 @@
       {
         "@type": "Offer",
         "@id": "https://afs-foiling.com/product/blackbird-v3#offer-7ft6-20in",
+        "url": "https://afs-foiling.com/product/blackbird-v3",
         "itemOffered": {
           "@id": "https://afs-foiling.com/product/blackbird-v3#size-7ft6-20in"
         },
-        "price": "2299.00",
+        "price": "1609.30",
         "priceCurrency": "EUR",
         "priceSpecification": [
           {
             "@type": "UnitPriceSpecification",
+            "priceType": "https://schema.org/ListPrice",
             "price": "2299.00",
+            "priceCurrency": "EUR",
+            "valueAddedTaxIncluded": true
+          },
+          {
+            "@type": "UnitPriceSpecification",
+            "priceType": "https://schema.org/SalePrice",
+            "price": "1609.30",
             "priceCurrency": "EUR",
             "valueAddedTaxIncluded": true
           }
@@ -997,6 +1007,7 @@
       {
         "@type": "Offer",
         "@id": "https://afs-foiling.com/product/blackbird-v3#offer-8ft0-17in-1-2",
+        "url": "https://afs-foiling.com/product/blackbird-v3",
         "itemOffered": {
           "@id": "https://afs-foiling.com/product/blackbird-v3#size-8ft0-17in-1-2"
         },
@@ -1040,6 +1051,7 @@
       {
         "@type": "Offer",
         "@id": "https://afs-foiling.com/product/blackbird-v3#offer-8ft0-19in-1-2",
+        "url": "https://afs-foiling.com/product/blackbird-v3",
         "itemOffered": {
           "@id": "https://afs-foiling.com/product/blackbird-v3#size-8ft0-19in-1-2"
         },
@@ -1083,6 +1095,7 @@
       {
         "@type": "Offer",
         "@id": "https://afs-foiling.com/product/blackbird-v3#offer-8ft4-17in",
+        "url": "https://afs-foiling.com/product/blackbird-v3",
         "itemOffered": {
           "@id": "https://afs-foiling.com/product/blackbird-v3#size-8ft4-17in"
         },
@@ -1126,15 +1139,24 @@
       {
         "@type": "Offer",
         "@id": "https://afs-foiling.com/product/blackbird-v3#offer-8ft4-19in",
+        "url": "https://afs-foiling.com/product/blackbird-v3",
         "itemOffered": {
           "@id": "https://afs-foiling.com/product/blackbird-v3#size-8ft4-19in"
         },
-        "price": "2339.00",
+        "price": "1637.30",
         "priceCurrency": "EUR",
         "priceSpecification": [
           {
             "@type": "UnitPriceSpecification",
+            "priceType": "https://schema.org/ListPrice",
             "price": "2339.00",
+            "priceCurrency": "EUR",
+            "valueAddedTaxIncluded": true
+          },
+          {
+            "@type": "UnitPriceSpecification",
+            "priceType": "https://schema.org/SalePrice",
+            "price": "1637.30",
             "priceCurrency": "EUR",
             "valueAddedTaxIncluded": true
           }
@@ -1169,6 +1191,7 @@
       {
         "@type": "Offer",
         "@id": "https://afs-foiling.com/product/blackbird-v3#offer-8ft4-21in",
+        "url": "https://afs-foiling.com/product/blackbird-v3",
         "itemOffered": {
           "@id": "https://afs-foiling.com/product/blackbird-v3#size-8ft4-21in"
         },
@@ -1212,6 +1235,7 @@
       {
         "@type": "Offer",
         "@id": "https://afs-foiling.com/product/blackbird-v3#offer-8ft8-16in-1-2",
+        "url": "https://afs-foiling.com/product/blackbird-v3",
         "itemOffered": {
           "@id": "https://afs-foiling.com/product/blackbird-v3#size-8ft8-16in-1-2"
         },
@@ -1255,6 +1279,7 @@
       {
         "@type": "Offer",
         "@id": "https://afs-foiling.com/product/blackbird-v3#offer-8ft8-18in-1-2",
+        "url": "https://afs-foiling.com/product/blackbird-v3",
         "itemOffered": {
           "@id": "https://afs-foiling.com/product/blackbird-v3#size-8ft8-18in-1-2"
         },
@@ -1298,6 +1323,7 @@
       {
         "@type": "Offer",
         "@id": "https://afs-foiling.com/product/blackbird-v3#offer-8ft8-20in-1-2",
+        "url": "https://afs-foiling.com/product/blackbird-v3",
         "itemOffered": {
           "@id": "https://afs-foiling.com/product/blackbird-v3#size-8ft8-20in-1-2"
         },

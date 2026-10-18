@@ -100,7 +100,12 @@ export interface Sheet {
   format_version?: string;
   schema_org_version?: string;
   canonical_url: string;
-  sheet_url: string;
+  /**
+   * An address the sheet is served from, as known to the publisher at
+   * generation time. Informational and optional: the page's alternate
+   * declaration is what locates a sheet.
+   */
+  sheet_url?: string;
   generated_at: string;
   expires_at?: string;
   data: unknown;

@@ -42,7 +42,8 @@ const core = docs.filter((d) => d.route.startsWith('core/'));
     </p>
     <p>
       The commerce documents cover product and organization sheets as brands,
-      manufacturers and retailers publish them. The core documents are
+      manufacturers and retailers publish them, and the collection sheet, a
+      draft, for the listing pages between them. The core documents are
       vertical-agnostic and apply to any future page type.
     </p>
   </div>
@@ -96,14 +97,15 @@ const core = docs.filter((d) => d.route.startsWith('core/'));
     <p>
       <span class="k">Published</span>: commerce product and organization
       sheets, the <code>pagefront:</code> vocabulary, the rule catalogue, the
-      linter design.
+      discovery spec, the linter design.
     </p>
     <p>
       <span class="k">Tooling</span>: <code>@pagefront/lint-core</code> and <code>@pagefront/lint-commerce</code> on npm;
-      the <a href={LINKS.validator}>conformance validator</a>, running in your browser.
+      <a href={LINKS.validator}>Check</a>, which reads a page's declaration and judges the sheet.
     </p>
     <p>
-      <span class="k">Not yet</span>: category and collection sheets.
+      <span class="k">Draft</span>: the collection sheet, awaiting ratification;
+      it joins the next minor release with its schema.
     </p>
   </section>
 </Section>

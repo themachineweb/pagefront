@@ -1,7 +1,9 @@
 import type { Sheet } from "@pagefront/lint-core";
 import { SCHEMA_IDS } from "./generated/schema-ids.js";
+import { overrides } from "./overrides.js";
 import {
-  CURRENT_RELEASE,
+  currentRelease,
+  knownReleases,
   legacySchemaUrl,
   schemaUrlFor,
   sheetSpecVersionFor,
@@ -22,6 +24,13 @@ export type SchemaResolution =
   | { kind: "schema"; id: string }
   /** `release` names no release in the manifest. */
   | { kind: "unknown-release"; declared: string }
+  /**
+   * The release bundles no schema for the sheet's type: the type joined
+   * the line after that release (`release` is the release tried, the
+   * declared one or the current one), or the sheet is on the legacy
+   * draft line and the type was never on it (`release` is null).
+   */
+  | { kind: "unbundled-type"; sheetType: SheetType; release: string | null }
   /** A legacy sheet's `$schema` names no schema this package bundles. */
   | { kind: "unknown-schema"; declared: string };
 
@@ -55,20 +64,34 @@ export function resolveSchema(sheet: Sheet, sheetType?: SheetType): SchemaResolu
   if (sheet.release !== undefined) {
     // A non-string release is validated against the current schema,
     // whose `release` pattern rejects it.
-    if (typeof sheet.release !== "string") {
-      return { kind: "schema", id: schemaUrlFor(type, sheetSpecVersionFor(CURRENT_RELEASE, type) as string) };
-    }
+    if (typeof sheet.release !== "string") return currentSchema(type);
+    if (!knownReleases().includes(sheet.release)) return { kind: "unknown-release", declared: sheet.release };
     const version = sheetSpecVersionFor(sheet.release, type);
-    if (version === undefined) return { kind: "unknown-release", declared: sheet.release };
+    if (version === undefined) return { kind: "unbundled-type", sheetType: type, release: sheet.release };
     return { kind: "schema", id: schemaUrlFor(type, version) };
   }
 
   if (typeof declared === "string") {
-    if (SCHEMA_IDS.includes(declared)) return { kind: "schema", id: declared };
+    if (SCHEMA_IDS.includes(declared) || overrides().validators?.[declared] !== undefined) {
+      return { kind: "schema", id: declared };
+    }
     const former = FORMER_LEGACY_ID.exec(declared);
-    if (former !== null) return { kind: "schema", id: legacySchemaUrl(former[1] as SheetType) };
+    if (former !== null) return { kind: "schema", id: legacySchemaUrl(former[1] as SheetType) as string };
     if (detectSheetLine(sheet) === "legacy") return { kind: "unknown-schema", declared };
   }
-  if (detectSheetLine(sheet) === "legacy") return { kind: "schema", id: legacySchemaUrl(type) };
-  return { kind: "schema", id: schemaUrlFor(type, sheetSpecVersionFor(CURRENT_RELEASE, type) as string) };
+  if (detectSheetLine(sheet) === "legacy") {
+    const legacy = legacySchemaUrl(type);
+    return legacy === undefined
+      ? { kind: "unbundled-type", sheetType: type, release: null }
+      : { kind: "schema", id: legacy };
+  }
+  return currentSchema(type);
+}
+
+/** The current release's schema for a type, or unbundled-type when the current release has none. */
+function currentSchema(type: SheetType): SchemaResolution {
+  const release = currentRelease();
+  const version = sheetSpecVersionFor(release, type);
+  if (version === undefined) return { kind: "unbundled-type", sheetType: type, release };
+  return { kind: "schema", id: schemaUrlFor(type, version) };
 }

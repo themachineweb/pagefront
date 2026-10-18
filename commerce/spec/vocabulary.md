@@ -2,7 +2,7 @@
 
 Namespace: `https://themachineweb.org/pagefront/vocabulary/`
 Prefix: `pagefront:`
-Vocabulary version: 0.4.0 (the vocabulary carries the commerce release version; see [`releases.md`](releases.md))
+Vocabulary version: 0.5.0 (the vocabulary carries the commerce release version; see [`releases.md`](releases.md))
 Schema.org version targeted: 30.0
 
 This document defines the **pagefront vocabulary**, a small set of typed extensions to Schema.org used in pagefront product sheets. The vocabulary fills gaps in Schema.org's coverage for commerce-specific concerns: structured size charts, multi-stage manufacturing provenance, configurable products, made-to-order economics, gemstone grading, videos with structured role classification, typed product documents, typed product relationships, and a few others.
@@ -364,11 +364,13 @@ Used on the `Organization` data block of a Commerce Organization Sheet whose `co
 
 ### pagefront:availableLanguages
 
-Used on `Product` (or `ProductGroup`) to list the URLs of sibling sheets in other languages, when the publisher publishes the same resource in multiple languages. Convenience metadata for cross-language navigation; the authoritative discovery path remains the canonical page's `Link rel=describedby` headers with `hreflang` parameters.
+Used on `Product` (or `ProductGroup`) to list the URLs of sibling sheets in other languages, when the publisher publishes the same resource in multiple languages. It is the language-variant mechanism: a publisher with more than one language variant of a sheet SHOULD declare it on each of them, listing every sibling. The discovery link carries no language attribute; each sibling is declared by its own page, and its `inLanguage` states its language.
 
 Value is an array of objects, each with:
 - `lang` *(required)*: BCP 47 language tag matching the sibling sheet's `inLanguage`.
 - `url` *(required)*: absolute URL of the sibling sheet.
+
+Each `url` is a traversal hint under "Traversal hints" in Pagefront Discovery ([`../../core/spec/discovery.md`](../../core/spec/discovery.md#traversal-hints-normative)): it MAY be stale, since a sibling's address can change between updates of this sheet. A consumer MUST be able to reach a sibling through the sibling's own page, the language variant of this sheet's canonical page, and the sheet that page declares with `alternate`; it SHOULD treat the entry as an optimisation over that path, and MUST NOT cache a sibling's URL across the page's changes.
 
 ```json
 "pagefront:availableLanguages": [
@@ -380,6 +382,10 @@ Value is an array of objects, each with:
 ### pagefront:careInstructions
 
 Used on `Product` to express care instructions. Value is an array of strings, each a single care instruction.
+
+### pagefront:collectionKind
+
+Used on the `Collection` data block of a Commerce Collection Sheet (see [`collection.md`](collection.md)) as the sheet's kind discriminator, and on `Collection` member entries (`hasPart`, `isPartOf`, the `itemListElement` of an organization sheet's `hasOfferCatalog`, a product sheet's `isPartOf`) so a consumer can tell a subcategory from a nested collection before fetching it. Value is a single string from the closed Collection kinds enum (see "Enumerated values"). Required on the data block of that sheet type; recommended on a `Collection` entry; not used elsewhere. Added in release 0.5.0, with the Commerce Collection Sheet.
 
 ### pagefront:commerceRole
 
@@ -488,11 +494,13 @@ Used on `Product` (or `ProductGroup`) to carry the product's safety warnings, la
 
 ### pagefront:sheetUrl
 
-Used on a reference to an entity to declare the URL of the Pagefront sheet describing that entity. Value is an absolute URL (string). In v0.9 it applies to organization references: `Offer.seller`, `Product.brand`, and the `organization` of a reference-form `pagefront:legalEntity` entry. Added in v0.9.
+Used on a reference to an entity to declare the URL of the Pagefront sheet describing that entity. Value is an absolute URL (string). In v0.9 it applies to organization references: `Offer.seller`, `Product.brand`, and the `organization` of a reference-form `pagefront:legalEntity` entry. Added in v0.9. With the Commerce Collection Sheet ([`collection.md`](collection.md)) it also applies to collection references: the member entries of a collection sheet's `hasPart` and `isPartOf`, of a product sheet's `isPartOf` and of an organization sheet's `hasOfferCatalog`, which reference a product, product-group or collection sheet, and the `brand` reference of a brand collection.
 
-`@id` identifies an entity and does not locate its sheet, and the discovery rule forbids constructing sheet URLs, so a sheet reached by reference is located by the publisher's declaration. The URL's host is checked per edge: the product sheet's host for seller references, the `@id`'s host for brand references, either for legal-entity references. The fetched sheet must declare the referenced `@id` at the node the edge points at: the data block for organization references, `data.brand` for brand references. The rules are the linking contract in [`organization.md`](organization.md#linking-contract-identity-only).
+`@id` identifies an entity and does not locate its sheet, and the discovery rule forbids constructing sheet URLs, so a sheet reached by reference is located by the publisher's declaration. The URL's host is checked per edge: the product sheet's host for seller references, the `@id`'s host for brand references, either for legal-entity references; the canonical host of the referencing sheet for the members and parents of a collection sheet and the entries of `hasOfferCatalog`. The fetched sheet must declare the referenced `@id` at the node the edge points at: the data block for organization and collection references, `data.brand` for brand references. The rules are the linking contract in [`organization.md`](organization.md#linking-contract-identity-only) and "Identity" in [`collection.md`](collection.md#identity).
 
 It plays the role `sheet_url` plays on variant entries (`hasVariant[]`, `isVariantOf`) in the Pagefront Spec, in a different position: `sheet_url` is a Pagefront structural field on product-family entries, and `pagefront:sheetUrl` is a vocabulary term that can sit inside any Schema.org-typed reference.
+
+Like `sheet_url`, it is a traversal hint under "Traversal hints" in Pagefront Discovery ([`../../core/spec/discovery.md`](../../core/spec/discovery.md#traversal-hints-normative)). It MAY be stale: the organization sheet's address can change between updates of the sheet carrying the reference. A consumer MUST be able to reach the organization sheet through the entity's page, the reference's `url` and then the Sheet that page declares, SHOULD treat the hint as an optimisation over that path, and MUST NOT cache the organization sheet's URL across the page's changes. The linking contract applies its host and identity checks to whichever URL is followed.
 
 ### pagefront:sizeChart
 
@@ -562,6 +570,16 @@ The closed enum for `pagefront:commerceRole` on a Commerce Organization Sheet (a
 - `seller`: sells products directly to end customers; the entity an `Offer.seller` link resolves to.
 
 The values reuse the `pagefront:LegalEntity` role names, adding `seller`, which the legalEntity enum lacks. `licensee`, `authorized_representative`, and `importer` remain legalEntity-only: they are per-product compliance declarations. Additional values require a spec amendment.
+
+### Collection kinds
+
+The closed enum for `pagefront:collectionKind` on a Commerce Collection Sheet and on `Collection` member entries (added in release 0.5.0, with [`collection.md`](collection.md)):
+
+- `category`: a node of the storefront's navigation tree. A root category has no `isPartOf`; every other category has at least one, each resolving to another `category` sheet on the same host.
+- `collection`: a set outside the tree, curated or rule-based (new arrivals, a sale, a capsule). It MAY nest in another `collection` and MUST NOT point at a `category`.
+- `brand`: the products a store sells under one label. The sheet carries `brand`, a reference to the `Brand` node it is keyed on, and has no `isPartOf`.
+
+What separates a category from a collection is the tree. Additional values require a spec amendment.
 
 ## Schema.org-native patterns
 
@@ -763,7 +781,7 @@ The versioning scheme, the release table and the release notes are in [`releases
 
 - **Sheet specs.** Each sheet spec (product, organization, and future ones) has its own semver and evolves independently. Before 1.0, a breaking or an additive change bumps the minor and a fix or clarification bumps the patch.
 - **Releases.** A commerce release is a named, versioned bundle of member versions: each sheet spec and this vocabulary. Its bump follows its members: major if any member bumps major, else minor if any member bumps minor, else patch. A new sheet type joining is a minor. 1.0.0 is a release like any other.
-- **This vocabulary.** It has no independent version and carries the release version: this is vocabulary 0.4.0, the vocabulary of commerce release 0.4.0.
+- **This vocabulary.** It has no independent version and carries the release version: this is vocabulary 0.5.0, the vocabulary of commerce release 0.5.0.
 - **On the wire.** A sheet's envelope carries `release`, and its `$schema` names the sheet-spec version that release bundles for the sheet's type. Sheets carrying `format_version` belong to the legacy draft line (format versions 0.9 and earlier), which stays valid against the legacy schemas.
 - **Rule catalogue and linter.** Each has its own semver, independent of the release and of the sheet specs.
 
@@ -783,7 +801,7 @@ Before release 1.0.0, terms may still change. Every change is recorded in the ch
 
 ### Term history
 
-This is vocabulary 0.4.0. The versions named in this section are legacy format versions. `pagefront:Document` and `pagefront:RelatedProduct` were added in v0.7. `pagefront:FeatureGroup`, `pagefront:LegalEntity`, `pagefront:SafetyWarning`, `pagefront:SafetyNotice`, `pagefront:featureGroup`, `pagefront:feature`, `pagefront:presentationValue`, `pagefront:productHighlights`, `pagefront:legalEntity`, `pagefront:safetyWarning`, and `pagefront:safetyNotice` were added in v0.8. `pagefront:commerceRole`, `pagefront:fulfillmentTerms`, `pagefront:SocialAccount`, `pagefront:socialAccount`, `pagefront:AuthorizedResellers`, `pagefront:authorizedResellers`, (2026-09-24) `pagefront:manufacturerWarranty`, (2026-09-30) `pagefront:sheetUrl`, and (2026-10-01) `pagefront:ConfiguratorPricing` and `pagefront:configuratorPricing` were added in v0.9. No term is added in release 0.3.0 or in release 0.4.0. From release 1.0.0 the stability policy above applies to every term.
+This is vocabulary 0.5.0. The versions named in this section are legacy format versions. `pagefront:Document` and `pagefront:RelatedProduct` were added in v0.7. `pagefront:FeatureGroup`, `pagefront:LegalEntity`, `pagefront:SafetyWarning`, `pagefront:SafetyNotice`, `pagefront:featureGroup`, `pagefront:feature`, `pagefront:presentationValue`, `pagefront:productHighlights`, `pagefront:legalEntity`, `pagefront:safetyWarning`, and `pagefront:safetyNotice` were added in v0.8. `pagefront:commerceRole`, `pagefront:fulfillmentTerms`, `pagefront:SocialAccount`, `pagefront:socialAccount`, `pagefront:AuthorizedResellers`, `pagefront:authorizedResellers`, (2026-09-24) `pagefront:manufacturerWarranty`, (2026-09-30) `pagefront:sheetUrl`, and (2026-10-01) `pagefront:ConfiguratorPricing` and `pagefront:configuratorPricing` were added in v0.9. No term is added in release 0.3.0 or in release 0.4.0. From release 1.0.0 the stability policy above applies to every term.
 
 Note: v0.5 made envelope/structural changes (the `sheet_url` rename, internationalization model, and URL convention) without adding new vocabulary terms, which is why the vocabulary jumped from 0.4 to 0.6. v0.7 adds two new types (`pagefront:Document`, `pagefront:RelatedProduct`) and adopts Schema.org-native vocabulary for product Q&A without minting a parallel `pagefront:` term. v0.8 adds four new types (`pagefront:FeatureGroup`, `pagefront:LegalEntity`, `pagefront:SafetyWarning`, `pagefront:SafetyNotice`) and five new data-block properties (`pagefront:featureGroup`, `pagefront:productHighlights`, `pagefront:legalEntity`, `pagefront:safetyWarning`, `pagefront:safetyNotice`), and adopts Schema.org-native vocabulary for machine-readable categories (`CategoryCode`) and multiple GTINs without minting parallel terms. v0.9 adds four new properties: `pagefront:commerceRole`, the role discriminator on the Commerce Organization Sheet, with its closed Commerce roles enum; `pagefront:fulfillmentTerms`, the org-level attachment point for store-wide shipping defaults carried as Schema.org-native `OfferShippingDetails`; `pagefront:socialAccount`, the typed home for official social accounts, with the `pagefront:SocialAccount` type, landed together with the tightening of `sameAs` on that sheet to identity authority records only; and `pagefront:authorizedResellers`, the brand's authorization claim over its distribution, with the `pagefront:AuthorizedResellers` type, added 2026-08-31 within the 0.9 draft. v0.9 also adds one certification scope value (`organization`), adopts Schema.org-native vocabulary for company registration identity (a ladder of machine keys, `leiCode` when the entity has an LEI, else `iso6523Code` where the register has an ICD, plus an `identifier` `PropertyValue` for the display form) without minting a term, and relaxes the `pagefront:LegalEntity` `organization.name` requirement in the JSON Schema so reference stubs (`@type` + `@id`) validate. All of this is additive: no term is renamed or removed, and existing v0.8 sheets stay valid. The 2026-10-01 revision is the exception: it removes the price properties of `pagefront:Configurator` and of its options, and a sheet that carried them needs re-emission.
 
@@ -791,7 +809,16 @@ Note: v0.5 made envelope/structural changes (the `sheet_url` rename, internation
 
 ### Unreleased
 
-_Nothing yet. Changes land here and are versioned at the next release; see "Releasing" in [`../../CONTRIBUTING.md`](../../CONTRIBUTING.md)._
+### 0.5.0 — 2026-10-18
+
+The vocabulary of commerce release 0.5.0. One term is added, `pagefront:collectionKind`, with the Commerce Collection Sheet; nothing is renamed or removed.
+
+- **Editorial: traversal-hint pointers.** The notes on `pagefront:sheetUrl` and `pagefront:availableLanguages` point at "Traversal hints" in Pagefront Discovery ([`../../core/spec/discovery.md`](../../core/spec/discovery.md)), where the rule now lives.
+Changes land here and are versioned at the next release; see "Releasing" in [`../../CONTRIBUTING.md`](../../CONTRIBUTING.md).
+
+- **Addition (release 0.5.0): `pagefront:collectionKind`.** Minted with the Commerce Collection Sheet ([`collection.md`](collection.md)): the kind discriminator on that sheet's `Collection` data block and on `Collection` member entries, with the closed Collection kinds enum `category`, `collection`, `brand` (see "Enumerated values"). `pagefront:sheetUrl` extends to collection references: the member entries of `hasPart`, `isPartOf` and `hasOfferCatalog`, checked against the referencing sheet's canonical host, and the `brand` reference of a brand collection, checked under the brand edge. No other term changes; the JSON-LD context block gains its `collectionKind` mapping at the release.
+- **Clarification: `pagefront:availableLanguages` is the language-variant mechanism.** `hreflang` is removed from the discovery link in the Pagefront Spec, and the property's entry says a publisher with more than one language variant of a sheet SHOULD declare it. The fallback path for a stale entry is the sibling's own page and the sheet it declares with `alternate`. Shape and values are unchanged.
+- **Clarification: traversal hints.** `pagefront:sheetUrl` and the `url` of each `pagefront:availableLanguages` entry are traversal hints that MAY be stale. A consumer MUST be able to reach the target through its page, SHOULD treat the hint as an optimisation over that path, and MUST NOT cache a sheet URL across the page's changes. The general rule is stated under "Traversal hints" in the Pagefront Spec; the two term entries refer to it. No term is added, renamed or removed.
 
 ### 0.4.0 — 2026-10-02
 
@@ -828,8 +855,11 @@ Policy and prose only; no term, schema or sheet changes conformance. Releases be
 ## References
 
 - Commerce releases and the versioning scheme: [`releases.md`](releases.md)
-- Product Sheet schema, spec version 0.10.0: `https://themachineweb.org/pagefront/spec/commerce/product/v0.10.0.json` (published file: [`../schemas/product/v0.10.0.json`](../schemas/product/v0.10.0.json))
-- Organization Sheet schema, spec version 0.4.0: `https://themachineweb.org/pagefront/spec/commerce/organization/v0.4.0.json` (published file: [`../schemas/organization/v0.4.0.json`](../schemas/organization/v0.4.0.json))
+- Product Sheet schema, spec version 0.11.0: `https://themachineweb.org/pagefront/spec/commerce/product/v0.11.0.json` (published file: [`../schemas/product/v0.11.0.json`](../schemas/product/v0.11.0.json))
+- Organization Sheet schema, spec version 0.5.0: `https://themachineweb.org/pagefront/spec/commerce/organization/v0.5.0.json` (published file: [`../schemas/organization/v0.5.0.json`](../schemas/organization/v0.5.0.json))
+- Collection Sheet schema, spec version 0.1.0: `https://themachineweb.org/pagefront/spec/commerce/collection/v0.1.0.json` (published file: [`../schemas/collection/v0.1.0.json`](../schemas/collection/v0.1.0.json))
+- Product Sheet schema, spec version 0.10.0, for sheets declaring release 0.4.0: `https://themachineweb.org/pagefront/spec/commerce/product/v0.10.0.json` (published file: [`../schemas/product/v0.10.0.json`](../schemas/product/v0.10.0.json))
+- Organization Sheet schema, spec version 0.4.0, for sheets declaring release 0.4.0: `https://themachineweb.org/pagefront/spec/commerce/organization/v0.4.0.json` (published file: [`../schemas/organization/v0.4.0.json`](../schemas/organization/v0.4.0.json))
 - Schema.org vocabulary: `https://schema.org/`
 - JSON-LD 1.1: `https://www.w3.org/TR/json-ld11/`
 - RFC 8288 (Web Linking): `https://www.rfc-editor.org/rfc/rfc8288`

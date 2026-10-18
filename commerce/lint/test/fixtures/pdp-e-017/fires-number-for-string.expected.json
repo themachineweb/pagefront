@@ -4,7 +4,7 @@
   "linter_version": "0.0.0-test",
   "release": "0.4.0",
   "sheet_spec_version": "0.10.0",
-  "catalogue_version": "0.16.0",
+  "catalogue_version": "0.17.0",
   "findings": [
     {
       "rule": "PDP-E-017",
@@ -13,9 +13,12 @@
       "values": {
         "dimension": "shelf_count",
         "option": "1",
-        "problem": "`shelf_count` lists no option `1`"
+        "problem": "it references `1` (number); dimension `shelf_count` declares `\"1\"` (string)",
+        "reference_type": "number",
+        "declared_option": "\"1\"",
+        "declared_type": "string"
       },
-      "message": "Configuration reference at `$['data']['pagefront:configurator']['exclusions'][1]['shelf_count']` (dimension `shelf_count`, option `1`) does not resolve: `shelf_count` lists no option `1`.",
+      "message": "Configuration reference at `$['data']['pagefront:configurator']['exclusions'][1]['shelf_count']` (dimension `shelf_count`, option `1`) does not resolve: it references `1` (number); dimension `shelf_count` declares `\"1\"` (string).",
       "remediation": "Name a dimension the configurator declares, and write the option exactly as its `value` is written in that dimension's `options`, including its JSON type. Remove an exclusion or adjustment that refers to an option the product no longer offers."
     }
   ],

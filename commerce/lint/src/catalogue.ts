@@ -18,6 +18,9 @@ import { pdpE015 } from "./rules/pdp-e-015.js";
 import { pdpE016 } from "./rules/pdp-e-016.js";
 import { pdpE017 } from "./rules/pdp-e-017.js";
 import { pdpE018 } from "./rules/pdp-e-018.js";
+import { pdpE019 } from "./rules/pdp-e-019.js";
+import { pdpE020 } from "./rules/pdp-e-020.js";
+import { pdpE021 } from "./rules/pdp-e-021.js";
 import { pdpW001 } from "./rules/pdp-w-001.js";
 import { pdpW002 } from "./rules/pdp-w-002.js";
 import { pdpW003 } from "./rules/pdp-w-003.js";
@@ -57,6 +60,7 @@ import { pdpW036 } from "./rules/pdp-w-036.js";
 import { pdpW037 } from "./rules/pdp-w-037.js";
 import { pdpW038 } from "./rules/pdp-w-038.js";
 import { pdpW039 } from "./rules/pdp-w-039.js";
+import { pdpW040 } from "./rules/pdp-w-040.js";
 import { pdpI001 } from "./rules/pdp-i-001.js";
 
 /**
@@ -69,6 +73,6 @@ import { pdpI001 } from "./rules/pdp-i-001.js";
 export const commerceCatalogue: Catalogue = {
   vertical: "commerce",
   releases: KNOWN_RELEASES,
-  catalogueVersion: "0.16.0",
-  rules: [pdpE001, pdpE002, pdpE003, pdpE004, pdpE005, pdpE006, pdpE007, pdpE008, pdpE009, pdpE010, pdpE011, pdpE012, pdpE013, pdpE014, pdpE015, pdpE016, pdpE017, pdpE018, pdpW001, pdpW002, pdpW003, pdpW004, pdpW005, pdpW006, pdpW007, pdpW008, pdpW009, pdpW010, pdpW011, pdpW012, pdpW013, pdpW014, pdpW015, pdpW016, pdpW017, pdpW018, pdpW019, pdpW020, pdpW021, pdpW022, pdpW023, pdpW024, pdpW025, pdpW026, pdpW027, pdpW028, pdpW029, pdpW030, pdpW031, pdpW032, pdpW033, pdpW034, pdpW035, pdpW036, pdpW037, pdpW038, pdpW039, pdpI001],
+  catalogueVersion: "0.17.0",
+  rules: [pdpE001, pdpE002, pdpE003, pdpE004, pdpE005, pdpE006, pdpE007, pdpE008, pdpE009, pdpE010, pdpE011, pdpE012, pdpE013, pdpE014, pdpE015, pdpE016, pdpE017, pdpE018, pdpE019, pdpE020, pdpE021, pdpW001, pdpW002, pdpW003, pdpW004, pdpW005, pdpW006, pdpW007, pdpW008, pdpW009, pdpW010, pdpW011, pdpW012, pdpW013, pdpW014, pdpW015, pdpW016, pdpW017, pdpW018, pdpW019, pdpW020, pdpW021, pdpW022, pdpW023, pdpW024, pdpW025, pdpW026, pdpW027, pdpW028, pdpW029, pdpW030, pdpW031, pdpW032, pdpW033, pdpW034, pdpW035, pdpW036, pdpW037, pdpW038, pdpW039, pdpW040, pdpI001],
 };

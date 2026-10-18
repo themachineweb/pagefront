@@ -6,8 +6,9 @@
  */
 import type { LintOptions, Report, Sheet } from "@pagefront/lint-core";
 import { lintSheet } from "./lint-sheet.js";
+import { overrides } from "./overrides.js";
 import { resolveSchema } from "./schema-registry.js";
-import type { SheetType } from "./sheet-type.js";
+import { SHEET_LABEL, type SheetType } from "./sheet-type.js";
 import { VALIDATORS } from "./schema-validators.js";
 
 /**
@@ -37,9 +38,12 @@ export type ValidateAndLintResult =
  * sheet is validated against the schema its `$schema` names. Returns
  * the errors, empty when the document is valid. A `release` the
  * manifest does not list is a Layer 1 failure of its own, reported at
- * `/release` with the keyword `release`; a legacy `$schema` naming no
- * bundled schema is reported at `/$schema`. In neither case is the
- * document validated against some other version.
+ * `/release` with the keyword `release`, and so is a release that
+ * bundles no schema for the sheet's type (a type that joined the line
+ * later); a legacy `$schema` naming no bundled schema is reported at
+ * `/$schema`, and a legacy sheet of a type that was never on that line
+ * at `/format_version`. In no case is the document validated against
+ * some other version.
  */
 export function schemaErrorsFor(input: unknown, sheetType?: SheetType): SchemaError[] {
   const envelope = (typeof input === "object" && input !== null ? input : {}) as Sheet;
@@ -62,7 +66,29 @@ export function schemaErrorsFor(input: unknown, sheetType?: SheetType): SchemaEr
       },
     ];
   }
-  const validate = VALIDATORS[resolution.id];
+  if (resolution.kind === "unbundled-type") {
+    const label = SHEET_LABEL[resolution.sheetType];
+    return [
+      resolution.release === null
+        ? {
+            instancePath: "/format_version",
+            message: `the legacy draft line has no ${label} schema`,
+            keyword: "format_version",
+          }
+        : {
+            instancePath: "/release",
+            message: `release ${resolution.release} bundles no ${label} schema`,
+            keyword: "release",
+          },
+    ];
+  }
+  // A test may install a validator for a schema the store does not
+  // carry yet (test-hooks.ts); the compiled validators are the rule.
+  const validate = overrides().validators?.[resolution.id] ?? VALIDATORS[resolution.id];
+  if (validate === undefined) {
+    // Unreachable when the store and the manifest agree, which CI checks.
+    return [{ instancePath: "/release", message: `no schema bundled for ${resolution.id}`, keyword: "release" }];
+  }
   if (validate(input)) return [];
   return (validate.errors ?? []).map((error) => ({
     instancePath: error.instancePath,
@@ -89,7 +115,8 @@ export function schemaErrorsFor(input: unknown, sheetType?: SheetType): SchemaEr
  *
  * Layer 2 dispatches by page type (see sheet-type.ts): product sheets
  * lint with the product catalogue, Commerce Organization Sheets with
- * the organization catalogue.
+ * the organization catalogue, Commerce Collection Sheets with the
+ * collection catalogue.
  */
 export function validateAndLint(
   input: unknown,

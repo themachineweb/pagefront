@@ -1,8 +1,9 @@
 # Kimaï — Case Study
 
 Commerce release 0.4.0. Sheets derived from the live site and verified against
-it on 2026-09-04; the product sheet re-derived on 2026-10-01, with its
-options and prices taken from Kimaï's store data.
+it on 2026-09-04; the product sheet re-derived on 2026-10-01. The offer's
+starting price is the one the page displays; the options and their price
+differences come from Kimaï's store data.
 
 ## The merchant and the product
 
@@ -45,7 +46,11 @@ The sheet gives an agent the full price list and the whole set of terms:
 
 ## Where it came from
 
-- **Kimaï's store data** gave the options and the prices. Each ring page
+- **The rendered page** gave the price: with the base configuration
+  selected it displays "Price £3,140", read again on 2026-10-02. The page
+  carries no structured data describing the ring, so there was no second
+  figure to check it against.
+- **Kimaï's store data** gave the options and their price differences. Each ring page
   ships its store products as a data file. The ring is two products: a
   diamond, one product per carat, and a band, one product per band style
   with a variant per size and metal. Carats, band styles, metals and sizes
@@ -150,8 +155,9 @@ engraving leaves the price unchanged.
   affect the price.
 - **The warranty.** "Lifetime Warranty" and the repair-or-replace promise
   are on the page three times. The sheet carries them on the offer.
-- **The price states its basis.** The UK edition prices in pounds with
-  taxes and duties included, and the page names its market in the URL.
+- **The price states its basis.** The page says that all import taxes
+  and duties are included in the final price for UK orders, and its
+  country selector shows "United Kingdom (GBP£)".
   The offer carries `valueAddedTaxIncluded` and declares the United
   Kingdom with `areaServed`.
 - **The category is the site's own word.** "Engagement rings".
@@ -179,8 +185,9 @@ Where the site contradicts itself, a merchant would want to know:
 ## What publishing would take
 
 The site is a static build from a content system, so the sheet is one more
-build output per product and per language, served on kimai.com with a link
-tag on the page. The terms already live in the content system and the
+build output per product and per language, served on kimai.com as
+`application/pagefront+json`, with a link tag on each page: `rel="alternate"`
+with `type="application/pagefront+json"`. The terms already live in the content system and the
 prices in the store, as two products per ring; the sheet states their sum
 for each configuration, which the page leaves to the browser. The
 organization sheet is one file per language. Both sheets validate; the
@@ -273,4 +280,9 @@ that day.
   the European half-size adjustment dropped beside UK sizes, the advice
   kept as written.
 - **2026-10-02** — sheets moved to commerce release 0.4.0 (`release` and
+  `$schema` only); no other value changed.
+- **2026-10-18** — the offer states the page where it is bought (`url`,
+  the UK product page); no other value changed. The page states no
+  checkout link, so no checkout template is carried.
+- **2026-10-18** — sheets moved to commerce release 0.5.0 (`release` and
   `$schema` only); no other value changed.

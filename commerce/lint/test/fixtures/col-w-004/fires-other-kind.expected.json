@@ -1,0 +1,28 @@
+{
+  "sheet": "https://merchant.example/collections/knitwear",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.5.0",
+  "sheet_spec_version": "0.1.0",
+  "catalogue_version": "0.17.0",
+  "findings": [
+    {
+      "rule": "COL-W-004",
+      "severity": "warning",
+      "path": "$['data']",
+      "values": {
+        "problem": "carries `brand` but declares `pagefront:collectionKind` `category`"
+      },
+      "message": "Collection at `$['data']` carries `brand` but declares `pagefront:collectionKind` `category`.",
+      "remediation": "On a brand collection, add `brand`, the reference to the `Brand` node the set is keyed on (`@type`, `@id` and `pagefront:sheetUrl`). On a category or a collection, remove `brand`, or declare the kind `brand` if the set is the products sold under one label."
+    }
+  ],
+  "summary": {
+    "errors": 0,
+    "warnings": 1,
+    "info": 0,
+    "rules_fired": [
+      "COL-W-004"
+    ]
+  }
+}

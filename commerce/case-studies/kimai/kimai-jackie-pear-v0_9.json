@@ -1,6 +1,6 @@
 {
-  "$schema": "https://themachineweb.org/pagefront/spec/commerce/product/v0.10.0.json",
-  "release": "0.4.0",
+  "$schema": "https://themachineweb.org/pagefront/spec/commerce/product/v0.11.0.json",
+  "release": "0.5.0",
   "schema_org_version": "30.0",
   "canonical_url": "https://kimai.com/uk/engagement-rings/jackie",
   "sheet_url": "https://kimai.com/pagefront/commerce/product/jackie-pear.en-GB.json",
@@ -483,6 +483,7 @@
       {
         "@type": "AggregateOffer",
         "@id": "https://kimai.com/uk/engagement-rings/jackie#offer",
+        "url": "https://kimai.com/uk/engagement-rings/jackie",
         "priceCurrency": "GBP",
         "lowPrice": 3140,
         "highPrice": 11040,

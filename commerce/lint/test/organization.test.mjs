@@ -141,7 +141,7 @@ test("identity is @id + name: dropping either fails Layer 1", () => {
 });
 
 // ---------------------------------------------------------------------------
-// Layer 2 — the organization catalogue (ORG-W-001 … ORG-W-006), corpus-clean
+// Layer 2 — the organization catalogue (ORG-W-001 … ORG-W-007), corpus-clean
 // ---------------------------------------------------------------------------
 
 const CORPUS = [
@@ -168,7 +168,7 @@ test("the three corpus organization sheets lint clean end to end", () => {
       { errors: 0, warnings: 0, info: 0, rules_fired: [] },
       `${file} should have zero findings`
     );
-    assert.equal(result.report.catalogue_version, "0.16.0");
+    assert.equal(result.report.catalogue_version, "0.17.0");
   }
 });
 

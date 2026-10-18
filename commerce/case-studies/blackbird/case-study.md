@@ -1,7 +1,8 @@
 # AFS Blackbird V3 — Case Study
 
 Commerce release 0.4.0. Sheets derived from the live site and verified against
-it on 2026-09-04; the product sheet re-verified on 2026-09-30.
+it on 2026-09-04; the product sheet re-verified on 2026-09-30, and its
+prices read again from the rendered page on 2026-10-02.
 
 ## The merchant and the product
 
@@ -12,7 +13,7 @@ edition, and through a network of dealers it maps on its own site. The
 company also owns a second brand, AHD, and presents itself at foilandco.fr.
 
 The product is the Blackbird V3, a downwind foil board sold bare in ten
-sizes, from 2 299 €:
+sizes, 2 299 € to 2 349 € at their regular price:
 https://afs-foiling.com/product/blackbird-v3
 
 ## What the page says today, and what the sheet adds
@@ -29,7 +30,7 @@ The sheet makes all of that answerable in one read:
 | Question an agent might be asked | From the page | From the sheet |
 |---|---|---|
 | Is the 8'0 × 19½ in stock? | Selects it and waits for a script | One unit left; nine other sizes on back order |
-| What does it cost? | Waits for the price to load | 2 299 € to 2 349 € including VAT, per size |
+| What does it cost? | Waits for the price to load | 1 609,30 € to 2 349 € including VAT, per size; two sizes on sale with their regular price |
 | Which size for an 85 kg rider? | Reads the size guide | Four sizes carry that limit, as a value on each |
 | How long, how wide, how heavy? | Reads a ten-row table | Numbers with units on every size, display strings kept |
 | What is the warranty, can I return it? | Reads the strip and the terms | Two years and fifteen days free on the offer; the legal terms on the seller |
@@ -56,10 +57,13 @@ treat statements that disagree. The prices follow the specification's
 
 ## What AFS would decide
 
-- **Prices.** The shop stores prices excluding VAT and displays them
-  including it, at the French rate. The sheet carries the displayed,
-  tax-inclusive price for each size, says so with `valueAddedTaxIncluded`,
-  and declares France as the market: the storefront shows one euro price
+- **Prices.** The sheet carries, for each size, the price the page
+  displays once that size is selected. Two sizes were on sale on
+  2026-10-02; their offers carry the sale price, with the regular price
+  beside it. AFS's terms of sale state that prices are in euros inclusive
+  of all taxes, and the record the page embeds names the displayed amount
+  as its tax-inclusive price. The offers say so with
+  `valueAddedTaxIncluded`. The sheet declares France as the market: the storefront shows one euro price
   to every visitor, and that price is the French consumer price. A producer
   running inside the shop would take the displayed price directly.
 - **Per-size addresses.** The shop's own per-size links point at the
@@ -89,8 +93,10 @@ Where the site contradicts itself:
 
 A WooCommerce plugin on the backend would have every product value the
 sheet needs, including the tax-inclusive price, and could serve the sheet
-next to the product. The storefront would add one link tag. The
-organization sheet is one file, refreshed when dealers change. The
+next to the product, served as `application/pagefront+json`. The storefront
+would add one link tag, `rel="alternate"` with
+`type="application/pagefront+json"`. The organization sheet is one file,
+refreshed when dealers change. The
 organization sheet validates clean; the product sheet carries the one
 expected warning above.
 
@@ -134,9 +140,12 @@ products, the French edition, the home page, the legal notice, the terms of
 sale, the team page, the dealer map and its records, and foilandco.fr.
 Every value in both sheets was checked against those sources by a script
 that accepts a value only if it is quoted from a page, matched against
-shop data, or derived by a stated rule. Tax-inclusive prices are derived
-from the API's tax-exclusive ones by the ratio the page's own record
-states. Values that are the editor's reading: image and video roles, the
+shop data, or derived by a stated rule. Prices are the ones the page
+renders: on 2026-10-02 each of the ten sizes was selected in a browser and
+its displayed price read. The page's structured data gives one figure, a
+lowest price of 1 609,30 €, which agrees with the lowest rendered price.
+The shop's tax-exclusive amounts were used only to check the rendered
+ones. Values that are the editor's reading: image and video roles, the
 new-condition flag, the feature-group labels, and the country codes on
 dealer addresses.
 
@@ -150,9 +159,17 @@ dealer addresses.
 - **2026-09-04** — case switched to the Blackbird V3; both sheets derived
   from the live site.
 - **2026-09-18** — offers state their tax basis and market.
+- **2026-10-02** — prices read from the rendered page, size by size: eight
+  unchanged; the 7'6 × 20" and the 8'4 × 19" on sale at 30 % off, carried
+  as sale price with the regular price.
 - **2026-09-30** — product sheet re-verified: prices and stock unchanged;
   the spec table's construction and box columns follow the page's current
   split; a fifth upsell added; the related items dropped, since the shop
   reshuffles them on every page load.
 - **2026-10-02** — sheets moved to commerce release 0.4.0 (`release` and
+  `$schema` only); no other value changed.
+- **2026-10-18** — each offer states the page where it is bought (`url`,
+  the product page, which every size shares); no other value changed. The
+  page states no checkout link, so no checkout template is carried.
+- **2026-10-18** — sheets moved to commerce release 0.5.0 (`release` and
   `$schema` only); no other value changed.

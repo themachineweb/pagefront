@@ -1,15 +1,14 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://themachineweb.org/pagefront/spec/commerce/organization/v0.4.0.json",
-  "title": "Pagefront Commerce Organization Sheet 0.4.0",
-  "description": "Sheet spec version 0.4.0, a member of commerce release 0.4.0. Since 0.4.0 the envelope requires $schema. The envelope carries release in place of format_version, and $schema, which is required, names this sheet-spec version; a sheet carrying format_version belongs to the legacy draft line and validates against the legacy schema at .../organization/v0.9.json, which is otherwise identical. Formal schema for the Pagefront Commerce Organization Sheet — the sheet describing the entity behind products (brand owner, manufacturer, seller), introduced with commerce format 0.9 alongside the reference-capable legalEntity and the seller-sheet return/shipping model. The data block roots on Schema.org Organization (recognized subtypes permitted; @type is not constrained to a single value). pagefront:commerceRole is the required role discriminator, an array of one or more values from the closed enum brand_owner / manufacturer / seller. pagefront:fulfillmentTerms carries the store-wide shipping defaults as an array of Schema.org-native OfferShippingDetails objects; only the attachment shell is validated, the payload is Schema.org content. pagefront:socialAccount carries the organization's official social accounts (platform / url / handle; publisher-stated only), distinct from sameAs, which carries identity authority records only. pagefront:authorizedResellers carries the brand's authorization claim over its distribution — a pagefront:AuthorizedResellers object with an optional exhaustive flag and a reseller array whose entries name an Organization either as a reference stub (@id) or inline (name plus url and/or address), with optional Schema.org-native areaServed; valid only where commerceRole includes brand_owner (linter ORG-W-006). There is no GTIN-equivalent identifier requirement: identity is @id + name. Validates the envelope and pagefront-namespaced extensions strictly; Schema.org-typed blocks permit additional unspecified properties.",
+  "$id": "https://themachineweb.org/pagefront/spec/commerce/organization/v0.5.0.json",
+  "title": "Pagefront Commerce Organization Sheet 0.5.0",
+  "description": "Sheet spec version 0.5.0, a member of commerce release 0.5.0. Since 0.5.0 the sheet may carry hasOfferCatalog, the catalogue entry point: a flat Schema.org OfferCatalog whose itemListElement lists the storefront's root collections as Collection member entries (@type, @id and url required; pagefront:sheetUrl, name and pagefront:collectionKind optional), valid for any commerce role, referencing Commerce Collection Sheets on the sheet's own host. Since 0.5.0 sheet_url is optional: it is an address the sheet is served from as known at generation time, and the page's alternate link locates the sheet. Since 0.4.0 the envelope requires $schema. The envelope carries release in place of format_version, and $schema, which is required, names this sheet-spec version; a sheet carrying format_version belongs to the legacy draft line and validates against the legacy schema at .../organization/v0.9.json, which is otherwise identical. Formal schema for the Pagefront Commerce Organization Sheet — the sheet describing the entity behind products (brand owner, manufacturer, seller), introduced with commerce format 0.9 alongside the reference-capable legalEntity and the seller-sheet return/shipping model. The data block roots on Schema.org Organization (recognized subtypes permitted; @type is not constrained to a single value). pagefront:commerceRole is the required role discriminator, an array of one or more values from the closed enum brand_owner / manufacturer / seller. pagefront:fulfillmentTerms carries the store-wide shipping defaults as an array of Schema.org-native OfferShippingDetails objects; only the attachment shell is validated, the payload is Schema.org content. pagefront:socialAccount carries the organization's official social accounts (platform / url / handle; publisher-stated only), distinct from sameAs, which carries identity authority records only. pagefront:authorizedResellers carries the brand's authorization claim over its distribution — a pagefront:AuthorizedResellers object with an optional exhaustive flag and a reseller array whose entries name an Organization either as a reference stub (@id) or inline (name plus url and/or address), with optional Schema.org-native areaServed; valid only where commerceRole includes brand_owner (linter ORG-W-006). There is no GTIN-equivalent identifier requirement: identity is @id + name. Validates the envelope and pagefront-namespaced extensions strictly; Schema.org-typed blocks permit additional unspecified properties.",
   "type": "object",
   "required": [
     "$schema",
     "release",
     "schema_org_version",
     "canonical_url",
-    "sheet_url",
     "generated_at",
     "data"
   ],
@@ -243,6 +242,28 @@
             }
           ]
         },
+        "hasOfferCatalog": {
+          "type": "object",
+          "required": [
+            "@type",
+            "itemListElement"
+          ],
+          "properties": {
+            "@type": {
+              "const": "OfferCatalog"
+            },
+            "name": {
+              "type": "string"
+            },
+            "itemListElement": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/memberEntry"
+              }
+            }
+          },
+          "additionalProperties": true
+        },
         "pagefront:commerceRole": {
           "type": "array",
           "minItems": 1,
@@ -427,6 +448,43 @@
         },
         "additionalProperty": {
           "type": "array"
+        }
+      },
+      "additionalProperties": true
+    },
+    "memberEntry": {
+      "type": "object",
+      "required": [
+        "@type",
+        "@id",
+        "url"
+      ],
+      "properties": {
+        "@type": {
+          "type": "string"
+        },
+        "@id": {
+          "type": "string",
+          "format": "uri"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "pagefront:sheetUrl": {
+          "type": "string",
+          "format": "uri"
+        },
+        "name": {
+          "type": "string"
+        },
+        "pagefront:collectionKind": {
+          "type": "string",
+          "enum": [
+            "category",
+            "collection",
+            "brand"
+          ]
         }
       },
       "additionalProperties": true

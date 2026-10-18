@@ -1,20 +1,16 @@
 import type { CheckFn, CheckHit, Rule } from "@pagefront/lint-core";
-import { KNOWN_RELEASES, schemaUrlFor, sheetSpecVersionFor } from "../releases.js";
-import type { SheetType } from "../sheet-type.js";
+import { knownReleases, schemaUrlFor, sheetSpecVersionFor } from "../releases.js";
+import { SHEET_LABEL, type SheetType } from "../sheet-type.js";
 
 /**
- * Shared checks for the envelope's version fields, used by the product
- * and organization catalogues (PDP-E-002 / ORG-E-003, PDP-E-016 /
- * ORG-E-002). Transcribed from commerce/spec/rules.md (normative).
+ * Shared checks for the envelope's version fields, used by the product,
+ * organization and collection catalogues (PDP-E-002 / ORG-E-003 /
+ * COL-E-003, PDP-E-016 / ORG-E-002, PDP-E-018 / ORG-E-004 / COL-E-004).
+ * Transcribed from commerce/spec/rules.md (normative).
  */
 
 /** The trailing `v<version>.json` of a `$schema` URL. */
 const SCHEMA_VERSION = /v(\d+(?:\.\d+)*)\.json$/;
-
-const SHEET_LABEL: Record<SheetType, string> = {
-  product: "Product Sheet",
-  organization: "Organization Sheet",
-};
 
 /**
  * Release / schema mismatch. The rule reads `$schema` and is quiet
@@ -24,7 +20,8 @@ const SHEET_LABEL: Record<SheetType, string> = {
  * present `$schema` must be the URL of the sheet-spec schema the release
  * manifest maps the declared `release` and the sheet type to; a release
  * the manifest does not list has no mapping (the unknown-release rule
- * reports it). On the legacy line the `$schema` version segment must
+ * reports it), and neither has a listed release that bundles no schema
+ * for the sheet type (Layer 1 reports that). On the legacy line the `$schema` version segment must
  * equal `format_version`, as before. Quiet when the sheet carries both
  * fields (the both-fields rule reports that).
  */
@@ -112,8 +109,9 @@ export const BOTH_VERSION_FIELDS: Pick<Rule, "title" | "severity" | "target" | "
  */
 export const unknownRelease: CheckFn = (_match, ctx) => {
   const { release } = ctx.sheet;
-  if (typeof release !== "string" || KNOWN_RELEASES.includes(release)) return null;
-  return { path: "$['release']", values: { release, known: KNOWN_RELEASES.join(", ") } };
+  const known = knownReleases();
+  if (typeof release !== "string" || known.includes(release)) return null;
+  return { path: "$['release']", values: { release, known: known.join(", ") } };
 };
 
 export const UNKNOWN_RELEASE: Pick<Rule, "title" | "severity" | "target" | "messageTemplate" | "remediation"> = {

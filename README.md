@@ -15,9 +15,9 @@ they offer — without any platform's permission required.
 
 ## Status
 
-Commerce release 0.4.0 is the current release. It bundles the Product Sheet
-spec 0.10.0, the Organization Sheet spec 0.4.0 and the vocabulary. Category,
-collection and catalog sheets are to come, each joining in a later release.
+Commerce release 0.5.0 is the current release. It bundles the Product Sheet
+spec 0.11.0, the Organization Sheet spec 0.5.0, the Collection Sheet spec
+0.1.0 and the vocabulary.
 The format is suitable for experimentation and feedback today; the stability
 policy applies from release 1.0.0.
 
@@ -33,31 +33,31 @@ What this repository contains today:
   (`scoring.md`). `product.json` and `organization.json` are the editable
   heads of the JSON Schemas. Rendered at
   [themachineweb.org/pagefront/spec](https://themachineweb.org/pagefront/spec).
-- [`core/spec/`](core/spec/) — the vertical-agnostic linter design
-  (`linter.md`).
+- [`core/spec/`](core/spec/) — the format-level documents: discovery
+  (`discovery.md`) and the vertical-agnostic linter design (`linter.md`).
 - [`core/lint/`](core/lint/) and [`commerce/lint/`](commerce/lint/) —
   `@pagefront/lint-core` and `@pagefront/lint-commerce`, published on npm:
   the rule engine, the commerce catalogue, and the `pagefront-lint-commerce`
   CLI.
 - [`commerce/case-studies/`](commerce/case-studies/) — worked examples
-  against real merchants, all with release 0.4.0 sheets. Nitto (apparel), Kimaï
+  against real merchants, all with release 0.5.0 sheets. Nitto (apparel), Kimaï
   (jewelry, made-to-order) and AFS Blackbird V3 (sports equipment, multi-SKU)
   each carry a product sheet and an organization sheet; Zalando / Friboo
   (multi-brand retailer) carries organization sheets only.
 - [`commerce/schemas/`](commerce/schemas/) — every published JSON Schema,
-  one file per version (`product/v0.10.0.json`, `organization/v0.4.0.json`,
-  and the legacy `v0.9.json` files). Frozen and append-only: the site serves
+  one file per version (`product/v0.11.0.json`, `organization/v0.5.0.json`,
+  `collection/v0.1.0.json`, the earlier versions, and the legacy `v0.9.json`
+  files). Frozen and append-only: the site serves
   these files verbatim, so a published schema URL never changes or
   disappears.
 - [`commerce/archive/`](commerce/archive/) — frozen: the record of drafts
   before release 0.3.0. Nothing is added; later history is in git tags and
   changelogs.
-- [`site/`](site/) — themachineweb.org, including the browser-side
-  [conformance validator](https://themachineweb.org/pagefront/commerce/product/validate)
-  for product sheets.
+- [`site/`](site/) — themachineweb.org, including
+  [Check](https://themachineweb.org/pagefront/commerce/validate), which reads a
+  page's sheet declaration and judges the sheet it points at.
 
-Not yet: category and collection sheets, and verticals beyond commerce
-(`media/` is reserved).
+Not yet: verticals beyond commerce (`media/` is reserved).
 
 ## Repository layout
 
@@ -71,6 +71,7 @@ pagefront/
 ├── package.json                  npm workspaces root (lint packages)
 ├── core/                         Vertical-agnostic pieces
 │   ├── spec/
+│   │   ├── discovery.md            Discovery: carriers, entry point, traversal hints
 │   │   └── linter.md               Linter design (rule structure, output)
 │   └── lint/                       @pagefront/lint-core (rule engine, renderers)
 ├── commerce/                     The commerce vertical
@@ -86,8 +87,9 @@ pagefront/
 │   │   ├── scoring.md              Completeness dimensions (non-normative)
 │   │   └── registry/               Machine-readable property registry
 │   ├── schemas/                    Published JSON Schemas, frozen, one per version
-│   │   ├── product/                  v0.10.0.json, v0.9.0.json, and the legacy v0.9.json
-│   │   └── organization/             v0.4.0.json, v0.3.0.json, and the legacy v0.9.json
+│   │   ├── product/                  v0.11.0.json, v0.10.0.json, v0.9.0.json, and the legacy v0.9.json
+│   │   ├── organization/             v0.5.0.json, v0.4.0.json, v0.3.0.json, and the legacy v0.9.json
+│   │   └── collection/               v0.1.0.json
 │   ├── lint/                       @pagefront/lint-commerce (catalogue + CLI)
 │   ├── case-studies/               Worked examples against real merchants
 │   │   ├── nitto/                    Apparel (Nitto Knitwear)
@@ -107,7 +109,7 @@ pagefront/
 2. Read [`commerce/spec/product.md`](commerce/spec/product.md) for the prose
    specification, here or [on the site](https://themachineweb.org/pagefront/spec/commerce/product).
 3. Author a sheet and check it: paste it into the
-   [validator](https://themachineweb.org/pagefront/commerce/product/validate),
+   [Check](https://themachineweb.org/pagefront/commerce/validate),
    or run `pagefront-lint-commerce <sheet-url-or-path>` from
    `@pagefront/lint-commerce`. Both validate against the JSON Schema first,
    then apply the rule catalogue.

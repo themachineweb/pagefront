@@ -1,0 +1,57 @@
+{
+  "$schema": "https://themachineweb.org/pagefront/spec/commerce/collection/v0.1.0.json",
+  "release": "0.5.0",
+  "schema_org_version": "30.0",
+  "canonical_url": "https://merchant.example/collections/knitwear",
+  "sheet_url": "https://merchant.example/pagefront/commerce/collection/knitwear.en.json",
+  "generated_at": "2026-10-01T00:00:00Z",
+  "expires_at": "2026-10-02T00:00:00Z",
+  "data": {
+    "@context": [
+      "https://schema.org",
+      {
+        "pagefront": "https://themachineweb.org/pagefront/vocabulary/"
+      }
+    ],
+    "@type": "Collection",
+    "@id": "https://merchant.example/collections/knitwear#collection",
+    "name": "Knitwear",
+    "inLanguage": "en",
+    "url": "https://merchant.example/collections/knitwear",
+    "pagefront:collectionKind": "category",
+    "isPartOf": [
+      {
+        "@type": "Collection",
+        "@id": "https://merchant.example/collections/women#collection",
+        "url": "https://merchant.example/collections/women",
+        "pagefront:sheetUrl": "https://merchant.example/pagefront/commerce/collection/women.en.json",
+        "name": "Women",
+        "pagefront:collectionKind": "category"
+      }
+    ],
+    "hasPart": [
+      {
+        "@type": "Collection",
+        "@id": "https://merchant.example/collections/knitwear-cardigans#collection",
+        "url": "https://merchant.example/collections/knitwear-cardigans",
+        "pagefront:sheetUrl": "https://merchant.example/pagefront/commerce/collection/knitwear-cardigans.en.json",
+        "name": "Cardigans",
+        "pagefront:collectionKind": "category"
+      },
+      {
+        "@type": "ProductGroup",
+        "@id": "https://merchant.example/products/aurora-jumper#product",
+        "url": "https://merchant.example/products/aurora-jumper",
+        "pagefront:sheetUrl": "https://merchant.example/pagefront/commerce/product/aurora-jumper.en.json",
+        "name": "Aurora Jumper"
+      },
+      {
+        "@type": "Product",
+        "@id": "https://merchant.example/products/harbor-vest#product",
+        "url": "https://merchant.example/products/harbor-vest",
+        "pagefront:sheetUrl": "https://merchant.example/pagefront/commerce/product/harbor-vest.en.json",
+        "name": "Harbor Vest"
+      }
+    ]
+  }
+}

@@ -6,7 +6,9 @@ import { hostOf, renderHost } from "./sheet-url-host.js";
  * Transcribed from commerce/spec/rules.md (normative).
  *
  * Fires when an offer's `seller` carries `pagefront:sheetUrl` whose host
- * differs from the host of the sheet's own `sheet_url`, or has no host.
+ * differs from the canonical host, or has no host. The canonical host is
+ * the host of the envelope `canonical_url`, the page the sheet describes
+ * (the catalogue's Definitions); the optional `sheet_url` plays no part.
  * The seller's `@id` plays no part: the linking contract lets it be
  * minted on another domain the organization controls. The finding sits
  * at the `pagefront:sheetUrl` path.
@@ -24,15 +26,15 @@ export const pdpE005: Rule = {
     const s = seller as Record<string, unknown>;
     if (s["pagefront:sheetUrl"] === undefined) return null;
     const urlHost = hostOf(s["pagefront:sheetUrl"]);
-    const sheetHost = hostOf(ctx.sheet.sheet_url);
-    if (urlHost !== null && urlHost === sheetHost) return null;
+    const canonicalHost = hostOf(ctx.sheet.canonical_url);
+    if (urlHost !== null && urlHost === canonicalHost) return null;
     return {
       path: `${match.path}['seller']['pagefront:sheetUrl']`,
-      values: { sheetUrlHost: renderHost(urlHost), sheetHost: renderHost(sheetHost) },
+      values: { sheetUrlHost: renderHost(urlHost), host: renderHost(canonicalHost) },
     };
   },
   messageTemplate:
-    "Seller sheet URL at `{path}` is on host `{sheetUrlHost}`; the product sheet is on `{sheetHost}`.",
+    "Seller sheet URL at `{path}` is on host `{sheetUrlHost}`; the canonical page is on `{host}`.",
   remediation: "Publish the seller's organization sheet on the storefront host.",
   introduced: "v0.9",
   appliesFrom: "0.3.0",
