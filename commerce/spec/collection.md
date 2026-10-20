@@ -12,7 +12,7 @@ The Commerce Collection Sheet is the Pagefront Sheet that describes a listing pa
 Every listing page is a set of products with a name and a URL. What differs is why the products are together:
 
 - A **category** is a node in the storefront's navigation tree. Its members share a kind. It has a parent, except at the root, and it may have subcategories.
-- A **collection** is a curated or rule-based set outside the tree: new arrivals, a sale, a licensed capsule, a lookbook. It may nest in another collection (a series inside a family) and otherwise stands alone.
+- A **collection** is a set outside the tree that the merchant assembles by hand: a licensed capsule, a lookbook, an edit. It may nest in another collection (a series inside a family) and otherwise stands alone. A set filled by a rule is not a collection in this sense and has no sheet (see "Listing pages without a Sheet").
 - A **brand** collection is the set of products a multi-brand store sells under one label. Its membership criterion is the label, and it points at the `Brand` node it is keyed on.
 
 One sheet type carries all three because the shape is the same: a `Collection` with members in `hasPart` and parents in `isPartOf`. The kind is declared explicitly in `pagefront:collectionKind`, so a consumer knows whether it is walking a tree or reading a list.
@@ -38,7 +38,7 @@ Identical to every Pagefront Sheet. `canonical_url` is the listing page the shee
 
 `release` and `$schema` follow the rules in "The envelope" in the Pagefront Spec ([`product.md`](product.md)); `$schema` names this sheet spec's version, `collection/v0.1.0.json`, and MUST name the version the release table bundles (linter rule COL-E-003).
 
-Membership changes often. A sheet whose members are computed by a rule (an automated collection, a sale) SHOULD carry an `expires_at` within a day; a category whose assignments are stable MAY sit further out. A consumer reading an expired sheet treats its `hasPart` as possibly stale and re-fetches before acting on it.
+Membership changes often. A category whose members are computed by a rule SHOULD carry an `expires_at` within a day; a category whose assignments are stable MAY sit further out. A consumer reading an expired sheet treats its `hasPart` as possibly stale and re-fetches before acting on it.
 
 ## Sheet URL and stability
 
@@ -252,6 +252,12 @@ Where a facet page does get a sheet, it is a `category` whose `isPartOf` is the 
 
 A consumer that lands on a listing page without a sheet reads the page. The products on it are product pages with sheets, and each product sheet's `isPartOf` leads to the nearest sheeted set.
 
+**Collections filled by a rule have no sheet.** A collection whose membership the merchant's platform computes from a rule (an automated collection, a dynamic campaign, a set defined by a condition on price, date, stock, sales or a product attribute) is not described by a Collection Sheet. A producer MUST NOT emit one for it. Its products are reached through their own pages and through the category tree.
+
+A producer determines that a collection is filled by a rule from the platform's model, which states it. It does not infer it from the collection's name or from the products on its page. A collection whose platform states no rule is treated as assembled by hand.
+
+This applies to the `collection` kind. A listing in the category tree is a `category` and keeps its sheet however its membership is filled.
+
 ## Discovery
 
 As for every sheet, per Pagefront Discovery ([`../../core/spec/discovery.md`](../../core/spec/discovery.md)): `Link: rel="alternate"; type="application/pagefront+json"` on the listing page's response, with the HTML `<link>` fallback, and the `profile` attribute naming this sheet spec's schema. A collection sheet is also reached by reference, through `pagefront:sheetUrl` on an `isPartOf` entry, a `hasPart` entry or a `hasOfferCatalog` entry, under the traversal-hint rule in that document.
@@ -260,15 +266,15 @@ As for every sheet, per Pagefront Discovery ([`../../core/spec/discovery.md`](..
 
 Collection sheets are produced from the platform's catalog model, where the producer has access to it. The model states direct membership, position and the tree, which a crawl of the pages cannot recover. The mapping, per model:
 
-- **A platform with a category tree and separate collections or campaigns** (Magento, Salesforce B2C, PrestaShop, commercetools): categories map to `category` with the model's parent links, products to the `hasPart` of each category they are assigned to in the model's position order, and promotional or campaign groupings to `collection`.
-- **A platform with one flat collection object** (Shopify): the online store's menu hierarchy is the tree. A collection reached through a nested menu item maps to `category`, with the parent menu item's collection as `isPartOf`; a menu item that is a link with no collection behind it has no page to describe, and its children attach to the nearest ancestor collection. A collection outside the menus, or in a flat featured menu, maps to `collection`. A brand collection (a vendor collection) maps to `brand`. Automated collections are exhaustive at emission and churn; give them a short `expires_at`.
+- **A platform with a category tree and separate collections or campaigns** (Magento, Salesforce B2C, PrestaShop, commercetools): categories map to `category` with the model's parent links, products to the `hasPart` of each category they are assigned to in the model's position order, and promotional or campaign groupings assembled by hand to `collection`; groupings the model defines by a rule have no sheet.
+- **A platform with one flat collection object** (Shopify): the online store's menu hierarchy is the tree. A collection reached through a nested menu item maps to `category`, with the parent menu item's collection as `isPartOf`; a menu item that is a link with no collection behind it has no page to describe, and its children attach to the nearest ancestor collection. A collection outside the menus, or in a flat featured menu, maps to `collection` when it is a manual collection; an automated collection outside the menus has no sheet. An automated collection reached through a nested menu item is a `category` like any other, with a short `expires_at`. A brand collection (a vendor collection) maps to `brand`.
 - **Facet pages** exist in the storefront's routing and in no platform model. A producer that cannot see them emits none, which is conformant.
 
 Direct membership from a model is a read. Where a platform states only page-level membership and rolls descendants into parents, the direct members of a node are the products on it minus the union of its descendants' products; a product assigned to both a parent and a child is then listed under the child only.
 
 ## Worked examples
 
-To be written against a real sheet before ratification. The candidate is a Shopify storefront with a nested menu, so that the flat-collection mapping above is exercised.
+To be written against a real sheet before ratification. The candidate is a Shopify storefront with a nested menu, so that the flat-collection mapping above is exercised. The example uses a category or a manual collection; a collection filled by a rule has no sheet to show.
 
 ## Linter rules (proposed)
 
@@ -287,6 +293,8 @@ Codes are reserved here and defined in [`rules.md`](rules.md), where catalogue 0
 - **COL-W-006** the same `@id` twice in `hasPart`.
 
 The rules are defined, with their fixtures, under "Commerce Collection Sheet rules" in [`rules.md`](rules.md) (catalogue 0.17.0); the two lists are kept identical.
+
+The exclusion of collections filled by a rule ("Listing pages without a Sheet") is a producer obligation with no linter check: a sheet cannot show how its source collection was filled.
 
 ## Companion changes
 
@@ -317,6 +325,7 @@ Recorded for the ratification review.
 - **No catalog sheet**: no page, and `hasOfferCatalog` plus the tree carry what it would have.
 - **Brand as a collection kind**, pointing at the `Brand`: a Schema.org `Brand` is a label (an `Intangible` used for labeling products), and the set of products under a label is a `Collection`.
 - **A listing with its own URL is a category, and un-sheeted listings are conformant**: the first keeps the definition free of a taxonomy/facet distinction no producer can draw; the second keeps the obligation within what producers can see.
+- **No sheet for a collection filled by a rule**: a rule-filled collection is a view of the catalogue; its products are reached through their own pages and the tree. The rule is read from the platform's model, never inferred. Categories are exempt, since the tree is built from them however they are filled.
 
 ## References
 
@@ -332,6 +341,8 @@ Recorded for the ratification review.
 ### Unreleased
 
 Changes land here and are versioned at the next release; see "Releasing" in [`../../CONTRIBUTING.md`](../../CONTRIBUTING.md).
+
+- **Change (minor): collections filled by a rule have no sheet.** Producers MUST NOT emit one, determine rule-filled membership from the platform's model, and do not infer it. The `collection` kind covers sets assembled by hand. Categories are unaffected and keep their sheets however they are filled. See "One sheet type, three kinds", "Listing pages without a Sheet" and "Producer guidance"; the product side is in [`product.md`](product.md).
 
 ### 0.1.0 — 2026-10-18
 

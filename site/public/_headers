@@ -3,6 +3,8 @@
 # legacy encoding and mangle the em dashes and the euro sign.
 /pagefront/publish/assistant.md
 	Content-Type: text/markdown; charset=utf-8
+/pagefront/publish/write/*.md
+	Content-Type: text/markdown; charset=utf-8
 
 # The spec documents' markdown twins, and the model-facing index.
 /pagefront/spec/commerce/product.md
@@ -33,6 +35,17 @@
 
 /pagefront/spec/commerce/organization/*
 	Content-Type: application/schema+json; charset=utf-8
+	Access-Control-Allow-Origin: *
+
+/pagefront/spec/commerce/collection/*
+	Content-Type: application/schema+json; charset=utf-8
+	Access-Control-Allow-Origin: *
+
+# The Pagefront Property Registry (commerce/spec/registry/properties.json),
+# the machine-readable registry of propertyID values the Product Sheet spec
+# publishes at this address.
+/pagefront/commerce/registry/properties.json
+	Content-Type: application/json; charset=utf-8
 	Access-Control-Allow-Origin: *
 
 /pagefront/spec/commerce/releases.md

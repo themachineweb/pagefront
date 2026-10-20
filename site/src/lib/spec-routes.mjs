@@ -40,8 +40,7 @@ export const SPEC_DOCS = {
   'commerce/spec/collection': {
     route: 'commerce/collection',
     source: 'commerce/spec/collection.md',
-    // No schemaType: the schema is an editable head until a release
-    // freezes it, and the chip links to released schemas only.
+    schemaType: 'collection',
     title: 'Collection sheet',
     status: 'normative',
     statusLine:

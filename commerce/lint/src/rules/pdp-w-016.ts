@@ -1,4 +1,5 @@
 import type { Rule } from "@pagefront/lint-core";
+import { isUnavailable } from "./unavailable-offer.js";
 
 /**
  * PDP-W-016 — Possibly-missed price.
@@ -6,6 +7,10 @@ import type { Rule } from "@pagefront/lint-core";
  *
  * Bespoke cross-field check: `availability` and `priceCurrency` present,
  * but no `price`, no `priceSpecification`, no `pagefront:priceOnRequest`.
+ * Silent when `availability` is OutOfStock, SoldOut or Discontinued: an
+ * offer the page shows as unavailable is published without a price
+ * ("Unavailable offers without a price"), so the missing price is no
+ * sign of an extraction failure.
  */
 export const pdpW016: Rule = {
   id: "PDP-W-016",
@@ -16,6 +21,7 @@ export const pdpW016: Rule = {
     const offer = match.value;
     if (typeof offer !== "object" || offer === null) return null;
     const o = offer as Record<string, unknown>;
+    if (isUnavailable(o)) return null;
     return o["availability"] !== undefined &&
       o["priceCurrency"] !== undefined &&
       o["price"] === undefined &&

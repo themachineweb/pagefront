@@ -12,6 +12,14 @@ const spec = defineCollection({
   loader: glob({ pattern: ['commerce/spec/*.md', 'core/spec/*.md'], base: '..' }),
 });
 
+// The prompts in commerce/prompts/: the built chat prompts are rendered at
+// /pagefront/publish/write/<platform>, the one-product prompt at
+// /pagefront/publish/assistant, each with a markdown twin; the code-route
+// prompts are in the collection and have no page yet.
+const prompts = defineCollection({
+  loader: glob({ pattern: 'commerce/prompts/*.md', base: '..' }),
+});
+
 // The governance document, rendered at /pagefront/governance.
 const governance = defineCollection({
   loader: glob({ pattern: 'GOVERNANCE.md', base: '..' }),
@@ -38,4 +46,4 @@ const consume = defineCollection({
   loader: glob({ pattern: 'consume.md', base: './src/content' }),
 });
 
-export const collections = { manifesto, spec, governance, contributing, caseStudies, publish, consume };
+export const collections = { manifesto, spec, prompts, governance, contributing, caseStudies, publish, consume };

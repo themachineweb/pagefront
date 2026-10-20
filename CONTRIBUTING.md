@@ -250,7 +250,11 @@ A commerce release is cut from `main` in one pull request, then tagged.
    [`commerce/spec/releases.json`](commerce/spec/releases.json).
 6. **Migrate the case-study sheets and the examples** to the new release:
    `release`, `$schema`, and whatever the release changed. The examples
-   include the ones on the site (`site/src/content/`).
+   include the ones on the site (`site/src/content/`). Rebuild the prompts
+   in `commerce/prompts/` for the new release (schema URLs, spec versions,
+   the target release line), bump the prompt set and add its changelog
+   entry; see "Versioning" in
+   [`commerce/prompts/README.md`](commerce/prompts/README.md).
 7. **Merge to `main`, then tag** `commerce-v<release>` on the merge commit
    and publish a GitHub Release with the notes from `releases.md`.
 
@@ -261,6 +265,8 @@ Tag names:
 - `lint-core-v<semver>` and `lint-commerce-v<semver>` mark the npm
   packages, and match the published versions. Pushing one publishes the
   package.
+- `commerce-prompts-v<semver>` marks a version of the prompt set in
+  `commerce/prompts/`, and matches the version the prompts state.
 - Sheet specs are not tagged. A release tag pins them through
   `releases.json`.
 

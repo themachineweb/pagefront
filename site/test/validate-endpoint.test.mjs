@@ -82,7 +82,7 @@ test("?sheet= and POST validate the caller's own JSON without fetching", async (
   assert.equal(limited.status, 429);
 });
 
-test("type detection: product, organization, collection (not yet checkable), unresolvable", async () => {
+test("type detection: product, organization, collection, unresolvable", async () => {
   const product = await (await call(`${VALIDATE_PATH}?sheet=${encodeURIComponent(CLEAN)}`)).json();
   assert.equal(product.kind, "report");
   assert.equal(product.sheet_type, "product");
@@ -92,7 +92,9 @@ test("type detection: product, organization, collection (not yet checkable), unr
   assert.equal(organization.sheet_type, "organization");
 
   const collection = await (await call(`${VALIDATE_PATH}?sheet=${encodeURIComponent(COLLECTION)}`)).json();
-  assert.deepEqual(collection, { kind: "unsupported-type", sheet_type: "collection" });
+  assert.equal(collection.kind, "report");
+  assert.equal(collection.sheet_type, "collection");
+  assert.equal(collection.report.sheet_spec_version, "0.1.0");
 
   // Detection by the data block when $schema is absent.
   const byShape = JSON.parse(ORGANIZATION);

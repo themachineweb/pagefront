@@ -27,10 +27,10 @@ sheet type.
 
 ## Catalogue
 
-Catalogue 0.17.0, supporting commerce releases 0.5.0 (Product Sheet spec
+Catalogue 0.18.0, supporting commerce releases 0.5.0 (Product Sheet spec
 0.11.0, Organization Sheet spec 0.5.0, Collection Sheet spec 0.1.0), 0.4.0
 (Product Sheet spec 0.10.0, Organization Sheet spec 0.4.0) and 0.3.0, and the
-legacy draft line (format 0.9): 62 product rules (`PDP-E-001` to `PDP-E-021`, `PDP-W-001` to
+legacy draft line (format 0.9): 63 product rules (`PDP-E-001` to `PDP-E-022`, `PDP-W-001` to
 `PDP-W-040`, `PDP-I-001`), 11 organization rules (`ORG-E-001` to
 `ORG-E-004`, `ORG-W-001` to `ORG-W-007`) and 10 collection rules
 (`COL-E-001` to `COL-E-005`, `COL-W-001`, `COL-W-002`, `COL-W-004` to
@@ -186,9 +186,14 @@ Added in 0.12.0 (catalogue 0.16.0), with commerce release 0.4.0. Requires
   Offer with neither `areaServed` nor `eligibleRegion`; an Offer `url` that
   is not an absolute http or https URL; and an Offer without `url` on a
   sheet carrying several offers.
+- `PDP-E-022` (applies from release 0.6.0, unreleased) — "Unavailable offers
+  without a price" in the Product Sheet spec: a `checkoutPageURLTemplate` on
+  an Offer whose `availability` is `OutOfStock`, `SoldOut` or `Discontinued`.
+  From the same change, `PDP-W-016` is silent on such an Offer, which the
+  spec publishes without a price.
 
-Added in catalogue 0.17.0, released with commerce release 0.5.0, with the
-Commerce Collection Sheet spec
+Added in 0.13.0 (catalogue 0.17.0), released with commerce release 0.5.0,
+with the Commerce Collection Sheet spec
 ([`collection.md`](https://github.com/themachineweb/pagefront/blob/main/commerce/spec/collection.md)):
 
 - A third page type. A sheet whose `$schema` path contains

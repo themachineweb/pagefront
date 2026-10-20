@@ -168,7 +168,7 @@ test("the three corpus organization sheets lint clean end to end", () => {
       { errors: 0, warnings: 0, info: 0, rules_fired: [] },
       `${file} should have zero findings`
     );
-    assert.equal(result.report.catalogue_version, "0.17.0");
+    assert.equal(result.report.catalogue_version, "0.18.0");
   }
 });
 

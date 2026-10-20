@@ -27,7 +27,7 @@ A pagefront sheet references this vocabulary by declaring the `pagefront:` prefi
 
 JSON-LD processors that follow the prefix will resolve `pagefront:SizeChart` to `https://themachineweb.org/pagefront/vocabulary/SizeChart`. Consumers that don't dereference the prefix still parse the sheet correctly because the property names are self-describing.
 
-The companion JSON-LD context file is available at `https://themachineweb.org/pagefront/vocabulary/context.jsonld` and is reproduced in the "JSON-LD Context" section below.
+The JSON-LD context for the vocabulary is the block under "JSON-LD Context" below. No context file is served at a URL of its own; a sheet needs none, since the prefix declaration above is what a JSON-LD processor expands the terms with.
 
 ## Design principles
 
@@ -576,7 +576,7 @@ The values reuse the `pagefront:LegalEntity` role names, adding `seller`, which 
 The closed enum for `pagefront:collectionKind` on a Commerce Collection Sheet and on `Collection` member entries (added in release 0.5.0, with [`collection.md`](collection.md)):
 
 - `category`: a node of the storefront's navigation tree. A root category has no `isPartOf`; every other category has at least one, each resolving to another `category` sheet on the same host.
-- `collection`: a set outside the tree, curated or rule-based (new arrivals, a sale, a capsule). It MAY nest in another `collection` and MUST NOT point at a `category`.
+- `collection`: a set outside the tree that the merchant assembles by hand (a capsule, a lookbook, an edit). A set filled by a rule has no sheet ("Listing pages without a Sheet" in [`collection.md`](collection.md)). It MAY nest in another `collection` and MUST NOT point at a `category`.
 - `brand`: the products a store sells under one label. The sheet carries `brand`, a reference to the `Brand` node it is keyed on, and has no `isPartOf`.
 
 What separates a category from a collection is the tree. Additional values require a spec amendment.
@@ -619,7 +619,7 @@ The corpus illustrates each rung. Nitto (MBTJM SAS) carries `iso6523Code` on ICD
 
 ## JSON-LD Context
 
-The following is the machine-readable JSON-LD context for the pagefront vocabulary. Consumers using JSON-LD processors can fetch this from `https://themachineweb.org/pagefront/vocabulary/context.jsonld`.
+The following is the machine-readable JSON-LD context for the pagefront vocabulary. It is published in this document; a sheet declares the `pagefront` prefix inline, as shown at the top of this document, and a JSON-LD processor needs nothing more to expand the terms.
 
 ```json
 {
@@ -665,6 +665,9 @@ The following is the machine-readable JSON-LD context for the pagefront vocabula
     "careInstructions": {
       "@id": "pagefront:careInstructions",
       "@container": "@list"
+    },
+    "collectionKind": {
+      "@id": "pagefront:collectionKind"
     },
     "commerceRole": {
       "@id": "pagefront:commerceRole",
@@ -808,6 +811,10 @@ Note: v0.5 made envelope/structural changes (the `sheet_url` rename, internation
 ## Changelog
 
 ### Unreleased
+
+- **Fix: `collectionKind` in the context block.** The 0.5.0 entry said the JSON-LD context block gains its `collectionKind` mapping at the release. The mapping was missing and is added.
+- **Editorial: no context file.** The two sentences saying a context file is available at `https://themachineweb.org/pagefront/vocabulary/context.jsonld` are removed; that address was never served, and no sheet or consumer in the corpus references it. The context is the block under "JSON-LD Context". Serving the vocabulary namespace, the term IRIs and a context file together, is future work.
+- **Clarification: the `collection` kind.** The enum entry says the kind covers sets assembled by hand and that a set filled by a rule has no sheet, following the amendment to [`collection.md`](collection.md). No term changes.
 
 ### 0.5.0 — 2026-10-18
 

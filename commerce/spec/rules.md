@@ -1,7 +1,7 @@
 # Pagefront Commerce Linter — Rule Catalogue
 
 Status: draft / design document, not yet a published normative artifact.
-Catalogue version: 0.17.0
+Catalogue version: 0.18.0
 Supports: commerce releases 0.5.0 (Product Sheet spec 0.11.0, Organization Sheet spec 0.5.0, Collection Sheet spec 0.1.0), 0.4.0 (Product Sheet spec 0.10.0, Organization Sheet spec 0.4.0) and 0.3.0 (Product Sheet spec 0.9.0, Organization Sheet spec 0.3.0), and the legacy draft line (format 0.9).
 
 This document is the normative linter rule catalogue for Pagefront commerce Sheets. Its version is a semver of its own, independent of the commerce release and of the sheet specs ([`releases.md`](releases.md)); the "Supports" line above states which releases this catalogue version applies to. It implements the rule structure, severity levels, and output format defined in the vertical-agnostic linter design at [`../../core/spec/linter.md`](../../core/spec/linter.md).
@@ -27,6 +27,7 @@ Rules that do not follow the default:
 | PDP-E-017 | release 0.4.0 | no |
 | PDP-E-018, ORG-E-004, COL-E-004 | every declared release (they judge the declared release itself) | no (a legacy Sheet declares no release) |
 | PDP-E-019, PDP-E-020, PDP-E-021, PDP-W-040 | release 0.5.0, whose Product Sheet spec 0.11.0 adds "Where to buy" | no |
+| PDP-E-022 | release 0.6.0, whose Product Sheet spec 0.12.0 adds "Unavailable offers without a price" | no |
 | COL-E-001, COL-E-002, COL-E-003, COL-E-005, COL-W-001 to COL-W-006 | release 0.5.0, the release that bundles Collection Sheet spec 0.1.0 | no (the Collection Sheet spec has no legacy draft line) |
 | ORG-W-007 | release 0.5.0, which admits `hasOfferCatalog` | no |
 
@@ -317,6 +318,18 @@ The `{url}` placeholder renders the value as JSON.
 **Applies from:** release 0.5.0. Product Sheet spec 0.11.0 introduces the requirement ("Where to buy"); a Sheet declaring release 0.4.0 or 0.3.0, or a legacy Sheet, is not judged by this rule.
 **Spec reference:** `product.md#where-to-buy`
 
+#### PDP-E-022 — Checkout template on an unavailable offer
+
+**Severity:** error
+**Target:** `$.data.offers[*]` (the finding sits at the Offer's `checkoutPageURLTemplate`)
+**Description:** An Offer whose `availability` is `OutOfStock`, `SoldOut` or `Discontinued` cannot be bought now ("Unavailable offers without a price"). A checkout template is a hand-off that can create a cart, so such an Offer MUST NOT carry one; its `url` stays, since the page is where a shopper asks to be notified. The rule fires whether or not the Offer states a price.
+**Check:** Fires when an Offer carries `checkoutPageURLTemplate` and its `availability` is a string matching `https?://schema.org/(OutOfStock|SoldOut|Discontinued)`. Silent on every other availability value and on an Offer without a template; the template's own validity is PDP-E-019's concern and its region PDP-E-020's.
+**Message:** Checkout template at `{path}` sits on an Offer whose `availability` is `{availability}`, which cannot be bought now.
+**Remediation:** Remove the template; keep `url`, the page where a shopper can ask to be notified.
+**Introduced:** release 0.6.0
+**Applies from:** release 0.6.0. Product Sheet spec 0.12.0 introduces the requirement ("Unavailable offers without a price"); a Sheet declaring an earlier release, or a legacy Sheet, is not judged by this rule.
+**Spec reference:** `product.md#tax-inclusion`
+
 ### Warnings
 
 #### PDP-W-001 — Recommended field absent: image
@@ -491,8 +504,8 @@ One message covers both the variants-carry-`@id`s case and the no-identifiers-at
 
 **Severity:** warning
 **Target:** `$.data.offers[*]`
-**Description:** An `Offer` that carries commercial structure (`availability` and `priceCurrency`) but no `price`, no `priceSpecification`, and no `pagefront:priceOnRequest` declaration is most likely the result of an extraction failure: the merchant's page probably shows a price that the production pipeline did not capture. Intentional omissions should be declared via `pagefront:priceOnRequest` so the linter can distinguish "deliberately unpriced" from "we missed it."
-**Check:** An `Offer` has `availability` and `priceCurrency` defined, but no `price`, no `priceSpecification`, and no `pagefront:priceOnRequest`.
+**Description:** An `Offer` that carries commercial structure (`availability` and `priceCurrency`) but no `price`, no `priceSpecification`, and no `pagefront:priceOnRequest` declaration is most likely the result of an extraction failure: the merchant's page probably shows a price that the production pipeline did not capture. Intentional omissions should be declared via `pagefront:priceOnRequest` so the linter can distinguish "deliberately unpriced" from "we missed it." An Offer whose `availability` is `OutOfStock`, `SoldOut` or `Discontinued` is outside the rule: an offer the page shows as unavailable, with no price shown, is published without a price ("Unavailable offers without a price"), so the missing price is no sign of a missed extraction.
+**Check:** An `Offer` has `availability` and `priceCurrency` defined, but no `price`, no `priceSpecification`, and no `pagefront:priceOnRequest`. Does not fire when `availability` matches `https?://schema.org/(OutOfStock|SoldOut|Discontinued)`.
 **Message:** Offer at `{path}` has commercial structure (availability, priceCurrency) but no price declaration (no `price`, no `priceSpecification`, no `pagefront:priceOnRequest`).
 **Remediation:** Add `price` (and confirm `priceCurrency`) if the price was missed during extraction. If the merchant intentionally publishes no price, declare `pagefront:priceOnRequest` with an appropriate `method` and contact channel.
 **Introduced:** v0.6
@@ -1081,6 +1094,8 @@ The `{name}` placeholder renders the entry's `name`; when absent, the fixed fall
 ### Unreleased
 
 Changes land here and are versioned at the next release; see "Releasing" in [`../../CONTRIBUTING.md`](../../CONTRIBUTING.md).
+
+- **Minor (catalogue 0.18.0): unavailable offers without a price.** Product Sheet spec 0.12.0 (unreleased) lets an Offer the page shows as `OutOfStock`, `SoldOut` or `Discontinued`, with no price shown, be published without a price ("Unavailable offers without a price" in [`product.md`](product.md)). PDP-W-016 no longer fires on an Offer carrying one of those three values. One error added: PDP-E-022, a `checkoutPageURLTemplate` on such an Offer, applying from release 0.6.0 and never to the legacy line. PDP-W-028 and PDP-W-029 already read a priceless Offer as stating no price and are silent on it; each gains a negative fixture saying so. The new fixtures declare release 0.6.0 and run against the test manifest (`commerce/lint/test/manifest/releases.json`), which adds that row and resolves Product Sheet spec 0.12.0 to the editable head; the release pull request adds the row to `commerce/spec/releases.json` and freezes the head, and changes nothing in the fixtures. No published sheet changes conformance.
 
 ### 0.17.0 — 2026-10-18
 

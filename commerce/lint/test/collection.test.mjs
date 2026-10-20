@@ -122,7 +122,7 @@ test("schema head: a member entry carries @type, @id and url; the brand referenc
 test("the worked example lints clean against the collection catalogue, under the test manifest", () => {
   const report = underTestManifest(() => lintSheet(loadExample(), OPTS));
   assert.deepEqual(report.summary, { errors: 0, warnings: 0, info: 0, rules_fired: [] });
-  assert.equal(report.catalogue_version, "0.17.0");
+  assert.equal(report.catalogue_version, "0.18.0");
   assert.equal(report.release, "0.5.0");
   assert.equal(report.sheet_spec_version, "0.1.0");
 });

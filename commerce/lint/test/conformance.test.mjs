@@ -30,8 +30,14 @@ const fixturesDir = join(here, "fixtures");
 const TEST_MANIFEST = JSON.parse(readFileSync(join(here, "manifest", "releases.json"), "utf8"));
 // The "Where to buy" rules (product.md), all applying from release 0.5.0.
 const WHERE_TO_BUY = new Set(["pdp-e-019", "pdp-e-020", "pdp-e-021", "pdp-w-040"]);
+// The rules with fixtures for an unavailable offer without a price
+// (product.md, "Unavailable offers without a price"): those fixtures
+// declare release 0.6.0, which the test manifest adds ahead of its
+// release. The directories' other fixtures declare earlier releases,
+// which the test manifest lists identically.
+const UNAVAILABLE_OFFERS = new Set(["pdp-e-022", "pdp-w-016", "pdp-w-028", "pdp-w-029"]);
 const runsAgainstTestManifest = (ruleDir) =>
-  ruleDir.startsWith("col-") || ruleDir === "org-w-007" || WHERE_TO_BUY.has(ruleDir);
+  ruleDir.startsWith("col-") || ruleDir === "org-w-007" || WHERE_TO_BUY.has(ruleDir) || UNAVAILABLE_OFFERS.has(ruleDir);
 
 const ruleDirs = readdirSync(fixturesDir, { withFileTypes: true })
   .filter((entry) => entry.isDirectory())

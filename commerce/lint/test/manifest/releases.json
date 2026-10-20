@@ -1,5 +1,5 @@
 {
-  "$comment": "Test manifest: commerce/spec/releases.json plus any unreleased row the fixtures need ahead of its release. Since release 0.5.0 landed on 2026-10-18 it carries no extra row and equals the bundled manifest; it stays so that fixtures for the next unreleased release can declare it. Installed by test-hooks.ts; never read in production.",
+  "$comment": "Test manifest: commerce/spec/releases.json plus any unreleased row the fixtures need ahead of its release. It adds the 0.6.0 row (Product Sheet spec 0.12.0, the editable head commerce/spec/product.json) for the fixtures of the unavailable-offer rules; the release pull request adds that row to the bundled manifest and freezes the head. Installed by test-hooks.ts; never read in production.",
   "vertical": "commerce",
   "schema_url_template": "https://themachineweb.org/pagefront/spec/commerce/{sheet}/v{version}.json",
   "releases": [
@@ -27,6 +27,16 @@
       "vocabulary": "0.5.0",
       "sheets": {
         "product": "0.11.0",
+        "organization": "0.5.0",
+        "collection": "0.1.0"
+      }
+    },
+    {
+      "release": "0.6.0",
+      "date": "unreleased",
+      "vocabulary": "0.5.0",
+      "sheets": {
+        "product": "0.12.0",
         "organization": "0.5.0",
         "collection": "0.1.0"
       }

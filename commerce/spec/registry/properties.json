@@ -2,8 +2,8 @@
   "$id": "https://themachineweb.org/pagefront/commerce/registry/properties.json",
   "name": "Pagefront Property Registry",
   "description": "Machine-readable registry of propertyID values used in Pagefront Sheets (variant dimensions, pagefront:featureGroup entries, and additionalProperty conventions). The registry is a coordination artifact: producers SHOULD draw propertyID values from it so that independent publishers converge on the same identifiers, making sheets comparable across merchants. Consumers MUST treat propertyID values not present in this registry as opaque but usable identifiers, never as errors.",
-  "registry_version": "1.0.0-draft",
-  "updated": "2026-08-06",
+  "registry_version": "0.1.0",
+  "updated": "2026-10-19",
   "spec": "https://themachineweb.org/pagefront/commerce",
   "policy": {
     "stability": "Entries are never removed or renamed. Status transitions: proposed -> stable -> deprecated. Deprecated entries remain resolvable and valid.",

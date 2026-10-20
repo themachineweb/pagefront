@@ -1,0 +1,39 @@
+{
+  "sheet": "https://merchant.example/products/aurora-lamp",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.6.0",
+  "sheet_spec_version": "0.12.0",
+  "catalogue_version": "0.18.0",
+  "findings": [
+    {
+      "rule": "PDP-W-013",
+      "severity": "warning",
+      "path": "$['data']['offers'][0]['availability']",
+      "values": {
+        "value": "http://schema.org/OutOfStock"
+      },
+      "message": "Legacy HTTP Schema.org URI `http://schema.org/OutOfStock` at `$['data']['offers'][0]['availability']`.",
+      "remediation": "Change `http://schema.org/...` to `https://schema.org/...`. The value is otherwise unchanged."
+    },
+    {
+      "rule": "PDP-E-022",
+      "severity": "error",
+      "path": "$['data']['offers'][0]['checkoutPageURLTemplate']",
+      "values": {
+        "availability": "http://schema.org/OutOfStock"
+      },
+      "message": "Checkout template at `$['data']['offers'][0]['checkoutPageURLTemplate']` sits on an Offer whose `availability` is `http://schema.org/OutOfStock`, which cannot be bought now.",
+      "remediation": "Remove the template; keep `url`, the page where a shopper can ask to be notified."
+    }
+  ],
+  "summary": {
+    "errors": 1,
+    "warnings": 1,
+    "info": 0,
+    "rules_fired": [
+      "PDP-W-013",
+      "PDP-E-022"
+    ]
+  }
+}

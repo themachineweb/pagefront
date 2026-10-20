@@ -125,7 +125,7 @@ test("options inject checked_at and linter_version; defaults otherwise", () => {
   assert.equal(injected.catalogue_version, "0.0.1");
 
   const defaulted = lint(sheet, catalogue);
-  assert.equal(defaulted.linter_version, "0.3.0"); // package version
+  assert.equal(defaulted.linter_version, "0.4.0"); // package version
   assert.ok(!Number.isNaN(Date.parse(defaulted.checked_at)));
 });
 

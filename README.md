@@ -50,6 +50,9 @@ What this repository contains today:
   files). Frozen and append-only: the site serves
   these files verbatim, so a published schema URL never changes or
   disappears.
+- [`commerce/prompts/`](commerce/prompts/) — the prompts a merchant hands
+  to a chat or code assistant to write sheets: the sources, the built
+  prompts the site serves, and the prompt set's own version and changelog.
 - [`commerce/archive/`](commerce/archive/) — frozen: the record of drafts
   before release 0.3.0. Nothing is added; later history is in git tags and
   changelogs.
@@ -91,6 +94,7 @@ pagefront/
 │   │   ├── organization/             v0.5.0.json, v0.4.0.json, v0.3.0.json, and the legacy v0.9.json
 │   │   └── collection/               v0.1.0.json
 │   ├── lint/                       @pagefront/lint-commerce (catalogue + CLI)
+│   ├── prompts/                    Assistant prompts: sources, built files, version and changelog
 │   ├── case-studies/               Worked examples against real merchants
 │   │   ├── nitto/                    Apparel (Nitto Knitwear)
 │   │   ├── kimai/                    Jewelry, made-to-order, configurable

@@ -195,11 +195,22 @@ test("unresolvable type → unknown-type, nothing judged", () => {
   assert.deepEqual(buildResult("[1,2]", "paste"), { kind: "unknown-type" });
 });
 
-test("a collection sheet → unsupported-type until a release bundles its schema", () => {
-  assert.deepEqual(buildResult(COLLECTION, "paste"), { kind: "unsupported-type", sheet_type: "collection" });
+test("a collection sheet → judged under the collection catalogue since release 0.5.0 bundles its schema", () => {
+  const model = buildResult(COLLECTION, "paste");
+  assert.equal(model.kind, "report");
+  assert.equal(model.sheet_type, "collection");
+  assert.equal(model.report.release, "0.5.0");
+  assert.equal(model.report.sheet_spec_version, "0.1.0");
+  assert.deepEqual(model.report.summary.rules_fired, []);
+  // Detected by shape when $schema is absent, then held to the schema the
+  // release bundles, which requires $schema: a Layer 1 failure, as for any
+  // release-line sheet without it.
   const byShape = JSON.parse(COLLECTION);
   delete byShape.$schema;
-  assert.deepEqual(buildResult(JSON.stringify(byShape), "paste"), { kind: "unsupported-type", sheet_type: "collection" });
+  const shaped = buildResult(JSON.stringify(byShape), "paste");
+  assert.equal(shaped.kind, "layer1");
+  assert.equal(shaped.sheet_type, "collection");
+  assert.deepEqual(shaped.schemaErrors.map((e) => e.message), ["must have required property '$schema'"]);
 });
 
 test("a product sheet declaring the organization schema → judged by its release, ORG-E-003 names the mismatch", () => {

@@ -1,0 +1,28 @@
+{
+  "sheet": "https://merchant.example/products/aurora-lamp",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.6.0",
+  "sheet_spec_version": "0.12.0",
+  "catalogue_version": "0.18.0",
+  "findings": [
+    {
+      "rule": "PDP-E-022",
+      "severity": "error",
+      "path": "$['data']['offers'][0]['checkoutPageURLTemplate']",
+      "values": {
+        "availability": "https://schema.org/SoldOut"
+      },
+      "message": "Checkout template at `$['data']['offers'][0]['checkoutPageURLTemplate']` sits on an Offer whose `availability` is `https://schema.org/SoldOut`, which cannot be bought now.",
+      "remediation": "Remove the template; keep `url`, the page where a shopper can ask to be notified."
+    }
+  ],
+  "summary": {
+    "errors": 1,
+    "warnings": 0,
+    "info": 0,
+    "rules_fired": [
+      "PDP-E-022"
+    ]
+  }
+}

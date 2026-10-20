@@ -27,6 +27,6 @@ import { colW006 } from "./rules/col-w-006.js";
 export const collectionCatalogue: Catalogue = {
   vertical: "commerce",
   releases: KNOWN_RELEASES,
-  catalogueVersion: "0.17.0",
+  catalogueVersion: "0.18.0",
   rules: [colE001, colE002, colE003, colE004, colE005, colW001, colW002, colW004, colW005, colW006],
 };

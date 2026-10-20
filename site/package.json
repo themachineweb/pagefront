@@ -11,7 +11,7 @@
   "dependencies": {
     "@astrojs/markdown-remark": "^7.3.0",
     "@astrojs/sitemap": "^3.7.4",
-    "@pagefront/lint-commerce": "^0.12.1",
+    "@pagefront/lint-commerce": "^0.13.0",
     "astro": "^7.2.10"
   }
 }

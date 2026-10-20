@@ -24,6 +24,6 @@ import { orgW007 } from "./rules/org-w-007.js";
 export const organizationCatalogue: Catalogue = {
   vertical: "commerce",
   releases: KNOWN_RELEASES,
-  catalogueVersion: "0.17.0",
+  catalogueVersion: "0.18.0",
   rules: [orgE001, orgE002, orgE003, orgE004, orgW001, orgW002, orgW003, orgW004, orgW005, orgW006, orgW007],
 };

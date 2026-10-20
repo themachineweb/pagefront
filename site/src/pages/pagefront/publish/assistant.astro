@@ -2,16 +2,18 @@
 /**
  * /pagefront/publish/assistant — the prompt a merchant hands to an AI
  * assistant to draft a first product sheet from one product page. The
- * prompt text lives in src/content/assistant-prompt.md and is also served
- * verbatim at /pagefront/publish/assistant.md; this page wraps it with a
- * short brief and a copy button.
+ * prompt text is commerce/prompts/draft-product-from-page-chat.md, read
+ * through the prompts collection, and is also served verbatim at
+ * /pagefront/publish/assistant.md; this page wraps it with a short brief
+ * and a copy button.
  */
 import Section from '../../../layouts/Section.astro';
 import { LINKS } from '../../../lib/links';
-import prompt from '../../../content/assistant-prompt.md?raw';
+import { promptBody, promptSetLine } from '../../../lib/prompts';
 
+const prompt = await promptBody('draft-product-from-page-chat');
+const setLine = promptSetLine(prompt);
 const RAW_URL = `${LINKS.publish}/assistant.md`;
-import { CURRENT_RELEASE } from '../../../lib/releases.mjs';
 ---
 
 <Section
@@ -48,7 +50,7 @@ import { CURRENT_RELEASE } from '../../../lib/releases.mjs';
 
   <div class="prompt-box">
     <div class="prompt-bar">
-      <span class="prompt-title">Prompt · Product sheet, release {CURRENT_RELEASE}</span>
+      <span class="prompt-title">Prompt · Product sheet · {setLine}</span>
       <button type="button" class="prompt-copy" id="prompt-copy">Copy prompt</button>
     </div>
     <pre id="prompt-text">{prompt}</pre>

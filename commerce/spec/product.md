@@ -106,7 +106,7 @@ Recommended:
 - `brand`: typed Brand or Organization
 - `description`: prose description in `inLanguage`
 - `category`: hierarchical category string (e.g., "Apparel > Knitwear > Sweaters")
-- `isPartOf`: an array of `Collection` member entries, one per set whose direct members include the product, each in the member entry shape of the Commerce Collection Sheet (`@type`, `@id`, `url`, `pagefront:sheetUrl`, `name`, `pagefront:collectionKind`; see "The product side" in [`collection.md`](collection.md)). The `category` string is unchanged: it is the human path and `isPartOf` is the machine link; the two SHOULD agree where both are present, and the linter does not compare them.
+- `isPartOf`: an array of `Collection` member entries, one per set whose direct members include the product, each in the member entry shape of the Commerce Collection Sheet (`@type`, `@id`, `url`, `pagefront:sheetUrl`, `name`, `pagefront:collectionKind`; see "The product side" in [`collection.md`](collection.md)). The `category` string is unchanged: it is the human path and `isPartOf` is the machine link; the two SHOULD agree where both are present, and the linter does not compare them. A product's `isPartOf` does not list a collection filled by a rule, since that collection has no sheet (see "Listing pages without a Sheet" in [`collection.md`](collection.md)).
 - `image`: array of ImageObject (see image roles below)
 - `video`: array of VideoObject (see video roles below)
 - `offers`: array of Offer (see offers section)
@@ -1860,6 +1860,14 @@ A rendered price is the price for the market the page was served for, and the pr
 
 **When a price cannot be published.** A sheet without an offer is a valid state. It is preferable to an offer whose price is not the rendered price, or whose rendered price disagrees with the merchant's structured data: the first is honestly incomplete, the second may be silently wrong. An unstated VAT basis is not a reason to withhold the offer; it is published without the flag.
 
+**Unavailable offers without a price.** An offer the page shows as unavailable (out of stock, sold out or discontinued) and shows no price for is published without a price. `availability` states it (`https://schema.org/OutOfStock`, `https://schema.org/SoldOut` or `https://schema.org/Discontinued`), and `price`, `priceCurrency` and `priceSpecification` are absent. A consumer reads the offer as not purchasable now, at no stated price. Where the page shows a price for an unavailable offer, the offer carries it as usual.
+
+Availability is taken from what the page shows, as the price is. The merchant's structured data checks it and is never its source: a producer does not drop a price the page shows because structured data says the item is unavailable.
+
+Only these three values allow a priceless offer. `PreOrder`, `BackOrder`, `MadeToOrder`, `LimitedAvailability`, `InStoreOnly` and `InStock` describe an item that can still be bought, and an offer carrying them needs a price.
+
+An unavailable offer without a price keeps its other fields: `url` (the page, where a shopper can ask to be notified), `itemOffered`, and `areaServed`, which SHOULD still be declared since availability is per market. It MUST NOT carry `checkoutPageURLTemplate` (rule PDP-E-022, applying from the release that ships this change). The linter's possibly-missed-price warning (PDP-W-016) is silent on such an offer.
+
 **Prices that cannot state a basis.** `hasVariant[].price` render hints carry no region and no `priceSpecification`, so they cannot state a tax basis. A `pagefront:configurator` carries no prices; the amounts in a `pagefront:configuratorPricing` block sit inside an offer and take their currency, region and tax basis from it, so they are as authoritative as that offer's `price`. Render hints are non-authoritative display hints: consumers MUST NOT use them for computation or for quoting a price to a buyer, and MUST resolve the region-matched `Offer` for an authoritative amount. `AggregateOffer` is an offer type and carries its own `areaServed` and `priceSpecification` like any other offer.
 
 A VAT-inclusive price depends on a rate that can change. Sheets carrying region-scoped offers SHOULD use shorter `expires_at` windows, consistent with the existing guidance for multi-currency offers and scheduled promotions.
@@ -1940,7 +1948,7 @@ As of v0.9 this per-offer form is the deviation override; see "Return policy" ab
 Agents routinely need to answer "is this product current?": on the market, not yet released, or discontinued and superseded. Schema.org and the existing relationship enum cover each lifecycle signal, so Pagefront mints no vocabulary.
 
 - **Market availability.** `releaseDate` (Schema.org-native on `Product`) declares when the product reached, or will reach, the market. A future `releaseDate` pairs naturally with Offer `availability: "https://schema.org/PreOrder"`.
-- **End of life.** A discontinued product's Offer declares `availability: "https://schema.org/Discontinued"`. The Sheet stays published: the page usually outlives the product, and the Sheet is how agents learn that the product is discontinued, as distinct from out of stock.
+- **End of life.** A discontinued product's Offer declares `availability: "https://schema.org/Discontinued"`. The Sheet stays published: the page usually outlives the product, and the Sheet is how agents learn that the product is discontinued, as distinct from out of stock. The offer carries a price only if the page shows one; see "Unavailable offers without a price" under "Tax inclusion".
 - **Succession.** When a successor exists, the discontinued product's Sheet SHOULD pair the `Discontinued` availability with a `pagefront:relatedProduct` entry of `relationship: "replaced_by"` pointing at the successor, so a consumer landing on the old product can route the buyer forward. The successor's own Sheet carries the inverse `replaces` entry pointing back.
 
 A discontinued product referencing its successor:
@@ -2197,6 +2205,10 @@ Changes land under "Unreleased" and are versioned at the next release, when the 
 ### Unreleased
 
 Changes land here and are versioned at the next release; see "Releasing" in [`../../CONTRIBUTING.md`](../../CONTRIBUTING.md).
+
+- **Change (minor): unavailable offers without a price.** An offer the page shows as out of stock, sold out or discontinued, with no price shown, is published without a price: `availability` carries one of `OutOfStock`, `SoldOut` or `Discontinued`, and `price`, `priceCurrency` and `priceSpecification` are absent. Availability is taken from the page, as the price is; structured data checks it and never sources it. The other availability values still need a price. Such an offer keeps `url`, `itemOffered` and `areaServed` and carries no checkout template (PDP-E-022). The product-lifecycle pattern points here. See "Unavailable offers without a price" under "Tax inclusion". **(schema)** a fourth alternative to the Offer price requirement: `availability` is one of the three values, in the `http` or `https` form the schema already accepts. The head moves to Product Sheet spec 0.12.0; no valid sheet becomes invalid.
+- **Property Registry served.** The Pagefront Property Registry is served at the address "Variant dimensions" states, `https://themachineweb.org/pagefront/commerce/registry/properties.json`, as `registry_version` 0.1.0 dated 2026-10-19. The entries are unchanged from the draft file; its `1.0.0-draft` label is replaced by the first published version, and the permanence rule under "Registry governance" applies from this version.
+- **Clarification: `isPartOf` and rule-filled collections.** A product's `isPartOf` does not list a collection filled by a rule, since that collection has no sheet ("Listing pages without a Sheet" in [`collection.md`](collection.md)). No schema change.
 
 ### 0.11.0 — 2026-10-18
 

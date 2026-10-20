@@ -5,4 +5,4 @@
  * (test/linter-version.test.mjs) fails when they diverge. Regenerate
  * on version bump.
  */
-export const PACKAGE_VERSION = "0.12.1";
+export const PACKAGE_VERSION = "0.13.0";

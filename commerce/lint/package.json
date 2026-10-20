@@ -1,6 +1,6 @@
 {
   "name": "@pagefront/lint-commerce",
-  "version": "0.12.1",
+  "version": "0.13.0",
   "description": "Pagefront commerce linter: the commerce rule catalogue and CLI, on the @pagefront/lint-core engine.",
   "license": "Apache-2.0",
   "repository": {
@@ -39,7 +39,7 @@
     "prepublishOnly": "npm test"
   },
   "dependencies": {
-    "@pagefront/lint-core": "^0.3.0",
+    "@pagefront/lint-core": "^0.4.0",
     "ajv": "^8.20.0",
     "ajv-formats": "^3.0.1"
   },

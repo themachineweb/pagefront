@@ -1,0 +1,59 @@
+{
+  "$schema": "https://themachineweb.org/pagefront/spec/commerce/product/v0.12.0.json",
+  "release": "0.6.0",
+  "schema_org_version": "30.0",
+  "canonical_url": "https://merchant.example/products/aurora-lamp",
+  "sheet_url": "https://merchant.example/products/aurora-lamp.pagefront.json",
+  "generated_at": "2026-08-01T00:00:00Z",
+  "data": {
+    "@context": [
+      "https://schema.org",
+      {
+        "pagefront": "https://themachineweb.org/pagefront/vocabulary/"
+      }
+    ],
+    "@type": "Product",
+    "@id": "https://merchant.example/products/aurora-lamp.pagefront.json",
+    "name": "Aurora Table Lamp",
+    "url": "https://merchant.example/products/aurora-lamp",
+    "inLanguage": "en",
+    "sku": "AUR-100",
+    "description": "A dimmable table lamp with a hand-blown glass shade and a solid oak base.",
+    "brand": {
+      "@type": "Brand",
+      "name": "Auroral"
+    },
+    "image": [
+      {
+        "@type": "ImageObject",
+        "url": "https://merchant.example/media/aurora-lamp-hero.jpg",
+        "additionalProperty": [
+          {
+            "@type": "PropertyValue",
+            "name": "role",
+            "value": "hero"
+          }
+        ]
+      }
+    ],
+    "offers": [
+      {
+        "@type": "Offer",
+        "url": "https://merchant.example/products/aurora-lamp",
+        "price": "129.00",
+        "priceCurrency": "EUR",
+        "availability": "https://schema.org/Discontinued",
+        "areaServed": "FR",
+        "priceSpecification": [
+          {
+            "@type": "UnitPriceSpecification",
+            "price": "129.00",
+            "priceCurrency": "EUR",
+            "valueAddedTaxIncluded": true
+          }
+        ],
+        "checkoutPageURLTemplate": "https://merchant.example/cart/4521:{quantity}"
+      }
+    ]
+  }
+}

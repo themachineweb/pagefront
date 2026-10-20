@@ -5,4 +5,4 @@
  * (test/version.test.mjs) fails when they diverge. Regenerate on
  * version bump.
  */
-export const PACKAGE_VERSION = "0.3.0";
+export const PACKAGE_VERSION = "0.4.0";

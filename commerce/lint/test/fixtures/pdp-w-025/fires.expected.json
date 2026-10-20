@@ -4,7 +4,7 @@
   "linter_version": "0.0.0-test",
   "release": "0.4.0",
   "sheet_spec_version": "0.10.0",
-  "catalogue_version": "0.17.0",
+  "catalogue_version": "0.18.0",
   "findings": [
     {
       "rule": "PDP-W-025",

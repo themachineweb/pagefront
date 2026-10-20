@@ -37,9 +37,13 @@ conformance by producing structurally identical reports for these inputs.
   against the test manifest, `manifest/releases.json`, installed through
   `dist/test-hooks.js` (`installTestManifest` / `clearTestManifest`) for
   those directories only. Since release 0.5.0 landed on 2026-10-18 the test
-  manifest equals the bundled `commerce/spec/releases.json`; the hook and
-  the manifest stay so that fixtures for the next unreleased release can
-  declare it ahead of time, and `collection.test.mjs` keeps validating the
+  manifest equalled the bundled `commerce/spec/releases.json`. It now adds
+  the 0.6.0 row (Product Sheet spec 0.12.0, the editable head
+  `commerce/spec/product.json`) for the fixtures of PDP-E-022 and the
+  sold-out fixtures of PDP-W-016, PDP-W-028 and PDP-W-029, which
+  `unavailable-offers.test.mjs` validates at Layer 1 against that head; the
+  hook and the manifest let fixtures for an unreleased release declare it
+  ahead of time, and `collection.test.mjs` keeps validating the
   collection fixtures at Layer 1 against the editable head
   `commerce/spec/collection.json`, which equals the frozen
   `commerce/schemas/collection/v0.1.0.json`. Production never reads the
