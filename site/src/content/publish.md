@@ -73,12 +73,12 @@ wrong, or which you cannot confirm, and it corrects the file; a field you
 cannot confirm comes out. A missing field costs you a little completeness. An
 invented one is the failure this standard exists to prevent.
 
-The product sheet alone is a complete first publication. The assistant also
-hands back a sheet for each category the product belongs to and the
-organization sheet for your shop. Each is served and linked the same way,
-from the page it describes: the category sheet from the category page, the
-organization sheet from your About page. They can follow later. How a
-machine finds the organization sheet from your domain is in [the Discovery
+The assistant also hands back a sheet for each category the product belongs
+to and the organization sheet for your shop. Each is served and linked the
+same way, from the page it describes: the category sheet from the category
+page, the organization sheet from your About page. Publish the product sheet
+first if you want to see one working before you do the rest. How a machine
+finds the organization sheet from your domain is in [the Discovery
 document](/pagefront/spec/core/discovery).
 
 ## 2. Serve it
