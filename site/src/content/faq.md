@@ -21,8 +21,7 @@ Machine Web knows about them is what they chose to say.
 Fewer and fewer of the visitors to product pages are people. Assistants
 answer questions about products, comparison engines rank them, and agents
 are starting to buy them. The pages they read were never built for them, and
-the only party who can state what a product is, reliably, is the one selling
-it.
+the first party who can state what a product is, is the one selling it.
 
 ## Why does it matter?
 
@@ -39,6 +38,15 @@ Two merchants work with us as design partners, and their shops are where the
 format is being proven. The next publishers shape what 1.0 becomes;
 [the contributing page](/pagefront/contributing) says how.
 
+## Why should I try this now?
+
+Doing a pilot is a small task, but learning how to participate in the
+Machine Web is a giant step forward. One product and a few hours give you a
+sheet a machine can read, a report of what your shop could not state, and a
+view of your own data you have never had. The format is still being written,
+so what you find shapes it. And when readers arrive, you are already ahead
+of the pack.
+
 ## Will this get me cited by ChatGPT?
 
 No one can promise that, and we do not. What a sheet does is remove the two
@@ -51,8 +59,8 @@ is its decision.
 You are porting your catalogue to the Machine Web. For a while the two run
 side by side and you keep them in step: when a price or the stock changes,
 the sheet changes too, by hand at first, from your shop's own data once it
-is wired in. Longer term the sheet is the foundation, the one description
-your site, your partners and the machines all read from.
+is wired in. Longer term the sheet can become the foundation, the one
+description your site, your partners and the machines all read from.
 
 ## Can I do this on Shopify or WooCommerce without a developer?
 
@@ -61,6 +69,17 @@ and [Check](/pagefront/commerce/validate) does the checking. Serving the
 sheet on your domain and adding the link to your product pages are changes
 to your site, and on most platforms that is a job for whoever runs it. If
 your pages are rendered by your own application, it is a developer's job.
+
+## How do I know it is working?
+
+Three things, in order. [Check](/pagefront/commerce/validate) passes: the
+page declares the sheet, the sheet is where the page says, and it conforms.
+The sheet is reachable: fetch it signed out, from outside your admin, and
+the search engines you care about have indexed it, which their tools will
+show you. A reader used it: today the way to know is to ask one. Give an
+assistant your product page and see whether its answer carries what only
+the sheet states. What we have observed so far about assistants reaching
+sheets is [on the publish page](/pagefront/publish#2-serve-it).
 
 ## Does it replace Schema.org, or my product feeds?
 
@@ -71,9 +90,10 @@ a feed was built for.
 
 ## What does it cost, and who do I sign up with?
 
-Nothing, and nobody. There is no account, no registry, no fee and no
-licence to accept. You write a file, put it on your own server and link to
-it. If this site disappeared, your sheet would keep working.
+The standard costs nothing, and you sign up with nobody. There is no
+account, no registry, no fee and no licence to accept. Serving the sheet and
+linking it are work on your site, like any change to it. If this site
+disappeared, your sheet would keep working.
 
 ## Will the format change under me?
 
@@ -86,6 +106,7 @@ and a removal is announced and stays valid for at least twelve months.
 
 Yes. It is your file on your domain. Remove it and let the address answer
 404, and remove the link from the page. Nothing else needs to be told.
+Copies already fetched stay with whoever fetched them, as with any page.
 
 ## Who decides what goes in the spec?
 
