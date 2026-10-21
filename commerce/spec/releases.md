@@ -149,7 +149,7 @@ Normative for this repository:
 - `main` holds one living copy of each spec: always the next release in progress. There are no version folders for spec prose.
 - Git tags mark releases: `commerce-v<release>` on `main`. The spec as it stood at a release is the repository at that tag. Sheet specs are not tagged; a release tag pins them through [`releases.json`](releases.json).
 - Published JSON Schemas are the only per-version copies. They live in [`../schemas/`](../schemas/) as `<type>/v<version>.json`, frozen and append-only, and are served verbatim, so every schema URL ever published stays resolvable. [`product.json`](product.json) and [`organization.json`](organization.json) in this folder are the editable heads: each `$id` names the version the head will next be released as, and until a change lands the head equals the latest published file.
-- [`../archive/`](../archive/) is frozen: the record of drafts before release 0.3.0. Nothing new goes there.
+- Drafts before release 0.3.0 are in the tree of tag `commerce-v0.3.0`. The repository keeps no archive folder.
 - Each spec document's changelog opens with an "Unreleased" section, where changes land. A document's version line changes only at release time, so a header never shows an unreleased version.
 
 The steps to cut a release, the tag names and the branch rules are in "Releasing" and "Branches" in [`../../CONTRIBUTING.md`](../../CONTRIBUTING.md).

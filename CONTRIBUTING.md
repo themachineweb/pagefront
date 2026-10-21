@@ -203,8 +203,8 @@ Four principles govern where things live:
   ([`frozen-schemas.yml`](.github/workflows/frozen-schemas.yml)) fails any
   pull request that modifies or deletes a published schema, or that leaves
   the store and `commerce/spec/releases.json` disagreeing.
-- **`commerce/archive/` is frozen.** It is the record of drafts before
-  release 0.3.0. Nothing new goes there; tags replace it.
+- **There is no archive folder.** Drafts before release 0.3.0 are in the
+  tree of tag `commerce-v0.3.0`; tags and changelogs hold the history.
 
 ### Changelogs
 
