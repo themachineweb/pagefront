@@ -1,18 +1,43 @@
 # FAQ
 
-## Who reads sheets today?
+## What is Pagefront?
 
-As of 2026-10-20, nobody that we know of. No merchant serves a sheet from
-their own domain yet, and no assistant, search engine or shopping agent has
-said it looks for them.
+An open specification for a small file, called a sheet, that describes a
+product, a collection or the organization behind them in a form machines
+read directly. It uses Schema.org's vocabulary, extended where commerce
+needs it, is written in JSON, and lives at its own address on your domain,
+linked from the page it describes.
 
-What exists: the specification at commerce release 0.5.0, the lint packages
-on npm, [Check](/pagefront/commerce/validate), and three worked examples on
-this site, built from real product pages. One merchant,
-[Nitto](/pagefront/commerce/case-studies/nitto), has approved publication of
-its sheet.
+## What is it for, and who is it for?
 
-This answer is dated and gets updated at each release.
+For publishers who want to participate in the Machine Web on their own
+terms. Instead of relying on third parties to frame their catalogue,
+Pagefront publishers describe it themselves, in their own words, at their
+own address, and every machine that reads it reads the same thing. What the
+Machine Web knows about them is what they chose to say.
+
+## Why now?
+
+Fewer and fewer of the visitors to product pages are people. Assistants
+answer questions about products, comparison engines rank them, and agents
+are starting to buy them. The pages they read were never built for them, and
+the only party who can state what a product is, reliably, is the one selling
+it.
+
+## Why does it matter?
+
+Because the next customer who meets your product may never see your page.
+An assistant will describe it, a comparison engine will rank it, an agent
+will decide whether to buy it, and all of them will work from a
+reconstruction of what you published for people. You will not choose the
+channel. You can still choose the description.
+
+## What is the current status?
+
+Early days. The specification is at commerce release 0.5.0 and still moving.
+Two merchants work with us as design partners, and their shops are where the
+format is being proven. The next publishers shape what 1.0 becomes;
+[the contributing page](/pagefront/contributing) says how.
 
 ## Will this get me cited by ChatGPT?
 
@@ -23,13 +48,11 @@ is its decision.
 
 ## Am I creating a second catalogue to maintain?
 
-For a first product, yes. The sheet is a copy of what your shop already
-says, and when a price or the stock changes you run the prompt again. That
-is fine for a pilot and tiresome for a catalogue.
-
-The arrangement that lasts generates the sheet from your shop's own data,
-so it changes when your shop does. That is the developer version, which is
-coming.
+You are porting your catalogue to the Machine Web. For a while the two run
+side by side and you keep them in step: when a price or the stock changes,
+the sheet changes too, by hand at first, from your shop's own data once it
+is wired in. Longer term the sheet is the foundation, the one description
+your site, your partners and the machines all read from.
 
 ## Can I do this on Shopify or WooCommerce without a developer?
 
@@ -42,8 +65,9 @@ your pages are rendered by your own application, it is a developer's job.
 ## Does it replace Schema.org, or my product feeds?
 
 Neither. A sheet is Schema.org, extended where commerce needs it, in a file
-of its own. Your feeds keep working exactly as before; a sheet is something
-you add, not something you swap.
+of its own. Your feeds keep working exactly as before. A sheet is for a
+broader audience: every machine that reads the web, not the one destination
+a feed was built for.
 
 ## What does it cost, and who do I sign up with?
 
