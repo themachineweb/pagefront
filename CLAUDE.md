@@ -33,8 +33,8 @@ package manifests and git.
 - `commerce/spec/product.json` and `commerce/spec/organization.json` are
   the editable heads. A head that differs from the latest frozen file must
   name a new, unreleased version in its `$id`.
-- `commerce/archive/` is the record of drafts before release 0.3.0. Never
-  add to it and never edit it.
+- There is no archive folder, and none gets created. Drafts before
+  release 0.3.0 are in the tree of tag `commerce-v0.3.0`.
 
 ## Versioning
 

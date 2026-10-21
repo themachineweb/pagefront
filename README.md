@@ -53,14 +53,14 @@ What this repository contains today:
 - [`commerce/prompts/`](commerce/prompts/) — the prompts a merchant hands
   to a chat or code assistant to write sheets: the sources, the built
   prompts the site serves, and the prompt set's own version and changelog.
-- [`commerce/archive/`](commerce/archive/) — frozen: the record of drafts
-  before release 0.3.0. Nothing is added; later history is in git tags and
-  changelogs. The public history of this repository starts at the release
-  snapshots, one commit per release tag from 0.3.0; the working record
-  before them is kept in a private archive.
 - [`site/`](site/) — themachineweb.org, including
   [Check](https://themachineweb.org/pagefront/commerce/validate), which reads a
   page's sheet declaration and judges the sheet it points at.
+
+Drafts before release 0.3.0 are in the tree of tag `commerce-v0.3.0`;
+later history is in git tags and changelogs. The public history of this
+repository starts at the release snapshots, one commit per release tag
+from 0.3.0; the working record before them is kept in a private archive.
 
 Not yet: verticals beyond commerce (`media/` is reserved).
 
@@ -97,12 +97,11 @@ pagefront/
 │   │   └── collection/               v0.1.0.json
 │   ├── lint/                       @pagefront/lint-commerce (catalogue + CLI)
 │   ├── prompts/                    Assistant prompts: sources, built files, version and changelog
-│   ├── case-studies/               Worked examples against real merchants
-│   │   ├── nitto/                    Apparel (Nitto Knitwear)
-│   │   ├── kimai/                    Jewelry, made-to-order, configurable
-│   │   ├── blackbird/                Sports equipment, multi-SKU (AFS)
-│   │   └── zalando/                  Multi-brand retailer, organization sheets
-│   └── archive/                    Frozen: drafts before release 0.3.0
+│   └── case-studies/               Worked examples against real merchants
+│       ├── nitto/                    Apparel (Nitto Knitwear)
+│       ├── kimai/                    Jewelry, made-to-order, configurable
+│       ├── blackbird/                Sports equipment, multi-SKU (AFS)
+│       └── zalando/                  Multi-brand retailer, organization sheets
 ├── scripts/                      Repository checks (frozen-schema guard)
 ├── media/                        Reserved for the media/article vertical
 └── site/                         themachineweb.org (Astro, Cloudflare Workers)
