@@ -55,7 +55,9 @@ What this repository contains today:
   prompts the site serves, and the prompt set's own version and changelog.
 - [`commerce/archive/`](commerce/archive/) — frozen: the record of drafts
   before release 0.3.0. Nothing is added; later history is in git tags and
-  changelogs.
+  changelogs. The public history of this repository starts at the release
+  snapshots, one commit per release tag from 0.3.0; the working record
+  before them is kept in a private archive.
 - [`site/`](site/) — themachineweb.org, including
   [Check](https://themachineweb.org/pagefront/commerce/validate), which reads a
   page's sheet declaration and judges the sheet it points at.

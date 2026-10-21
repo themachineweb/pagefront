@@ -1,0 +1,44 @@
+---
+/**
+ * /pagefront/faq — the questions merchants and developers ask, one per
+ * H2 so the "On this page" list is the list of questions. Site copy,
+ * kept as markdown at src/content/faq.md and rendered with the same doc
+ * chrome as the governance page; the markdown's own H1 is hidden under
+ * the page header.
+ */
+import { getCollection, render } from 'astro:content';
+import Section from '../../layouts/Section.astro';
+import { LINKS } from '../../lib/links';
+
+const entries = await getCollection('faq');
+const entry = entries[0];
+const { Content, headings } = await render(entry);
+const toc = headings.filter((h) => h.depth === 2);
+---
+
+<Section
+  title="FAQ — Pagefront"
+  description="Questions about Pagefront: who reads sheets today, what a sheet does and does not promise, what it costs, how the format changes, and who decides."
+  path={LINKS.faq}
+  current="faq"
+>
+  <header class="doc-head">
+    <p class="pf-kicker"><a href={LINKS.landing}>Pagefront</a></p>
+    <h1>FAQ</h1>
+  </header>
+
+  {toc.length > 0 && (
+    <nav class="doc-toc" aria-label="On this page">
+      <p class="doc-toc-title">On this page</p>
+      <ul>
+        {toc.map((h) => (
+          <li><a href={`#${h.slug}`}>{h.text}</a></li>
+        ))}
+      </ul>
+    </nav>
+  )}
+
+  <div class="doc-body">
+    <Content />
+  </div>
+</Section>

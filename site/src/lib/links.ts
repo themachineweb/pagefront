@@ -20,13 +20,15 @@ export const LINKS = {
   contributing: '/pagefront/contributing',
 
   caseStudies: '/pagefront/commerce/case-studies',
+  faq: '/pagefront/faq',
 
   repo: REPO,
 } as const;
 
 /** The Pagefront section nav; `current` marks the page rendering it. */
-export const pagefrontNav = (current?: 'spec' | 'validator' | 'caseStudies') => [
+export const pagefrontNav = (current?: 'spec' | 'validator' | 'caseStudies' | 'faq') => [
   { label: 'Spec', href: LINKS.spec, current: current === 'spec' },
   { label: 'Check', href: LINKS.validator, current: current === 'validator' },
   { label: 'Case studies', href: LINKS.caseStudies, current: current === 'caseStudies' },
+  { label: 'FAQ', href: LINKS.faq, current: current === 'faq' },
 ];

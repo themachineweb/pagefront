@@ -1,8 +1,8 @@
 ---
 /**
  * /pagefront/publish/write/<platform> — the prompt a merchant hands to a
- * chat assistant to write every sheet for a shop, from its homepage
- * address. The prompt text is commerce/prompts/write-<platform>-chat.md,
+ * chat assistant to write the sheets for a shop, from a list of its
+ * product pages' addresses. The prompt text is commerce/prompts/write-<platform>-chat.md,
  * read through the prompts collection, and is also served verbatim at
  * the same path plus ".md"; this page wraps it with a short brief and a
  * copy button, as /pagefront/publish/assistant does for the one-product
@@ -27,7 +27,7 @@ const title = `Write your sheets — ${meta.titleSuffix}`;
 
 <Section
   title={`${title} — Pagefront`}
-  description={`A prompt to hand a chat assistant to write every Pagefront sheet for a ${meta.label === 'any shop' ? 'shop on any platform' : `${meta.label} shop`}: give it the shop's homepage address and it writes the product, collection and organization sheets and a report, inventing no value.`}
+  description={`A prompt to hand a chat assistant to write every Pagefront sheet for a ${meta.label === 'any shop' ? 'shop on any platform' : `${meta.label} shop`}: give it the addresses of the product pages and it writes the product, collection and organization sheets and a report, inventing no value.`}
   path={PATH}
 >
   <header class="doc-head">
@@ -38,12 +38,15 @@ const title = `Write your sheets — ${meta.titleSuffix}`;
   <div class="doc-body">
     <p>
       Copy the prompt below into ChatGPT, Claude or another chat assistant
-      and send it as is. Its first reply asks for your shop's homepage
-      address; answer with that address. It will read the spec and the shop,
-      write every sheet, the product sheets, the collection sheets and the
-      organization sheet, and present them together with a report of what it
-      read and anything it had to leave out. The assistant needs to be able
-      to fetch web pages; one that cannot will say so.
+      and send it as is. Its first reply asks for the addresses of the
+      product pages you want sheets for; answer with the list. Paste the
+      list with the prompt and it starts at once. It works out your shop
+      from those addresses, reads the spec and the shop, writes the product
+      sheets, the collection sheets that list those products and the
+      organization sheet, and hands them back as files with a report in
+      plain words of what it read and anything it had to leave out. The
+      assistant needs to be able to fetch web pages; one that cannot will
+      say so.
     </p>
     <p>
       What comes back is a draft. The prompt forbids the assistant from

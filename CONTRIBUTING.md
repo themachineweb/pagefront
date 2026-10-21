@@ -188,7 +188,10 @@ Four principles govern where things live:
 - **`main` holds one living copy of each spec.** It is always the next
   release in progress. There are no version folders for spec prose.
 - **Git tags mark releases.** A release is a tag on `main`; the spec as it
-  stood at a release is the repository at that tag.
+  stood at a release is the repository at that tag. The public history
+  starts at those release snapshots: one commit per release tag from
+  commerce 0.3.0, then the current `main`. The earlier working record is
+  kept in a private archive.
 - **Published JSON Schemas are the only per-version copies.** They live in
   [`commerce/schemas/`](commerce/schemas/), one file per published version
   (`<type>/v<version>.json`). They are frozen and append-only, and the site

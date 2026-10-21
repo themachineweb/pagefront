@@ -45,5 +45,9 @@ const publish = defineCollection({
 const consume = defineCollection({
   loader: glob({ pattern: 'consume.md', base: './src/content' }),
 });
+// The FAQ at /pagefront/faq, one question per H2.
+const faq = defineCollection({
+  loader: glob({ pattern: 'faq.md', base: './src/content' }),
+});
 
-export const collections = { manifesto, spec, prompts, governance, contributing, caseStudies, publish, consume };
+export const collections = { manifesto, spec, prompts, governance, contributing, caseStudies, publish, consume, faq };

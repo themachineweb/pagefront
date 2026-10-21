@@ -28,6 +28,8 @@
 import Base from '../../../layouts/Base.astro';
 import { LINKS, pagefrontNav } from '../../../lib/links';
 import { SPEC_BASE, SPEC_DOCS } from '../../../lib/spec-routes.mjs';
+const RULES_URL = `https://themachineweb.org${SPEC_BASE}/${SPEC_DOCS['commerce/spec/rules'].route}`;
+const LINTER_URL = `https://themachineweb.org${SPEC_BASE}/${SPEC_DOCS['core/spec/linter'].route}`;
 import { CURRENT_RELEASE, currentSheetSpec, LEGACY_FORMATS } from '../../../lib/releases.mjs';
 
 const legacyFormat = LEGACY_FORMATS[LEGACY_FORMATS.length - 1];
@@ -61,8 +63,8 @@ const legacyFormat = LEGACY_FORMATS[LEGACY_FORMATS.length - 1];
     <p class="tool-meta">
       Commerce release {CURRENT_RELEASE} (Product Sheet spec {currentSheetSpec('product')}, Organization Sheet spec {currentSheetSpec('organization')}) and legacy sheets carrying <code>format_version</code> {legacyFormat}.
       Programs can ask for the same result as JSON from <code>/pagefront/commerce/validate.json</code> with <code>?url=…</code>, <code>?sheet=…</code> or a POST body.
-      Rule catalogue: <a href={`${SPEC_BASE}/${SPEC_DOCS['commerce/spec/rules'].route}`}>rules.md</a>.
-      Linter design: <a href={`${SPEC_BASE}/${SPEC_DOCS['core/spec/linter'].route}`}>linter.md</a>.
+      Rule catalogue: <a href={RULES_URL}>{RULES_URL}</a>.
+      Linter design: <a href={LINTER_URL}>{LINTER_URL}</a>.
     </p>
   </div>
 </Base>

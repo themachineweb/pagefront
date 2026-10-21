@@ -7,6 +7,7 @@ import { CASE_STUDIES, CASE_STUDIES_BASE } from './src/lib/case-study-routes.mjs
 
 const repoRoot = fileURLToPath(new URL('..', import.meta.url));
 const REPO = 'https://github.com/themachineweb/pagefront';
+const SITE = 'https://themachineweb.org';
 const routeBySource = Object.fromEntries(
   Object.values(SPEC_DOCS).map((d) => [d.source, `${SPEC_BASE}/${d.route}`])
 );
@@ -26,7 +27,29 @@ for (const c of Object.values(CASE_STUDIES)) routeBySource[c.source] = `${CASE_S
  * registry) becomes its GitHub URL. Absolute URLs and #fragments pass
  * through untouched. Scoped to the spec sources, the root documents and
  * the case studies; the manifesto is not rewritten.
+ *
+ * A link whose visible text is the path itself (`[\`../../CONTRIBUTING.md\`]
+ * (../../CONTRIBUTING.md)`) reads as a repository path on a web page, so
+ * its text becomes the absolute URL the link now points at, without the
+ * fragment. Link text that names the document is left alone.
  */
+function textOf(node) {
+  if (node.type === 'text') return node.value;
+  return (node.children ?? []).map(textOf).join('');
+}
+
+// Replaces the text of a link that holds one text node, possibly inside
+// one wrapping element such as <code>, and leaves any other shape alone.
+function setText(node, value) {
+  let holder = node;
+  while (holder.children && holder.children.length === 1 && holder.children[0].type === 'element') {
+    holder = holder.children[0];
+  }
+  if (holder.children && holder.children.length === 1 && holder.children[0].type === 'text') {
+    holder.children[0].value = value;
+  }
+}
+
 function rewriteSpecRelativeLinks() {
   return (tree, file) => {
     const from = file && file.path;
@@ -47,6 +70,10 @@ function rewriteSpecRelativeLinks() {
           const isDir = target.endsWith('/') || !/\.[a-z0-9]+$/i.test(target);
           const dest = route ?? `${REPO}/${isDir ? 'tree' : 'blob'}/main/${rel}`;
           node.properties.href = dest + (frag ? `#${frag}` : '');
+          const text = textOf(node).trim();
+          if (text === target || text === href) {
+            setText(node, route ? `${SITE}${dest}` : dest);
+          }
         }
       }
       for (const child of node.children ?? []) visit(child);
