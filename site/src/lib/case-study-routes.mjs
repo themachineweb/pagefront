@@ -29,6 +29,21 @@ export const CASE_STUDIES = {
     description:
       'Pagefront case study: Nitto Knitwear’s Youri turtleneck as a product sheet and an organization sheet — what the page says today, what the sheet adds, and what publishing would take.',
   },
+  'commerce/case-studies/blackbird/case-study': {
+    route: 'blackbird',
+    source: 'commerce/case-studies/blackbird/case-study.md',
+    folder: 'commerce/case-studies/blackbird',
+    title: 'AFS Blackbird V3',
+    sector: 'Sports equipment',
+    blurb:
+      'A ten-size foil board. Per-size price and stock the page only loads by script, a spec table with units, and 95 dealers on the seller sheet.',
+    sheets: [
+      { file: 'blackbird-v3-v0_9.json', label: 'Product sheet — Blackbird V3', kind: 'product' },
+      { file: 'afs-organization-v0_9.json', label: 'Organization sheet — Foil And Co (AFS)', kind: 'organization' },
+    ],
+    description:
+      'Pagefront case study: the AFS Blackbird V3 as a ten-size product sheet and Foil And Co’s organization sheet — what the page says today, what the sheet adds, and what publishing would take.',
+  },
   'commerce/case-studies/kimai/case-study': {
     route: 'kimai',
     unlinked: true,
@@ -44,21 +59,5 @@ export const CASE_STUDIES = {
     ],
     description:
       'Pagefront case study: Kimaï’s Jackie Pear Ring as a configurator sheet and an organization sheet — what the page says today, what the sheet adds, and what the merchant would decide.',
-  },
-  'commerce/case-studies/blackbird/case-study': {
-    route: 'blackbird',
-    unlinked: true,
-    source: 'commerce/case-studies/blackbird/case-study.md',
-    folder: 'commerce/case-studies/blackbird',
-    title: 'AFS Blackbird V3',
-    sector: 'Sports equipment',
-    blurb:
-      'A ten-size foil board. Per-size price and stock the page only loads by script, a spec table with units, and 95 dealers on the seller sheet.',
-    sheets: [
-      { file: 'blackbird-v3-v0_9.json', label: 'Product sheet — Blackbird V3', kind: 'product' },
-      { file: 'afs-organization-v0_9.json', label: 'Organization sheet — Foil And Co (AFS)', kind: 'organization' },
-    ],
-    description:
-      'Pagefront case study: the AFS Blackbird V3 as a ten-size product sheet and Foil And Co’s organization sheet — what the page says today, what the sheet adds, and what publishing would take.',
   },
 };
