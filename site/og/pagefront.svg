@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Open Graph card for /pagefront and the pages under it (the Site layout's
+  default). Same system as the manifesto card: the site's paper, ink and
+  ink-soft tokens, Charter for the title, the system sans for the rest.
+
+  Render on a Mac (Charter ships with macOS) from site/:
+    node -e "require('sharp')('og/pagefront.svg').png().toFile('public/og-pagefront.png')"
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="2400" height="1260" viewBox="0 0 2400 1260">
+  <rect width="2400" height="1260" fill="#f7f4ed"/>
+  <text x="178" y="226" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="58" fill="#5a554c">The Machine Web</text>
+  <text x="172" y="560" font-family="Charter, Georgia, serif" font-size="200" fill="#1a1814">Pagefront</text>
+  <text font-family="Charter, Georgia, serif" font-size="88" fill="#1a1814">
+    <tspan x="178" y="720">Reliable product data,</tspan>
+    <tspan x="178" y="830">published on your own domain.</tspan>
+  </text>
+  <text x="178" y="1090" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="46" fill="#5a554c">themachineweb.org/pagefront</text>
+</svg>
