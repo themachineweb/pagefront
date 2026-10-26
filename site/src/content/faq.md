@@ -78,8 +78,7 @@ The sheet is reachable: fetch it signed out, from outside your admin, and
 the search engines you care about have indexed it, which their tools will
 show you. A reader used it: today the way to know is to ask one. Give an
 assistant your product page and see whether its answer carries what only
-the sheet states. What we have observed so far about assistants reaching
-sheets is [on the publish page](/pagefront/publish#2-serve-it).
+the sheet states.
 
 ## Does it replace Schema.org, or my product feeds?
 
