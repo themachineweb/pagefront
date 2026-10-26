@@ -2,18 +2,24 @@
 <!--
   Open Graph card for /pagefront and the pages under it (the Site layout's
   default). Same system as the manifesto card: the site's paper, ink and
-  ink-soft tokens, Charter for the title, the system sans for the rest.
+  ink-soft tokens, Charter for the title, the system sans for the footer.
+  The top line is the site's signature (public/brand/tmw-logo-signature.png)
+  redrawn as text: the {w} mark in the favicon's bold monospace beside the
+  wordmark in Charter. The same mark, large and in a pale tint, fills the
+  right half beside the title; no text runs under it.
 
-  Render on a Mac (Charter ships with macOS) from site/:
+  Render on a Mac (Charter and Menlo ship with macOS) from site/:
     node -e "require('sharp')('og/pagefront.svg').png().toFile('public/og-pagefront.png')"
 -->
 <svg xmlns="http://www.w3.org/2000/svg" width="2400" height="1260" viewBox="0 0 2400 1260">
   <rect width="2400" height="1260" fill="#f7f4ed"/>
-  <text x="178" y="226" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="58" fill="#5a554c">The Machine Web</text>
+  <text x="2250" y="640" text-anchor="end" font-family="Menlo, DejaVu Sans Mono, Consolas, monospace" font-weight="bold" font-size="600" fill="#e6e1d6">{w}</text>
+  <text x="172" y="226" font-family="Menlo, DejaVu Sans Mono, Consolas, monospace" font-weight="bold" font-size="56" fill="#1a1814">{w}</text>
+  <text x="296" y="226" font-family="Charter, Georgia, serif" font-size="64" fill="#1a1814">The Machine Web</text>
   <text x="172" y="560" font-family="Charter, Georgia, serif" font-size="200" fill="#1a1814">Pagefront</text>
   <text font-family="Charter, Georgia, serif" font-size="88" fill="#1a1814">
     <tspan x="178" y="720">An open specification</tspan>
-    <tspan x="178" y="830">to publish to The Machine Web</tspan>
+    <tspan x="178" y="830">to publish to the Machine Web</tspan>
   </text>
   <text x="178" y="1090" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="46" fill="#5a554c">themachineweb.org/pagefront</text>
 </svg>
