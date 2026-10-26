@@ -1,0 +1,61 @@
+# The Machine Web · Pagefront
+
+> Pagefront is an open specification for publishing reliable product data to the Machine Web: a publisher writes a small typed JSON file, a sheet, describing one resource (a product, a collection or the organization behind them), serves it on their own domain, and links to it from the page it describes.
+
+A sheet is Schema.org JSON-LD. The `pagefront:` vocabulary adds what commerce needs and Schema.org does not carry: material composition, care instructions, size charts, certifications with a scope, safety notices, documents, the legal entity behind a product. Every value in a sheet is the publisher's own statement, served from the publisher's domain.
+
+A sheet is found from the page it describes: a `<link rel="alternate" type="application/pagefront+json">` element or an HTTP `Link` header. An origin's entry point is `/.well-known/pagefront`, or a `Pagefront:` line in robots.txt, and leads to the Organization Sheet. Never construct a sheet URL from a page URL.
+
+Commerce release 0.5.0 is the current release. It bundles the Product Sheet spec 0.11.0, the Organization Sheet spec 0.5.0, the Collection Sheet spec 0.1.0 and the vocabulary. The format is suitable for experimentation and feedback today; the stability policy applies from release 1.0.0.
+
+## Specification
+
+- [Product sheet](https://themachineweb.org/pagefront/spec/commerce/product.md): envelope, data block, identifiers, variants, offers, media, discovery. The normative document.
+- [Organization sheet](https://themachineweb.org/pagefront/spec/commerce/organization.md): the publisher's own statement of who they are, the entity behind the products.
+- [Collection sheet](https://themachineweb.org/pagefront/spec/commerce/collection.md): the listing page: categories, curated collections and brand collections, with their members, their parents and the catalogue entry point.
+- [Pagefront vocabulary](https://themachineweb.org/pagefront/spec/commerce/vocabulary.md): every term Pagefront adds on top of Schema.org, what it means, and why Schema.org could not carry it. Includes the JSON-LD context.
+- [Releases and versioning](https://themachineweb.org/pagefront/spec/commerce/releases.md): sheet-spec versions, releases, the release table and the legacy draft line.
+- [Rule catalogue](https://themachineweb.org/pagefront/spec/commerce/rules.md): every check the linter applies, with stable rule IDs, severities and fixes.
+- [Completeness dimensions](https://themachineweb.org/pagefront/spec/commerce/scoring.md): a shared vocabulary for how complete a sheet is. Dimensions only, no weights, no score. Non-normative.
+- [Discovery](https://themachineweb.org/pagefront/spec/core/discovery.md): how a consumer locates a sheet: the page-based carriers, the entry point for an origin, the traversal-hint rule and the filename convention. Every sheet type, every vertical.
+- [Linter design](https://themachineweb.org/pagefront/spec/core/linter.md): rule structure, severity levels, report format and the conformance contract. Vertical-agnostic.
+
+## Schemas, registry and checking
+
+- [Product sheet JSON Schema 0.11.0](https://themachineweb.org/pagefront/spec/commerce/product/v0.11.0.json): the normative inventory of fields and shapes; the value a sheet declares as `$schema`.
+- [Organization sheet JSON Schema 0.5.0](https://themachineweb.org/pagefront/spec/commerce/organization/v0.5.0.json)
+- [Collection sheet JSON Schema 0.1.0](https://themachineweb.org/pagefront/spec/commerce/collection/v0.1.0.json)
+- [Property Registry](https://themachineweb.org/pagefront/commerce/registry/properties.json): the registered variant dimensions, registry version 0.1.0.
+- [Check](https://themachineweb.org/pagefront/commerce/validate): the hosted checker for people. Given a page URL it checks discovery, the hop to the sheet and the envelope's coherence with the page, then the conformance report; given a sheet URL, the conformance report.
+- [Check endpoint](https://themachineweb.org/pagefront/commerce/validate.json): the same report as JSON. `?url=` with a page URL or a served sheet's URL, `?sheet=` with the sheet JSON URL-encoded (up to about 60 KB), or a POST with the JSON body. Report only, rate-limited.
+
+## Publishing and consuming
+
+- [Publish](https://themachineweb.org/pagefront/publish): the whole procedure in four steps: write, serve, link, check.
+- [Write prompt, any shop](https://themachineweb.org/pagefront/publish/write/generic.md): a prompt for a chat assistant that drafts a first product sheet from a product page. It asks for the page addresses, reads the specification and the page, writes the sheet and presents it. It never invents a value.
+- [Write prompt, Shopify](https://themachineweb.org/pagefront/publish/write/shopify.md)
+- [Write prompt, WooCommerce](https://themachineweb.org/pagefront/publish/write/woocommerce.md)
+- [Consume](https://themachineweb.org/pagefront/consume): how to find a sheet from the page that links to it, fetch it, read the envelope and the data, and follow references. No key, no account, no permission.
+- [FAQ](https://themachineweb.org/pagefront/faq): what Pagefront is, who it is for, how it relates to Schema.org and feeds, and what it costs.
+
+## Example sheets
+
+Derived from a public product page by the project, checked field by field; not published by the merchant.
+
+- [Nitto Knitwear, Youri turtleneck: product sheet](https://themachineweb.org/pagefront/commerce/case-studies/nitto/nitto-youri-col-roule-orange-v0_9.json): a ProductGroup with per-size variants, provenance, delivery and the stockists.
+- [Nitto Knitwear: organization sheet](https://themachineweb.org/pagefront/commerce/case-studies/nitto/nitto-organization-v0_9.json)
+- [Case study writeup](https://themachineweb.org/pagefront/commerce/case-studies/nitto): what the page says today, what the sheet adds, where the data came from.
+
+## Tooling
+
+- [@pagefront/lint-commerce](https://www.npmjs.com/package/@pagefront/lint-commerce): the commerce linter and CLI on npm; `npx @pagefront/lint-commerce <sheet URL or file> --format json`.
+- [@pagefront/lint-core](https://www.npmjs.com/package/@pagefront/lint-core): the vertical-agnostic rule engine.
+- [Repository](https://github.com/themachineweb/pagefront): the specification sources (CC BY 4.0), the linters (Apache 2.0) and the case studies.
+
+## Optional
+
+- [Pagefront overview](https://themachineweb.org/pagefront): the landing page, with a rendered product page beside its sheet.
+- [The Machine Web manifesto](https://themachineweb.org/manifesto)
+- [Governance](https://themachineweb.org/pagefront/governance)
+- [Contributing](https://themachineweb.org/pagefront/contributing)
+- [Sitemap](https://themachineweb.org/sitemap-index.xml)

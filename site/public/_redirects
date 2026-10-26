@@ -1,3 +1,0 @@
-# Phase 1 of the manifesto launch: the manifesto is the front door.
-# 302 on purpose, so browsers do not cache it past the revert.
-/ /manifesto 302
