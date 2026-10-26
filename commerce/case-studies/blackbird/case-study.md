@@ -1,8 +1,8 @@
 # AFS Blackbird V3 — Case Study
 
-Commerce release 0.4.0. Sheets derived from the live site and verified against
+Commerce release 0.5.0. Sheets derived from the live site and verified against
 it on 2026-09-04; the product sheet re-verified on 2026-09-30, and its
-prices read again from the rendered page on 2026-10-02.
+prices read again from the rendered page on 2026-10-02 and on 2026-10-26.
 
 ## The merchant and the product
 
@@ -30,7 +30,7 @@ The sheet makes all of that answerable in one read:
 | Question an agent might be asked | From the page | From the sheet |
 |---|---|---|
 | Is the 8'0 × 19½ in stock? | Selects it and waits for a script | One unit left; nine other sizes on back order |
-| What does it cost? | Waits for the price to load | 1 609,30 € to 2 349 € including VAT, per size; two sizes on sale with their regular price |
+| What does it cost? | Waits for the price to load | 1 637,30 € to 2 349 € including VAT, per size; one size on sale with its regular price |
 | Which size for an 85 kg rider? | Reads the size guide | Four sizes carry that limit, as a value on each |
 | How long, how wide, how heavy? | Reads a ten-row table | Numbers with units on every size, display strings kept |
 | What is the warranty, can I return it? | Reads the strip and the terms | Two years and fifteen days free on the offer; the legal terms on the seller |
@@ -58,8 +58,8 @@ treat statements that disagree. The prices follow the specification's
 ## What AFS would decide
 
 - **Prices.** The sheet carries, for each size, the price the page
-  displays once that size is selected. Two sizes were on sale on
-  2026-10-02; their offers carry the sale price, with the regular price
+  displays once that size is selected. One size was on sale on
+  2026-10-26; its offer carries the sale price, with the regular price
   beside it. AFS's terms of sale state that prices are in euros inclusive
   of all taxes, and the record the page embeds names the displayed amount
   as its tax-inclusive price. The offers say so with
@@ -141,9 +141,10 @@ sale, the team page, the dealer map and its records, and foilandco.fr.
 Every value in both sheets was checked against those sources by a script
 that accepts a value only if it is quoted from a page, matched against
 shop data, or derived by a stated rule. Prices are the ones the page
-renders: on 2026-10-02 each of the ten sizes was selected in a browser and
-its displayed price read. The page's structured data gives one figure, a
-lowest price of 1 609,30 €, which agrees with the lowest rendered price.
+renders: on 2026-10-02, and again on 2026-10-26, each of the ten sizes was
+selected in a browser and its displayed price read. The page's structured
+data gives one figure, a lowest price of 1 637,30 €, which agrees with the
+lowest rendered price.
 The shop's tax-exclusive amounts were used only to check the rendered
 ones. Values that are the editor's reading: image and video roles, the
 new-condition flag, the feature-group labels, and the country codes on
@@ -173,3 +174,7 @@ dealer addresses.
   page states no checkout link, so no checkout template is carried.
 - **2026-10-18** — sheets moved to commerce release 0.5.0 (`release` and
   `$schema` only); no other value changed.
+- **2026-10-26** — prices read from the rendered page, size by size: the
+  7'6 × 20" sale has ended and its offer carries the regular price of
+  2 299 €; the 8'4 × 19" is still on sale at 30 % off; eight unchanged.
+  The product sheet's `generated_at` and `expires_at` moved to the day.
