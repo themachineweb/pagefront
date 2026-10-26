@@ -2,14 +2,17 @@
 <!--
   Open Graph card for the home page, /. Same system as the other cards:
   the site's paper, ink and ink-soft tokens, Charter for the title and
-  the subtitle, the system sans for the footer.
+  the subtitle, the system sans for the footer. The title is the site's
+  signature (public/brand/tmw-logo-signature.png) at title scale: the {w}
+  mark in the favicon's bold monospace before the wordmark in Charter.
 
-  Render on a Mac (Charter ships with macOS) from site/:
+  Render on a Mac (Charter and Menlo ship with macOS) from site/:
     node -e "require('sharp')('og/home.svg').png().toFile('public/og-home.png')"
 -->
 <svg xmlns="http://www.w3.org/2000/svg" width="2400" height="1260" viewBox="0 0 2400 1260">
   <rect width="2400" height="1260" fill="#f7f4ed"/>
-  <text x="172" y="560" font-family="Charter, Georgia, serif" font-size="200" fill="#1a1814">The Machine Web</text>
+  <text x="172" y="560" font-family="Menlo, DejaVu Sans Mono, Consolas, monospace" font-weight="bold" font-size="175" fill="#1a1814">{w}</text>
+  <text x="540" y="560" font-family="Charter, Georgia, serif" font-size="200" fill="#1a1814">The Machine Web</text>
   <text font-family="Charter, Georgia, serif" font-size="88" fill="#1a1814">
     <tspan x="178" y="720">The web was built to be displayed.</tspan>
     <tspan x="178" y="830">Machines now read it more than people do.</tspan>
