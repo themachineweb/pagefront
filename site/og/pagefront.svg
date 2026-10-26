@@ -12,8 +12,8 @@
   <text x="178" y="226" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="58" fill="#5a554c">The Machine Web</text>
   <text x="172" y="560" font-family="Charter, Georgia, serif" font-size="200" fill="#1a1814">Pagefront</text>
   <text font-family="Charter, Georgia, serif" font-size="88" fill="#1a1814">
-    <tspan x="178" y="720">Reliable product data,</tspan>
-    <tspan x="178" y="830">published on your own domain.</tspan>
+    <tspan x="178" y="720">An open specification</tspan>
+    <tspan x="178" y="830">to publish to The Machine Web</tspan>
   </text>
   <text x="178" y="1090" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="46" fill="#5a554c">themachineweb.org/pagefront</text>
 </svg>
