@@ -1,6 +1,6 @@
 # Nitto Knitwear — Case Study
 
-Commerce release 0.4.0. Sheets derived from the live site and verified against
+Commerce release 0.5.0. Sheets derived from the live site and verified against
 it on 2026-09-30.
 
 ## The merchant and the product

@@ -1,6 +1,6 @@
 # Kimaï — Case Study
 
-Commerce release 0.4.0. Sheets derived from the live site and verified against
+Commerce release 0.5.0. Sheets derived from the live site and verified against
 it on 2026-09-04; the product sheet re-derived on 2026-10-01. The offer's
 starting price is the one the page displays; the options and their price
 differences come from Kimaï's store data.

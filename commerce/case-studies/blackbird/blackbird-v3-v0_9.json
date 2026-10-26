@@ -4,8 +4,8 @@
   "schema_org_version": "30.0",
   "canonical_url": "https://afs-foiling.com/product/blackbird-v3",
   "sheet_url": "https://afs-foiling.com/pagefront/commerce/product/blackbird-v3.en.json",
-  "generated_at": "2026-09-30T18:09:00Z",
-  "expires_at": "2026-10-07T18:09:00Z",
+  "generated_at": "2026-10-26T14:13:00Z",
+  "expires_at": "2026-11-02T14:13:00Z",
   "data": {
     "@context": [
       "https://schema.org",
@@ -959,20 +959,12 @@
         "itemOffered": {
           "@id": "https://afs-foiling.com/product/blackbird-v3#size-7ft6-20in"
         },
-        "price": "1609.30",
+        "price": "2299.00",
         "priceCurrency": "EUR",
         "priceSpecification": [
           {
             "@type": "UnitPriceSpecification",
-            "priceType": "https://schema.org/ListPrice",
             "price": "2299.00",
-            "priceCurrency": "EUR",
-            "valueAddedTaxIncluded": true
-          },
-          {
-            "@type": "UnitPriceSpecification",
-            "priceType": "https://schema.org/SalePrice",
-            "price": "1609.30",
             "priceCurrency": "EUR",
             "valueAddedTaxIncluded": true
           }
