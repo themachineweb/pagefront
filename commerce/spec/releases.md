@@ -1,7 +1,7 @@
 # Pagefront Commerce Releases
 
 Status: normative.
-Current commerce release: 0.4.0 (2026-10-02)
+Current commerce release: 0.5.0 (2026-10-18)
 Machine-readable manifest: [`releases.json`](releases.json)
 
 This document states how the commerce vertical is versioned, lists every commerce release with the member versions it bundles, and carries the release notes. The sheet specs, the vocabulary, the rule catalogue and the linter design each point here for the scheme and keep their own changelogs for their content.
