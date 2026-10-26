@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Open Graph card for the home page, /. Same system as the other cards:
+  the site's paper, ink and ink-soft tokens, Charter for the title and
+  the subtitle, the system sans for the footer.
+
+  Render on a Mac (Charter ships with macOS) from site/:
+    node -e "require('sharp')('og/home.svg').png().toFile('public/og-home.png')"
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="2400" height="1260" viewBox="0 0 2400 1260">
+  <rect width="2400" height="1260" fill="#f7f4ed"/>
+  <text x="172" y="560" font-family="Charter, Georgia, serif" font-size="200" fill="#1a1814">The Machine Web</text>
+  <text font-family="Charter, Georgia, serif" font-size="88" fill="#1a1814">
+    <tspan x="178" y="720">The web was built to be displayed.</tspan>
+    <tspan x="178" y="830">Machines now read it more than people do.</tspan>
+  </text>
+  <text x="178" y="1090" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="46" fill="#5a554c">themachineweb.org</text>
+</svg>
