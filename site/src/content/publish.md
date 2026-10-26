@@ -104,8 +104,7 @@ Four things to get right:
   browser, allow cross-origin reads.
 - **Indexable.** Let search crawlers reach the sheet URLs and list them in your
   sitemap, alongside the pages. Many assistants reach the web through a search
-  index and can only fetch what that index holds; in one test, a sheet the index
-  had never seen was out of reach for them even though the page linked it. So
+  index and can only fetch what that index holds. So
   send no `noindex` for sheets, in `X-Robots-Tag` or in a robots rule, and do
   not disallow the crawlers you want reading them. The page's `alternate` link
   already tells a crawler that the sheet is a representation of the page.
