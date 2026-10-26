@@ -91,11 +91,9 @@ const UNLISTED = new Set(
 export default defineConfig({
   site: 'https://themachineweb.org',
   integrations: [
-    // Phase 1 of the manifesto launch: no sitemap while the manifesto is
-    // the front door. Phase 2 uncomments this block.
-    // sitemap({
-    //   filter: (page) => !UNLISTED.has(new URL(page).pathname),
-    // }),
+    sitemap({
+      filter: (page) => !UNLISTED.has(new URL(page).pathname),
+    }),
   ],
   trailingSlash: 'never',
   build: {
