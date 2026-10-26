@@ -240,20 +240,25 @@ A commerce release is cut from `main` in one pull request, then tagged.
 1. **Decide each member's bump.** Read each changed member's Unreleased
    entries and take its semver bump: before 1.0, a breaking or an additive
    change is a minor and a fix or clarification is a patch.
-2. **Bump the spec headers** to the new versions, and turn each Unreleased
-   section into `### <version> — <date>`, leaving an empty `### Unreleased`
-   above it.
+2. **Bump the spec headers** to the new versions, along with a document's
+   Status section where it repeats them (the Product Sheet spec has one),
+   and turn each Unreleased section into `### <version> — <date>`, leaving
+   an empty `### Unreleased` above it.
 3. **Freeze the schemas.** Copy each changed head schema to
    `commerce/schemas/<type>/v<version>.json`. The head's `$id` already
    names that version. Published files are never edited afterwards.
 4. **Compute the release bump:** the highest member bump, and a new sheet
    type is a minor. The vocabulary takes the release version.
 5. **Update [`commerce/spec/releases.md`](commerce/spec/releases.md)** (the
-   table and the release notes) and
-   [`commerce/spec/releases.json`](commerce/spec/releases.json).
+   current-release line at the top, the table and the release notes) and
+   [`commerce/spec/releases.json`](commerce/spec/releases.json). The
+   README's Status paragraph states the release and its members in prose;
+   update it too.
 6. **Migrate the case-study sheets and the examples** to the new release:
-   `release`, `$schema`, and whatever the release changed. The examples
-   include the ones on the site (`site/src/content/`). Rebuild the prompts
+   `release`, `$schema`, and whatever the release changed. Each case-study
+   writeup opens with the release its sheets declare; move that line with
+   the sheets. The examples include the ones on the site
+   (`site/src/content/`). Rebuild the prompts
    in `commerce/prompts/` for the new release (schema URLs, spec versions,
    the target release line), bump the prompt set and add its changelog
    entry; see "Versioning" in
