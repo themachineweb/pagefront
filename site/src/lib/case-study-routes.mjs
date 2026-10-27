@@ -45,7 +45,7 @@ export const CASE_STUDIES = {
       'Pagefront case study: the AFS Blackbird V3 as a ten-size product sheet and Foil And Co’s organization sheet — what the page says today, what the sheet adds, and what publishing would take.',
   },
   'commerce/case-studies/kimai/case-study': {
-    route: 'kimai',
+    route: '_kimai',
     unlinked: true,
     source: 'commerce/case-studies/kimai/case-study.md',
     folder: 'commerce/case-studies/kimai',
