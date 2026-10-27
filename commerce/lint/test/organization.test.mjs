@@ -18,7 +18,7 @@ import {
 
 const NITTO_SHEET = join(
   dirname(fileURLToPath(import.meta.url)),
-  "..", "..", "case-studies", "nitto", "nitto-organization-v0_9.json"
+  "..", "..", "case-studies", "nitto", "nitto-knitwear.fr.json"
 );
 
 function loadNitto() {
@@ -145,9 +145,9 @@ test("identity is @id + name: dropping either fails Layer 1", () => {
 // ---------------------------------------------------------------------------
 
 const CORPUS = [
-  ["nitto", "nitto-organization-v0_9.json"],
-  ["zalando", "zalando-organization-v0_9.json"],
-  ["zalando", "zalando-friboo-organization-v0_9.json"],
+  ["nitto", "nitto-knitwear.fr.json"],
+  ["zalando", "zalando.de.json"],
+  ["zalando", "friboo.de.json"],
 ];
 
 test("the three corpus organization sheets lint clean end to end", () => {
@@ -183,7 +183,7 @@ test("sheet-type dispatch: product rules never run on org sheets and vice versa"
     readFileSync(
       join(
         dirname(fileURLToPath(import.meta.url)),
-        "..", "..", "case-studies", "nitto", "nitto-youri-col-roule-orange-v0_9.json"
+        "..", "..", "case-studies", "nitto", "pull-col-roule-youri-orange.fr.json"
       ),
       "utf8"
     )

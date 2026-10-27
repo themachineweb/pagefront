@@ -87,7 +87,11 @@ the page.
 
 - The sheets, validating against the current schemas in `commerce/spec/`:
   the product sheet and,
-  where the merchant is its own seller, the organization sheet.
+  where the merchant is its own seller, the organization sheet. Each file
+  is named as the sheet's own `sheet_url` names it (`blackbird-v3.en.json`),
+  the `{id}.{lang}.json` shape from "Filename convention" in
+  [`core/spec/discovery.md`](core/spec/discovery.md). The release a sheet
+  belongs to is in its envelope; a filename carries no version.
 - A `case-study.md` written for a merchant deciding whether to publish,
   and readable by an implementer building a producer. In this order:
   1. **The merchant and the product**, in a few sentences.
