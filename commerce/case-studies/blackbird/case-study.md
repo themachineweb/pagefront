@@ -2,15 +2,15 @@
 
 Commerce release 0.5.0. Sheets derived from the live site and verified against
 it on 2026-09-04; the product sheet re-verified on 2026-09-30, and its
-prices read again from the rendered page on 2026-10-02 and on 2026-10-26.
+prices read again from the rendered page on 2026-10-02 and on 2026-10-26;
+the organization sheet re-verified on 2026-10-27.
 
 ## The merchant and the product
 
-AFS is the foil, board and wing brand of Foil And Co SAS, a Breton
-manufacturer that has designed and built its products in Pencran, Finistère,
-since 2016. It sells direct from afs-foiling.com, in English with a French
-edition, and through a network of dealers it maps on its own site. The
-company also owns a second brand, AHD, and presents itself at foilandco.fr.
+AFS is the foil, board and wing brand of Foil And Co, a Breton manufacturer
+that designs and builds its products in Pencran, Finistère, with a team of
+forty. It sells direct from afs-foiling.com, in English with a French
+edition, and through a network of dealers it maps on its own site.
 
 The product is the Blackbird V3, a downwind foil board sold bare in ten
 sizes, 2 299 € to 2 349 € at their regular price:
@@ -46,10 +46,10 @@ The sheet makes all of that answerable in one read:
   state.
 - **The product page** gave the description, the spec table and the rider
   weights, quoted as written.
-- **The legal notice, the terms of sale, the team page and foilandco.fr**
-  gave the company identity, the withdrawal and delivery terms, the head
-  count and the founding year.
-- **The dealer map's own records** gave the 95 resellers.
+- **The legal notice, the terms of sale and the team page** gave the
+  company identity, the withdrawal and delivery terms, the payment methods
+  and the head count.
+- **The dealer map's own records** gave the 97 resellers.
 
 The human decisions: whether to declare per-size addresses, and how to
 treat statements that disagree. The prices follow the specification's
@@ -84,8 +84,9 @@ Where the site contradicts itself:
   statements on the offers and the terms on the seller.
 - The description lists volumes for three 8'8 sizes that differ from the
   spec table. The sheet follows the table.
-- The legal notice gives Pencran as head office and Le Tréhou as registered
-  office, and a different share capital from the terms.
+- The legal notice gave Pencran as head office and Le Tréhou as registered
+  office, and a different share capital from the terms. Since the terms were
+  rewritten, both name one office and one capital.
 - The dealer map's addresses are free text in a dozen formats; twenty name
   no country.
 
@@ -115,7 +116,7 @@ The document alone is twenty-three times the sheet, and it shows no price:
 that arrives after 25 script files load and call the shop's API, alongside 6
 stylesheets and the images. The sheet carries all ten sizes, prices and
 stock states in one request. The organization sheet is larger than the
-product sheet because it carries 95 dealers.
+product sheet because it carries the dealers.
 
 ## For implementers
 
@@ -129,7 +130,7 @@ related items are left out: it reshuffles them on every page load, so any
 list would be one draw. Brand owner and manufacturer are reference stubs to an
 organization identified on the company's own domain so a future AHD sheet
 can share it. The organization sheet exercises all three roles, the SIREN
-rung of the registration ladder, and a 95-entry reseller list with typed
+rung of the registration ladder, and a 97-entry reseller list with typed
 dealer categories.
 
 ## Method
@@ -149,6 +150,20 @@ The shop's tax-exclusive amounts were used only to check the rendered
 ones. Values that are the editor's reading: image and video roles, the
 new-condition flag, the feature-group labels, and the country codes on
 dealer addresses.
+
+The organization sheet's sources were read again on 2026-10-27, in a
+browser: the legal notice, the terms of sale, the team page, the factory
+page, the home page, the product page and the dealer map with its records.
+The terms of sale had been rewritten, so the withdrawal, delivery and
+payment statements are quoted from the new text. The legal notice now gives
+one office and one share capital, the same as the terms. foilandco.fr now
+redirects to the shop, so the founding year it stated is no longer carried.
+The reassurance strips the home page used to show, among them click and
+collect, worldwide delivery and payment in instalments, no longer render on
+any page read, so the delivery and payment statements come from the terms
+alone. The dealer map held 135 records, 97 of them in the dealer, advanced
+dealer and distributor categories the sheet carries; the other 38 are
+schools and a test centre, as before.
 
 ## History
 
@@ -178,3 +193,11 @@ dealer addresses.
   7'6 × 20" sale has ended and its offer carries the regular price of
   2 299 €; the 8'4 × 19" is still on sale at 30 % off; eight unchanged.
   The product sheet's `generated_at` and `expires_at` moved to the day.
+- **2026-10-27** — organization sheet re-verified against the live site.
+  The withdrawal, delivery and payment statements follow the rewritten
+  terms of sale; the registered office is Espace Joseph Rolland, ZAE de
+  Gorrequer, as the legal notice and the terms now both state; the founding
+  year and the foilandco.fr link are dropped, that site having become a
+  redirect; two dealers added, for 97. The envelope carries the day's
+  `generated_at` and a new `expires_at`. The page weights were not
+  re-measured.
