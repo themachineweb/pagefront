@@ -69,7 +69,8 @@ editor with respect to every implementer:
   implementation of this specification, the editor will move the spec to
   shared stewardship.
 
-The spec is licensed CC BY 4.0 and can be implemented by anyone. The
+The spec is licensed CC BY 4.0 and can be implemented by anyone; the code
+in this repository is Apache 2.0. The
 governance commitment is that the spec serves publishers and agent and tool
 builders. No single commercial entity, including any VengaLabs venture, gets
 priority over them.

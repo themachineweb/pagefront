@@ -16,3 +16,7 @@ node_modules/
 core/lint/dist/
 commerce/lint/dist/
 commerce/lint/src/generated/
+
+# Local tooling state
+site/.wrangler/
+.claude/

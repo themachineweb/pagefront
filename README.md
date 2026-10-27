@@ -40,10 +40,12 @@ What this repository contains today:
   the rule engine, the commerce catalogue, and the `pagefront-lint-commerce`
   CLI.
 - [`commerce/case-studies/`](commerce/case-studies/) — worked examples
-  against real merchants, all with release 0.5.0 sheets. Nitto (apparel), Kimaï
-  (jewelry, made-to-order) and AFS Blackbird V3 (sports equipment, multi-SKU)
-  each carry a product sheet and an organization sheet; Zalando / Friboo
-  (multi-brand retailer) carries organization sheets only.
+  against real merchants, all with release 0.5.0 sheets. Nitto (apparel) and
+  AFS Blackbird V3 (sports equipment, multi-SKU) are published on the site,
+  each with a product sheet and an organization sheet. Kimaï (jewelry,
+  made-to-order, product and organization sheets) and Zalando / Friboo
+  (multi-brand retailer, organization sheets only) are corpus examples kept
+  in the repository.
 - [`commerce/schemas/`](commerce/schemas/) — every published JSON Schema,
   one file per version (`product/v0.11.0.json`, `organization/v0.5.0.json`,
   `collection/v0.1.0.json`, the earlier versions, and the legacy `v0.9.json`
@@ -166,9 +168,11 @@ The Pagefront specification is licensed under
 modify, and redistribute it — including commercially — provided you give
 appropriate credit and indicate any changes.
 
-Code in this repository — the lint packages under `core/lint/` and
-`commerce/lint/` — is licensed under Apache 2.0 (see the `LICENSE` file in
-each package). The specification remains CC BY 4.0.
+Code in this repository is licensed under Apache 2.0: the lint packages
+under `core/lint/` and `commerce/lint/`, the site and its Worker under
+`site/`, and the prompt build script in `commerce/prompts/`. Each code
+folder carries its `LICENSE` file. The specification, the case studies and
+the prompts remain CC BY 4.0.
 
 ## Contact
 
