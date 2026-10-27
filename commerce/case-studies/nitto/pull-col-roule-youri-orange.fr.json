@@ -4,8 +4,8 @@
   "schema_org_version": "30.0",
   "canonical_url": "https://www.nittoknitwear.com/products/pull-col-roule-youri-orange",
   "sheet_url": "https://www.nittoknitwear.com/pagefront/commerce/product/pull-col-roule-youri-orange.fr.json",
-  "generated_at": "2026-09-30T17:06:00Z",
-  "expires_at": "2026-10-07T17:06:00Z",
+  "generated_at": "2026-10-27T07:53:00Z",
+  "expires_at": "2026-11-03T07:53:00Z",
   "data": {
     "@context": [
       "https://schema.org",
@@ -368,9 +368,9 @@
         "areaServed": "FR",
         "pagefront:estimatedDelivery": {
           "@type": "pagefront:DeliveryEstimate",
-          "earliest": "2026-10-03",
-          "latest": "2026-10-03",
-          "description": "Livraison - estimée le 03 octobre 2026"
+          "earliest": "2026-10-30",
+          "latest": "2026-11-01",
+          "description": "Livraison estimée entre le 30 octobre et le 01 novembre 2026"
         },
         "acceptedPaymentMethod": [
           "Visa",
@@ -410,9 +410,9 @@
         "areaServed": "FR",
         "pagefront:estimatedDelivery": {
           "@type": "pagefront:DeliveryEstimate",
-          "earliest": "2026-10-03",
-          "latest": "2026-10-03",
-          "description": "Livraison - estimée le 03 octobre 2026"
+          "earliest": "2026-10-30",
+          "latest": "2026-11-01",
+          "description": "Livraison estimée entre le 30 octobre et le 01 novembre 2026"
         },
         "acceptedPaymentMethod": [
           "Visa",
@@ -452,9 +452,9 @@
         "areaServed": "FR",
         "pagefront:estimatedDelivery": {
           "@type": "pagefront:DeliveryEstimate",
-          "earliest": "2026-10-03",
-          "latest": "2026-10-03",
-          "description": "Livraison - estimée le 03 octobre 2026"
+          "earliest": "2026-10-30",
+          "latest": "2026-11-01",
+          "description": "Livraison estimée entre le 30 octobre et le 01 novembre 2026"
         },
         "acceptedPaymentMethod": [
           "Visa",
@@ -494,9 +494,9 @@
         "areaServed": "FR",
         "pagefront:estimatedDelivery": {
           "@type": "pagefront:DeliveryEstimate",
-          "earliest": "2026-10-03",
-          "latest": "2026-10-03",
-          "description": "Livraison - estimée le 03 octobre 2026"
+          "earliest": "2026-10-30",
+          "latest": "2026-11-01",
+          "description": "Livraison estimée entre le 30 octobre et le 01 novembre 2026"
         },
         "acceptedPaymentMethod": [
           "Visa",

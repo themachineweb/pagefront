@@ -21,7 +21,7 @@ export const CASE_STUDIES = {
     title: 'Nitto Knitwear',
     sector: 'Apparel',
     blurb:
-      'A five-size merino turtleneck in eight colours on Shopify. Stock per size, fit, provenance, delivery date and 148 stockists, all from data already on the site.',
+      'A five-size merino turtleneck in eight colours on Shopify. Stock per size, fit, provenance, delivery date and 150 stockists, all from data already on the site.',
     sheets: [
       { file: 'pull-col-roule-youri-orange.fr.json', label: 'Product sheet — Pull col roulé Youri, orange', kind: 'product' },
       { file: 'nitto-knitwear.fr.json', label: 'Organization sheet — Nitto Knitwear', kind: 'organization' },

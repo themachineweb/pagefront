@@ -4,8 +4,8 @@
   "schema_org_version": "30.0",
   "canonical_url": "https://www.nittoknitwear.com/pages/atelier",
   "sheet_url": "https://www.nittoknitwear.com/pagefront/commerce/organization/nitto-knitwear.fr.json",
-  "generated_at": "2026-09-30T17:06:00Z",
-  "expires_at": "2026-10-07T17:06:00Z",
+  "generated_at": "2026-10-27T07:53:00Z",
+  "expires_at": "2026-11-03T07:53:00Z",
   "data": {
     "@context": [
       "https://schema.org",
@@ -627,19 +627,6 @@
         {
           "organization": {
             "@type": "Organization",
-            "name": "Flair",
-            "address": {
-              "@type": "PostalAddress",
-              "streetAddress": "91 Grande Rue",
-              "postalCode": "25000",
-              "addressLocality": "Besançon",
-              "addressCountry": "FR"
-            }
-          }
-        },
-        {
-          "organization": {
-            "@type": "Organization",
             "name": "Flaneurs",
             "address": {
               "@type": "PostalAddress",
@@ -764,6 +751,19 @@
               "postalCode": "40150",
               "addressLocality": "Hossegor",
               "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Hill's Of Kerrisdale",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "2125 W 41st Ave",
+              "postalCode": "V6M 1Z3",
+              "addressLocality": "Vancouver",
+              "addressCountry": "CA"
             }
           }
         },
@@ -1576,6 +1576,19 @@
         {
           "organization": {
             "@type": "Organization",
+            "name": "Ray Rickburn",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "2100 W 4th Ave",
+              "postalCode": "V6K 1N6",
+              "addressLocality": "Vancouver",
+              "addressCountry": "CA"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
             "name": "Rayne 77",
             "address": {
               "@type": "PostalAddress",
@@ -1751,6 +1764,19 @@
               "streetAddress": "9 rue des Poulets",
               "postalCode": "71100",
               "addressLocality": "Chalon-sur-Saône",
+              "addressCountry": "FR"
+            }
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Superbien",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "91 Grande Rue",
+              "postalCode": "25000",
+              "addressLocality": "Besançon",
               "addressCountry": "FR"
             }
           }
