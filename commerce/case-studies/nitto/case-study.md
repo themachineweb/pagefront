@@ -1,14 +1,14 @@
 # Nitto Knitwear — Case Study
 
 Commerce release 0.5.0. Sheets derived from the live site and verified against
-it on 2026-09-30.
+it on 2026-09-30, and again on 2026-10-27.
 
 ## The merchant and the product
 
 Nitto Knitwear is a French men's knitwear brand launched in 2022 by a family
 workshop in Clamart, near Paris, that has been knitting since 1972. It
 designs, makes and sells its own garments on a Shopify store, in French with
-an English edition, and through 148 stockists it lists on its own site.
+an English edition, and through 150 stockists it lists on its own site.
 
 The product is the Youri turtleneck in orange, a 195 € extra-fine merino
 jumper sold in five sizes. It is one of eight colours, and the page also
@@ -39,9 +39,9 @@ page where the two disagree:
 | Is a size M in stock? | In stock in the markup, few units on a badge | Limited availability, with the SKU; XXL out of stock |
 | Will it fit me? | Reads a table in a pop-up | Three measurements for five sizes, two model references, "choisir votre taille habituelle" |
 | What is it made of, and where? | "Laine mérinos" and France in the markup, the rest in a panel | 100 % extra-fine merino, RWS and Woolmark yarn, spun in Italy, knitted and made up in the Clamart workshop |
-| When would it arrive? | Reads a line in the cart | 3 October 2026 |
+| When would it arrive? | Reads a line under the price | 30 October to 1 November 2026 |
 | How do I return it? | 14 days, free, in France, from the markup | The same, with the conditions and the prepaid label, on the seller's own sheet |
-| Where can I see it in a shop? | Opens a map widget | 148 stockists with addresses, on the seller's sheet |
+| Where can I see it in a shop? | Opens a map widget | 150 stockists with addresses, on the seller's sheet |
 | What other colours and models are there? | Reads the swatches and the model switch | Ten pages declared as one family, by colour and model |
 | Is there an English version? | Reads hreflang | Declared as a sibling |
 
@@ -63,7 +63,7 @@ in the shop's own data:
   fit advice, all quoted as written.
 - **The legal notice, shipping page and terms of sale** gave the company
   identity, the tariff table and the return terms.
-- **The stockist map's own data feed** gave the 148 shops.
+- **The stockist map's own data feed** gave the 150 shops.
 
 The human decisions were small: which statement wins when two disagree,
 which words become the category, and how to name identifiers.
@@ -155,8 +155,18 @@ that are the editor's reading of the page: image
 roles, the "true to size" reading of the fit sentence, the certification
 issuers' names, the new-condition flag, and the Clamart workshop as the
 place of knitting and making up, which the product page states as "notre
-atelier" in France and the site banner places in Clamart. The delivery date
-is the one the page's cart summary shows.
+atelier" in France and the site banner places in Clamart. The delivery
+estimate is the one the product page shows under the price.
+
+Sources read again on 2026-10-27: the product page rendered in a browser,
+with its Schema.org markup, the shipping and returns page, the terms of
+sale, the legal notice and the stockist feed. The shop's product data
+endpoint refused the request that day, so the price and the stock of each
+size were read from the rendered page and its markup. The price and the
+stock badges had not changed; the delivery estimate had moved and is now a
+range; the stockist feed had grown to 150, one shop in Besançon trading
+under a new name at the same address and two added in Vancouver. The
+tariff and the return terms on the shipping page were unchanged.
 
 ## History
 
@@ -178,3 +188,8 @@ is the one the page's cart summary shows.
   cart URL under a separate protocol, and is not carried.
 - **2026-10-18** — sheets moved to commerce release 0.5.0 (`release` and
   `$schema` only); no other value changed.
+- **2026-10-27** — both sheets re-verified against the live site. Price and
+  stock per size unchanged; the delivery estimate is now the range the
+  product page shows; the stockist list grew to 150. Both envelopes carry
+  the day's `generated_at` and a new `expires_at`. The page weights were
+  not re-measured.
