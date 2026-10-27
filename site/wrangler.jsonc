@@ -4,6 +4,11 @@
   "compatibility_date": "2025-04-01",
   // Serve on the custom domain only; no *.workers.dev twin of the site.
   "workers_dev": false,
+  // Branch previews from Workers Builds are aliased Version URLs on
+  // workers.dev, which route only while Version URLs are on. Without this
+  // key the setting follows workers_dev and a deploy can switch it off, as
+  // it did on 2026-10-27; with it, every deploy asserts it.
+  "preview_urls": true,
   // The Worker serves one route, the Check endpoint, at its path and its
   // two former paths; every other request goes straight to the assets
   // (see worker/index.ts).
