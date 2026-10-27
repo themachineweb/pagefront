@@ -36,7 +36,7 @@ export const CASE_STUDIES = {
     title: 'AFS Blackbird V3',
     sector: 'Sports equipment',
     blurb:
-      'A ten-size foil board. Per-size price and stock the page only loads by script, a spec table with units, and 95 dealers on the seller sheet.',
+      'A ten-size foil board. Per-size price and stock the page only loads by script, a spec table with units, and 97 dealers on the seller sheet.',
     sheets: [
       { file: 'blackbird-v3.en.json', label: 'Product sheet — Blackbird V3', kind: 'product' },
       { file: 'afs.en.json', label: 'Organization sheet — Foil And Co (AFS)', kind: 'organization' },

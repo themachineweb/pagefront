@@ -4,8 +4,8 @@
   "schema_org_version": "30.0",
   "canonical_url": "https://afs-foiling.com/",
   "sheet_url": "https://afs-foiling.com/pagefront/commerce/organization/afs.en.json",
-  "generated_at": "2026-09-04T13:30:00Z",
-  "expires_at": "2026-09-11T13:30:00Z",
+  "generated_at": "2026-10-27T08:53:00Z",
+  "expires_at": "2026-11-03T08:53:00Z",
   "data": {
     "@context": [
       "https://schema.org",
@@ -16,7 +16,7 @@
     "@type": "Organization",
     "@id": "https://foilandco.fr/#org",
     "name": "Foil And Co.",
-    "legalName": "FOIL AND CO SAS",
+    "legalName": "FOIL AND CO",
     "inLanguage": "en",
     "url": "https://afs-foiling.com",
     "pagefront:commerceRole": [
@@ -32,23 +32,19 @@
     },
     "vatID": "FR23822822615",
     "description": "AFS’s mission is to offer the best-performing foils, boards and wings, while guaranteeing first-rate accessibility and stability. To ensure that all riders can practice their sport in complete safety, whatever the conditions and whatever their riding style (freeride, carving, downwind, surf foil, etc.). These products are designed and manufactured in Brittany, France, by Foil And Co. French manufacturing using the most advanced techniques to offer you the best quality!",
-    "foundingDate": "2016-09",
     "numberOfEmployees": {
       "@type": "QuantitativeValue",
       "value": 40
     },
-    "telephone": "02 98 19 29 03",
+    "telephone": "+33 2 98 19 29 03",
     "email": "contact@foilandco.com",
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": "ZAE Correquer",
+      "streetAddress": "Espace Joseph Rolland, ZAE de Gorrequer",
       "postalCode": "29800",
       "addressLocality": "Pencran",
       "addressCountry": "FR"
     },
-    "sameAs": [
-      "https://foilandco.fr/"
-    ],
     "pagefront:socialAccount": [
       {
         "@type": "pagefront:SocialAccount",
@@ -1435,6 +1431,36 @@
               "addressCountry": "FR"
             }
           }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "La Torche Surf School",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Roz an Tremen",
+              "postalCode": "29120",
+              "addressLocality": "Plomeur",
+              "addressCountry": "FR"
+            },
+            "telephone": "07 86 40 37 69"
+          }
+        },
+        {
+          "organization": {
+            "@type": "Organization",
+            "name": "Ecole de Voile A.S.N Quiberon",
+            "description": "Dealers",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Bd des émigrés, Port Haliguen",
+              "postalCode": "56170",
+              "addressLocality": "QUIBERON",
+              "addressCountry": "FR"
+            },
+            "telephone": "02 97 30 56 54"
+          }
         }
       ]
     },
@@ -1444,38 +1470,20 @@
       "merchantReturnDays": 14,
       "returnFees": "https://schema.org/ReturnShippingFees",
       "returnMethod": "https://schema.org/ReturnByMail",
-      "description": "In accordance with legal provisions, within 14 days of receiving your product, you may exercise your right of withdrawal. You do not have to give reasons or pay any penalty. Except for return costs, which remain your responsibility, we will refund you the total sums paid no later than 14 days after your withdrawal. The product must be returned complete and in its original condition. In accordance with legal provisions, the right of withdrawal cannot be exercised for products made to order, according to the consumer's specific specifications ."
+      "description": "In accordance with Articles L. 221-18 et seq. of the French Consumer Code, the customer has 14 days from receipt of the product to exercise the right of withdrawal, without giving any reason or paying any penalty. The customer returns the product, complete and in its original condition, no later than 14 days after communicating the decision. Return costs are borne by the customer, who may be held liable for any diminished value resulting from handling other than what is necessary to establish the nature, characteristics and functioning of the product. We refund all sums paid, including initial delivery costs (on the basis of standard delivery), no later than 14 days after being informed of the withdrawal. In accordance with Article L. 221-28 of the French Consumer Code, the right of withdrawal does not apply to products made to the customer's specifications or clearly personalised."
     },
     "pagefront:fulfillmentTerms": [
       {
         "@type": "OfferShippingDetails",
-        "name": "Worldwide delivery — shipping costs calculated in the basket",
-        "description": "We will deliver the products to the address indicated in the order form. The shipping costs for any deliverable order are calculated in your shopping basket. If you request delivery outside French territory, your order may be subject to possible taxes and customs duties when it arrives at its destination.",
-        "shippingDestination": [
-          {
-            "@type": "DefinedRegion",
-            "name": "Worldwide delivery"
-          }
-        ]
-      },
-      {
-        "@type": "OfferShippingDetails",
-        "name": "Click & Collect",
-        "description": "Click & Collect",
-        "shippingDestination": [
-          {
-            "@type": "DefinedRegion",
-            "addressCountry": "FR",
-            "name": "Pencran"
-          }
-        ]
+        "name": "Delivery to the address given at the order, costs shown in the cart",
+        "description": "We deliver the products to the address given by the customer when placing the order. Delivery costs are calculated and displayed in the cart before the order is confirmed. If you request delivery outside French territory, your order may be subject to possible taxes and customs duties when it arrives at its destination."
       }
     ],
     "paymentAccepted": [
+      "CB",
       "Visa",
       "Mastercard",
-      "Carte bleue",
-      "Secure payments in 3 or 4 instalments"
+      "Bank transfer"
     ],
     "location": [
       {
@@ -1483,7 +1491,7 @@
         "name": "Foil and Co factory (Pencran)",
         "address": {
           "@type": "PostalAddress",
-          "streetAddress": "ZAE Correquer",
+          "streetAddress": "Espace Joseph-Rolland, ZAE Gorrequer",
           "postalCode": "29800",
           "addressLocality": "Pencran",
           "addressCountry": "FR"
