@@ -4,8 +4,8 @@
   "schema_org_version": "30.0",
   "canonical_url": "https://afs-foiling.com/product/blackbird-v3",
   "sheet_url": "https://afs-foiling.com/pagefront/commerce/product/blackbird-v3.en.json",
-  "generated_at": "2026-10-26T14:13:00Z",
-  "expires_at": "2026-11-02T14:13:00Z",
+  "generated_at": "2026-10-27T11:13:00Z",
+  "expires_at": "2026-11-03T11:13:00Z",
   "data": {
     "@context": [
       "https://schema.org",
@@ -516,7 +516,7 @@
           {
             "@type": "PropertyValue",
             "name": "Weight",
-            "value": 6.0,
+            "value": 6,
             "unitCode": "KGM"
           },
           {
@@ -947,9 +947,8 @@
         "hasMerchantReturnPolicy": {
           "@type": "MerchantReturnPolicy",
           "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
-          "merchantReturnDays": 15,
-          "returnFees": "https://schema.org/FreeReturn",
-          "description": "Free returns within 15 days"
+          "merchantReturnDays": 14,
+          "description": "Returns within 14 days"
         }
       },
       {
@@ -991,9 +990,8 @@
         "hasMerchantReturnPolicy": {
           "@type": "MerchantReturnPolicy",
           "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
-          "merchantReturnDays": 15,
-          "returnFees": "https://schema.org/FreeReturn",
-          "description": "Free returns within 15 days"
+          "merchantReturnDays": 14,
+          "description": "Returns within 14 days"
         }
       },
       {
@@ -1035,9 +1033,8 @@
         "hasMerchantReturnPolicy": {
           "@type": "MerchantReturnPolicy",
           "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
-          "merchantReturnDays": 15,
-          "returnFees": "https://schema.org/FreeReturn",
-          "description": "Free returns within 15 days"
+          "merchantReturnDays": 14,
+          "description": "Returns within 14 days"
         }
       },
       {
@@ -1079,9 +1076,8 @@
         "hasMerchantReturnPolicy": {
           "@type": "MerchantReturnPolicy",
           "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
-          "merchantReturnDays": 15,
-          "returnFees": "https://schema.org/FreeReturn",
-          "description": "Free returns within 15 days"
+          "merchantReturnDays": 14,
+          "description": "Returns within 14 days"
         }
       },
       {
@@ -1123,9 +1119,8 @@
         "hasMerchantReturnPolicy": {
           "@type": "MerchantReturnPolicy",
           "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
-          "merchantReturnDays": 15,
-          "returnFees": "https://schema.org/FreeReturn",
-          "description": "Free returns within 15 days"
+          "merchantReturnDays": 14,
+          "description": "Returns within 14 days"
         }
       },
       {
@@ -1175,9 +1170,8 @@
         "hasMerchantReturnPolicy": {
           "@type": "MerchantReturnPolicy",
           "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
-          "merchantReturnDays": 15,
-          "returnFees": "https://schema.org/FreeReturn",
-          "description": "Free returns within 15 days"
+          "merchantReturnDays": 14,
+          "description": "Returns within 14 days"
         }
       },
       {
@@ -1219,9 +1213,8 @@
         "hasMerchantReturnPolicy": {
           "@type": "MerchantReturnPolicy",
           "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
-          "merchantReturnDays": 15,
-          "returnFees": "https://schema.org/FreeReturn",
-          "description": "Free returns within 15 days"
+          "merchantReturnDays": 14,
+          "description": "Returns within 14 days"
         }
       },
       {
@@ -1263,9 +1256,8 @@
         "hasMerchantReturnPolicy": {
           "@type": "MerchantReturnPolicy",
           "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
-          "merchantReturnDays": 15,
-          "returnFees": "https://schema.org/FreeReturn",
-          "description": "Free returns within 15 days"
+          "merchantReturnDays": 14,
+          "description": "Returns within 14 days"
         }
       },
       {
@@ -1307,9 +1299,8 @@
         "hasMerchantReturnPolicy": {
           "@type": "MerchantReturnPolicy",
           "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
-          "merchantReturnDays": 15,
-          "returnFees": "https://schema.org/FreeReturn",
-          "description": "Free returns within 15 days"
+          "merchantReturnDays": 14,
+          "description": "Returns within 14 days"
         }
       },
       {
@@ -1351,9 +1342,8 @@
         "hasMerchantReturnPolicy": {
           "@type": "MerchantReturnPolicy",
           "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
-          "merchantReturnDays": 15,
-          "returnFees": "https://schema.org/FreeReturn",
-          "description": "Free returns within 15 days"
+          "merchantReturnDays": 14,
+          "description": "Returns within 14 days"
         }
       }
     ]
