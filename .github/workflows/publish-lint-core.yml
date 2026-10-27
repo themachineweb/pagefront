@@ -5,8 +5,8 @@
 # Trusted Publishers as themachineweb / pagefront / publish-lint-core.yml.
 #
 # Runs on a tag of the form lint-core-v<version>; the tag must match the
-# version in core/lint/package.json. Provenance is off because the
-# repository is private, where npm does not support it.
+# version in core/lint/package.json. Provenance is on: the repository is
+# public, so npm records which workflow run built the package.
 name: Publish lint-core
 
 on:
@@ -37,4 +37,4 @@ jobs:
             || { echo "tag ${GITHUB_REF_NAME} does not match package version ${version}"; exit 1; }
       - run: npm publish -w @pagefront/lint-core
         env:
-          NPM_CONFIG_PROVENANCE: 'false'
+          NPM_CONFIG_PROVENANCE: 'true'

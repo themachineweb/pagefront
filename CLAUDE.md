@@ -14,8 +14,9 @@ package manifests and git.
   checks, merge it by rebase so the commit lands as written, and delete
   the branch. There are two checks, and the second reports a few minutes
   after the first: `frozen-schemas` and `Workers Builds: themachineweb`
-  (the site's preview build). Wait for both. `main` has no branch protection on GitHub, so this rule
-  holds only if you follow it. See "Branches" in `CONTRIBUTING.md`.
+  (the site's preview build). Wait for both. A ruleset on `main` enforces
+  pull requests, rebase merges and the `frozen-schemas` check; the preview
+  build is not required by it. See "Branches" in `CONTRIBUTING.md`.
 - Commit as the user. No co-author trailer and no tool attribution in
   commit messages or pull request descriptions.
 - Before opening a pull request, run what the change can affect:
