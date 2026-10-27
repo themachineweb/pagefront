@@ -3,7 +3,7 @@
 Commerce release 0.5.0. Sheets derived from the live site and verified against
 it on 2026-09-04; the product sheet re-verified on 2026-09-30, and its
 prices read again from the rendered page on 2026-10-02 and on 2026-10-26;
-the organization sheet re-verified on 2026-10-27.
+both sheets re-verified on 2026-10-27.
 
 ## The merchant and the product
 
@@ -22,8 +22,8 @@ The page has no product structured data. The price shows "Loading…" until
 the browser fetches it, and the per-size stock is a dropdown state. Yet the
 storefront ships the shop's full product record inside the page, and the
 shop's public API returns each size's price and stock. The spec table and
-the rider-weight guide are plain text. The delivery, return and warranty
-terms are a footer strip and a separate terms page.
+the rider-weight guide are plain text. The return and warranty terms are a
+strip in the buy drawer and a separate terms page.
 
 The sheet makes all of that answerable in one read:
 
@@ -33,7 +33,7 @@ The sheet makes all of that answerable in one read:
 | What does it cost? | Waits for the price to load | 1 637,30 € to 2 349 € including VAT, per size; one size on sale with its regular price |
 | Which size for an 85 kg rider? | Reads the size guide | Four sizes carry that limit, as a value on each |
 | How long, how wide, how heavy? | Reads a ten-row table | Numbers with units on every size, display strings kept |
-| What is the warranty, can I return it? | Reads the strip and the terms | Two years and fifteen days free on the offer; the legal terms on the seller |
+| What is the warranty, can I return it? | Reads the strip and the terms | Two years and fourteen days on the offer; the legal terms, with the return costs, on the seller |
 | What goes with it? | Scrolls "Recommended products" | Five merchant-chosen upsells |
 | Where can I buy it in person? | Opens a map | 95 dealers with addresses and phones |
 
@@ -78,10 +78,12 @@ treat statements that disagree. The prices follow the specification's
 
 Where the site contradicts itself:
 
-- The page says "Free returns within 15 days"; the terms of sale give the
-  legal fourteen days with return costs on the buyer. The footer says "2 to
-  3 years warranty"; the page says two years. The sheet carries the page's
-  statements on the offers and the terms on the seller.
+- In September the page said "Free returns within 15 days" while the terms
+  of sale gave the legal fourteen days with return costs on the buyer, and
+  the footer said "2 to 3 years warranty" while the page said two years. By
+  2026-10-27 the strip says "Returns within 14 days", the footer strip is
+  gone, and the statements agree. The sheet carries the page's statements
+  on the offers and the terms on the seller.
 - The description lists volumes for three 8'8 sizes that differ from the
   spec table. The sheet follows the table.
 - The legal notice gave Pencran as head office and Le Tréhou as registered
@@ -165,6 +167,15 @@ alone. The dealer map held 135 records, 97 of them in the dealer, advanced
 dealer and distributor categories the sheet carries; the other 38 are
 schools and a test centre, as before.
 
+The product page was read again the same day, size by size in the buy
+drawer, and the store's public API beside it: the ten rendered prices and
+the stock states were unchanged, one size still on sale and one still with
+a single unit. The strip in the drawer now says "Returns within 14 days",
+and the offers follow it. The drawer also shows a scheduled departure date
+for each size, which the sheet does not carry: it is the date the board
+leaves the workshop, and the sheet's delivery estimate names the date the
+customer receives it.
+
 ## History
 
 - **v0.4.1 to v0.9, Whitebird Mid Length** — the merchant's first worked
@@ -201,3 +212,7 @@ schools and a test centre, as before.
   redirect; two dealers added, for 97. The envelope carries the day's
   `generated_at` and a new `expires_at`. The page weights were not
   re-measured.
+- **2026-10-27** — product sheet re-verified: prices and stock states
+  unchanged; the offers' return statement follows the drawer's strip,
+  "Returns within 14 days", where the page used to say fifteen days free.
+  The envelope carries the day's `generated_at` and a new `expires_at`.
