@@ -497,9 +497,9 @@ One read travels the product-to-organization links beyond identity confirmation:
 
 ## Worked examples
 
-- **DTC, all three roles**: the Nitto organization sheet ([`../case-studies/nitto/nitto-organization-v0_9.json`](../case-studies/nitto/nitto-organization-v0_9.json)). MBTJM SAS behind the Nitto Knitwear brand, with the full ten-entry `pagefront:fulfillmentTerms` store policy, the store return policy, registration identity on the `iso6523Code` rung plus the RCS display form, and, since 2026-08-31, a `pagefront:authorizedResellers` statement transcribed from the brand's Revendeurs page: 148 physical stockists across eighteen countries, each an inline `Organization` keyed by name and postal address (the page publishes no websites), with no `exhaustive` claim because a store locator makes none.
-- **Seller-only**: the Zalando organization sheet ([`../case-studies/zalando/zalando-organization-v0_9.json`](../case-studies/zalando/zalando-organization-v0_9.json)). A pure-retailer sheet with `commerceRole: ["seller"]`, registration identity on the `leiCode` rung (`529900YRFFGH5AXU4S86`) plus the Handelsregister display form, that register having no ISO 6523 ICD.
-- **Private-label brand sheet**: the Friboo sheet ([`../case-studies/zalando/zalando-friboo-organization-v0_9.json`](../case-studies/zalando/zalando-friboo-organization-v0_9.json)). A brand with no domain of its own, anchored on the owner's storefront per the cardinality rule.
+- **DTC, all three roles**: the Nitto organization sheet ([`../case-studies/nitto/nitto-knitwear.fr.json`](../case-studies/nitto/nitto-knitwear.fr.json)). MBTJM SAS behind the Nitto Knitwear brand, with the full ten-entry `pagefront:fulfillmentTerms` store policy, the store return policy, registration identity on the `iso6523Code` rung plus the RCS display form, and, since 2026-08-31, a `pagefront:authorizedResellers` statement transcribed from the brand's Revendeurs page: 148 physical stockists across eighteen countries, each an inline `Organization` keyed by name and postal address (the page publishes no websites), with no `exhaustive` claim because a store locator makes none.
+- **Seller-only**: the Zalando organization sheet ([`../case-studies/zalando/zalando.de.json`](../case-studies/zalando/zalando.de.json)). A pure-retailer sheet with `commerceRole: ["seller"]`, registration identity on the `leiCode` rung (`529900YRFFGH5AXU4S86`) plus the Handelsregister display form, that register having no ISO 6523 ICD.
+- **Private-label brand sheet**: the Friboo sheet ([`../case-studies/zalando/friboo.de.json`](../case-studies/zalando/friboo.de.json)). A brand with no domain of its own, anchored on the owner's storefront per the cardinality rule.
 
 ## What this spec does not address
 
@@ -533,7 +533,7 @@ _Entries dated before 2026-10-01 were written under the legacy scheme, in which 
 
 ### Unreleased
 
-Changes land here and are versioned at the next release; see "Releasing" in [`../../CONTRIBUTING.md`](../../CONTRIBUTING.md).
+- **Editorial: case-study sheet links.** The worked examples link the case-study sheets under their new filenames, which follow the recommended `{id}.{lang}.json` shape (`nitto-knitwear.fr.json`, `zalando.de.json`, `friboo.de.json`); the files carried a `-v0_9` suffix from the legacy format line.
 
 ### 0.5.0 — 2026-10-18
 

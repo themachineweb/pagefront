@@ -427,7 +427,7 @@ Used on `Product` (or `ProductGroup`) to express grouped, ordered technical spec
 
 Used on the `Organization` data block of a Commerce Organization Sheet carrying the `seller` commerce role, to express the store-wide shipping defaults: destinations, rates, and delivery timeframes. Value is an array of Schema.org-native `OfferShippingDetails` objects; free-shipping thresholds ride on the existing `pagefront:appliesWhen` / `pagefront:PricingCondition` machinery, as they do on an Offer. Added in v0.9.
 
-Composition over inheritance, per house pattern: Schema.org scopes `OfferShippingDetails` to the Offer (via `shippingDetails`), so the Pagefront term is only the org-level attachment point Schema.org lacks. The payload stays plain Schema.org, and no parallel shipping vocabulary is minted. Offer-level `shippingDetails` remains valid as the per-product override for products that deviate from the store defaults; consumers resolve product-else-seller along the `Offer.seller` edge, mirroring return policy (see "Return policy" in the Pagefront Spec). The Nitto organization sheet (`../case-studies/nitto/nitto-organization-v0_9.json`) is a worked example: the full ten-entry store shipping policy, with two free-shipping-threshold tiers across Colissimo point-relais and home delivery, plus five export zones.
+Composition over inheritance, per house pattern: Schema.org scopes `OfferShippingDetails` to the Offer (via `shippingDetails`), so the Pagefront term is only the org-level attachment point Schema.org lacks. The payload stays plain Schema.org, and no parallel shipping vocabulary is minted. Offer-level `shippingDetails` remains valid as the per-product override for products that deviate from the store defaults; consumers resolve product-else-seller along the `Offer.seller` edge, mirroring return policy (see "Return policy" in the Pagefront Spec). The Nitto organization sheet (`../case-studies/nitto/nitto-knitwear.fr.json`) is a worked example: the full ten-entry store shipping policy, with two free-shipping-threshold tiers across Colissimo point-relais and home delivery, plus five export zones.
 
 ### pagefront:gemstone
 
@@ -615,7 +615,7 @@ An aggregate rating may blend product-quality signals with seller/fulfilment exp
 
 **Company registration identity** *(added in v0.9)*. Schema.org has no dedicated property for a company registration number and its register, and machine-key coverage of national registers is uneven. Commerce Organization Sheets therefore carry registration identity as a ladder of Schema.org-native machine keys (`leiCode` when the entity has an LEI, `iso6523Code` where the register has an ISO 6523 ICD, e.g. `"0002:808641435"` for a French SIREN) plus a generic `identifier` `PropertyValue` for the jurisdiction-flavored display form, every rung conditional on the data existing. The ladder, its authority order, its floor, and the publisher-stated-only rule are normative in "Company registration identity" in [`organization.md`](organization.md); no linter rule warns on absent registration identifiers. `vatID` remains separately recommended where applicable.
 
-The corpus illustrates each rung. Nitto (MBTJM SAS) carries `iso6523Code` on ICD 0002 plus the RCS display form (`../case-studies/nitto/nitto-organization-v0_9.json`). Zalando SE illustrates the LEI rung, `leiCode` `529900YRFFGH5AXU4S86` plus the Handelsregister display form, that register having no ICD. Reformation (LYMI Inc.) illustrates the floor: `legalName` and address only, with nothing else published.
+The corpus illustrates each rung. Nitto (MBTJM SAS) carries `iso6523Code` on ICD 0002 plus the RCS display form (`../case-studies/nitto/nitto-knitwear.fr.json`). Zalando SE illustrates the LEI rung, `leiCode` `529900YRFFGH5AXU4S86` plus the Handelsregister display form, that register having no ICD. Reformation (LYMI Inc.) illustrates the floor: `legalName` and address only, with nothing else published.
 
 ## JSON-LD Context
 
@@ -812,6 +812,7 @@ Note: v0.5 made envelope/structural changes (the `sheet_url` rename, internation
 
 ### Unreleased
 
+- **Editorial: case-study sheet link.** The registration-identity paragraph links the Nitto organization sheet under its new filename, `nitto-knitwear.fr.json`; the file carried a `-v0_9` suffix from the legacy format line.
 - **Fix: `collectionKind` in the context block.** The 0.5.0 entry said the JSON-LD context block gains its `collectionKind` mapping at the release. The mapping was missing and is added.
 - **Editorial: no context file.** The two sentences saying a context file is available at `https://themachineweb.org/pagefront/vocabulary/context.jsonld` are removed; that address was never served, and no sheet or consumer in the corpus references it. The context is the block under "JSON-LD Context". Serving the vocabulary namespace, the term IRIs and a context file together, is future work.
 - **Clarification: the `collection` kind.** The enum entry says the kind covers sets assembled by hand and that a set filled by a rule has no sheet, following the amendment to [`collection.md`](collection.md). No term changes.

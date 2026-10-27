@@ -1,6 +1,6 @@
 # Zalando / Friboo — Commerce Organization Sheet worked example (release 0.5.0; first worked at legacy format 0.9, sketch v0.1)
  
-Second worked example, chosen to exercise everything the Nitto DTC case could not: the seller-only path, the multi-brand shared storefront, and the registration-identifier pattern outside France. Source page: the Friboo Stiefelette product (`zalando.de/friboo-stiefelette-taupe-f5713i0iv-n11.html`), plus live fetches of the Zalando Impressum, returns FAQ, and the Friboo brand page (2026-08-14). Companion files: `zalando-organization-v0_9.json` (seller sheet), `zalando-friboo-organization-v0_9.json` (brand sheet).
+Second worked example, chosen to exercise everything the Nitto DTC case could not: the seller-only path, the multi-brand shared storefront, and the registration-identifier pattern outside France. Source page: the Friboo Stiefelette product (`zalando.de/friboo-stiefelette-taupe-f5713i0iv-n11.html`), plus live fetches of the Zalando Impressum, returns FAQ, and the Friboo brand page (2026-08-14). Companion files: `zalando.de.json` (seller sheet), `friboo.de.json` (brand sheet).
  
 ## Why this case
  
@@ -8,8 +8,8 @@ Zalando is the retailer shape: a multi-brand store that is the target of `Offer.
  
 ## The two-sheet pattern in practice
  
-- **Seller sheet** (`zalando-organization-v0_9.json`): `@type: OnlineStore`, `commerceRole: ["seller"]`, no `brand` node. Carries the store-wide terms: 30-day free returns, free standard shipping ≥€34.90 else €4.90 (via `pagefront:fulfillmentTerms` + `appliesWhen`).
-- **Brand sheet** (`zalando-friboo-organization-v0_9.json`): `commerceRole: ["brand_owner"]`, the Friboo `Brand` node nested, no seller content.
+- **Seller sheet** (`zalando.de.json`): `@type: OnlineStore`, `commerceRole: ["seller"]`, no `brand` node. Carries the store-wide terms: 30-day free returns, free standard shipping ≥€34.90 else €4.90 (via `pagefront:fulfillmentTerms` + `appliesWhen`).
+- **Brand sheet** (`friboo.de.json`): `commerceRole: ["brand_owner"]`, the Friboo `Brand` node nested, no seller content.
 - **Same `Organization.@id`** (`https://www.zalando.de/#org`) in both — the sketch's identity-dedup rule for one company emitting several sheets, exercised for real.
 The Friboo product page closes the graph: `Product.brand` → `…/friboo/#brand` (brand sheet), `Offer.seller` → `…/#org` (seller sheet). Same legal entity, two roles, two sheets, one identity.
  

@@ -13,7 +13,7 @@ const fixture = (p) =>
 
 const CLEAN = fixture("lint/test/cli-fixtures/clean.json");
 const BROKEN = fixture("lint/test/cli-fixtures/layer1-fails.json");
-const BLACKBIRD = fixture("case-studies/blackbird/blackbird-v3-v0_9.json");
+const BLACKBIRD = fixture("case-studies/blackbird/blackbird-v3.en.json");
 const ORGANIZATION = fixture("lint/test/fixtures/org-e-001/clean.json");
 const ORGANIZATION_WARNS = fixture("lint/test/fixtures/org-w-001/fires.json");
 const COLLECTION = fixture("lint/test/fixtures/col-e-001/clean.json");

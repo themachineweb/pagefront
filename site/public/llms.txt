@@ -42,11 +42,11 @@ Commerce release 0.5.0 is the current release. It bundles the Product Sheet spec
 
 Derived from a public product page by the project, checked field by field; not published by the merchant.
 
-- [Nitto Knitwear, Youri turtleneck: product sheet](https://themachineweb.org/pagefront/commerce/case-studies/nitto/nitto-youri-col-roule-orange-v0_9.json): a ProductGroup with per-size variants, provenance, delivery and the stockists.
-- [Nitto Knitwear: organization sheet](https://themachineweb.org/pagefront/commerce/case-studies/nitto/nitto-organization-v0_9.json)
+- [Nitto Knitwear, Youri turtleneck: product sheet](https://themachineweb.org/pagefront/commerce/case-studies/nitto/pull-col-roule-youri-orange.fr.json): a ProductGroup with per-size variants, provenance, delivery and the stockists.
+- [Nitto Knitwear: organization sheet](https://themachineweb.org/pagefront/commerce/case-studies/nitto/nitto-knitwear.fr.json)
 - [Case study writeup](https://themachineweb.org/pagefront/commerce/case-studies/nitto): what the page says today, what the sheet adds, where the data came from.
-- [AFS Blackbird V3: product sheet](https://themachineweb.org/pagefront/commerce/case-studies/blackbird/blackbird-v3-v0_9.json): a ten-size foil board with per-size price and stock, a spec table with units and the rider-weight guide.
-- [Foil And Co (AFS): organization sheet](https://themachineweb.org/pagefront/commerce/case-studies/blackbird/afs-organization-v0_9.json): the manufacturer and its dealer network.
+- [AFS Blackbird V3: product sheet](https://themachineweb.org/pagefront/commerce/case-studies/blackbird/blackbird-v3.en.json): a ten-size foil board with per-size price and stock, a spec table with units and the rider-weight guide.
+- [Foil And Co (AFS): organization sheet](https://themachineweb.org/pagefront/commerce/case-studies/blackbird/afs.en.json): the manufacturer and its dealer network.
 - [Case study writeup](https://themachineweb.org/pagefront/commerce/case-studies/blackbird)
 
 ## Tooling
