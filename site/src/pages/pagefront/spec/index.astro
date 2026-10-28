@@ -14,7 +14,7 @@ import { CURRENT_RELEASE, currentSheetSpec } from '../../../lib/releases.mjs';
 const present = new Set((await getCollection('spec')).map((e) => e.id));
 
 const docs = Object.entries(SPEC_DOCS)
-  .filter(([id]) => present.has(id))
+  .filter(([id, meta]) => present.has(id) && !meta.unlisted)
   .map(([, meta]) => meta);
 
 const commerce = docs.filter((d) => d.route.startsWith('commerce/'));
