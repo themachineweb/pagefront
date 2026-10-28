@@ -4,7 +4,10 @@ The prompt set's own semver; see "Versioning" in [`README.md`](README.md).
 
 ## Unreleased
 
-For commerce release 0.5.0. To be tagged as 1.4.0.
+## 1.4.0 — 2026-10-28
+
+For commerce release 0.5.0. One tag for the changes made as 1.2.0, 1.3.0
+and 1.4.0.
 
 - Product sheets carry `question` where the page shows a FAQ for the
   product, one entry per pair as the page writes it, from the page's text
