@@ -4,6 +4,16 @@ The prompt set's own semver; see "Versioning" in [`README.md`](README.md).
 
 ## Unreleased
 
+For commerce release 0.5.0. To be tagged as 1.2.0.
+
+- The header's spec links point at the specs' plain-text form (`.md`),
+  with the page beside each, and a line says the schema links are JSON
+  files to download and that the product spec is longer than a reader may
+  hold. Chat assistants' page readers failed on the HTML pages and the
+  schema files while a direct download succeeded; the text form is what a
+  reader opens (`core.md` and the one-product prompt; the six built
+  prompts rebuilt).
+
 ## 1.1.0 — 2026-10-21
 
 For commerce release 0.5.0.
