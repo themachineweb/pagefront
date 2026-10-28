@@ -82,8 +82,8 @@ and stop. From the homepage:
 - **The catalogue**: the product categories and the products, from the
   platform's data. The products to write sheets for are the ones the
   merchant listed.
-- **The sets**: the categories and collections that list those products,
-  and their parents up to the top level (COLLECTION SHEETS).
+- **The sets**: the category or collection that holds each of those
+  products directly, and the parents it names (COLLECTION SHEETS).
 - **The organization page**: the page that describes the shop as a
   business (who runs it, since when, where), an About page linked from the
   homepage. A page that presents a product line, a team or a campaign is not
@@ -154,8 +154,11 @@ Collection spec.
 
 Which sets:
 
-- the sets that list a product you write a sheet for, and each of their
-  parents up to the top level of the tree;
+- the set that holds a product you write a sheet for directly, the one its
+  page names as holding it (the platform's section says where). Its
+  parents, up to the top level of the tree, get no sheet in this run: the
+  sheet names them in `isPartOf` by page address, with no
+  `pagefront:sheetUrl`, and a later run or the code route writes them;
 - a `collection` filled automatically by a rule (new arrivals, a sale,
   every product with a tag), where the platform's section says how to tell:
   none, and no product's isPartOf names it; say so in the report. A
@@ -436,5 +439,7 @@ The sheets (Step 7), then the report, in plain words:
   countries, a missing identifier or brand);
 - the sets left without a sheet, and why (a collection filled by a rule, a listing not
   read in full, outside what the platform's data lets you list);
+- the parents of each product's set, named by page address without a
+  sheet, as this route's rule has it;
 - what the Check said, or why it could not be run;
 - every address your fetch tool refused.

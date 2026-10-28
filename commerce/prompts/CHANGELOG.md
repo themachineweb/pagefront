@@ -12,6 +12,12 @@ For commerce release 0.5.0. To be tagged as 1.3.0.
   listing. A collection the page does not name is not listed for the
   product, and the report says so. A run on a Shopify shop with 23
   navigation collections had read 300 listing pages to place one product.
+- Chat route: a collection sheet is written for the set that holds a
+  product directly; its parents, up to the top level, are named in
+  `isPartOf` by page address without a sheet, and the report says so. The
+  code route keeps writing the parents' sheets. A root category with
+  thousands of products no longer means reading its every listing page to
+  place one product.
 - Shopify: member types in bulk. Where the shop answers
   `/collections/<handle>/products.json`, a listing Shopify does not
   document, each member's type comes from its `variants` there, 250
