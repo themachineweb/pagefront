@@ -4,8 +4,22 @@ The prompt set's own semver; see "Versioning" in [`README.md`](README.md).
 
 ## Unreleased
 
-For commerce release 0.5.0. To be tagged as 1.2.0.
+For commerce release 0.5.0. To be tagged as 1.3.0.
 
+- Shopify, chat route: which collections hold a product is read from the
+  product page's breadcrumb, the last entry the set that holds it and the
+  others its ancestors, in place of reading every navigation collection's
+  listing. A collection the page does not name is not listed for the
+  product, and the report says so. A run on a Shopify shop with 23
+  navigation collections had read 300 listing pages to place one product.
+- Shopify: member types in bulk. Where the shop answers
+  `/collections/<handle>/products.json`, a listing Shopify does not
+  document, each member's type comes from its `variants` there, 250
+  products a page, in place of one `.js` request per member; the listing
+  page keeps membership and order, since the feed's order is the shop's
+  own and differs from the listing's. Where the feed does not answer, the
+  `.js` request per member stays. The same run had made 2,297 single
+  requests and the storefront's rate limit refused every one.
 - The header's spec links point at the specs' plain-text form (`.md`),
   with the page beside each, and a line says the schema links are JSON
   files to download and that the product spec is longer than a reader may

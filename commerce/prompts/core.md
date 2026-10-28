@@ -5,7 +5,7 @@
 # Pagefront — write your shop's sheets (code assistant)
 <!-- /route -->
 
-- Prompt set 1.2.0, for commerce release 0.5.0.
+- Prompt set 1.3.0, for commerce release 0.5.0.
 - Writes Product sheets (spec 0.11.0), Collection sheets (spec 0.1.0) and the Organization sheet (spec 0.5.0), commerce release 0.5.0.
 - Product spec: https://themachineweb.org/pagefront/spec/commerce/product.md (page: https://themachineweb.org/pagefront/spec/commerce/product)
 - Product schema: https://themachineweb.org/pagefront/spec/commerce/product/v0.11.0.json
