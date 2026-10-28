@@ -1,14 +1,15 @@
 # Pagefront — write your shop's sheets (code assistant)
 
-- Prompt set 1.1.0, for commerce release 0.5.0.
+- Prompt set 1.2.0, for commerce release 0.5.0.
 - Writes Product sheets (spec 0.11.0), Collection sheets (spec 0.1.0) and the Organization sheet (spec 0.5.0), commerce release 0.5.0.
-- Product spec: https://themachineweb.org/pagefront/spec/commerce/product
+- Product spec: https://themachineweb.org/pagefront/spec/commerce/product.md (page: https://themachineweb.org/pagefront/spec/commerce/product)
 - Product schema: https://themachineweb.org/pagefront/spec/commerce/product/v0.11.0.json
-- Organization spec: https://themachineweb.org/pagefront/spec/commerce/organization
+- Organization spec: https://themachineweb.org/pagefront/spec/commerce/organization.md (page: https://themachineweb.org/pagefront/spec/commerce/organization)
 - Organization schema: https://themachineweb.org/pagefront/spec/commerce/organization/v0.5.0.json
-- Collection spec: https://themachineweb.org/pagefront/spec/commerce/collection
+- Collection spec: https://themachineweb.org/pagefront/spec/commerce/collection.md (page: https://themachineweb.org/pagefront/spec/commerce/collection)
 - Collection schema: https://themachineweb.org/pagefront/spec/commerce/collection/v0.1.0.json
 - Check: https://themachineweb.org/pagefront/commerce/validate
+- The spec links are plain text, the form a reader opens; the product spec is long, so a reader may hold only part of it. The schema links are JSON files, to download.
 - Linter: `npx @pagefront/lint-commerce` (npm package `@pagefront/lint-commerce`, CLI `pagefront-lint-commerce`)
 
 You are writing Pagefront sheets for a shop, from its homepage address

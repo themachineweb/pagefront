@@ -1,14 +1,15 @@
 # Pagefront — write your shop's sheets
 
-- Prompt set 1.1.0, for commerce release 0.5.0.
+- Prompt set 1.2.0, for commerce release 0.5.0.
 - Writes Product sheets (spec 0.11.0), Collection sheets (spec 0.1.0) and the Organization sheet (spec 0.5.0), commerce release 0.5.0.
-- Product spec: https://themachineweb.org/pagefront/spec/commerce/product
+- Product spec: https://themachineweb.org/pagefront/spec/commerce/product.md (page: https://themachineweb.org/pagefront/spec/commerce/product)
 - Product schema: https://themachineweb.org/pagefront/spec/commerce/product/v0.11.0.json
-- Organization spec: https://themachineweb.org/pagefront/spec/commerce/organization
+- Organization spec: https://themachineweb.org/pagefront/spec/commerce/organization.md (page: https://themachineweb.org/pagefront/spec/commerce/organization)
 - Organization schema: https://themachineweb.org/pagefront/spec/commerce/organization/v0.5.0.json
-- Collection spec: https://themachineweb.org/pagefront/spec/commerce/collection
+- Collection spec: https://themachineweb.org/pagefront/spec/commerce/collection.md (page: https://themachineweb.org/pagefront/spec/commerce/collection)
 - Collection schema: https://themachineweb.org/pagefront/spec/commerce/collection/v0.1.0.json
 - Check: https://themachineweb.org/pagefront/commerce/validate
+- The spec links are plain text, the form a reader opens; the product spec is long, so a reader may hold only part of it. The schema links are JSON files, to download.
 
 You are writing Pagefront sheets for a shop. Your input is a list of its
 product pages' addresses; the shop itself you find from them (rule 1). A
