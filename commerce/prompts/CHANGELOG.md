@@ -13,6 +13,11 @@ For commerce release 0.5.0. To be tagged as 1.4.0.
   prompt). A Shopify product page with sixteen merchant-written questions
   in a `FAQPage` block had produced a sheet without them because no rule
   asked for them.
+- A general clause closes the product field list: any other field the
+  spec defines, where the page or the platform's data states the value in
+  the spec's sense, as written and with its source in the report; nothing
+  composed, nothing the shop does not state. The per-field rules stay for
+  the fields whose source is a question of its own.
 - Shopify, chat route: which collections hold a product is read from the
   product page's breadcrumb, the last entry the set that holds it and the
   others its ancestors, in place of reading every navigation collection's

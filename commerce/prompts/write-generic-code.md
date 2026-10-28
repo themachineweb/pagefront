@@ -323,6 +323,10 @@ no `expires_at`. The data block follows the spec and the schema in full:
   product: leave them out unless the shop states them as the product's own.
 - No language siblings (pagefront:availableLanguages) until a second
   language exists.
+- Any other field the spec defines, where the page or the platform's data
+  states the value in the spec's sense: as written, with its source named
+  in the report. Nothing composed, and nothing the spec defines that the
+  shop does not state.
 - A product that is not on sale (not purchasable, password-protected, or
   not shown on its page), or that is a bundle of separate products or sold
   on another site: write no sheet for it, and say so.
