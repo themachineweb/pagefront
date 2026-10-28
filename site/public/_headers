@@ -23,10 +23,6 @@
 	Content-Type: text/markdown; charset=utf-8
 /pagefront/spec/core/linter.md
 	Content-Type: text/markdown; charset=utf-8
-/pagefront/spec/commerce/*-changelog.md
-	Content-Type: text/markdown; charset=utf-8
-/pagefront/spec/core/*-changelog.md
-	Content-Type: text/markdown; charset=utf-8
 /llms.txt
 	Content-Type: text/plain; charset=utf-8
 
