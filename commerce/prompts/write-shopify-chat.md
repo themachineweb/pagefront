@@ -1,6 +1,6 @@
 # Pagefront — write your shop's sheets
 
-- Prompt set 1.2.0, for commerce release 0.5.0.
+- Prompt set 1.3.0, for commerce release 0.5.0.
 - Writes Product sheets (spec 0.11.0), Collection sheets (spec 0.1.0) and the Organization sheet (spec 0.5.0), commerce release 0.5.0.
 - Product spec: https://themachineweb.org/pagefront/spec/commerce/product.md (page: https://themachineweb.org/pagefront/spec/commerce/product)
 - Product schema: https://themachineweb.org/pagefront/spec/commerce/product/v0.11.0.json
@@ -339,18 +339,32 @@ the sets you wrote a sheet for).
   navigation nests them (up to three levels), kind `category`; a menu entry
   that links to no collection has no page: its children attach to the
   nearest collection above it. A collection the navigation does not link to
-  cannot be listed from public data: none; say so. Which collections list a
-  product: read every navigation collection's listing. Members: the
-  collection's page and every page its pagination links to, the product
-  tiles in the order shown. A Shopify collection is its own list, and a
+  cannot be listed from public data: none; say so. Which collections hold a
+  product: its page's breadcrumb, which names the collection that holds it
+  last and that collection's ancestors before it; a theme that links the
+  product under a collection's path (`/collections/<handle>/products/<product
+  handle>`) names that collection too. A collection the product page does
+  not name is not listed for the product: say so in the report, naming the
+  page as the source. Members: the collection's page and every page its
+  pagination links to, the product tiles in the order shown. A Shopify
+  collection is its own list, and a
   parent collection often holds its subcategories' products too, added by
   the merchant so its page shows them all: its direct members are the
   products on its pages that are on none of its subcategories' pages, at
   any depth, so read those pages too. A tile links to the product's page
   (sometimes under the collection's path, `/collections/<handle>/products/<product
   handle>`); the member is `<origin>/products/<product handle>`, and its type
-  is the Ajax API's: more than one variant is `ProductGroup`, one is
-  `Product`. Whether a collection is filled by a rule is an admin setting,
+  is the product's own: more than one variant is `ProductGroup`, one is
+  `Product`. Most shops answer
+  `<origin>/collections/<handle>/products.json?limit=250&page=<n>` with the
+  collection's products, each with its `handle` and `variants`, 250 a page
+  until a page comes back empty; Shopify does not document it, a shop can
+  switch it off, and the storefront's rate limit applies to it. Where it
+  answers, take each member's type from its `variants` there; its order is
+  the shop's own and differs from the listing's, so the listing page keeps
+  membership and order. Where it does not answer, the product's `.js`,
+  member by member; a member whose data is refused: say so in the report.
+  Whether a collection is filled by a rule is an admin setting,
   not readable from public data: say so in the report.
 - **A product's data**: `<origin>/products/<handle>.js`. A product with more
   than one variant is a ProductGroup, one hasVariant entry per entry of
