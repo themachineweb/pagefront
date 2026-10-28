@@ -105,4 +105,32 @@ export const SPEC_DOCS = {
     blurb:
       'Rule structure, severity levels, report format, and the conformance contract. Vertical-agnostic.',
   },
+  // Each document's changelog lives in a sibling file; routed so the
+  // specs' links to them resolve on the site, kept off the index.
+  ...changelogDocs([
+    ['commerce/spec/product', 'Product sheet'],
+    ['commerce/spec/organization', 'Organization sheet'],
+    ['commerce/spec/collection', 'Collection sheet'],
+    ['commerce/spec/vocabulary', 'Vocabulary'],
+    ['commerce/spec/rules', 'Rule catalogue'],
+    ['core/spec/discovery', 'Discovery'],
+    ['core/spec/linter', 'Linter design'],
+  ]),
 };
+
+function changelogDocs(pairs) {
+  return Object.fromEntries(
+    pairs.map(([id, title]) => [
+      `${id}-changelog`,
+      {
+        route: `${id.replace('/spec/', '/')}-changelog`,
+        source: `${id}-changelog.md`,
+        title: `${title}: changelog`,
+        status: 'non-normative',
+        statusLine: `The history of the ${title.toLowerCase()} document, with its Unreleased entries.`,
+        blurb: `Every change to the ${title.toLowerCase()} document, by version.`,
+        unlisted: true,
+      },
+    ])
+  );
+}

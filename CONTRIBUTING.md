@@ -212,11 +212,13 @@ Four principles govern where things live:
 
 ### Changelogs
 
-Every spec document (`product.md`, `organization.md`, `vocabulary.md`,
-`rules.md`, `core/spec/discovery.md`, `core/spec/linter.md`) has an
-`### Unreleased` heading at the
-top of its changelog. A change to a document lands with an entry there, in
-the same pull request.
+Every spec document (`product.md`, `organization.md`, `collection.md`,
+`vocabulary.md`, `rules.md`, `core/spec/discovery.md`,
+`core/spec/linter.md`) keeps its changelog in a sibling file,
+`<document>-changelog.md`, with an `### Unreleased` heading at the top.
+The document itself carries a one-line Changelog section pointing there.
+A change to a document lands with an entry in its changelog file, in the
+same pull request.
 
 A spec header never shows an unreleased version. The version line of a
 document changes only at release time, in the release pull request.
@@ -245,8 +247,9 @@ A commerce release is cut from `main` in one pull request, then tagged.
    change is a minor and a fix or clarification is a patch.
 2. **Bump the spec headers** to the new versions, along with a document's
    Status section where it repeats them (the Product Sheet spec has one),
-   and turn each Unreleased section into `### <version> — <date>`, leaving
-   an empty `### Unreleased` above it.
+   and in each changed document's changelog file turn the Unreleased
+   section into `### <version> — <date>`, leaving an empty
+   `### Unreleased` above it.
 3. **Freeze the schemas.** Copy each changed head schema to
    `commerce/schemas/<type>/v<version>.json`. The head's `$id` already
    names that version. Published files are never edited afterwards.

@@ -46,7 +46,8 @@ package manifests and git.
   sheet-spec version. `format_version` belongs to the legacy draft line:
   keep reading it, never write it into a new sheet.
 - A change to a spec document gets an entry under `### Unreleased` in that
-  document's changelog, in the same pull request. A document's version line
+  document's changelog file, `<document>-changelog.md` beside it, in the
+  same pull request. A document's version line
   changes only in a release pull request.
 - New annotations name the release ("added in release 0.3.0"). The "v0.7",
   "v0.9" annotations already in the documents are legacy format versions
