@@ -5,7 +5,7 @@
 # Pagefront — write your shop's sheets (code assistant)
 <!-- /route -->
 
-- Prompt set 1.4.0, for commerce release 0.5.0.
+- Prompt set 1.5.0, for commerce release 0.5.0.
 - Writes Product sheets (spec 0.11.0), Collection sheets (spec 0.1.0) and the Organization sheet (spec 0.5.0), commerce release 0.5.0.
 - Product spec: https://themachineweb.org/pagefront/spec/commerce/product.md (page: https://themachineweb.org/pagefront/spec/commerce/product)
 - Product schema: https://themachineweb.org/pagefront/spec/commerce/product/v0.11.0.json
@@ -14,7 +14,7 @@
 - Collection spec: https://themachineweb.org/pagefront/spec/commerce/collection.md (page: https://themachineweb.org/pagefront/spec/commerce/collection)
 - Collection schema: https://themachineweb.org/pagefront/spec/commerce/collection/v0.1.0.json
 - Check: https://themachineweb.org/pagefront/commerce/validate
-- The spec links are plain text, the form a reader opens; the product spec is long, so a reader may hold only part of it. The schema links are JSON files, to download.
+- The spec links are plain text, the form a reader opens. The product spec is a field reference: for each field, what it means, its shape, where its value comes from and what checks it; read the entries for the fields your sheet uses. Its design notes are not needed to write a sheet. The schema links are JSON files, to download.
 <!-- route: code -->
 - Linter: `npx @pagefront/lint-commerce` (npm package `@pagefront/lint-commerce`, CLI `pagefront-lint-commerce`)
 <!-- /route -->
@@ -63,7 +63,7 @@ platform with no section there is outside this version.
    and say so in the report; never ask, never guess.
 <!-- /route -->
 2. **Read before you write.** Read the specs above before writing a sheet:
-   the Product spec and schema in the sections your sheet uses, the
+   the Product spec's entries for the fields your sheet uses and its schema, the
    Organization spec (its "Catalogue entry point" in full), and the
    Collection spec in full. Read the platform's own documentation for
    each API you use. If a page cannot be read, say which and stop; never
@@ -323,108 +323,66 @@ Read each page for the displayed price, any statement that prices include or
 exclude tax, identifiers in its structured data, the breadcrumb, and
 `<html lang>`.
 
-What any shop's pages hold that is not what it seems:
-
-- A struck-through price is the former price; the price is the one beside
-  it.
-- A product with variants may show a price range until a variant is chosen:
-  the range is not a price.
-- Recommended, related or recently viewed products are not this product.
-- A shop's categories are its navigation, not a taxonomy: the sheet's
-  category is the page's breadcrumb.
-- Skip ratings and reviews.
-- Windows over the page. A page may open a cookie banner, a region or
-  language chooser, a newsletter or sign-up prompt over its content. Close
-  each without choosing anything it offers: refuse optional cookies, or
-  close the banner; close a region or language chooser rather than pick an
-  entry, keeping the region and language the page opened with; decline
-  sign-ups. Say in the report which region and currency the page showed its
-  prices in. A sign-in or age prompt that hides the page is not answered:
-  say so and leave out what it hides.
+What a page opens over its content: a cookie banner, a region or language
+chooser, a newsletter or sign-up prompt. Close each without choosing
+anything it offers: refuse optional cookies, or close the banner; close a
+region or language chooser rather than pick an entry, keeping the region
+and language the page opened with; decline sign-ups. Say in the report
+which region and currency the page showed its prices in. A sign-in or age
+prompt that hides the page is not answered: say so and leave out what it
+hides.
 
 What to write: the envelope the spec defines, with the product schema URL as
 `$schema`, `release` `0.5.0`, `sheet_url` its address, `generated_at` now,
-no `expires_at`. The data block follows the spec and the schema in full:
+no `expires_at`. The data block follows the spec and the schema in full.
+The spec is a field reference: for each field it states what the field
+means, its shape, where its value comes from and what checks it. Follow it
+field by field, as written; write a field only where the shop states its
+value in the spec's sense, and leave out every field it does not; name each
+value's source in the report. The rules below are this prompt's own, where
+the spec leaves the choice to the producer or the platform settles it:
 
 - @id per IDENTITIES.
-- canonical_url and url are the product's page: the address its
-  `<link rel="canonical">` states where the page declares one, otherwise the
-  page's address as the platform's data states it (its permalink). Say in the
-  report which it was.
+- canonical_url and url per the spec's source rule, the platform's
+  permalink being the page's address where the page declares no canonical
+  link. Say in the report which it was.
 - A product without variants is a Product; one with variants is a
   ProductGroup, with one hasVariant entry per variant. Never blend
   variants' values into one product.
 - name and description as the platform's data states them, description as
   plain text, verbatim.
-- category is the breadcrumb as one string, leaf last, without the home
-  entry and the product.
 - brand as the platform's data states it; if it states none, the `brand`
   the page's structured data states for this product; if neither does,
   leave brand out.
-- On a ProductGroup, the dimensions the variants differ by give variesBy:
-  `color`, `size`, `material` where plainly one of these, otherwise an
-  additionalProperty per the spec's variant dimensions. An attribute whose
-  meaning you cannot read from its name and values is left out. Each
-  variant's @id per IDENTITIES, its url its own page where it has one, its
-  image its own. The product's other specifications are
-  additionalProperty entries, as the platform states them.
-- question, only where the page shows a set of questions and answers for
-  this product (a FAQ section, or a `FAQPage` in its structured data): one
-  entry per pair, the question as the page writes it in `name`, the answer
-  as the page writes it in `acceptedAnswer.text`, in the sheet's language,
-  in the page's order. Where the page's text and its structured data both
-  carry the FAQ, use the pairs they agree on and say in the report which
-  differed. Questions about the shop as a whole, and any pair you would
-  have to compose, are left out.
-- The identifier: a Product carries sku, gtin13, gtin or mpn as the
-  platform or the page's structured data states it (13 digits go in gtin13;
-  8, 12 or 14 in gtin); a ProductGroup a family identifier as
-  productGroupID and each variant its own. A database row number is not an
-  identifier. If none exists, leave it out and say so: the Check will refuse
-  the sheet.
-- offers: on a ProductGroup, the group's `offers` hold one Offer per
-  variant, each naming its variant with `itemOffered: { "@id": "<the
-  variant's @id>" }` (the spec's "itemOffered references"); on a Product,
-  one Offer. Each Offer's `url` is the page it is bought on: the variant's
-  own page where it has one, otherwise the product's page. No
-  checkoutPageURLTemplate unless the page's structured data states one for an
-  offer that carries areaServed; never build one from the platform's address
-  pattern. price
-  the displayed price as a plain decimal string; priceCurrency as the data
-  states it; availability as the page shows it (InStock, OutOfStock,
-<!-- route: chat -->
-  BackOrder). The tax basis only where the page states it, as
-  valueAddedTaxIncluded on a UnitPriceSpecification that mirrors the price;
-  otherwise no flag. areaServed only where the shop states the countries it
-  sells to; otherwise leave it out. A price-validity or end date only where
-<!-- /route -->
+- On a ProductGroup, the dimensions the variants differ by give variesBy,
+  per the spec's variant dimensions. An attribute whose meaning you cannot
+  read from its name and values is left out. Each variant's @id per
+  IDENTITIES, its url its own page where it has one, its image its own.
+  The product's other specifications are additionalProperty entries, as
+  the platform states them.
+- The identifiers as the platform or the page's structured data states
+  them, per the spec; a ProductGroup carries productGroupID and each
+  variant its own. If none exists, leave it out and say so: the Check will
+  refuse the sheet.
+- offers: on a ProductGroup, one Offer per variant in the group's
+  `offers`, each naming its variant with `itemOffered: { "@id": "<the
+  variant's @id>" }`; on a Product, one Offer. Every Offer field per the
+  spec, its `price` as a plain decimal string.
 <!-- route: code -->
-  BackOrder). The tax basis only where the shop states it, on the page or
-  in the store's tax-display setting (the platform's section says how to
-  read it), as valueAddedTaxIncluded on a UnitPriceSpecification that
-  mirrors the price; otherwise no flag. Never infer it from the currency,
-  the domain or the seller's country. areaServed only where the shop names
-  the countries the price is for, on a page or in a store setting that
-  lists them; a shop that sells to every country names no single market:
-  leave it out and say so. A price-validity or end date only where
+  The spec admits the store's tax-display setting as a source of the tax
+  basis; the platform's section says how to read it.
 <!-- /route -->
-  the shop states one. seller: a reference to the organization, with the
-  organization sheet's `@id`, name and url, and `pagefront:sheetUrl` the
-  organization sheet's address.
+  seller: a reference to the organization, with the organization sheet's
+  `@id`, name and url, and `pagefront:sheetUrl` the organization sheet's
+  address.
 - isPartOf: one entry per set you wrote a sheet for whose direct members
   include the product, in the member entry shape, with that sheet's address
-  as `pagefront:sheetUrl`. The category string stays the breadcrumb.
-- A former price above the price, in the spec's sale-pricing shape.
-- Images as the platform's data lists them, with their alt text as the
-  caption; an image with no alt text has no caption.
-- Shipping weight and size describe the parcel, not necessarily the
-  product: leave them out unless the shop states them as the product's own.
+  as `pagefront:sheetUrl`.
+- Images as the platform's data lists them, with the roles the spec
+  defines where the data states them. An image's alt text is never its
+  caption.
 - No language siblings (pagefront:availableLanguages) until a second
   language exists.
-- Any other field the spec defines, where the page or the platform's data
-  states the value in the spec's sense: as written, with its source named
-  in the report. Nothing composed, and nothing the spec defines that the
-  shop does not state.
 - A product that is not on sale (not purchasable, password-protected, or
   not shown on its page), or that is a bundle of separate products or sold
   on another site: write no sheet for it, and say so.
