@@ -216,6 +216,9 @@ entries. Where the spec leaves a choice open, these conventions apply:
   as the page writes it in `acceptedAnswer.text`, in the page's order;
   questions about the shop as a whole, and any pair you would have to
   compose, are left out
+- any other field the spec defines, where the page states the value in the
+  spec's sense: as written, with its source named in the report; nothing
+  composed, and nothing the spec defines that the page does not state
 - description is the page's own text, verbatim
 - image URLs come from og:image or the page's existing structured data;
   never guess a CDN path
