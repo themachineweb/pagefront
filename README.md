@@ -26,7 +26,8 @@ What this repository contains today:
 - [`manifesto.md`](manifesto.md) — why this exists
   ([read online](https://themachineweb.org/manifesto)).
 - [`commerce/spec/`](commerce/spec/) — the commerce vertical, one living
-  copy of each document: the product sheet (`product.md`), the organization
+  copy of each document: the product sheet (`product.md`, with its design
+  notes in `product-notes.md`), the organization
   sheet (`organization.md`), the `pagefront:` vocabulary, the releases and
   versioning scheme (`releases.md`, `releases.json`), the linter rule
   catalogue (`rules.md`), and the non-normative completeness dimensions
@@ -83,7 +84,8 @@ pagefront/
 │   └── lint/                       @pagefront/lint-core (rule engine, renderers)
 ├── commerce/                     The commerce vertical
 │   ├── spec/
-│   │   ├── product.md              Product sheet, prose spec with rationale
+│   │   ├── product.md              Product sheet, the field reference
+│   │   ├── product-notes.md        Product sheet design notes (non-normative)
 │   │   ├── product.json            Product sheet JSON Schema, editable head
 │   │   ├── organization.md         Organization sheet, prose spec
 │   │   ├── organization.json       Organization sheet JSON Schema, editable head

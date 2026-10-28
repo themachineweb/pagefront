@@ -49,6 +49,14 @@ package manifests and git.
   document's changelog file, `<document>-changelog.md` beside it, in the
   same pull request. A document's version line
   changes only in a release pull request.
+- A spec document is the field reference; its rationale lives in
+  `<document>-notes.md` beside it (`product-notes.md`), non-normative, one
+  H2 per note, linked from the field with `[why](<document>-notes.md#...)`
+  and rendered on the site as footnotes under the spec. The notes carry the
+  document's version line, moved only in a release pull request, and have
+  no changelog: a change to a note is an entry in the document's changelog,
+  prefixed "Design notes:". A notes H2 must differ from every heading of the
+  document. See "Design notes" in `CONTRIBUTING.md`.
 - New annotations name the release ("added in release 0.3.0"). The "v0.7",
   "v0.9" annotations already in the documents are legacy format versions
   and stay as they are.
@@ -77,6 +85,8 @@ Follow "Releasing" in `CONTRIBUTING.md`. The parts that go wrong:
   `releases.json` and is ignored by git. Do not commit it or edit it.
 
 ## Spec and site prose
+
+These rules cover the design-notes files too.
 
 - No em dashes in running prose.
 - State what a thing is. Avoid the contrast forms "X, not Y" and "not X

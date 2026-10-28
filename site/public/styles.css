@@ -415,3 +415,51 @@ a.doc-schema:hover{ color:var(--ink); border-color:var(--ink); text-decoration:n
   color:var(--ink-soft);
 }
 .doc-body hr{ border:0; border-top:1px solid var(--rule); margin:2.5rem 0; }
+
+/* ---- design notes: footnote markers in the spec, numbered notes below it --- */
+
+a.fn-ref{ text-decoration:none; color:var(--ink-soft); scroll-margin-top:1.5rem; }
+a.fn-ref sup{ font-family:var(--sans); font-size:.72em; line-height:0; padding:0 .08em; }
+a.fn-ref:hover sup,
+a.fn-ref:target sup{ color:var(--ink); text-decoration:underline; text-underline-offset:2px; }
+
+.doc-notes{
+  margin-top: clamp(3rem,7vw,4.5rem);
+  padding-top:1.6rem;
+  border-top:2px solid var(--ink);
+}
+.doc-notes-head h2{
+  font-family:var(--sans);
+  font-weight:700;
+  font-size:1.35rem;
+  letter-spacing:-0.01em;
+  margin:0 0 .7rem;
+}
+.doc-notes-lede{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:.6rem;
+  margin:0;
+  font-family:var(--sans);
+  font-size:.85rem;
+  color:var(--ink-soft);
+}
+.doc-notes-body{ margin-top:1.5rem; }
+.doc-notes-body h2{
+  font-size:1.05rem;
+  font-weight:600;
+  margin:2.2rem 0 .7rem;
+  padding-top:1.2rem;
+  border-top:1px solid var(--rule);
+  scroll-margin-top:1.5rem;
+}
+.doc-notes-body h2:target{ border-top-color:var(--ink); }
+.fn-num{
+  display:inline-block;
+  min-width:1.8em;
+  color:var(--ink-soft);
+  font-variant-numeric:tabular-nums;
+}
+a.fn-back{ margin-left:.4em; font-size:.85em; color:var(--ink-soft); text-decoration:none; }
+a.fn-back:hover{ color:var(--ink); }

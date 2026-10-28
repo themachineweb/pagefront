@@ -223,6 +223,24 @@ same pull request.
 A spec header never shows an unreleased version. The version line of a
 document changes only at release time, in the release pull request.
 
+### Design notes
+
+A spec document is a field reference: for each field, what it means, its
+shape, where its value comes from and which rule checks it. The reasoning
+behind a field lives beside the document in `<document>-notes.md`
+(`product-notes.md` for `product.md`), one H2 per note, in the order the
+document reaches them. The notes are non-normative; the document governs.
+A field links its note with `[why](<document>-notes.md#<note heading
+slug>)`, and a note opens with a link back to the field. The site renders
+both files as one page: the spec, then the notes as numbered footnotes
+under it, with the links turned into footnote markers. A notes H2 must be
+unique against the document's own headings, since the two share one page.
+
+The notes carry the document's version line and move it in the release
+pull request. A change to a note lands in the document's changelog under
+`### Unreleased`, prefixed "Design notes:". The notes have no version and
+no changelog of their own.
+
 ### Branches
 
 - Changes land on `main` by pull request only. A ruleset on `main`
@@ -246,7 +264,8 @@ A commerce release is cut from `main` in one pull request, then tagged.
    entries and take its semver bump: before 1.0, a breaking or an additive
    change is a minor and a fix or clarification is a patch.
 2. **Bump the spec headers** to the new versions, along with a document's
-   Status section where it repeats them (the Product Sheet spec has one),
+   Status section where it repeats them (the Product Sheet spec has one)
+   and its design notes' version line where it has notes (`product-notes.md`),
    and in each changed document's changelog file turn the Unreleased
    section into `### <version> — <date>`, leaving an empty
    `### Unreleased` above it.

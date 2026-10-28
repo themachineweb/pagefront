@@ -10,7 +10,8 @@ Commerce release 0.5.0 is the current release. It bundles the Product Sheet spec
 
 ## Specification
 
-- [Product sheet](https://themachineweb.org/pagefront/spec/commerce/product.md): envelope, data block, identifiers, variants, offers, media, discovery. The normative document.
+- [Product sheet](https://themachineweb.org/pagefront/spec/commerce/product.md): envelope, data block, identifiers, variants, offers, media, discovery. For each field, what it means and where its value comes from.
+- [Product sheet design notes](https://themachineweb.org/pagefront/spec/commerce/product-notes.md): the reasoning behind the product sheet's fields, note by note; the spec links each note from the field it explains. Non-normative.
 - [Organization sheet](https://themachineweb.org/pagefront/spec/commerce/organization.md): the publisher's own statement of who they are, the entity behind the products.
 - [Collection sheet](https://themachineweb.org/pagefront/spec/commerce/collection.md): the listing page: categories, curated collections and brand collections, with their members, their parents and the catalogue entry point.
 - [Pagefront vocabulary](https://themachineweb.org/pagefront/spec/commerce/vocabulary.md): every term Pagefront adds on top of Schema.org, what it means, and why Schema.org could not carry it. Includes the JSON-LD context.

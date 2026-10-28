@@ -7,6 +7,11 @@
  * top-level headings, then the rendered repository markdown. The
  * markdown's own H1 repeats the title and is hidden by the doc-body
  * styles in /styles.css.
+ *
+ * A document with design notes passes them in the `notes` slot: they
+ * render under the spec as a numbered, non-normative section, the targets
+ * of the footnote markers the spec body carries (renderDesignNotes in
+ * astro.config.mjs).
  */
 import Section from './Section.astro';
 import { SPEC_BASE } from '../lib/spec-routes.mjs';
@@ -28,11 +33,15 @@ interface Props {
   schema?: string;
   route: string;
   headings: Heading[];
+  /** Served URL of the design notes' markdown twin, when the document has notes. */
+  notesMarkdown?: string;
 }
 
-const { title, blurb, status, statusLine, schema, route, headings } = Astro.props;
+const { title, blurb, status, statusLine, schema, route, headings, notesMarkdown } = Astro.props;
 const area = route.startsWith('commerce/') ? 'Commerce' : 'Core';
+const hasNotes = Astro.slots.has('notes');
 const toc = headings.filter((h) => h.depth === 2);
+if (hasNotes) toc.push({ depth: 2, slug: 'design-notes', text: 'Design notes' });
 ---
 
 <Section
@@ -66,4 +75,20 @@ const toc = headings.filter((h) => h.depth === 2);
   <div class="doc-body">
     <slot />
   </div>
+
+  {hasNotes && (
+    <section class="doc-notes" id="design-notes" aria-labelledby="design-notes-title">
+      <header class="doc-notes-head">
+        <h2 id="design-notes-title">Design notes</h2>
+        <p class="doc-notes-lede">
+          <span class="pf-pill pf-pill-non-normative">non-normative</span>
+          <span>The reasoning behind the fields above. The spec governs; a note adds no requirement.</span>
+          {notesMarkdown && <a class="doc-schema" href={notesMarkdown}>Markdown <span aria-hidden="true">→</span></a>}
+        </p>
+      </header>
+      <div class="doc-body doc-notes-body">
+        <slot name="notes" />
+      </div>
+    </section>
+  )}
 </Section>

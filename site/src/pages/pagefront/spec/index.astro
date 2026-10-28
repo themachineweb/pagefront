@@ -42,8 +42,8 @@ const core = docs.filter((d) => d.route.startsWith('core/'));
     </p>
     <p>
       The commerce documents cover product and organization sheets as brands,
-      manufacturers and retailers publish them, and the collection sheet, a
-      draft, for the listing pages between them. The core documents are
+      manufacturers and retailers publish them, and the collection sheet for
+      the listing pages between them. The core documents are
       vertical-agnostic and apply to any future page type.
     </p>
   </div>
@@ -85,27 +85,25 @@ const core = docs.filter((d) => d.route.startsWith('core/'));
   <p class="pf-note spec-foot">
     Each document renders the current version from the repository, which remains
     the canonical source. Every page links to its source file, whose history is
-    the versioned record.
+    the versioned record. A document's design notes, where it has them, render
+    under it as footnotes.
   </p>
 
   <section class="status" aria-label="Status">
     <p>
       <span class="k">Release {CURRENT_RELEASE}</span> · the current commerce release:
-      Product Sheet spec {currentSheetSpec('product')}, Organization Sheet spec {currentSheetSpec('organization')}. Breaking changes
+      Product Sheet spec {currentSheetSpec('product')}, Organization Sheet spec {currentSheetSpec('organization')},
+      Collection Sheet spec {currentSheetSpec('collection')}. Breaking changes
       follow semver; the stability policy applies from release 1.0.0.
     </p>
     <p>
-      <span class="k">Published</span>: commerce product and organization
-      sheets, the <code>pagefront:</code> vocabulary, the rule catalogue, the
+      <span class="k">Published</span>: commerce product, organization and
+      collection sheets, the <code>pagefront:</code> vocabulary, the rule catalogue, the
       discovery spec, the linter design.
     </p>
     <p>
       <span class="k">Tooling</span>: <code>@pagefront/lint-core</code> and <code>@pagefront/lint-commerce</code> on npm;
       <a href={LINKS.validator}>Check</a>, which reads a page's declaration and judges the sheet.
-    </p>
-    <p>
-      <span class="k">Draft</span>: the collection sheet, awaiting ratification;
-      it joins the next minor release with its schema.
     </p>
   </section>
 </Section>
