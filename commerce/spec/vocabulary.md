@@ -259,7 +259,7 @@ A typed relationship between this product and another product. Surfaces relation
 - `name` *(recommended)*: human-readable name of the related product.
 - `url` *(recommended)*: canonical URL of the related product page.
 
-Relationships are qualitative. Quantitative weighting (e.g., co-purchase percentages on `often_bought_with`) is not modeled; see the Pagefront Spec's open design questions.
+Relationships are qualitative. Quantitative weighting (e.g., co-purchase percentages on `often_bought_with`) is not modeled; see "New design questions surfaced in v0.7" in the Product Sheet design notes, [`product-notes.md`](product-notes.md#new-design-questions-surfaced-in-v07).
 
 Used via the `pagefront:relatedProduct` property on `Product` (or `ProductGroup`), whose value is an array of `pagefront:RelatedProduct` objects.
 

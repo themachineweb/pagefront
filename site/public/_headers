@@ -9,6 +9,8 @@
 # The spec documents' markdown twins, and the model-facing index.
 /pagefront/spec/commerce/product.md
 	Content-Type: text/markdown; charset=utf-8
+/pagefront/spec/commerce/product-notes.md
+	Content-Type: text/markdown; charset=utf-8
 /pagefront/spec/commerce/organization.md
 	Content-Type: text/markdown; charset=utf-8
 /pagefront/spec/commerce/collection.md

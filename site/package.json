@@ -13,6 +13,7 @@
     "@astrojs/markdown-remark": "^7.3.0",
     "@astrojs/sitemap": "^3.7.4",
     "@pagefront/lint-commerce": "^0.13.0",
-    "astro": "^7.2.10"
+    "astro": "^7.2.10",
+    "github-slugger": "^2.0.0"
   }
 }

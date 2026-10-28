@@ -25,6 +25,17 @@ export const SPEC_DOCS = {
       `Normative. Product Sheet spec ${currentSheetSpec('product')}, in commerce release ${CURRENT_RELEASE}: ${MATURITY}`,
     blurb:
       'The product sheet: envelope, data block, identifiers, variants, offers, media, discovery.',
+    /**
+     * The document's design notes: a sibling file of non-normative
+     * rationale, rendered as numbered footnotes at the bottom of this
+     * page (see renderDesignNotes in astro.config.mjs). It has no page
+     * of its own; `route` is its markdown twin, /pagefront/spec/{route}.md.
+     */
+    notes: {
+      id: 'commerce/spec/product-notes',
+      source: 'commerce/spec/product-notes.md',
+      route: 'commerce/product-notes',
+    },
   },
   'commerce/spec/organization': {
     route: 'commerce/organization',

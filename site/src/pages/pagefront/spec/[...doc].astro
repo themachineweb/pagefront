@@ -2,11 +2,12 @@
 /**
  * Every published specification document, rendered from the repository
  * markdown. Routes come from SPEC_DOCS; a document not listed there is not
- * published, however complete it may be in the repo.
+ * published, however complete it may be in the repo. A document with
+ * design notes renders them on the same page, as footnotes under the spec.
  */
-import { getCollection, render } from 'astro:content';
+import { getCollection, getEntry, render } from 'astro:content';
 import SpecDoc from '../../../layouts/SpecDoc.astro';
-import { SPEC_DOCS } from '../../../lib/spec-routes.mjs';
+import { SPEC_DOCS, SPEC_BASE } from '../../../lib/spec-routes.mjs';
 import { schemaPath } from '../../../lib/releases.mjs';
 
 /**
@@ -30,6 +31,13 @@ export async function getStaticPaths() {
 
 const { entry, meta } = Astro.props;
 const { Content, headings } = await render(entry);
+
+let Notes: typeof Content | undefined;
+if (meta.notes) {
+  const notesEntry = await getEntry('spec', meta.notes.id);
+  if (!notesEntry) throw new Error(`design notes not found in repository: ${meta.notes.source}`);
+  Notes = (await render(notesEntry)).Content;
+}
 ---
 
 <SpecDoc
@@ -40,6 +48,8 @@ const { Content, headings } = await render(entry);
   schema={schemaLink(meta.schemaType)}
   route={meta.route}
   headings={headings}
+  notesMarkdown={meta.notes ? `${SPEC_BASE}/${meta.notes.route}.md` : undefined}
 >
   <Content />
+  {Notes && <Fragment slot="notes"><Notes /></Fragment>}
 </SpecDoc>

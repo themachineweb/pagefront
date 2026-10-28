@@ -9,31 +9,11 @@ Schema.org version targeted: 30.0 (2026-03-19)
 
 ## Design principles
 
-Unchanged from v0.6. Pagefront defines the structure of the published Sheet; what's inside the Sheet is the publisher's authoritative statement. The Sheet is JSON-LD, served on the publisher's domain at the address the page declares, discoverable via `Link: rel="alternate"`. Schema.org is the data vocabulary; `pagefront:` extensions cover what Schema.org under-specifies for commerce. The format prioritizes Schema.org compatibility: consumers ignoring `pagefront:` extensions parse the Sheet as clean Schema.org JSON-LD.
+Pagefront defines the structure of the published Sheet; what's inside the Sheet is the publisher's authoritative statement. The Sheet is JSON-LD, served on the publisher's domain at the address the page declares, discoverable via `Link: rel="alternate"`. Schema.org is the data vocabulary; `pagefront:` extensions cover what Schema.org under-specifies for commerce. The format prioritizes Schema.org compatibility: consumers ignoring `pagefront:` extensions parse the Sheet as clean Schema.org JSON-LD. A `pagefront:` term is minted only where Schema.org has a gap, under-specifies the concept, or conflicts with Pagefront's contract; everywhere else the sheet uses Schema.org's own vocabulary. [why](product-notes.md#when-to-extend-schemaorg-with-pagefront-vocabulary) The sheet carries no completeness score; scoring is consumer-side ([`scoring.md`](scoring.md)). [why](product-notes.md#why-completeness-is-not-in-the-sheet)
 
 ### What the schema validates
 
-The JSON Schema validates the envelope and `pagefront:`-prefixed extensions strictly. Schema.org-typed content within the data block is permitted by reference and validated upstream by Schema.org-aware consumers. Producers extend the Sheet with Schema.org properties Pagefront doesn't explicitly model; the schema's `additionalProperties: true` policy on Schema.org-typed blocks lets these through without constraint.
-
-Schema.org is large, well-specified upstream, and evolving. Pagefront re-validating Schema.org content would mean duplicating Schema.org's own work, choosing which subset of Schema.org to constrain (every choice excludes valid Schema.org), and maintaining the duplication forever as Schema.org evolves. Pagefront's job is to define the envelope and its typed extensions; Schema.org's job is to define the content vocabulary; consumers compose the two.
-
-Pagefront-recommended patterns built on Schema.org vocabulary (sale pricing via `PriceSpecification`, quantity-tier pricing via `eligibleQuantity`, video accessibility via `caption`/`transcript`, etc.) therefore require no schema changes when they are added or refined. The spec documents the patterns; the schema permits them; consumers interpret them. Schema changes are reserved for envelope fields and `pagefront:`-prefixed extension types.
-
-### When to extend Schema.org with `pagefront:` vocabulary
-
-Pagefront extends Schema.org with `pagefront:`-prefixed vocabulary only when one of three conditions holds:
-
-1. **Schema.org gap.** Schema.org lacks vocabulary for the concept being modeled. Examples in v0.7: `pagefront:Configurator` (configurator economics), `pagefront:MadeToOrderTerms` (made-to-order production), `pagefront:Material` with composition properties (typed material breakdown with `percentage`, purity, provenance, weight).
-2. **Schema.org under-specification.** Schema.org models the concept but without the closed-enum typing, mandatory structure, or precision agents need to dispatch on. Examples in v0.7: `pagefront:RelatedProduct` (Schema.org's typed relations are limited to four kinds; agents need more typed coverage), `pagefront:Document` (Schema.org has no typed-role enum for product documents like manuals, warranties, certificates), the image and video role enums (Schema.org has no opinion on image roles; Pagefront's closed enum lets consumers dispatch).
-3. **Schema.org mismatch with Pagefront's contract.** Schema.org's model conflicts with how Pagefront wants the data shaped. Example in v0.7: `pagefront:PriceOnRequest` (Schema.org has no affordance for "the merchant intentionally publishes no price"; the extension addresses the gap directly).
-
-When none of these triggers fire, Pagefront uses Schema.org-native vocabulary. Image-to-variant association uses Schema.org's `about`. Product Q&A uses Schema.org's `Question`/`Answer`. Pricing patterns use Schema.org's `PriceSpecification` and `AggregateOffer`. Product dimensions use Schema.org's `height`/`width`/`depth`/`weight` with `QuantitativeValue`. Untyped product relationships use Schema.org's `isRelatedTo` and `isSimilarTo`. Certifications use Schema.org's native `Certification` type and `hasCertification` field, with applicability `scope` carried as a `scope` PropertyValue convention; no type is minted for it. The schema permits these via the `additionalProperties: true` policy on Schema.org-typed blocks.
-
-v0.7 documents five further recommended patterns on the same principle, each surfaced by real-merchant sheet production and each fully covered by Schema.org's existing vocabulary: product lifecycle (`releaseDate`, and Offer `availability: Discontinued` paired with a `replaced_by` relationship; see "Product lifecycle"); cross-merchant canonical references (`sameAs` as a deduplication hint alongside the `@id` identity key; see "Cross-merchant canonical reference via `sameAs`"); EU energy efficiency (`hasEnergyConsumptionDetails` with `EUEnergyEfficiencyEnumeration` categories; see "Energy efficiency"); age suitability (`audience` with `PeopleAudience` plus an `additionalProperty` convention for regulatory age warnings; see "Age suitability"); and family and series membership (nested `isPartOf`; see "Five patterns for product-to-product relationships"). None mints a `pagefront:` term, and none required a schema change. The property choices were verified against Schema.org's `domainIncludes` declarations: each pattern uses only properties whose domain covers `Product` (or `Thing`), so the Sheets stay clean Schema.org even under domain-aware validation.
-
-The split is also a signal: `pagefront:`-prefixed fields mean "Pagefront-typed extension with closed-enum or structured shape"; Schema.org-native fields mean "upstream-validated vocabulary."
-
-This principle has operated implicitly across v0.7's decisions; documenting it guards against drift. A contributor proposing a `pagefront:` extension should be able to name which of the three triggers fires; if none do, the answer is Schema.org-native.
+The JSON Schema validates the envelope and `pagefront:`-prefixed extensions strictly. Schema.org-typed content within the data block is permitted by reference and validated upstream by Schema.org-aware consumers. Producers extend the Sheet with Schema.org properties Pagefront doesn't explicitly model; the schema's `additionalProperties: true` policy on Schema.org-typed blocks lets these through without constraint. Pagefront-recommended patterns built on Schema.org vocabulary need no schema change; schema changes are reserved for envelope fields and `pagefront:`-prefixed extension types. [why](product-notes.md#why-the-schema-validates-the-envelope-and-the-extensions-only)
 
 ### Upstream-equivalent forms
 
@@ -48,7 +28,7 @@ The schema enforces structural validity; the linter expresses canonical preferen
 
 ## The envelope
 
-Unchanged from v0.5, except that `sheet_url` became optional on 2026-10-13.
+The envelope is project-defined. It wraps one data block and states which release and sheet spec the sheet is written against, which page it describes and when it was generated.
 
 ```json
 {
@@ -67,21 +47,16 @@ Unchanged from v0.5, except that `sheet_url` became optional on 2026-10-13.
 }
 ```
 
-Envelope fields are project-defined. `$schema`, `release`, `schema_org_version`, `canonical_url`, `generated_at`, and `data` are required on every sheet that carries `release`. On the legacy draft line, `format_version` stands in for `release` and `$schema` is optional. `expires_at` is recommended: publishers SHOULD declare it when they have a meaningful expiry policy, and MAY omit it when the sheet has no defined expiry.
+- **`$schema`** *(required)*: the URL of the JSON Schema for the sheet's own sheet-spec version, with the full semver in its last segment: `https://themachineweb.org/pagefront/spec/commerce/product/v0.11.0.json` for Product Sheet spec 0.11.0. It names the sheet spec; the release has no schema of its own. It is what identifies the vertical and the sheet type, and what the release is checked against. The release and the sheet type resolve to exactly one sheet-spec version through the release table in [`releases.md`](releases.md) (machine-readable in [`releases.json`](releases.json)), and `$schema` MUST name that version: a Product Sheet declaring release 0.5.0 points `$schema` at `product/v0.11.0.json`, one declaring release 0.4.0 at `product/v0.10.0.json`, and one declaring release 0.3.0 at `product/v0.9.0.json`. Check: PDP-E-002.
+- **`release`** *(required)*: the commerce release the sheet is written against, as a full semver (`"0.5.0"`). It replaces `format_version`, the field of the legacy draft line. A sheet is judged by the release it declares: it is validated against the schema of the sheet-spec version that release bundles, and by the rules that apply from that release. A requirement introduced by a later release does not apply to it. Whether `$schema` is required is itself such a requirement: the schema of Product Sheet spec 0.10.0 requires it, and the schema of 0.9.0 does not. Checks: PDP-E-018 (a release the table does not list), PDP-E-016 (`format_version` beside `release`). [why](product-notes.md#why-release-has-a-generic-name)
+- **`schema_org_version`** *(required)*: the Schema.org version the data block targets, as its number (`"30.0"`).
+- **`canonical_url`** *(required)*: the canonical URL of the page this sheet describes.
+- **`sheet_url`** *(optional)*: an address this Sheet is served from, as known to the publisher at generation time. It is informational. The authoritative location of a Sheet is whatever the canonical page currently declares; a publisher whose platform assigns or changes the address after generation MAY omit this field. Sheets written before 2026-10-13 carry it, and nothing in them changes. [why](product-notes.md#why-sheet_url-is-informational)
+- **`generated_at`** *(required)*: when the sheet was generated, an RFC 3339 date-time (the schema's `date-time` format).
+- **`expires_at`** *(recommended)*: how long consumers should consider the sheet valid before re-fetching, an RFC 3339 date-time. Publishers SHOULD declare it when they have a meaningful expiry policy, and MAY omit it when the sheet has no defined expiry. Sheets carrying multi-currency `offers`, region-scoped offers or scheduled promotions SHOULD use shorter `expires_at` windows to reflect price volatility. Check: PDP-W-008 (past, or trivially close to `generated_at`).
+- **`data`** *(required)*: the Schema.org JSON-LD data block, the next section.
 
-`sheet_url` *(optional)*: an address this Sheet is served from, as known to the publisher at generation time. It is informational. The authoritative location of a Sheet is whatever the canonical page currently declares; a publisher whose platform assigns or changes the address after generation MAY omit this field. A consumer that holds a Sheet already knows where it fetched it from, and a consumer looking for one follows the page's declaration (see "Discovery", which points at Pagefront Discovery). Sheets written before 2026-10-13 carry it, and nothing in them changes.
-
-`release` and `$schema` are the sheet's two version statements:
-
-- `release` is the commerce release the sheet is written against, as a full semver (`"0.5.0"`). The name is generic because the envelope is shared across verticals; the vertical is identified by `$schema`. It replaces `format_version`, the field of the legacy draft line.
-- `$schema` is the URL of the JSON Schema for the sheet's own sheet-spec version, with the full semver in its last segment: `https://themachineweb.org/pagefront/spec/commerce/product/v0.11.0.json` for Product Sheet spec 0.11.0. It names the sheet spec; the release has no schema of its own. `$schema` is REQUIRED on every sheet carrying `release`: it is what identifies the vertical and the sheet type, and what the release is checked against. It is optional only on the legacy draft line.
-- The release and the sheet type resolve to exactly one sheet-spec version through the release table in [`releases.md`](releases.md) (machine-readable in [`releases.json`](releases.json)). `$schema` MUST name that version: a Product Sheet declaring release 0.5.0 points `$schema` at `product/v0.11.0.json`, one declaring release 0.4.0 at `product/v0.10.0.json`, and one declaring release 0.3.0 at `product/v0.9.0.json` (linter rule PDP-E-002).
-- A sheet is judged by the release it declares: it is validated against the schema of the sheet-spec version that release bundles, and by the rules that apply from that release. A requirement introduced by a later release does not apply to it. Whether `$schema` is required is itself such a requirement: the schema of Product Sheet spec 0.10.0 requires it, and the schema of 0.9.0 does not.
-- A sheet carrying both `format_version` and `release` is invalid (PDP-E-016).
-
-A sheet carrying `format_version` and no `release` belongs to the legacy draft line, format versions 0.9 and earlier. It validates against the legacy schema, which stays served at `https://themachineweb.org/pagefront/spec/commerce/product/v0.9.json`, and it gains nothing from later releases. See "The legacy draft line" in [`releases.md`](releases.md).
-
-`expires_at`, when present, indicates how long consumers should consider the sheet valid before re-fetching. Sheets carrying multi-currency `offers` or scheduled promotions SHOULD use shorter `expires_at` windows to reflect price volatility.
+**The legacy draft line.** A sheet carrying `format_version` and no `release` belongs to the legacy draft line, format versions 0.9 and earlier: `format_version` stands in for `release`, `$schema` is optional, the sheet validates against the legacy schema, which stays served at `https://themachineweb.org/pagefront/spec/commerce/product/v0.9.json`, and it gains nothing from later releases. See "The legacy draft line" in [`releases.md`](releases.md).
 
 ## data — Schema.org JSON-LD
 
@@ -90,31 +65,29 @@ The data block is a valid Schema.org Product (or `ProductGroup`, or a recognized
 ### Required and recommended core fields
 
 Required:
-- `@context`: `"https://schema.org"` when the data block uses no `pagefront:` term. A data block that uses any `pagefront:` term MUST declare the prefix, in the array form `["https://schema.org", {"pagefront": "https://themachineweb.org/pagefront/vocabulary/"}]`; see [vocabulary.md, "How to use this vocabulary"](vocabulary.md#how-to-use-this-vocabulary). Under the bare string a `pagefront:` key is an opaque IRI with scheme `pagefront`: it does not resolve to the vocabulary, and the vocabulary context's `@container` declarations do not apply to it.
-- `@type`: `"Product"` (or `"ProductGroup"`, or a recognized subtype)
-- `@id`: stable URL-shaped identifier
-- `name`: product name as displayed to humans
-- `inLanguage`: BCP 47 language tag (`fr`, `fr-CA`, `en-GB`, etc.); the language of all prose fields and language-scoped media in this sheet
-- `url` (canonical URL of the human page), conditional on `@type`: required for `Product` and subtypes, and optional for `ProductGroup`. A parent `ProductGroup` Sheet with no backing family page omits `url` and is reached by the `sheet_url` hint on its variants' `isVariantOf` (see "Multi-Sheet variant families").
-- One identifier, conditional on `@type`:
-  - For `Product` (and product subtypes): one of `sku`, `gtin13`, `gtin`, `mpn`, or `productID`.
-  - For `ProductGroup`: `productGroupID`. Per-variant SKUs SHOULD also be declared on each entry in `hasVariant`.
 
-A note on GPSR traceability identifiers (Art. 9(5)): the product *type* identification the regulation asks for is covered by `mpn`/`productID`. Batch and serial numbers identify individual units, so they are out of scope for a Sheet and MUST NOT be stuffed into `sku`.
+- **`@context`**: `"https://schema.org"` when the data block uses no `pagefront:` term. A data block that uses any `pagefront:` term MUST declare the prefix, in the array form `["https://schema.org", {"pagefront": "https://themachineweb.org/pagefront/vocabulary/"}]`; see [vocabulary.md, "How to use this vocabulary"](vocabulary.md#how-to-use-this-vocabulary). Under the bare string a `pagefront:` key is an opaque IRI with scheme `pagefront`: it does not resolve to the vocabulary, and the vocabulary context's `@container` declarations do not apply to it. Check: PDP-E-003.
+- **`@type`**: `"Product"` (or `"ProductGroup"`, or a recognized subtype).
+- **`@id`**: a stable URL-shaped identifier. It is the identity key, matched as an exact string (see "Product identity and deduplication").
+- **`name`**: the product name as displayed to humans.
+- **`inLanguage`**: a BCP 47 language tag (`fr`, `fr-CA`, `en-GB`); the language of all prose fields and language-scoped media in this sheet.
+- **`url`**: the canonical URL of the human page. Required for `Product` and subtypes, optional for `ProductGroup`: a parent `ProductGroup` Sheet with no backing family page omits `url` and is reached by the `sheet_url` hint on its variants' `isVariantOf` (see "Multi-Sheet variant families").
+- **One identifier**, by `@type`: for `Product` and product subtypes, one of `sku`, `gtin13`, `gtin`, `mpn` or `productID`; for `ProductGroup`, `productGroupID`, and per-variant SKUs SHOULD also be declared on each entry in `hasVariant`. The product *type* identification GPSR Art. 9(5) asks for is covered by `mpn`/`productID`. Batch and serial numbers identify individual units, so they are out of scope for a Sheet and MUST NOT be stuffed into `sku`.
 
 Recommended:
-- `brand`: typed Brand or Organization
-- `description`: prose description in `inLanguage`
-- `category`: hierarchical category string (e.g., "Apparel > Knitwear > Sweaters")
-- `isPartOf`: an array of `Collection` member entries, one per set whose direct members include the product, each in the member entry shape of the Commerce Collection Sheet (`@type`, `@id`, `url`, `pagefront:sheetUrl`, `name`, `pagefront:collectionKind`; see "The product side" in [`collection.md`](collection.md)). The `category` string is unchanged: it is the human path and `isPartOf` is the machine link; the two SHOULD agree where both are present, and the linter does not compare them. A product's `isPartOf` does not list a collection filled by a rule, since that collection has no sheet (see "Listing pages without a Sheet" in [`collection.md`](collection.md)).
-- `image`: array of ImageObject (see image roles below)
-- `video`: array of VideoObject (see video roles below)
-- `offers`: array of Offer (see offers section)
-- `isVariantOf`: ProductGroup if the product belongs to a variant family
-- `pagefront:availableLanguages`: array of `{lang, url}` objects pointing at language siblings, when the publisher publishes in multiple languages
-- `question`: array of Schema.org `Question` entries with `acceptedAnswer` (see "Product Q&A" below)
-- `pagefront:document`: array of typed product documents (see "Documents" below)
-- `pagefront:relatedProduct`: array of typed product relationships (see "Related products" below)
+
+- **`brand`**: a typed `Brand` or `Organization`. Check: PDP-W-003 (absent).
+- **`description`**: a prose description in `inLanguage`. Check: PDP-W-002 (absent).
+- **`category`**: the hierarchical category string ("Apparel > Knitwear > Sweaters"), optionally beside a coded form (see "Machine-readable category").
+- **`isPartOf`**: an array of `Collection` member entries, one per set whose direct members include the product, each in the member entry shape of the Commerce Collection Sheet (`@type`, `@id`, `url`, `pagefront:sheetUrl`, `name`, `pagefront:collectionKind`; see "The product side" in [`collection.md`](collection.md)). The `category` string is unchanged: it is the human path and `isPartOf` is the machine link; the two SHOULD agree where both are present, and the linter does not compare them. A product's `isPartOf` does not list a collection filled by a rule, since that collection has no sheet (see "Listing pages without a Sheet" in [`collection.md`](collection.md)).
+- **`image`**: an array of `ImageObject` (see "Image roles").
+- **`video`**: an array of `VideoObject` (see "Video roles").
+- **`offers`**: an array of `Offer` (see "Offers").
+- **`isVariantOf`**: the `ProductGroup`, when the product belongs to a variant family.
+- **`pagefront:availableLanguages`**: an array of `{lang, url}` objects pointing at language siblings, when the publisher publishes in multiple languages (see "Internationalization").
+- **`question`**: an array of Schema.org `Question` entries with `acceptedAnswer` (see "Product Q&A").
+- **`pagefront:document`**: an array of typed product documents (see "Documents").
+- **`pagefront:relatedProduct`**: an array of typed product relationships (see "Related products").
 
 #### Multiple GTINs
 
@@ -298,17 +271,13 @@ Each variant Sheet points back at this page-less parent as in the Onyx example a
 
 #### Per-variant URLs
 
-Each entry in `hasVariant` MAY declare a `url` field. The ProductGroup's top-level `url` remains the canonical URL of the product family (typically the merchant's primary listing page or the page from which variant discovery began). The variant's `@id` remains the primary identifier for the variant; the per-variant `url` is supplementary metadata that carries addressability information: consumers can use it to construct direct links to variant-specific page states. Agents recommending specific variants to users, link sharing, and any consumer that needs to address a variant individually rely on it.
+Each entry in `hasVariant` MAY declare a `url`: the variant's own page, or the page state that pre-selects the variant. The ProductGroup's top-level `url` remains the canonical URL of the product family (typically the merchant's primary listing page or the page from which variant discovery began), and the variant's `@id` remains its identifier; the per-variant `url` is what lets a consumer address a variant individually (an agent recommending one variant, link sharing). When the parent has no family page (see "Multi-Sheet variant families"), its top-level `url` is absent and each variant still declares its own page `url` under the same guidance.
 
-When the parent ProductGroup has no family page (the page-less parent of a multi-Sheet variant family, see "Multi-Sheet variant families"), its top-level `url` is absent and the family is reached by the `sheet_url` hint on its variants' `isVariantOf` instead. The per-variant `url` fields on `hasVariant` entries are unaffected: each variant still declares its own page `url` under the same guidance above.
+- **Shared-URL variants**: variants share the parent product's URL and are distinguished only by `@id`. The per-variant `url` MAY be omitted. Rare in practice.
+- **Same-page parameterized variants**: variants share the parent product's page, and each has a distinct addressable URL through platform-specific query parameters (`?variant={id}` on Shopify). Per-variant `url` SHOULD be populated. These URLs are semantically equivalent to the parent product URL, so consumers SHOULD treat them as the same canonical page with a different default state.
+- **Distinct-page variants**: each variant has its own page on its own URL (a watch family where each dial color is its own page, though such families are typically modeled as separate Sheets). Per-variant `url` is essential.
 
-Three patterns govern whether to populate it:
-
-1. **Shared-URL variants.** Variants share the parent product's URL and are distinguished only by `@id`. The `url` field on individual variants is unnecessary here and MAY be omitted.
-2. **Same-page parameterized variants.** Variants share the parent product's page, but each has a distinct addressable URL via platform-specific query parameters (e.g., `?variant={id}` on Shopify). The page is the same; the URL differs by which variant is pre-selected. Per-variant `url` SHOULD be populated because it carries addressability information consumers can use. These query-parameter URLs are semantically equivalent to the parent product URL, so consumers SHOULD treat them as the same canonical page with a different default state.
-3. **Distinct-page variants.** Each variant has its own page on its own URL (for example a watch family where each dial color is its own page, though such families are typically modeled as separate Sheets). Per-variant `url` is essential.
-
-Per-variant `url` SHOULD be populated when each variant has a meaningfully distinct addressable URL (cases 2 and 3). It MAY be omitted only when variants share the exact same URL with no parameter-based differentiation (case 1, rare in practice).
+Checks: PDP-W-014 (no per-variant `url` where variants are distinctly addressable), PDP-W-018 (`url` on some variants and not others).
 
 #### ProductGroup `name` and Google Merchant Center `item_group_title`
 
@@ -316,26 +285,19 @@ For implementers transitioning from Google Merchant Center feed formats: the `na
 
 #### Variant dimensions
 
-ProductGroup Sheets SHOULD declare the axes along which their variants differ. v0.7 recommends, in order of preference:
+ProductGroup Sheets SHOULD declare the axes along which their variants differ, and each variant in `hasVariant` declares its value on every axis.
 
-1. **Schema.org-native variant properties on each `hasVariant` entry**, when the axis is one Schema.org models directly: `color`, `size`, `material`. The corresponding `variesBy` array on the `ProductGroup` SHOULD reference these property names so consumers can discover the variant axes without scanning variants.
-2. **`additionalProperty` entries** with a `propertyID` drawn from the Pagefront Property Registry (below), when Schema.org has no native property for the dimension. Each `additionalProperty` carries `propertyID` (the dimension identifier) and `value` (the variant's value on that dimension).
-
-`variesBy` entries are represented in two forms depending on which kind of axis they reference. Schema.org-native axes are referenced by their full Schema.org URI (`https://schema.org/color`, `https://schema.org/size`, `https://schema.org/material`). Registry entries and producer-defined axes are referenced by the bare `propertyID` string: `storage` and `width` are registry entries; `packaging_ribbon_color` illustrates a producer-defined axis with no registry entry. Consumers distinguish the two forms by the presence of a URI scheme. A ProductGroup that varies along both Schema.org-native and non-native axes will have mixed entries:
+- **`variesBy`** on the `ProductGroup`: the axes, one entry each, so consumers discover them without scanning variants. A Schema.org-native axis (`color`, `size`, `material`) is referenced by its full Schema.org URI (`https://schema.org/color`, `https://schema.org/size`, `https://schema.org/material`). A registry entry or a producer-defined axis is referenced by its bare `propertyID` string: `storage` and `width` are registry entries; `packaging_ribbon_color` illustrates a producer-defined axis with no registry entry. Consumers distinguish the two forms by the presence of a URI scheme, and a group that varies along both kinds has mixed entries:
 
 ```json
 "variesBy": ["https://schema.org/color", "storage"]
 ```
 
-Each variant in `hasVariant` declares its value on every axis: Schema.org-native axes via the Schema.org property name (`color`, `size`, `material`) directly on the variant, and non-native axes via an `additionalProperty` entry whose `propertyID` matches the bare-string axis in `variesBy`. On such an entry, `name` remains the display label and may be localized; `propertyID` is the language-neutral coordination key.
+- **A variant's value on a Schema.org-native axis**: the Schema.org property, `color`, `size` or `material`, directly on the `hasVariant` entry. Preferred whenever Schema.org models the axis.
+- **A variant's value on any other axis**: an `additionalProperty` entry whose `propertyID` matches the bare-string axis in `variesBy` and whose `value` is the variant's value on that dimension. `name` is the display label and may be localized; `propertyID` is the language-neutral coordination key.
+- **`propertyID`**: drawn from the Pagefront Property Registry, a machine-readable, versioned registry at `https://themachineweb.org/pagefront/commerce/registry/properties.json`, when a matching entry exists. Producers SHOULD use the registry's identifiers and emit values in the entry's recommended unit (`recommendedUnitCode`, or `unitLabel` when no UN/CEFACT code exists), so raw values compare across sheets without conversion. A `propertyID` outside the registry is valid: consumers MUST treat it as an opaque but usable identifier and MUST NOT reject a sheet over it. Consumers MAY ship a pinned snapshot of the registry; fetching it at runtime is not required. [why](product-notes.md#why-examples-use-unregistered-propertyid-values)
 
-Non-Schema.org-native `propertyID` values are drawn from the **Pagefront Property Registry**, a machine-readable, versioned registry published at:
-
-```
-https://themachineweb.org/pagefront/commerce/registry/properties.json
-```
-
-superseding the v0.7 inline suggested-registry list. Each entry carries:
+A registry entry carries:
 
 - `id`: the `propertyID` value.
 - `definition`: a short description of the dimension.
@@ -344,13 +306,6 @@ superseding the v0.7 inline suggested-registry list. Each entry carries:
 - `repeatable`: present and `true` for axes that take multiple values per product (e.g. `input_type`, `port`).
 - `verticals`: the product categories the entry is used in.
 - `status`: `proposed`, `stable`, or `deprecated` (see "Registry governance" below).
-
-Normative guidance:
-
-- Producers SHOULD draw `propertyID` values from the registry and emit values in the entry's recommended unit (`recommendedUnitCode`, or `unitLabel` when no UN/CEFACT code exists), so raw values compare across sheets without conversion.
-- Consumers MUST treat `propertyID` values not present in the registry as opaque but usable identifiers (unchanged from v0.7) and MUST NOT reject sheets over them.
-- Consumers MAY ship a pinned snapshot of the registry; fetching it at runtime is not required. The registry is a coordination artifact for authoring-time convergence between independent producers.
-- Spec examples and worked illustrations of the unregistered path SHOULD use `propertyID` values with no plausible registration future, such as an idiosyncratic, single-merchant facet. A common cross-vertical term risks getting registered later, which would silently invalidate the example's premise.
 
 #### Registry governance
 
@@ -791,7 +746,7 @@ This pattern applies to `VideoObject` identically. Videos benefit from textual f
 
 ### Video roles
 
-Each VideoObject in the `video` array can declare a role via `additionalProperty`, mirroring the image-role pattern. The closed enumeration:
+Each VideoObject in the `video` array can declare a role via `additionalProperty`, mirroring the image-role pattern. User-generated videos, live streams and advertisements get no role of their own, and `hero` is an image role only. [why](product-notes.md#whats-not-in-video) The closed enumeration:
 
 - `overview`: primary product video, typically short (30–90 seconds), showing the product itself. The video equivalent of a hero image.
 - `tutorial`: how-to-use, how-to-install, how-to-assemble, how-to-care-for content. Typically longer (2–10 minutes), instructional in voice.
@@ -873,12 +828,7 @@ Video is language-scoped. A French-language sheet's `video` array contains Frenc
 
 When a video is language-agnostic (silent construction footage, instrument demonstrations without spoken content), publishers MAY include the same video file in multiple language sheets. The `caption` and `transcript` fields, if present, SHOULD match the sheet's `inLanguage`.
 
-#### What's not in `video`
 
-- **User-generated review videos** belong in `pagefront:userGeneratedMedia` (a future field, not in v0.6). The publisher isn't the author and the trust signal is fundamentally different from publisher-authored video.
-- **Live streams and scheduled broadcasts** are out of scope. Schema.org's `BroadcastEvent` and `LiveBlogPosting` cover this case; Pagefront may revisit if real consumer use cases surface.
-- **Promotional videos / advertisements** typically fall under `overview` or `lifestyle`. The spec doesn't define a distinct `commercial` role because the routing distinction doesn't help consumers.
-- **`hero` is not a video role.** The image role `hero` exists to disambiguate within an image set where multiple images could be the primary one. Most products have one overview video; the disambiguation isn't needed. Publishers wanting to surface a primary video should use `overview`.
 
 ### Product Q&A
 
@@ -914,9 +864,7 @@ v0.7 follows Schema.org's pattern of a single `acceptedAnswer` per question. Sch
 
 Pagefront Sheets MAY carry a `pagefront:featureGroup` array expressing grouped, ordered technical specifications: the "Specifications" table a product page renders as named sections ("Audio," "Battery," "Connectivity"), each section an ordered list of name/value rows.
 
-The extension trigger is **Schema.org under-specification**: Schema.org's `additionalProperty` carries name/value pairs, but as one flat list. It has no grouping (which section does a row belong to), no ordering (sections and rows render in a merchant-chosen order that carries editorial intent), and no split between the raw comparable value and the merchant's display formatting. Consumers comparing products need the raw values; consumers rendering a spec table need the structure.
-
-The shape is composition over inheritance: only the grouping shell is minted, and the rows inside it stay Schema.org-native `PropertyValue` objects.
+Only the grouping shell is minted; the rows inside it are Schema.org `PropertyValue` objects. [why](product-notes.md#why-feature-groups-are-minted)
 
 Each group carries:
 
@@ -931,9 +879,9 @@ Each group carries:
   - `description` *(optional)*: clarifying nuance, as on `QuantitativeValue` in "Product dimensions."
   - `pagefront:presentationValue` *(optional)*: the merchant's display-formatted rendering, when it differs from the raw value.
 
-`pagefront:presentationValue` exists because `PropertyValue` has no field that can carry display formatting cleanly. Merchants render values like "Up to 30 h (ANC on)" where the comparable quantity is `30` `HUR`. The display string carries qualifiers and locale formatting that must not pollute `value` (a consumer comparing battery life needs `30`), and overloading `description` would conflate formatting with explanation. So the raw value goes in Schema.org's `value`, and the display string, when the merchant has one, goes in `pagefront:presentationValue`. When the raw value renders acceptably as-is, omit `pagefront:presentationValue`; most rows need only `value` and `unitCode`.
+The raw value goes in Schema.org's `value`, and the display string, when the merchant has one, goes in `pagefront:presentationValue`: a merchant renders "Up to 30 h (ANC on)" where the comparable quantity is `30` `HUR`. When the raw value renders acceptably as-is, omit `pagefront:presentationValue`; most rows need only `value` and `unitCode`. [why](product-notes.md#why-pagefrontpresentationvalue-exists)
 
-The audio example below draws `driver_size` and `active_noise_cancellation` from the Pagefront Property Registry (both `status: proposed`). `earcup_fold_mechanism` has no registry entry and is producer-defined: producers MAY mint IDs like it for facets too idiosyncratic to standardize, and consumers MUST treat them as opaque but usable, the same rule the registry gives any unregistered `propertyID` (see "Variant dimensions"). The choice of `earcup_fold_mechanism` as the illustration follows the guidance in "Variant dimensions".
+The audio example below draws `driver_size` and `active_noise_cancellation` from the Pagefront Property Registry (both `status: proposed`). `earcup_fold_mechanism` has no registry entry and is producer-defined: producers MAY mint IDs like it for facets too idiosyncratic to standardize, and consumers MUST treat them as opaque but usable, the same rule the registry gives any unregistered `propertyID` (see "Variant dimensions"). [why](product-notes.md#why-examples-use-unregistered-propertyid-values)
 
 ```json
 "pagefront:featureGroup": [
@@ -984,13 +932,13 @@ The audio example below draws `driver_size` and `active_noise_cancellation` from
 
 Feature groups carry *specifications*: facts with a name and a value. They do not replace `additionalProperty` in its existing structural roles (image/video role declarations, variant axis values, the `age_warning` convention), which continue unchanged. A producer migrating a flat spec list into groups moves the rows; a producer with no grouping on the page can keep emitting flat `additionalProperty`: feature groups are for pages that actually group. A worked example against real merchant content is the Whitebird sheet (v0.9, 2026-08-11). It shows a foil-board size family's spec table promoted from per-variant `additionalProperty` rows, with registry and producer-defined `propertyID`s and dual-unit display strings in `pagefront:presentationValue`.
 
-The row vocabulary (`propertyID` values and their units) follows the `propertyID` rule above; see "Variant dimensions" and "Registry governance" for the registry. The registry is a coordination artifact (convergence by producer opt-in); a registry-*enforced* cross-publisher comparison contract remains open, tracked as open design question #26.
+The row vocabulary (`propertyID` values and their units) follows the `propertyID` rule above; see "Variant dimensions" and "Registry governance" for the registry.
 
 ### Product highlights
 
 Pagefront Sheets MAY carry `pagefront:productHighlights`, an ordered array of short, publisher-authored selling-point strings: the merchant's own ranked statement of what matters about this product, as rendered in the page's highlight bullets.
 
-The extension trigger is a **Schema.org gap**: no Schema.org property carries an ordered, publisher-curated highlight list. `description` is continuous prose; `additionalProperty` is specification data; neither expresses "these three points, in this order, are what the merchant leads with." The ordering is part of the signal, so the term is marked `@container: @list` in the JSON-LD context to survive JSON-LD processing, which otherwise treats arrays as unordered sets.
+The order is part of the value: the term is marked `@container: @list` in the JSON-LD context, so it survives JSON-LD processing as a list. [why](product-notes.md#why-product-highlights-are-minted-and-ordered)
 
 Normative guardrails:
 
@@ -1040,7 +988,7 @@ The closed `role` enum (v0.8):
 - `user_guide`: user-facing guide distinct from a full manual (typically shorter, task-oriented).
 - `quick_start`: quick-start or getting-started card.
 - `brochure`: marketing or sales brochure, a promotional overview. It does not serve as an authoritative technical source.
-- `repairability_index`: a regulation-driven repairability score document (e.g. the French *indice de réparabilité* label, the EU's emerging repairability labels). Cross-category and regulation-driven. Distinct from `certificate`, on the same rationale that separates `environmental_declaration`: a certificate is a conformity attestation, whereas this is a standardized regulatory disclosure. The document carries the score; a structured repairability *score* field (numeric value, scale, jurisdiction) is not modeled in v0.8 and is recorded as an open design question.
+- `repairability_index`: a regulation-driven repairability score document (e.g. the French *indice de réparabilité* label, the EU's emerging repairability labels). Cross-category and regulation-driven. Distinct from `certificate`, on the same rationale that separates `environmental_declaration`: a certificate is a conformity attestation, whereas this is a standardized regulatory disclosure. The document carries the score; a structured repairability *score* field (numeric value, scale, jurisdiction) is not modeled. [notes](product-notes.md#new-design-questions-surfaced-in-v08)
 - `recall_notice`: the human-readable recall or safety-notice artifact. Where a corrective measure applies, publishers SHOULD also emit the structured `pagefront:safetyNotice` (see "Safety notices"), so consumers can act on the recall from structured data. The `recall_notice` role links the artifact; it does not replace the structured notice. The division of labor is the same as `compatibility` versus `compatible_with` relationships.
 - `declaration_of_conformity`: the manufacturer's self-issued EU Declaration of Conformity underlying CE marking. Distinct from `certificate`: a certificate is issued by a third party (a certification body attesting conformity), whereas a DoC is the manufacturer's own legal declaration.
 
@@ -1107,9 +1055,7 @@ For the legal entities behind a regulated product (the GPSR responsible person, 
 
 ### Legal entities
 
-Pagefront Sheets MAY carry a `pagefront:legalEntity` array declaring the legal entities behind a product. The driver is regulation: the EU General Product Safety Regulation (GPSR) requires products sold into the EU to name a responsible economic operator established in the EU, and licensed goods routinely separate the brand owner from the licensee that actually manufactures and markets the product. Agents fielding "who is legally behind this product?" (for safety recalls, compliance checks, warranty claims) need the entities *and their roles*.
-
-The extension trigger is **Schema.org under-specification**: Schema.org's `manufacturer` names one organization in one fixed role. It has no typing for the other roles regulation distinguishes (a licensee, an authorized representative, an importer), and consumers cannot dispatch on a role the vocabulary cannot express.
+Pagefront Sheets MAY carry a `pagefront:legalEntity` array declaring the legal entities behind a product and their roles: the responsible economic operator the EU General Product Safety Regulation (GPSR) requires for products sold into the EU, the licensee of licensed goods, the importer. [why](product-notes.md#why-legal-entities-are-role-typed)
 
 Each entry carries:
 
@@ -1140,11 +1086,11 @@ When a `legalEntity` entry's organization has its own Commerce Organization Shee
 }
 ```
 
-The `@id` resolves to the organization sheet the same identity way as `Product.brand` and `Offer.seller`: exact-string `@id` match, per "Product identity and deduplication." `pagefront:sheetUrl` states where that sheet is, as a traversal hint that MAY be stale (see "Traversal hints" in Pagefront Discovery); the rules for following it are the linking contract in [`organization.md`](organization.md#linking-contract-identity-only). This removes the drift-prone duplication of stable organization data across every product the brand sells.
+The `@id` resolves to the organization sheet the same identity way as `Product.brand` and `Offer.seller`: exact-string `@id` match, per "Product identity and deduplication." `pagefront:sheetUrl` states where that sheet is, as a traversal hint that MAY be stale (see "Traversal hints" in Pagefront Discovery); the rules for following it are the linking contract in [`organization.md`](organization.md#linking-contract-identity-only).
 
-When the entity is a third party with no sheet, or varies by product or market, it stays fully inline with `name` and `address`. An `authorized_representative` or `importer` (the GPSR responsible person, the importer of record) is the typical case. There is nothing to reference, and GPSR Art. 19 wants the responsible entity resolvable at the listing itself; compliance-grade data stays on the product.
+When the entity is a third party with no sheet, or varies by product or market, it stays fully inline with `name` and `address`. An `authorized_representative` or `importer` (the GPSR responsible person, the importer of record) is the typical case.
 
-The reference form does not replace the inline form. `authorized_representative` and `importer` are per-product, per-market facts about third parties, and `manufacturer` ≠ `brand_owner` for licensed goods; the manufacturing licensee is named only at the product. The reference form needs no new machinery. A Schema.org `Organization` reduced to `@type` + `@id` is already a reference stub, and the linter's existing stub-vs-inline distinction (PDP-E-001 / PDP-W-020) applies unchanged. A `brand_owner` or `manufacturer` reference stub SHOULD resolve to a Commerce Organization Sheet declaring the matching `pagefront:commerceRole`. The v0.8 schema requires `organization.name`, so the stub form fails Layer 1 until the v0.9 schema makes `name` optional when `@id` is present; the SHOULD above is contingent on that relaxation landing in the same cut. The linter exempts reference stubs from PDP-W-024, the no-postal-address warning, in the same cut, because the address lives on the referenced sheet and the warning would be a false positive on a pure pointer.
+The reference form does not replace the inline form. A `brand_owner` or `manufacturer` reference stub SHOULD resolve to a Commerce Organization Sheet declaring the matching `pagefront:commerceRole`. The linter's stub-vs-inline distinction (PDP-E-001 / PDP-W-020) applies to the stub unchanged, and the stub is exempt from PDP-W-024, the no-postal-address warning. [why](product-notes.md#why-the-reference-form-does-not-replace-the-inline-form)
 
 A licensed product imported into the EU, with three role-typed entities in the fully-inline form (the licensee and the authorized representative are the entities that stay inline):
 
@@ -1197,7 +1143,7 @@ A licensed product imported into the EU, with three role-typed entities in the f
 
 Pagefront Sheets MAY carry a `pagefront:safetyWarning` array expressing the product's safety warnings: the warnings GPSR (Reg. 2023/988) Art. 19 requires distance-selling listings to display, and their equivalents in other jurisdictions.
 
-The extension trigger is a **Schema.org gap**: Schema.org has no product-safety-warning vocabulary. The `age_warning` `additionalProperty` convention (see "Age suitability") predates this field and remains valid for the age case; `pagefront:safetyWarning` is the general, typed form.
+The `age_warning` `additionalProperty` convention (see "Age suitability") predates this field and remains valid for the age case; `pagefront:safetyWarning` is the general, typed form.
 
 Each entry carries:
 
@@ -1206,9 +1152,9 @@ Each entry carries:
 - `pictogram` *(optional)*: URL of the warning pictogram image shown with the warning.
 - `hazardCategory` *(optional)*: the hazard class, as an **open vocabulary**. Common values: `choking_hazard`, `suffocation`, `fire`, `electrical`, `chemical`, `entanglement`. Consumers SHOULD treat unknown values as opaque categories, without rejecting them; conventions stabilize through real-merchant use, as with the variant-dimension registry.
 
-Producers SHOULD emit the warnings verbatim as shown on the page. The merchant's published wording is the compliance artifact, and a paraphrase is a new, unreviewed safety statement.
+Producers SHOULD emit the warnings verbatim as shown on the page.
 
-Warnings are language-scoped like all prose fields: a French-language sheet carries French-language warnings. GPSR requires safety information in the language of the member state where the product is sold, and the per-language sibling sheets (`pagefront:availableLanguages`) are the mechanism that satisfies it. A producer publishing into multiple EU markets publishes the warning in each language sheet, one language per sheet.
+Warnings are language-scoped like all prose fields: a French-language sheet carries French-language warnings. A producer publishing into multiple EU markets publishes the warning in each language sheet, one language per sheet. [why](product-notes.md#why-safety-warnings-are-verbatim-and-per-language)
 
 ```json
 "pagefront:safetyWarning": [
@@ -1230,7 +1176,7 @@ Warnings are language-scoped like all prose fields: a French-language sheet carr
 
 Pagefront Sheets MAY carry a `pagefront:safetyNotice` array when the product is subject to a corrective measure: a recall or a formal safety warning under GPSR Arts. 35–37 or an equivalent regime. The field is absent on virtually all sheets; it is present only when the product is under a recall or a formal safety warning.
 
-The extension trigger is a **Schema.org gap**: `availability: "https://schema.org/Discontinued"` means "no longer sold." It does not mean "dangerous — return it." Schema.org has no vocabulary for recalls, hazards, or remedies, and a consumer that reads a recalled product's Sheet as merely discontinued fails the buyer.
+A recalled product is a different fact from a discontinued one: `availability: "https://schema.org/Discontinued"` means "no longer sold", and the notice says what the owner should do. [why](product-notes.md#why-safety-notices-are-a-field-of-their-own)
 
 Each entry carries:
 
@@ -1266,7 +1212,7 @@ The `recall_notice` document role links the human-readable notice artifact (see 
 
 ### Related products
 
-Pagefront Sheets MAY carry a `pagefront:relatedProduct` array expressing typed relationships between products. Schema.org has loose relations (`isRelatedTo`, `isSimilarTo`, `isAccessoryOrSparePartFor`, `isConsumableFor`) but these are untyped beyond the four built-in relations and don't carry the typed-relationship semantics agents need for context-aware recommendations. Schema.org's `isAccessoryOrSparePartFor` fuses two distinct relationships into one untyped property. Pagefront separates them: `accessory` (an optional add-on that extends the product) and `spare_part` (a replacement for a component the product already has, ordered on wear or failure). Consumers act on the difference (an accessory is an upsell, a spare part is aftermarket support), so the distinction is typed; the consumer does not have to infer it from the target product's name.
+Pagefront Sheets MAY carry a `pagefront:relatedProduct` array expressing typed relationships between products, in a closed enum a consumer acts on; Schema.org's `isRelatedTo`, `isSimilarTo`, `isAccessoryOrSparePartFor` and `isConsumableFor` stay valid for the untyped cases. [why](product-notes.md#why-related-products-are-typed)
 
 Each entry has the shape:
 
@@ -1279,7 +1225,7 @@ Each entry has the shape:
 - `url` *(recommended)*: canonical URL of the related product page.
 - `image` *(optional)*: a single image URL for rendering the reference in a list without dereferencing. This is a render convenience; it may be stale relative to the target product's own Sheet, which holds the canonical, fully-roled image set. Producers should populate it with the related product's primary identifying image (its hero or packshot). Consumers rendering a related-products carousel may use this image directly; consumers needing current or role-specific imagery should dereference to the target Sheet via `@id` or `url`.
 
-The Schema.org-native relationship fields are parallel: `isRelatedTo`, `isSimilarTo`, and `hasPart` reference a Schema.org `Product`, which carries its own `image` property (a URL or `ImageObject`) via the `additionalProperties: true` policy. The `image` field on `pagefront:relatedProduct` provides the same render-hint capability for typed relationships that the Schema.org `Product` reference already provides for untyped ones. Both are the same convention, an image via Schema.org's `image`, surfaced through different mechanisms because `pagefront:relatedProduct` is a closed Pagefront extension while the Schema.org relationship fields are open.
+A Schema.org `Product` reference in `isRelatedTo`, `isSimilarTo` or `hasPart` carries the same render hint through its own `image` property. [why](product-notes.md#why-image-on-a-related-product-mirrors-schemaorgs)
 
 The closed `relationship` enum (v0.8):
 
@@ -1301,11 +1247,7 @@ The "You may also like" pattern, common on small-shop product pages, is brand-in
 
 #### Operationally-tracked vs. marketing-curated relationships
 
-The typed relationships in the closed enum divide along a scale-dependent line in how publishers declare them.
-
-Some are **operationally tracked** by publishers regardless of catalog size: `accessory`, `consumable`, `required_part`, `spare_part`, `replaces`, `replaced_by`, `bundle_component`, `compatible_with`, and `service`. These relationships reflect business operations (inventory, product hierarchy, parts management, lifecycle, service offerings) that publishers maintain because commerce requires them. A publisher with 10,000+ SKUs still knows which products are accessories of which, because it must manage that inventory.
-
-Others are **marketing-declared**: `often_bought_with` and `recommended_with`. These work cleanly at small catalog scales where marketing teams hand-curate pairings. At larger scales, the same relationships are typically generated by recommendation engines (SearchSpring, Dynamic Yield, Algolia Recommend, Shopify recommendations) and displayed in publisher-controlled UIs but not individually declared by the publisher.
+The typed relationships divide in how publishers declare them. `accessory`, `consumable`, `required_part`, `spare_part`, `replaces`, `replaced_by`, `bundle_component`, `compatible_with` and `service` are **operationally tracked**: they reflect business operations the publisher maintains whatever its catalog size. `often_bought_with` and `recommended_with` are **marketing-declared**: hand-curated at small scales, and at larger scales typically generated by a recommendation engine and displayed without being individually declared by the publisher. [why](product-notes.md#why-typed-relationships-divide-along-operational-and-marketing-lines)
 
 Producers SHOULD use typed enum values for relationships the publisher has declared itself: operationally-tracked data, or hand-curated marketing pairings. Producers SHOULD NOT coerce algorithmic recommendation-engine output into typed enum values; these are publisher-surfaced without being publisher-declared, and belong in Schema.org's native `isRelatedTo` (Pattern 5 in the relationship-patterns guidance below).
 
@@ -1318,7 +1260,7 @@ Rule-based generation is an intermediate case. When a publisher defines a rule t
 
 #### The structured-identifier requirement
 
-Beyond whether the publisher typed the relationship, `pagefront:relatedProduct` has a structural prerequisite: each entry must carry at least one structured identifier: `@id` (URL-shaped), `sku`, `gtin`, `gtin13`, or `mpn`. The JSON Schema enforces this via `anyOf`; a reference with only `name` and `url` does not validate as a `pagefront:relatedProduct` entry. The reason is the typed extension's contract: a typed relationship implies the consumer can act on the target (dereference it, fetch its Sheet, compare offers), and a name plus a link is too thin for that.
+Beyond whether the publisher typed the relationship, `pagefront:relatedProduct` has a structural prerequisite: each entry must carry at least one structured identifier: `@id` (URL-shaped), `sku`, `gtin`, `gtin13`, or `mpn`. The JSON Schema enforces this via `anyOf`; a reference with only `name` and `url` does not validate as a `pagefront:relatedProduct` entry. [why](product-notes.md#why-a-typed-relationship-needs-a-structured-identifier)
 
 Schema.org's `isRelatedTo` carries no such requirement. A reference with only `name` and `url` is a valid Schema.org `Product` reference, permitted via the `additionalProperties: true` policy on Schema.org-typed blocks.
 
@@ -1327,7 +1269,7 @@ A producer should therefore use `pagefront:relatedProduct` only when BOTH condit
 1. **Is the relationship publisher-typed?** (Operational data, manual editor curation, explicit merchant tagging; see the operational-vs-adjacency guidance above.)
 2. **Does the source data carry a structured identifier?** (`sku`, `gtin`, `gtin13`, `mpn`, or an `@id` derived from a stable identifier.)
 
-If either fails, the reference belongs in `isRelatedTo`. A typed relationship without a structured identifier is still untyped from the schema's perspective, because the consumer can't act on the typing without something to dereference. An algorithmic recommendation that happens to carry a SKU is still untyped from the operational perspective, because the publisher never declared the relationship type.
+If either fails, the reference belongs in `isRelatedTo`.
 
 The schema rejects a `pagefront:relatedProduct` entry that carries no identifier key at all, but it checks only that an identifier is *present*, and an empty or non-URL-shaped identifier passes Layer 1. The validator's linter (rule PDP-W-019) closes that gap: it warns when a `pagefront:relatedProduct` entry carries a structured identifier that is present but empty, whitespace-only, or not dereferenceable, signalling that the reference should either gain a real identifier or move to `isRelatedTo`.
 
@@ -1479,7 +1421,7 @@ A `pagefront:relatedProduct` entry identifies its target in one of two forms: an
 ]
 ```
 
-v0.8 carries qualitative relationships only. Weighted relationships (e.g., `often_bought_with` with a percentage) are not modeled; see the open design questions section.
+v0.8 carries qualitative relationships only. Weighted relationships (e.g., `often_bought_with` with a percentage) are not modeled. [notes](product-notes.md#new-design-questions-surfaced-in-v07)
 
 #### Bundles
 
@@ -1539,55 +1481,51 @@ Reserve `bundle_component` for components that ship WITH the product being descr
 A "bundled with" component sometimes can't be resolved to a structured identifier: the page names and prices it but exposes no link or SKU, and the producer can't resolve it via catalog lookup, platform API, or sitemap. Because `pagefront:relatedProduct` requires an identifier, such a component can't be a `bundle_component`. Keep it in the Sheet, because the buyer still receives it. Use Schema.org's `hasPart`, which has no identifier requirement; a `hasPart` entry with only a `name` is valid (add price via `additionalProperty` or an embedded `Offer` if the page shows it). The resolution order for "included with" components is: (1) resolve to an identifier → `pagefront:relatedProduct` with `bundle_component`; (2) resolution fails → Schema.org `hasPart` with the name (and price if shown); (3) in either case the component stays in the Sheet.
 ### Offers
 
-Offer core shape: `url` (the page where the offer is bought), `price`, `priceCurrency`, `availability`, `itemCondition`, `seller`, `areaServed` / `eligibleRegion`, `acceptedPaymentMethod`, `warranty` when the page states one, and `checkoutPageURLTemplate` when the merchant states a checkout link (optional; see "Where to buy"). (v0.9 removes `hasMerchantReturnPolicy` and `shippingDetails` from this routine list; see "Return policy" below. Both fields remain valid as per-product overrides of the seller sheet's store-wide terms.)
+An Offer in `offers`: what a shopper in one market is offered. One Offer per variant on a ProductGroup, each naming its variant; one Offer on a Product. Every value is what the merchant's page or data states; a value the page does not state is left out. An offer without a price is a price-on-request offer ("Price-on-request offers") or an unavailable one ("Unavailable offers without a price" under "Tax inclusion").
 
-`price` on a consumer Offer is the **displayed consumer price for the offer's declared region**: the unit amount a consumer in that region is shown and pays for the item itself, in `priceCurrency`, at the moment the sheet was generated. Where that region's consumer-protection law requires displayed prices to include value-added tax, `price` includes it. Where the prevailing convention displays prices before sales tax added at checkout, `price` excludes it. In both cases `price` excludes shipping, which is declared on `shippingDetails` or resolved from the seller sheet's `pagefront:fulfillmentTerms`.
-
-The meaning follows EU price-indication law, which defines the price a trader must display to a consumer as the final unit price including VAT and all other taxes: Directive 98/6/EC, Article 2(a) ("selling price shall mean the final price for a unit of the product, or a given quantity of the product, including VAT and all other taxes"), as amended by Directive (EU) 2019/2161, consolidated text in force since 28 May 2022. The shipping exclusion follows Directive 2011/83/EU, Article 6(1)(e), under which freight, delivery and postal charges are disclosed as additional charges beside the total price. That article governs the checkout-time total price, and it is cited here for the shipping exclusion alone.
-
-A producer MUST NOT publish, as `price`, an amount the consumer is never shown. `price` is taken from the price rendered on the merchant's product page; an amount from the page's structured data or from a platform API is used only to check it. This is a producer obligation. A linter can detect a missing tax-basis statement (PDP-W-028); whether a stated basis is true lies beyond what any linter can check. "Tax inclusion" under "Common pricing patterns" gives the sources of the price and of its basis, and says how to state the basis.
-
-The `availability` and `itemCondition` values are canonical Schema.org URIs (`InStock`, `OutOfStock`, `PreOrder`, `NewCondition`, `UsedCondition`, etc.). Both `http://schema.org/` and `https://schema.org/` scheme variants are accepted; consumers SHOULD treat them as semantically equivalent. The HTTPS form is canonical and recommended for new sheets.
+- **`url`**: the page on which this offer is bought ("Where to buy").
+- **`price`**: the displayed consumer price for the offer's declared region: the unit amount a consumer in that region is shown and pays for the item itself, in `priceCurrency`, at the moment the sheet was generated. Where that region's consumer-protection law requires displayed prices to include value-added tax, `price` includes it; where the prevailing convention displays prices before sales tax added at checkout, `price` excludes it. In both cases `price` excludes shipping, which is declared on `shippingDetails` or resolved from the seller sheet's `pagefront:fulfillmentTerms`. Source: the price rendered on the merchant's product page; an amount from the page's structured data or from a platform API is used only to check it, and a producer MUST NOT publish, as `price`, an amount the consumer is never shown. A JSON number or a decimal string, one carrier per sheet ("Amounts"). The tax basis is stated only where the merchant states it, as `valueAddedTaxIncluded` on a `UnitPriceSpecification` that mirrors the price; "Tax inclusion" gives the sources of the price and of its basis. A former price, a range and quantity tiers: "Common pricing patterns". Checks: PDP-W-028 (no basis stated), PDP-W-029 (no region declared). [why](product-notes.md#why-price-is-the-displayed-consumer-price)
+- **`priceCurrency`**: the ISO 4217 code of `price`. Check: PDP-W-004 (price without currency).
+- **`availability`**: a Schema.org URI: `InStock`, `OutOfStock`, `SoldOut`, `Discontinued`, `PreOrder`, `BackOrder`, `MadeToOrder`, `LimitedAvailability`, `InStoreOnly`. Source: as the page shows it; the merchant's structured data checks it and is never its source. The `https://schema.org/` form is canonical and recommended for new sheets; the `http://` form is accepted and consumers SHOULD treat the two as equivalent. Check: PDP-W-013 (legacy `http` form). [why](product-notes.md#why-both-schemaorg-schemes-are-accepted)
+- **`itemCondition`**: a Schema.org URI such as `NewCondition` or `UsedCondition`, in either scheme form. Source: the page.
+- **`seller`**: the organization selling: `@id`, `name`, `url`, and `pagefront:sheetUrl` to its Commerce Organization Sheet on this sheet's host, under the linking contract in [`organization.md`](organization.md#linking-contract-identity-only). Returns and shipping not stated on the Offer are read from that sheet ("Return policy").
+- **`areaServed` or `eligibleRegion`**: the market the price is for. Source: only where the merchant states it, under the no-inference rule in "Tax inclusion". Required before a checkout template. Check: PDP-W-029 (price without a region).
+- **`acceptedPaymentMethod`**: as the page states.
+- **`hasMerchantReturnPolicy`**, **`shippingDetails`**: only where this product deviates from the seller's store-wide terms ("Return policy").
+- **`availableDeliveryMethod`**, **`availableAtOrFrom`**: the delivery modes the page states ("Delivery").
+- **`warranty`**: the commercial warranty the page states for this offer ("Warranty").
+- **`checkoutPageURLTemplate`**: a merchant-stated checkout link ("Where to buy").
+- **`itemOffered`**: on a sheet with several Offers, the variant this Offer is for ("itemOffered references").
+- **`pagefront:priceOnRequest`**: in place of a price, where the merchant intentionally publishes none ("Price-on-request offers").
+- **`priceSpecification`**: `UnitPriceSpecification` entries carrying the tax basis, a former price or quantity tiers ("Common pricing patterns").
 
 #### Return policy
 
-The store-wide return policy is a property of the seller. It lives on the seller block of the seller's Commerce Organization Sheet ([`organization.md`](organization.md)) as `hasMerchantReturnPolicy`, stated once, so it does not duplicate and drift across Product Sheets.
+The store-wide return policy is a property of the seller. It lives on the seller block of the seller's Commerce Organization Sheet ([`organization.md`](organization.md)) as `hasMerchantReturnPolicy`, stated once. Store-wide shipping terms live there too, as `pagefront:fulfillmentTerms`, an array of Schema.org-native `OfferShippingDetails` objects.
 
-A Product Sheet carries return terms only when the product deviates from the store default: a final-sale item, or a made-to-order product, whose returns exceptions already live in `pagefront:madeToOrderTerms` and stay there. Consumers resolve return terms by reading the product's own return terms if present; otherwise they follow `Offer.seller` to the seller's Commerce Organization Sheet and use its store-wide policy. The seller sheet is located by the reference's `pagefront:sheetUrl` and resolved per the linking contract in [`organization.md`](organization.md#linking-contract-identity-only), which places it on the product sheet's own host: terms are inherited only from that sheet. When the seller sheet cannot be resolved (no `pagefront:sheetUrl`, a failed host check, or an `@id` or role mismatch), the inherited terms are unknown. A consumer draws no conclusion about the product's return policy from its silence.
+- **`hasMerchantReturnPolicy`** on the Offer: only when the product deviates from the store default: a final-sale item, or a made-to-order product, whose returns exceptions already live in `pagefront:madeToOrderTerms` and stay there. A `MerchantReturnPolicy`, as the page states it.
+- **`shippingDetails`** on the Offer: only when the product deviates from the seller's `pagefront:fulfillmentTerms` (bulky items with their own shipping rates, made-to-order lead times). An `OfferShippingDetails`; "Shipping cost declared alongside price" gives the shape.
 
-This is the format's one semantic cross-sheet dependency: answering "can I return this product" may require the seller sheet when the product is silent. The read rides the existing `Offer.seller` edge and stays `@id`-keyed for identity; `pagefront:sheetUrl` on the seller reference says where the seller sheet is. It is scoped to return and shipping terms; it does NOT generalize to other fields.
+**Reading the terms.** A consumer reads the product's own terms if present. Otherwise it follows `Offer.seller` to the seller's Commerce Organization Sheet, located by the reference's `pagefront:sheetUrl` and resolved per the linking contract in [`organization.md`](organization.md#linking-contract-identity-only), which places it on the product sheet's own host, and uses its store-wide policy. Terms are inherited only from that sheet. When the seller sheet cannot be resolved (no `pagefront:sheetUrl`, a failed host check, or an `@id` or role mismatch), the inherited terms are unknown, and a consumer draws no conclusion about the product's return policy from its silence. The read is scoped to return and shipping terms; it does NOT generalize to other fields. [why](product-notes.md#why-returns-and-shipping-default-to-the-seller-sheet)
 
-Shipping follows the same default-plus-override pattern, via minted vocabulary: store-wide shipping terms live on the seller sheet as `pagefront:fulfillmentTerms`, an array of Schema.org-native `OfferShippingDetails` objects, and an Offer carries `shippingDetails` only when the product deviates from those terms (bulky items with their own shipping rates, made-to-order lead times). Resolution is the same product-else-seller rule as returns: read the Offer's own `shippingDetails` if present, otherwise follow `Offer.seller` to the seller sheet's `pagefront:fulfillmentTerms`, with the seller sheet located and checked as for returns. Terms are inherited only from the seller sheet the linking contract resolves on the product sheet's own host; when none resolves, the shipping terms are unknown. (The term itself is minted in the vocabulary alongside the Commerce Organization Sheet.)
-
-A warranty is a separate matter from returns and has its own section: see "Warranty" below.
+A warranty is a separate matter from returns: see "Warranty".
 
 #### Warranty
 
 A warranty the page **states** ("2-year warranty", "lifetime warranty on manufacturing defects") is a `WarrantyPromise`. A warranty **document** (the terms as a file) is a `pagefront:document` entry with `role: "warranty"` (see "Documents"). A page may carry both.
 
-**Who gives it decides where it goes.**
+- **`warranty`** on the Offer: a warranty given by the **seller**, as Schema.org's `warranty`. Also where a warranty statement goes when the page does not say who gives it.
+- **`pagefront:manufacturerWarranty`** on the Product: a warranty the page attributes to the **manufacturer**; it follows the product across every retailer and is claimed against the manufacturer. Placed here only when the page names the manufacturer as the guarantor. A retailer's sheet may carry both: the manufacturer's warranty on the Product and its own on the Offer. [why](product-notes.md#why-a-warranty-goes-where-the-guarantor-is)
+- **Shape**, a `WarrantyPromise`:
+  - `durationOfWarranty`: a `QuantitativeValue` with `value` and a UN/CEFACT `unitCode` (`ANN` years, `MON` months, `DAY` days), when a finite length is stated. A lifetime warranty states no finite length: omit `durationOfWarranty` and carry the statement in `description`; never encode "lifetime" as a large number.
+  - `description`: the statement as written on the page.
+  - `name` *(optional)*: a short label ("Lifetime Warranty"); `WarrantyPromise` inherits `name` from `Thing`.
+  - `warrantyScope` *(optional)*: Schema.org's scope of the promise, where the page states one.
+- **Several region-scoped Offers**: each carries its own `warranty`; the entries are identical where the warranty is the same across markets, and each Offer states its own where it differs.
+- **Commercial warranty only**: the promise as the page states it. Producers MUST NOT synthesize a warranty from a statutory minimum (such as a legal conformity guarantee) when the page states none.
+- **Paid extended warranties** ("add 3-year protection for €49") are a distinct product with its own price: a `service` relationship (see "Related products"), never `warranty`.
 
-- A warranty given by the **seller** is part of the offer and lives on the Offer as Schema.org's `warranty`. Schema.org defines `warranty` on `Offer` (and `Demand`) only.
-- A warranty given by the **manufacturer** belongs to the product, follows it across every retailer, and is claimed against the manufacturer. It lives on the Product as `pagefront:manufacturerWarranty`, whose value is a `WarrantyPromise`. Schema.org has no product-level warranty property, so this is where a manufacturer's own sheet, which may carry no Offer at all, states its warranty.
-
-A retailer's sheet may carry both: the manufacturer's warranty on the Product and its own on the Offer. The distinction matters to consumers because the claim path and the portability differ.
-
-**When the page does not say who gives it,** record the statement on the Offer as `warranty`. Place it in `pagefront:manufacturerWarranty` only when the page names the manufacturer as the guarantor.
-
-**Shape.** A `WarrantyPromise` carries:
-
-- `durationOfWarranty` — a `QuantitativeValue` with `value` and a UN/CEFACT `unitCode` (`ANN` years, `MON` months, `DAY` days), when a finite length is stated.
-- `description` — the statement as written on the page.
-- `name` (optional) — a short label ("Lifetime Warranty"); `WarrantyPromise` inherits `name` from `Thing`.
-- `warrantyScope` (optional) — Schema.org's scope of the promise, where the page states one.
-
-Where the page states no finite length (a lifetime warranty), omit `durationOfWarranty` and carry the statement in `description`. Do not encode "lifetime" as a large number.
-
-**Multiple region-scoped Offers.** Each Offer carries its own `warranty`. Where the warranty is the same across markets the entries are identical; where it differs by market, each Offer states its own.
-
-**Commercial warranty only.** `warranty` records the commercial promise as the page states it. Producers MUST NOT synthesize a warranty from a statutory minimum (such as a legal conformity guarantee) when the page states none.
-
-**Paid extended warranties are out of scope.** Cover sold separately ("add 3-year protection for €49") is a distinct product with its own price; where the page offers it, it is a `service` relationship (see "Related products"). It is never carried in `warranty`.
+Check: PDP-W-030 (a `warranty` or `pagefront:manufacturerWarranty` with neither `durationOfWarranty` nor `description`).
 
 A seller's warranty on the Offer:
 
@@ -1628,8 +1566,6 @@ A manufacturer's lifetime warranty on the Product, on the manufacturer's own she
 }
 ```
 
-The validator's linter (rule PDP-W-030) warns when a `warranty` or `pagefront:manufacturerWarranty` entry carries neither `durationOfWarranty` nor `description`.
-
 #### Trust strips
 
 Product pages often display a strip combining several commitments ("2-year warranty · 30-day returns · free delivery"). Each fact has its own home; producers split the strip rather than storing it as one string:
@@ -1643,16 +1579,16 @@ A fact the strip states that none of these can hold stays in the product's prose
 
 #### Delivery
 
-Pages describe how the customer receives an item as "delivery". Schema.org files delivery cost, destination and timing under `shippingDetails` (`OfferShippingDetails`: `shippingDestination`, `shippingRate`, `deliveryTime` with handling and transit time); the property name is Schema.org's and is used unchanged.
-
-The delivery **mode** is a separate fact. Offers state the modes available with Schema.org's `availableDeliveryMethod`, whose value is a `DeliveryMethod`, and a pickup location with `availableAtOrFrom`, whose value is a `Place`. The `DeliveryMethod` enumeration has three members (Schema.org 30.1): `https://schema.org/ParcelService`, `https://schema.org/OnSitePickup`, and `https://schema.org/LockerDelivery`. Click-and-collect and in-store pickup are `OnSitePickup`; locker delivery is `LockerDelivery`. These are delivery modes and are declared there; they are never approximated in `shippingDetails`.
+- **`shippingDetails`**: delivery cost, destination and timing, as Schema.org's `OfferShippingDetails` (`shippingDestination`, `shippingRate`, `deliveryTime` with handling and transit time); only where the product deviates from the seller's terms ("Return policy").
+- **`availableDeliveryMethod`**: the delivery modes the page states, as `DeliveryMethod` URIs: `https://schema.org/ParcelService`, `https://schema.org/OnSitePickup` (click-and-collect, in-store pickup), `https://schema.org/LockerDelivery`. Modes are declared here and never approximated in `shippingDetails`.
+- **`availableAtOrFrom`**: a pickup location, as a `Place`. [why](product-notes.md#why-delivery-modes-stay-apart-from-shipping-details)
 
 #### Where to buy
 
-An Offer states where the shopper can buy it with two Schema.org properties. Both are Schema.org's own, so this section mints no `pagefront:` term and the Offer block admits them without a schema change; it is added in release 0.5.0.
+Two Schema.org properties on the Offer state where the shopper buys it. Both apply from release 0.5.0.
 
-- **`url`**: the page on which the shopper buys this offer: the product page, or the variant's page for a variant offer (see "Per-variant URLs"). An Offer without `url` is bought on the product's page, the data block's `url`. A sheet carrying more than one Offer SHOULD give each its `url`, since offers for different markets are often bought on different pages. When present, `url` MUST be an absolute URL.
-- **`checkoutPageURLTemplate`**: a URL template (RFC 6570) that takes the shopper directly to the merchant's checkout for this offer. Optional. It hands the shopper to the merchant: the cart, payment and order confirmation happen on the merchant's site. Expanded with `quantity` set to 1, the template MUST yield an absolute `https` URL.
+- **`url`**: the page on which the shopper buys this offer: the product page, or the variant's page for a variant offer (see "Per-variant URLs"). An absolute URL. An Offer without `url` is bought on the product's page, the data block's `url`. A sheet carrying more than one Offer SHOULD give each its `url`, since offers for different markets are often bought on different pages. Checks: PDP-E-021 (not absolute), PDP-W-040 (absent on a sheet carrying several Offers).
+- **`checkoutPageURLTemplate`** *(optional)*: an RFC 6570 URL template that takes the shopper directly to the merchant's checkout for this offer; the cart, payment and order confirmation happen on the merchant's site. Its only variable is `quantity`, the number of units, a positive integer: the offer identifies the item, so the template takes no product or variant identifier, and a template with no variable checks out one unit. Expanded with `quantity` set to 1, it MUST yield an absolute `https` URL. Source: only where the merchant states it, in its own structured data on the page or through a checkout-link feature it has enabled on its platform; a producer MUST NOT construct a checkout URL from a platform's URL pattern or from any other pattern the merchant has not stated. Region: each region-scoped Offer carries the template for its own market, and an Offer without a declared region (`areaServed` or `eligibleRegion`) MUST NOT carry one. Checks: PDP-E-019 (not valid RFC 6570, a variable Pagefront does not define, or no expansion to an absolute `https` URL), PDP-E-020 (no region), PDP-E-022 (on an unavailable offer). [why](product-notes.md#why-checkout-is-a-one-variable-template)
 
 ```json
 {
@@ -1665,25 +1601,11 @@ An Offer states where the shopper can buy it with two Schema.org properties. Bot
 }
 ```
 
-**Template variables.** A checkout template uses only the variables Pagefront defines, so that a consumer can fill every placeholder. The set is one variable:
-
-- `quantity`: the number of units, a positive integer.
-
-The offer itself identifies the item; a template does not take a product or variant identifier. A template with no variable is valid and checks out one unit.
-
-**Source.** A producer publishes `checkoutPageURLTemplate` only when the merchant states it: in the merchant's own structured data on the page, or through a checkout-link feature the merchant has enabled on its platform. A producer MUST NOT construct a checkout URL from a platform's URL pattern or from any other pattern the merchant has not stated, for the same reason it does not construct sheet URLs.
-
-**Region.** Checkout depends on the market. Each region-scoped Offer carries the checkout template for its own market. An Offer without a declared region (`areaServed` or `eligibleRegion`) MUST NOT carry a checkout template, since the shopper could be sent to another market's checkout.
-
-**Consumers.** A checkout template is a hand-off to the shopper. Following it can create a cart. Consumers MUST NOT follow it to complete a purchase without the shopper's confirmation, and MUST fill `quantity` with the quantity the shopper chose.
-
-**Out of scope.** Programmatic purchase, an endpoint a program calls to place an order, as described by Schema.org's `potentialAction` with a `BuyAction`, involves authentication, payment and order creation. It is a transaction protocol, and Pagefront describes offers, so Pagefront does not specify it. An Offer may carry it; consumers act on it under that protocol's terms, and this document says nothing about them. Where an item is not sold on the page at all, as on a manufacturer's own product page, there is no Offer and no checkout; directing shoppers to the retailers that sell it is not covered here.
-
-The validator's linter checks the template (rule PDP-E-019: a template that is not valid RFC 6570, that names a variable Pagefront does not define, or that does not expand to an absolute `https` URL), the region (rule PDP-E-020: a template on an Offer with neither `areaServed` nor `eligibleRegion`), and the offer's `url` (rule PDP-E-021: a `url` that is not an absolute URL; rule PDP-W-040: an Offer without `url` on a sheet carrying several). All four apply from release 0.5.0.
+**Consumers.** A checkout template is a hand-off to the shopper. Following it can create a cart. Consumers MUST NOT follow it to complete a purchase without the shopper's confirmation, and MUST fill `quantity` with the quantity the shopper chose. Programmatic purchase, Schema.org's `potentialAction` with a `BuyAction`, is a transaction protocol Pagefront does not specify; an Offer may carry it, and consumers act on it under that protocol's terms. A page that sells nothing has no Offer and no checkout.
 
 #### itemOffered references
 
-When a sheet declares multiple offers (typically a `ProductGroup` with multiple variants in `hasVariant`), each `Offer` SHOULD reference its target variant via `itemOffered: { "@id": "..." }`:
+- **`itemOffered`**: on a sheet with several Offers (typically a `ProductGroup` with variants in `hasVariant`), each Offer SHOULD reference its variant as `{ "@id": "..." }`, resolving to an entry in `hasVariant` or to the root product `@id`. MAY be omitted on a single-Offer sheet whose item is the root product. Check: PDP-E-001 (broken `@id` reference). [why](product-notes.md#why-itemoffered-may-be-omitted-on-a-single-offer)
 
 ```json
 "offers": [
@@ -1697,10 +1619,6 @@ When a sheet declares multiple offers (typically a `ProductGroup` with multiple 
   }
 ]
 ```
-
-The `@id` reference must resolve to an entry in `hasVariant` or to the root product `@id`. The validator's linter (rule PDP-E-001) flags broken `@id` references.
-
-For single-Offer sheets where the `itemOffered` is unambiguously the root product, the `itemOffered` field MAY be omitted; Schema.org consumers will infer it from the Offer's position on the Product.
 
 #### Product identity and deduplication
 
@@ -1734,9 +1652,14 @@ A reseller's Sheet describes the reseller's own page for a product whose brand p
 
 #### Price-on-request offers
 
-Some merchants intentionally publish no price. Authorized-retailer models (luxury watches, high-end jewelry), quote-based pricing (industrial equipment, bespoke commissions), and regional-reseller routing all share the same pattern: the merchant's product page is real, the product is real, and the price lives behind a contact channel. When a Sheet reflects such a product, the Offer SHOULD declare `pagefront:priceOnRequest`.
+Some merchants intentionally publish no price: authorized-retailer models (luxury watches, high-end jewelry), quote-based pricing (industrial equipment, bespoke commissions), regional-reseller routing. The product page is real, the product is real, and the price lives behind a contact channel.
 
-An Offer carrying `pagefront:priceOnRequest` is exempt from the otherwise-required `price` or `priceSpecification`. All other Offer fields apply normally: `availability`, `itemCondition`, `seller`, `shippingDetails`, `areaServed`, and so on. `priceCurrency` remains useful even without `price`: it signals what currency the eventual price will be quoted in.
+- **`pagefront:priceOnRequest`** on the Offer: SHOULD be declared for such a product. The Offer is then exempt from the otherwise-required `price` or `priceSpecification`; every other Offer field applies normally (`availability`, `itemCondition`, `seller`, `shippingDetails`, `areaServed`, and so on), and `priceCurrency` remains useful since it signals the currency the eventual price will be quoted in. A `pagefront:PriceOnRequest` object:
+  - `method` *(required)*: a closed enumeration. `authorized_retailer`: the merchant routes buyers to a curated network of brand-authorized retailers (luxury watches, high-end audio). `dealer_network`: similar in structure, for industrial and commercial products with regional dealer coverage. `quote_form`: a structured intake form that produces a quote (made-to-measure, custom configurations, B2B bulk). `email`, `phone`: the merchant directs buyers to an email address or a phone number for pricing. `unspecified`: no structured inquiry channel; the path to pricing is left to the buyer to discover. Additional values require a spec amendment.
+  - `contactUrl`, `contactEmail`, `contactPhone` *(optional)*: the inquiry channel the method names; `contactUrl` for `authorized_retailer`, `dealer_network` and `quote_form`, `contactEmail` for `email`, `contactPhone` for `phone`.
+  - `note` *(optional)*: free-text guidance shown to consumers.
+
+Checks: PDP-W-015 (a method other than `unspecified` with no contact channel), PDP-W-016 (an Offer with commercial structure but neither a price nor `pagefront:priceOnRequest`, which catches extraction failures while letting intentional omissions through; silent on an unavailable offer without a price).
 
 ```json
 {
@@ -1753,24 +1676,7 @@ An Offer carrying `pagefront:priceOnRequest` is exempt from the otherwise-requir
 }
 ```
 
-The `method` field is a closed enumeration:
-
-- `authorized_retailer`: the merchant routes buyers to a curated network of brand-authorized retailers (luxury watches, high-end audio).
-- `dealer_network`: similar in structure to `authorized_retailer` but used for industrial and commercial products with regional dealer coverage.
-- `quote_form`: the merchant provides a structured intake form that produces a quote (made-to-measure, custom configurations, B2B bulk).
-- `email`: the merchant directs buyers to an email address for pricing.
-- `phone`: the merchant directs buyers to a phone number for pricing.
-- `unspecified`: the merchant has no structured inquiry channel; the product is on the page but the path to pricing is left to the buyer to discover.
-
-Additional values require a spec amendment.
-
-The validator's linter (rule PDP-W-016) warns when an Offer has commercial structure (availability, itemCondition, or other Offer fields are present) but lacks both `price`/`priceSpecification` and `pagefront:priceOnRequest`. This catches extraction failures (cases where a price exists on the merchant's page but the pipeline didn't capture it) while letting intentional omissions through.
-
-For made-to-order products, see `pagefront:madeToOrderTerms` below.
-
-For configurable products, see `pagefront:configurator` below. An offer states the prices of a configurator through `pagefront:configuratorPricing`; see "Configurator pricing and price bands."
-
-For site-level promotions, see `pagefront:promotions` on each Offer.
+For made-to-order products, see `pagefront:madeToOrderTerms` below. For configurable products, see `pagefront:configurator` below; an offer states the prices of a configurator through `pagefront:configuratorPricing` ("Configurator pricing and price bands"). For site-level promotions, see `pagefront:promotions` on each Offer.
 
 #### Common pricing patterns
 
@@ -1816,9 +1722,7 @@ When a product is on sale, declare both the regular price and the current price 
 
 ##### Tax inclusion
 
-The tax basis of a price is a property of the (offer, region) pair. Whether tax is included is jurisdictional: EU and UK displayed prices include VAT, while US prices conventionally exclude sales tax added at checkout. The amount is jurisdictional too: under destination-based VAT the same product carries different gross prices across member states. A sheet's several region-scoped Offers may therefore each carry a different basis, and neither the sheet nor the seller has a single basis of its own.
-
-Producers SHOULD state whether `price` includes value-added tax, using Schema.org's `valueAddedTaxIncluded` on a `UnitPriceSpecification` entry. An Offer that already carries `priceSpecification` entries sets the flag on each. An Offer carrying only `price` adds one entry mirroring it:
+- **`valueAddedTaxIncluded`**: whether `price` includes value-added tax, as Schema.org's `valueAddedTaxIncluded` on a `UnitPriceSpecification` entry in `priceSpecification`. Producers SHOULD state it. An Offer that already carries `priceSpecification` entries sets the flag on each; an Offer carrying only `price` adds one entry mirroring it. An existing plain `PriceSpecification` entry carries the flag as well, and an `AggregateOffer`, with no single `price` to mirror, carries it on an entry of its own. `false` is the correct statement for a trade or B2B sheet quoting net prices, and for regions whose displayed prices exclude sales tax. The flag is a statement about `price`: consumers do not compute tax from it, and do not derive one amount from the other. When the flag is absent, consumers read `price` as the displayed consumer price and cannot tell whether tax was included. Checks: PDP-W-028 (absent), PDP-E-004 (a mirroring entry's `price` disagrees with the Offer's `price`; the Offer's `price` is authoritative). [why](product-notes.md#why-the-tax-basis-belongs-to-the-offer-and-its-region) [why](product-notes.md#why-unitpricespecification-carries-the-flag)
 
 ```json
 {
@@ -1836,12 +1740,6 @@ Producers SHOULD state whether `price` includes value-added tax, using Schema.or
   ]
 }
 ```
-
-`UnitPriceSpecification` is the recommended type for the entry, including an entry that carries only `valueAddedTaxIncluded`, as on an `AggregateOffer`, where there is no single `price` to mirror. Two reasons. It is the type the sale-pricing pattern above already uses with `priceType`. And it is the type consumers of Schema.org offer markup document for `priceSpecification` entries: Google's merchant listing documentation names `UnitPriceSpecification` and no other price specification type, so the flag sits on the entry type those consumers already parse. An entry of this type needs no unit to carry the flag. `valueAddedTaxIncluded` is defined on its parent `PriceSpecification`, so an existing plain `PriceSpecification` entry carries the flag as well. Where a mirroring entry's `price` disagrees with the Offer's `price`, the Offer's `price` is authoritative; the disagreement is an authoring error (rule PDP-E-004).
-
-`valueAddedTaxIncluded: false` is the correct statement for a trade or B2B sheet quoting net prices, and for regions whose displayed prices exclude sales tax. Directive 98/6/EC governs products offered by traders to consumers; net pricing on a trade sheet falls outside its scope. The flag is a statement about `price`: consumers do not compute tax from it, and do not derive one amount from the other.
-
-When the flag is absent, consumers read `price` as the displayed consumer price per the rule above and cannot tell whether tax was included.
 
 **Source of the price.** `price` is taken from the price rendered on the merchant's product page: the amount the shopper pays for the item as presented on the page. When a sale is shown, `price` is the sale price, and the crossed-out price is the regular price (see "Sale pricing"). `price` is the full price of the item: an instalment, a per-unit amount and a "from" amount are other figures and are never published as `price`. Where the page shows the price only after scripts run, the producer renders the page as a browser does; a producer that cannot obtain the rendered price has no price and publishes no offer.
 
@@ -2076,73 +1974,7 @@ The recommended filename shape, `{id}.{lang}.json`, is "Filename convention" in 
 
 Discovery is specified in Pagefront Discovery ([`../../core/spec/discovery.md`](../../core/spec/discovery.md)): the discovery principle, the page-based carriers (`Link: rel="alternate"; type="application/pagefront+json"` and the HTML `<link>` element), the entry point, the traversal-hint rule and the filename convention. Product-specific traversal hints are `sheet_url` on `hasVariant` entries and `isVariantOf`, `pagefront:sheetUrl` on organization references (`Offer.seller`, `Product.brand`, a reference-form `pagefront:legalEntity`; see the linking contract in [`organization.md`](organization.md#linking-contract-identity-only)) and on `isPartOf` entries (see [`collection.md`](collection.md)), and the `url` of `pagefront:availableLanguages` entries; the traversal-hint rule in Discovery governs all of them.
 
-## Why completeness is not in the sheet
 
-A completeness score is a valuation, and valuations differ per consumer: a compliance agent weights legal entities heavily, a visual-shopping agent weights media. No single score would be right for both, so the sheet carries none. Scoring is consumer-side, over the shared dimension taxonomy in [`scoring.md`](scoring.md); the linter judges correctness only.
-
-## Open design questions carried forward
-
-1. Extension namespace sub-paths within `pagefront:` (per-type URIs) remain to be defined as the spec stabilizes.
-2. ~~Multiple offers' `itemOffered` redundancy.~~ **Resolved in v0.6.** `@id` reference pattern is now the normative recommendation.
-3. ~~Completeness scoring weights.~~ **Resolved: scoring is consumer-side (see [`scoring.md`](scoring.md)).** The standard keeps a non-normative dimension taxonomy only; weights, formulas, and calibration are consumer rubric concerns, versioned independently of the format.
-4. Schema.org version pinning cadence. Project needs documented update cadence (review with each Schema.org major release).
-
-## Open design questions surfaced in v0.4
-
-5. ~~**Configurator pricing formula.**~~ Resolved 2026-10-01: `priceFormula` is removed, and `pagefront:configuratorPricing` defines the total as the base price plus option modifiers plus adjustments. See "Configurator pricing and price bands."
-6. **Image role multiplicity.** Should the order of roles encode preference (first role is primary), or should roles be unordered? Still open. Video roles inherit the same ambiguity.
-7. ~~**`pagefront:configurator` vs `isVariantOf`.**~~ Resolved in v0.5.
-8. **Certification scope vocabulary.** `scope` values are currently free-text. Open question: closed enum, or free-text with conventions per category?
-9. **AftermarketService taxonomy.** Common services (`free_resizing`, `lifetime_warranty`, `repair_credit`) but no defined vocabulary. Spec should document conventions without closing the set.
-10. ~~**Sheet URL stability.**~~ Resolved in v0.5.
-
-## Open design questions surfaced in v0.5
-
-11. **Index files and catalog enumeration.** Should publishers expose `/pagefront/commerce/product/index.{lang}.json` for crawlers? Still deferred in v0.7 pending real consumer use cases; revisit in a future version.
-12. **Fallback resolution semantics.** v0.5 recommends BCP 47 language-family fallback (`fr-CA` → `fr`). Open question: what should consumers do when no language preference matches at all?
-13. **Region-scoped certifications.** EU certifications (CE, OEKO-TEX) and US certifications (UL, FCC) have different shapes. v0.6 stays category-agnostic; typed certification extensions deferred.
-14. **Translation consistency.** Spec doesn't enforce that French and English variants say semantically the same thing. Whether to add `pagefront:translatedFrom` is open.
-15. **Currency-conversion freshness signaling.** Per-Offer `priceLastVerified` field is finer-grained than envelope `expires_at` but more complex. Open.
-
-## New design questions surfaced in v0.6
-
-16. **Video role overlap with image roles.** Both `image` and `video` arrays carry `lifestyle` and `context`-shaped roles. Consumers querying "show me lifestyle content" need to look in two places. Acceptable trade for clarity; revisit if it causes consumer pain.
-17. **`spin` belongs in `image` or `video`?** A 360° rotation is technically video but functionally a rich image. v0.6 places it in `video` because the delivery format is typically `.mp4` or HLS. Publishers using interactive 360° viewers (JS-based, with no video delivery) may need a future image-side `spin` role.
-18. **User-generated media as a separate field.** Reviews on most merchant sites include user-submitted videos and photos. Pagefront v0.6 omits these from `video` and `image` because the trust signal differs. A future `pagefront:userGeneratedMedia` field is worth designing but requires real case studies first.
-19. **Video transcripts and the size budget.** Full transcripts of tutorial videos can run to several thousand words. At catalog scale (a merchant with 5,000 SKUs, each with 2-3 videos), transcript content could dominate sheet size. Whether to allow `transcript` to be an external URL (`transcriptUrl`) rather than inline content is worth considering. Schema.org has both patterns.
-20. **Tracking known deviations across versions.** Real-merchant validation keeps surfacing narrow spec defects (the AFS `productGroupID` issue in v0.5, the Schema.org HTTP/HTTPS scheme issue in v0.6) that no amount of upfront design would have caught. This is a process note: worth maintaining a forward-running "known deviations" record alongside the spec so future implementers and validators don't rediscover the same edge cases. Where this record lives (changelog, separate doc, validator rules with case-study back-references) is open.
-21. **Cross-page variant discovery.** The spec recommends ProductGroup Sheets be complete and acknowledges per-variant URLs, but it does not specify how producers should discover variant relationships when the merchant's site exposes them only heuristically. This is a production-pipeline concern, but the linter rules that warn on suspected incompleteness depend on pipeline knowledge the Sheet itself cannot carry. Future versions may address whether per-Sheet metadata about variant discovery completeness is warranted.
-
-## New design questions surfaced in v0.7
-
-22. **Category-specific document roles.** The `pagefront:document` `role` enum is category-agnostic in v0.7. Real publishers may need category-specific roles (`dental_imaging_protocol` for medical devices, `nutrition_panel` for food, `installation_drawing` for industrial fittings) that don't map cleanly onto the closed set. v0.7 directs publishers to use the closest enum value and convey specifics in `name` and `description`. Whether to extend the closed enum, open it for category prefixes, or formalize a category-specific role registry is an open question; revisit when real publisher demand makes the trade-off concrete.
-23. **Relationship strength or weighting on `pagefront:relatedProduct`.** `often_bought_with` and `recommended_with` are qualitative in v0.7. A future version may add a `strength` or `weight` field (percentage of co-purchase, publisher-asserted prominence). v0.7 stays qualitative because weighted relationships invite a category of merchant self-asserted commercial signals that Pagefront has kept out of the vocabulary; see also "merchant-asserted popularity ranking" in the non-goals section.
-24. **Multiple accepted answers for Q&A.** Schema.org's `Question` allows a single `acceptedAnswer` plus a `suggestedAnswer` array. v0.7 follows Schema.org's pattern (single accepted answer) because publisher-authored Q&A about one's own product is typically authoritative. Whether Pagefront should surface `suggestedAnswer` as a recommended pattern (for community-contributed answers the publisher has curated but not endorsed as authoritative) is open; revisit if real implementer feedback surfaces use cases.
-25. **`encodingFormat` default semantics.** `pagefront:document.encodingFormat` defaults to `application/pdf` when omitted. The vast majority of product documents are PDFs, but the default arguably hides a producer choice that consumers may want to make explicit. Whether to require `encodingFormat` rather than defaulting it is open.
-
-## New design questions surfaced in v0.8
-
-26. ~~**Shared cross-publisher feature/measure registry.**~~ **Resolved in v0.8.** The Pagefront Property Registry (see "Variant dimensions" and "Registry governance") publishes governed, versioned `propertyID` identifiers with canonical `recommendedUnitCode`/`unitLabel`, covering `pagefront:featureGroup` rows as well as variant dimensions; its `proposed` → `stable` → `deprecated` lifecycle and additive-only versioning answer the "who governs it, how it versions" half of the original question. The registry does not *enforce*: it is a coordination artifact producers opt into, so `propertyID` values outside it remain valid opaque identifiers and comparison across merchants rests on convergence. Category-specific sub-registries remain unaddressed; revisit if a category's vocabulary outgrows the flat registry.
-27. **Structured repairability score.** v0.8 links the repairability *document* (`pagefront:document` `role: "repairability_index"`) but does not model the score itself. A structured field (numeric value, scale, jurisdiction/scheme) would be the repairability analogue of `hasEnergyConsumptionDetails` for energy class. Schemes are still multiplying (the French index, the EU labels in progress) and their scales differ; premature to close a shape around them. Revisit when the regulatory landscape settles or consumer demand surfaces.
-28. **Canonical domain for all Pagefront IRIs.** Resolved: all identifiers, machine and human, live on `themachineweb.org`, with machine paths mirroring the repository's vertical-first architecture: schemas at `https://themachineweb.org/pagefront/spec/commerce/product/v0.9.json` (since release 0.3.0 the last segment carries the sheet-spec semver, `v0.9.0.json`, and the `v0.9.json` URL is the legacy schema), the vocabulary namespace at `https://themachineweb.org/pagefront/vocabulary/`, and the Property Registry at `https://themachineweb.org/pagefront/commerce/registry/properties.json`.
-
-## What v0.8 deliberately does *not* address
-
-These are deferred to later versions when concrete consumer needs justify the complexity:
-
-- **Provenance and confidence metadata.** Removed in v0.4 entirely.
-- **Cryptographic signing of sheets.** Out of scope. The sheet's authority comes from being served on the publisher's domain.
-- **Cross-sheet dependencies.** Each sheet is self-contained. (v0.9 carves out the one accepted exception: product-else-seller resolution of return and shipping terms along the `Offer.seller` edge; see "Return policy.")
-- **Per-variant inventory and pricing structures finer-grained than `Offer`.**
-- **Index files for catalog enumeration.** Tracked as open question #11.
-- **Bundle products.** The bundle-as-product case (a bundle that is itself a sellable entity with its own name, price, and composition) is now addressed via Schema.org's `ProductCollection` (with `includesObject` and `TypeAndQuantityNode`), documented in the Related products section; it is no longer deferred. What remains out of scope is a Pagefront-native bundle-product type: Pagefront does not introduce one because Schema.org's `ProductCollection` covers the case. A future Pagefront extension would only be justified if `ProductCollection` proves inadequate against real merchant bundles.
-- **Live streams and scheduled broadcasts.** Out of scope for video.
-- **User-generated review videos and photos.** Tracked as open question #18.
-- **Audio-only media** (podcasts, audio descriptions of products). Schema.org has `AudioObject`. v0.8 stays focused on image, video, and documents; audio added if real use cases surface.
-- **Merchant-asserted popularity ranking.** Google Merchant Center's `popularity_rank` attribute and equivalent self-asserted percentile signals are out of scope. Pagefront represents the publisher's authoritative statement about *what a product is*; a product's commercial ranking among other products in the same catalog is outside that statement. For verifiable rating signals, use Schema.org's `aggregateRating`. For external recognition, use Schema.org's `award`. Self-asserted popularity rankings (where the merchant ranks their own catalog and asks consumers and agents to trust the ranking) are a marketing-surface decision, a different class of signal from a fact about the product. Pagefront leaves that surface to the publisher's page and does not add it to the vocabulary.
-- **Weighted product relationships.** `pagefront:relatedProduct` is qualitative; co-purchase percentages and similar weights are tracked as open question #23 and not in v0.8.
-- **Structured repairability score.** v0.8 links the repairability document (`role: "repairability_index"`) but does not model the score itself; tracked as open question #27.
-- **A fully contractual shared feature/measure registry.** The Pagefront Property Registry is no longer deferred; see resolved open question #26 and "Variant dimensions," "Registry governance," and "Feature groups." What remains out of scope is *enforcement*: sheets validate whether or not their `propertyID` values are registered.
 
 ## Planned breaking changes
 
@@ -2152,21 +1984,9 @@ Breaking changes follow semver: each of the changes below would make a conformin
 
 ## Status
 
-Normative spec: Product Sheet spec 0.11.0, a member of commerce release 0.5.0. The versioning scheme is in [`releases.md`](releases.md): the spec has its own semver, breaking changes follow it, and the envelope carries `release` in place of `format_version`. The 2026-10-01 revisions move configurator pricing from `pagefront:configurator` into the offer; sheets that carried prices inside the configurator need re-emission. The 2026-09-02 revision removes the recommended Sheet URL convention and states the follow-the-link discovery rule as a standalone normative requirement; no conformance requirement changes, no sheet becomes invalid, and none needs to move. The paragraphs below describe the legacy format versions this spec grew through.
+Normative spec: Product Sheet spec 0.11.0, a member of commerce release 0.5.0. The versioning scheme is in [`releases.md`](releases.md): the spec has its own semver, breaking changes follow it, and the envelope carries `release` in place of `format_version`. The legacy format versions this spec grew through, and the pending work carried from them, are in the design notes. [notes](product-notes.md#the-legacy-format-versions-this-spec-grew-through)
 
-v0.9 was an additive release on top of v0.8, with no breaking changes to the data model. v0.8 Sheets remain structurally valid under v0.9 once their `format_version` envelope field is updated from `"0.8"` to `"0.9"`. Three changes land together, keeping the Product Sheet consistent with the new Commerce Organization Sheet ([`organization.md`](organization.md)): the `commerce/` segment in the Sheet URL convention, return and shipping policy as seller-sheet defaults with per-product overrides, and reference-capable `pagefront:legalEntity`. The `pagefront:commerceRole` and `pagefront:fulfillmentTerms` terms, the `organization` certification scope value, and the v0.9 schema updates are tracked with the Commerce Organization Sheet's own landing.
-
-v0.8 was an additive release on top of v0.7, with no breaking changes. v0.7 Sheets remain structurally valid under v0.8 once their `format_version` envelope field is updated from `"0.7"` to `"0.8"`; the new affordances (`pagefront:featureGroup`, `pagefront:productHighlights`, `pagefront:legalEntity`, `pagefront:safetyWarning`, `pagefront:safetyNotice`, array-valued GTINs, coded `category`, the `repairability_index`/`recall_notice`/`declaration_of_conformity` roles, the `service` relationship) are optional additions.
-
-The v0.8 changes were each surfaced by real-merchant sheet production: grouped spec tables, multi-GTIN products, taxonomy-coded categories, highlight bullets, repairability disclosures, GPSR entity blocks, safety warnings and recall notices, and attached-service upsells all appear on real product pages that v0.7 could not express or could express only lossily.
-
-Pending work carried from v0.8:
-
-1. **Worked examples**: resolved for `pagefront:featureGroup` and `pagefront:legalEntity` by the Whitebird v0.9 re-emission (2026-08-11; see the citations in "Feature groups" and "Legal entities"). The same artifact carries `pagefront:productHighlights`, with one caveat queued for editor review: the merchant page renders no explicit highlight bullets, so the entries are distilled from merchant-derived prose, in tension with the publisher-authored-only guardrail (see the case study's writeup).
-2. **Linter rules**: landed. The legal-entity-address warning and the feature-value-unit warning are now defined as PDP-W-024 and PDP-W-025 in `rules.md`, joining PDP-W-022 (empty highlight entries).
-3. **Scoring rubric update**: withdrawn as spec pending work; rubric evolution is consumer-side (see [`scoring.md`](scoring.md)). Folding feature-group and legal-entity presence into a completeness signal for regulated categories belongs to implementers' rubric backlogs.
-
-Pending work carried from v0.7: worked case-study examples for `question` and `pagefront:document`, **still pending, and now exhausted against the current corpus**: none of the three case-study pages carries product-scoped Q&A or public document links (Whitebird and Kimaï have neither; Nitto has only a site-wide FAQ page and no PDFs). Resolving these two examples needs a fourth case study chosen for those features (a merchant with on-page product Q&A and downloadable manuals/SDS; electronics or appliances are natural donors), or an editor decision to illustrate them synthetically. (The document/Q&A completeness-rubric update formerly noted here is consumer-side per [`scoring.md`](scoring.md).) The `pagefront:relatedProduct` worked example is resolved by the Kimaï v0.9 re-emission (`../case-studies/kimai/jackie-pear.en-GB.json`, 2026-08-11): the merchant's "matching wedding bands" carousel as eight `recommended_with` entries, in the sharpened complementary-pairing meaning as distinct from a generic "you may also like" surface. (The v0.7 linter warnings, SDS documents without `inLanguage` and empty `acceptedAnswer.text`, are now defined as PDP-W-026 and PDP-W-027 in `rules.md`.)
+The open design questions are in the design notes too: those carried forward [notes](product-notes.md#open-design-questions-carried-forward) and those surfaced in v0.4 [notes](product-notes.md#open-design-questions-surfaced-in-v04), v0.5 [notes](product-notes.md#open-design-questions-surfaced-in-v05), v0.6 [notes](product-notes.md#new-design-questions-surfaced-in-v06), v0.7 [notes](product-notes.md#new-design-questions-surfaced-in-v07) and v0.8 [notes](product-notes.md#new-design-questions-surfaced-in-v08), with what v0.8 deliberately does not address [notes](product-notes.md#what-v08-deliberately-does-not-address).
 
 ## Changelog
 

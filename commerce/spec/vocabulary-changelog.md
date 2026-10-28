@@ -5,6 +5,7 @@ The history of [`vocabulary.md`](vocabulary.md). Changes land under "Unreleased"
 ### Unreleased
 
 - **Editorial: the changelog moves to this file.** `vocabulary.md` keeps a one-line Changelog section that points here; the entries are unchanged.
+- **Editorial: link to the Product Sheet design notes.** The relationships paragraph pointed at the Product Sheet spec's open design questions; those moved to [`product-notes.md`](product-notes.md), and the link now names the note. No term changes.
 - **Editorial: case-study sheet link.** The registration-identity paragraph links the Nitto organization sheet under its new filename, `nitto-knitwear.fr.json`; the file carried a `-v0_9` suffix from the legacy format line.
 - **Fix: `collectionKind` in the context block.** The 0.5.0 entry said the JSON-LD context block gains its `collectionKind` mapping at the release. The mapping was missing and is added.
 - **Editorial: no context file.** The two sentences saying a context file is available at `https://themachineweb.org/pagefront/vocabulary/context.jsonld` are removed; that address was never served, and no sheet or consumer in the corpus references it. The context is the block under "JSON-LD Context". Serving the vocabulary namespace, the term IRIs and a context file together, is future work.
