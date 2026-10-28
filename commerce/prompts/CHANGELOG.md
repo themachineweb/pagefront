@@ -4,6 +4,28 @@ The prompt set's own semver; see "Versioning" in [`README.md`](README.md).
 
 ## Unreleased
 
+## 1.5.0 — unreleased
+
+For commerce release 0.5.0.
+
+- The prompts point at the product spec as a field reference and stop
+  restating its per-field source rules. The spec now states, for each
+  field, where its value comes from and what checks it, so the rules on
+  the price and its tax basis, the market, the availability, the former
+  price, the category, the identifiers, the FAQ questions, the parcel
+  weight, the related products and the general "any other field" clause
+  leave `core.md` and the one-product prompt; what stays is the procedure
+  and what the platform settles (identities, addresses, the platform's
+  precedence over the page, the report).
+- An image's alt text is never written as its caption; ratings follow the
+  spec (`aggregateRating` as the page shows it, no reviews).
+- The one-product prompt puts one Offer per variant on a ProductGroup, as
+  the core prompt and the spec do; it no longer allows a group-level offer
+  for a family with one price. Its trap on the market no longer names a
+  country in the URL as a source, which the spec forbids.
+- The header describes the spec as a field reference whose design notes
+  are not needed to write a sheet.
+
 ## 1.4.0 — 2026-10-28
 
 For commerce release 0.5.0. One tag for the changes made as 1.2.0, 1.3.0

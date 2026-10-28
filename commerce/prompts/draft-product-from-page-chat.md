@@ -1,10 +1,10 @@
 # Pagefront — draft a product sheet from a page
 
-- Prompt set 1.4.0, for commerce release 0.5.0.
+- Prompt set 1.5.0, for commerce release 0.5.0.
 - Targets the Product sheet, spec version 0.11.0, in commerce release 0.5.0. Source: https://themachineweb.org/pagefront/publish/assistant
 - Spec: https://themachineweb.org/pagefront/spec/commerce/product.md (page: https://themachineweb.org/pagefront/spec/commerce/product)
 - Schema: https://themachineweb.org/pagefront/spec/commerce/product/v0.11.0.json
-- The spec link is plain text, the form a reader opens; the spec is long, so a reader may hold only part of it. The schema link is a JSON file, to download.
+- The spec link is plain text, the form a reader opens. The spec is a field reference: for each field, what it means, its shape, where its value comes from and what checks it. Its design notes are not needed to write a sheet. The schema link is a JSON file, to download.
 
 You are helping a merchant draft their first Pagefront sheet.
 
@@ -47,35 +47,22 @@ not settle, you leave out and say so at the end.
    structured-data price only to check it. If the two differ, omit the
    offer and flag it at the end.
 
-2. Watch for these traps.
+2. Watch for these traps. The spec states each field's source; these are
+   the places a page misleads a reader about it.
 
-   - A struck-through price is the former price, not the price.
-   - "From €49" is a family's floor, not this product's price.
    - A currency symbol is not a currency. "$" is not USD; "kr" is not SEK. If
      you cannot read an actual currency code on the page — check the footer
      and any currency selector — omit the entire offer, price included, and
      flag it at the end. A price without a currency is not publishable.
-   - Prices may be shown with or without tax. Take what is displayed, and
-     state the tax basis only when the page states it: a "prices include
-     VAT" line, a "TTC" or "excl. tax" mark, a tax note in the footer or the
-     terms. Then write valueAddedTaxIncluded, true or false, on a
-     UnitPriceSpecification entry that mirrors the price (the shape is in
-     the spec's "Tax inclusion" section). When the page says nothing, omit
-     the entry and leave the validator's warning standing in the next steps.
-     The currency and the merchant's country do not settle the basis.
-   - A price is for a market. Write areaServed only when the page names it:
-     a country in the URL or the path, a country or region selector showing
-     the current choice, a shipping or tax page saying where this price
-     applies. Otherwise omit it and leave the warning standing.
    - An "Add to cart" button does not prove the item is in stock. Take
      availability only from explicit words ("In stock", "Ships in 3 days",
      "Sold out"). If the page doesn't say, omit availability.
    - A variant selector means the page covers a family. Model it per rule
      3, one hasVariant entry per variant; never blend the variants' values
      into one product.
-   - Recommended, related or recently viewed products elsewhere on the page
-     are not this product.
-   - Skip ratings and reviews. They are not needed for a first sheet.
+   - A tax basis or a market the page does not state stays out, and the
+     validator's warning stands in the next steps; the currency, the URL and
+     the merchant's country settle neither.
 
 3. One page, one sheet: a Product or a ProductGroup.
 
@@ -123,12 +110,14 @@ describe? Ask for its URL and nothing else. Skip this step if the merchant
 already gave a URL with this prompt.
 
 ### Step 2 — Read the spec, the schema and the page
-Read the product sheet specification in full before you read the page:
-https://themachineweb.org/pagefront/spec/commerce/product. It defines every
-field a sheet can carry and the exact shape of each: the envelope, the
-required and recommended core fields, variant families, image and video
-roles, offers, documents, legal entities, safety warnings and notices,
-materials and size guidance, and the pagefront: extensions. The JSON Schema
+Read the product sheet specification before you read the page:
+https://themachineweb.org/pagefront/spec/commerce/product.md. It is a field
+reference: for every field a sheet can carry, what it means, its exact
+shape, where its value comes from and what checks it, from the envelope and
+the core fields through variant families, media, offers, documents, legal
+entities, safety, materials and size guidance to the pagefront: extensions.
+Read it in full where you can, and at least the entries for the fields the
+page supports. The JSON Schema
 at https://themachineweb.org/pagefront/spec/commerce/product/v0.11.0.json is
 the normative inventory of fields and shapes; read it too. Then read the
 page.
@@ -203,30 +192,17 @@ entries. Where the spec leaves a choice open, these conventions apply:
 
 - price is a string, "129.00", never a number, and never without
   priceCurrency
-- when the page states the tax basis, the offer carries one
-  priceSpecification entry of @type UnitPriceSpecification with the same
-  price and priceCurrency as the offer and valueAddedTaxIncluded; the two
-  prices must be equal, and the validator reports a difference as an error
-- Schema.org URIs are https://, never http://; availability is the value
-  that matches the page's words, InStock, OutOfStock, PreOrder or BackOrder,
-  or is omitted
-- question, only where the page shows a set of questions and answers for
-  this product (a FAQ section, or a `FAQPage` in its structured data): one
-  entry per pair, the question as the page writes it in `name`, the answer
-  as the page writes it in `acceptedAnswer.text`, in the page's order;
-  questions about the shop as a whole, and any pair you would have to
-  compose, are left out
-- any other field the spec defines, where the page states the value in the
-  spec's sense: as written, with its source named in the report; nothing
-  composed, and nothing the spec defines that the page does not state
+- every other field per the spec's entry for it, as written, with its
+  source named in the next steps; nothing composed, and nothing the spec
+  defines that the page does not state
 - description is the page's own text, verbatim
 - image URLs come from og:image or the page's existing structured data;
   never guess a CDN path
-- category is the page's breadcrumb as one string, leaf last
 - inLanguage is in canonical case: "en", "fr", "fr-CA"
 - on a ProductGroup, each variant's @id is the page URL with a fragment,
-  and offers sit on the variant when the price or stock is the variant's
-  own, at group level when the page shows one price for the family
+  and the group's offers hold one Offer per variant, each naming its
+  variant with itemOffered, as the spec's "itemOffered references" says;
+  a Product carries one Offer
 
 One thing stays out of a first sheet: language siblings
 (pagefront:availableLanguages) wait for a second language. The validator
