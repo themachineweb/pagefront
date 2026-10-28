@@ -54,7 +54,8 @@
   nearest collection above it. A collection the navigation does not link to
   cannot be listed from public data: none; say so. Which collections hold a
   product: its page's breadcrumb, which names the collection that holds it
-  last and that collection's ancestors before it; a theme that links the
+  last and that collection's ancestors before it, the set's parents for its
+  `isPartOf`; a theme that links the
   product under a collection's path (`/collections/<handle>/products/<product
   handle>`) names that collection too. A collection the product page does
   not name is not listed for the product: say so in the report, naming the
