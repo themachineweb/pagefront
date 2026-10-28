@@ -1,6 +1,6 @@
 # Pagefront — write your shop's sheets (code assistant)
 
-- Prompt set 1.3.0, for commerce release 0.5.0.
+- Prompt set 1.4.0, for commerce release 0.5.0.
 - Writes Product sheets (spec 0.11.0), Collection sheets (spec 0.1.0) and the Organization sheet (spec 0.5.0), commerce release 0.5.0.
 - Product spec: https://themachineweb.org/pagefront/spec/commerce/product.md (page: https://themachineweb.org/pagefront/spec/commerce/product)
 - Product schema: https://themachineweb.org/pagefront/spec/commerce/product/v0.11.0.json
@@ -278,6 +278,14 @@ no `expires_at`. The data block follows the spec and the schema in full:
   variant's @id per IDENTITIES, its url its own page where it has one, its
   image its own. The product's other specifications are
   additionalProperty entries, as the platform states them.
+- question, only where the page shows a set of questions and answers for
+  this product (a FAQ section, or a `FAQPage` in its structured data): one
+  entry per pair, the question as the page writes it in `name`, the answer
+  as the page writes it in `acceptedAnswer.text`, in the sheet's language,
+  in the page's order. Where the page's text and its structured data both
+  carry the FAQ, use the pairs they agree on and say in the report which
+  differed. Questions about the shop as a whole, and any pair you would
+  have to compose, are left out.
 - The identifier: a Product carries sku, gtin13, gtin or mpn as the
   platform or the page's structured data states it (13 digits go in gtin13;
   8, 12 or 14 in gtin); a ProductGroup a family identifier as

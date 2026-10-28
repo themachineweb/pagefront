@@ -1,6 +1,6 @@
 # Pagefront — draft a product sheet from a page
 
-- Prompt set 1.3.0, for commerce release 0.5.0.
+- Prompt set 1.4.0, for commerce release 0.5.0.
 - Targets the Product sheet, spec version 0.11.0, in commerce release 0.5.0. Source: https://themachineweb.org/pagefront/publish/assistant
 - Spec: https://themachineweb.org/pagefront/spec/commerce/product.md (page: https://themachineweb.org/pagefront/spec/commerce/product)
 - Schema: https://themachineweb.org/pagefront/spec/commerce/product/v0.11.0.json
@@ -210,6 +210,12 @@ entries. Where the spec leaves a choice open, these conventions apply:
 - Schema.org URIs are https://, never http://; availability is the value
   that matches the page's words, InStock, OutOfStock, PreOrder or BackOrder,
   or is omitted
+- question, only where the page shows a set of questions and answers for
+  this product (a FAQ section, or a `FAQPage` in its structured data): one
+  entry per pair, the question as the page writes it in `name`, the answer
+  as the page writes it in `acceptedAnswer.text`, in the page's order;
+  questions about the shop as a whole, and any pair you would have to
+  compose, are left out
 - description is the page's own text, verbatim
 - image URLs come from og:image or the page's existing structured data;
   never guess a CDN path

@@ -4,8 +4,15 @@ The prompt set's own semver; see "Versioning" in [`README.md`](README.md).
 
 ## Unreleased
 
-For commerce release 0.5.0. To be tagged as 1.3.0.
+For commerce release 0.5.0. To be tagged as 1.4.0.
 
+- Product sheets carry `question` where the page shows a FAQ for the
+  product, one entry per pair as the page writes it, from the page's text
+  or its `FAQPage` structured data where the two agree; shop-level
+  questions and composed pairs are left out (`core.md` and the one-product
+  prompt). A Shopify product page with sixteen merchant-written questions
+  in a `FAQPage` block had produced a sheet without them because no rule
+  asked for them.
 - Shopify, chat route: which collections hold a product is read from the
   product page's breadcrumb, the last entry the set that holds it and the
   others its ancestors, in place of reading every navigation collection's
