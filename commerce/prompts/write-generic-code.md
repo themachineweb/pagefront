@@ -1,6 +1,6 @@
 # Pagefront — write your shop's sheets (code assistant)
 
-- Prompt set 1.5.1, for commerce release 0.5.0.
+- Prompt set 1.6.0, for commerce release 0.5.0.
 - Writes Product sheets (spec 0.11.0), Collection sheets (spec 0.1.0) and the Organization sheet (spec 0.5.0), commerce release 0.5.0.
 - Product spec: https://themachineweb.org/pagefront/spec/commerce/product.md (page: https://themachineweb.org/pagefront/spec/commerce/product)
 - Product schema: https://themachineweb.org/pagefront/spec/commerce/product/v0.11.0.json
@@ -160,6 +160,10 @@ Every sheet's address is `<origin><sheet path>/commerce/<kind>/<id>.<lang>.json`
 - `<id>` is the platform's own handle for the thing the sheet describes, as
   the platform's data states it (never cut from a URL);
 - `<lang>` is the sheet's `inLanguage`.
+
+The part after `<sheet path>`, `commerce/<kind>/<id>.<lang>.json`, is the
+sheet's path in the folder you hand over (Step 7): the folder mirrors the
+addresses, so the two cannot differ.
 
 A sheet's own `sheet_url` is its address. The same scheme gives the
 addresses the sheets point at: the organization sheet's (from each product

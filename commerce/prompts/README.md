@@ -38,7 +38,7 @@ independent of the commerce release, stating which release they target.
 The version is the second line of every prompt's header block:
 
 ```
-- Prompt set 1.5.1, for commerce release 0.5.0.
+- Prompt set 1.6.0, for commerce release 0.5.0.
 ```
 
 The whole set shares one version. The rule:

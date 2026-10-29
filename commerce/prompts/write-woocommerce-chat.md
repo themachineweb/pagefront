@@ -1,6 +1,6 @@
 # Pagefront — write your shop's sheets
 
-- Prompt set 1.5.1, for commerce release 0.5.0.
+- Prompt set 1.6.0, for commerce release 0.5.0.
 - Writes Product sheets (spec 0.11.0), Collection sheets (spec 0.1.0) and the Organization sheet (spec 0.5.0), commerce release 0.5.0.
 - Product spec: https://themachineweb.org/pagefront/spec/commerce/product.md (page: https://themachineweb.org/pagefront/spec/commerce/product)
 - Product schema: https://themachineweb.org/pagefront/spec/commerce/product/v0.11.0.json
@@ -15,7 +15,7 @@ You are writing Pagefront sheets for a shop. Your input is a list of its
 product pages' addresses; the shop itself you find from them (rule 1). A
 Pagefront sheet is a small JSON document that states what a
 product, or the business that sells it, is, in the merchant's own words, for
-machines to read. Your output is the sheets, as files, and a report. Serving
+machines to read. Your output is the sheets, as files in a folder, and a report. Serving
 them, linking them from the shop's pages and checking them end to end are
 later phases, with their own instructions; this one only writes.
 
@@ -117,9 +117,23 @@ no source states to satisfy the Check: rule 3 outranks it. If the address is
 refused, say so in the report.
 
 ### Step 7 — Hand them over
-Each sheet as a file the merchant can download, named by its address's last
-segment (`<id>.<lang>.json`), or, if you cannot make files, as one JSON code
-block each with that filename above it. Then the report (OUTPUT).
+The sheets as one folder the merchant can download, named `commerce`, laid
+out as their addresses are (ADDRESSES): one subfolder per kind, each sheet
+named `<id>.<lang>.json` inside it.
+
+```
+commerce/
+  product/<id>.<lang>.json
+  organization/<id>.<lang>.json
+  collection/<id>.<lang>.json
+```
+
+Hand it over as one archive of that folder where you can make files, with
+the folder at its root. If you cannot make files, give each sheet as one
+JSON code block with its path from `commerce/` above it
+(`commerce/product/<id>.<lang>.json`). The merchant uploads the folder as it
+is to the storage behind their sheet path (serve step); every address then
+resolves. Then the report (OUTPUT).
 
 ## ADDRESSES
 
@@ -131,6 +145,10 @@ Every sheet's address is `<origin><sheet path>/commerce/<kind>/<id>.<lang>.json`
 - `<id>` is the platform's own handle for the thing the sheet describes, as
   the platform's data states it (never cut from a URL);
 - `<lang>` is the sheet's `inLanguage`.
+
+The part after `<sheet path>`, `commerce/<kind>/<id>.<lang>.json`, is the
+sheet's path in the folder you hand over (Step 7): the folder mirrors the
+addresses, so the two cannot differ.
 
 A sheet's own `sheet_url` is its address. The same scheme gives the
 addresses the sheets point at: the organization sheet's (from each product
@@ -415,7 +433,7 @@ the sets you wrote a sheet for).
 
 ## OUTPUT
 
-The sheets (Step 7), then the report, in plain words:
+The folder (Step 7), then the report, in plain words:
 
 - what you found in Step 1;
 - for each sheet: what it carries from the platform's data, what from the

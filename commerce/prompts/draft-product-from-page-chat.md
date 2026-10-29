@@ -1,6 +1,6 @@
 # Pagefront — draft a product sheet from a page
 
-- Prompt set 1.5.1, for commerce release 0.5.0.
+- Prompt set 1.6.0, for commerce release 0.5.0.
 - Targets the Product sheet, spec version 0.11.0, in commerce release 0.5.0. Source: https://themachineweb.org/pagefront/publish/assistant
 - Spec: https://themachineweb.org/pagefront/spec/commerce/product.md (page: https://themachineweb.org/pagefront/spec/commerce/product)
 - Schema: https://themachineweb.org/pagefront/spec/commerce/product/v0.11.0.json
@@ -179,9 +179,13 @@ and the schema state for the rest. Three envelope values are this prompt's
 own decisions:
 
 ```
-sheet_url     propose <canonical URL without extension>.<lang>.json and tell
-              the merchant it is a placeholder until they decide where they
-              will serve the file
+sheet_url     propose <origin>/pagefront/commerce/product/<id>.<lang>.json,
+              where <origin> is the page's scheme and host and <id> the
+              last segment of the page's canonical address, lower case,
+              without a file extension; tell the merchant it is a
+              placeholder until they decide where they will serve the file,
+              and that the file's place is commerce/product/<id>.<lang>.json
+              in whatever they serve under /pagefront
 generated_at  the moment you are writing, ISO 8601 UTC
 expires_at    omit; the merchant has no expiry policy yet
 ```
