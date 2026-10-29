@@ -4,6 +4,17 @@ The prompt set's own semver; see "Versioning" in [`README.md`](README.md).
 
 ## Unreleased
 
+## 1.5.1 — unreleased
+
+For commerce release 0.5.0.
+
+- How to call the Check: POST the sheet as the request body where the tool
+  allows it; the URL form takes a sheet up to about 60 KB once encoded and
+  a longer one is refused at the edge before the checker sees it, so the
+  JSON is serialized compactly. A Shopify run had its first Check of an
+  indented collection sheet fail at the edge and pass once compact; the
+  core prompt's chat route offered only the URL form.
+
 ## 1.5.0 — 2026-10-29
 
 For commerce release 0.5.0.
