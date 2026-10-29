@@ -50,11 +50,14 @@ The whole set shares one version. The rule:
   release line), bumps the set and adds a changelog entry; see "Releasing"
   in [`../../CONTRIBUTING.md`](../../CONTRIBUTING.md).
 
-Changes are recorded in [`CHANGELOG.md`](CHANGELOG.md) under "Unreleased"
-and dated when the set is tagged. The set is tagged
-`commerce-prompts-v<semver>` on `main`, following the `lint-*` tag pattern
-in `CONTRIBUTING.md`: the tag goes on a commit that is already on `main`
-and carries the version the prompts state.
+Changes are recorded in [`CHANGELOG.md`](CHANGELOG.md): a change lands
+with its version bump, its entry and the entry's date in the same pull
+request. The set is tagged `commerce-prompts-v<semver>` at a commerce
+release, which rebuilds the prompts, and at any other time the owner wants
+to cite a set; a tag goes on a commit that is already on `main` and carries
+the version the prompts state, following the `lint-*` tag pattern in
+`CONTRIBUTING.md`. Nothing is published by the tag; the site serves the
+prompts from `main`.
 
 ## Where the site renders them
 

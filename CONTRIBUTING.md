@@ -299,7 +299,9 @@ Tag names:
   packages, and match the published versions. Pushing one publishes the
   package.
 - `commerce-prompts-v<semver>` marks a version of the prompt set in
-  `commerce/prompts/`, and matches the version the prompts state.
+  `commerce/prompts/`, and matches the version the prompts state. It is
+  set at a commerce release and otherwise only when a set is worth citing;
+  a prompt change needs no tag.
 - Sheet specs are not tagged. A release tag pins them through
   `releases.json`.
 
