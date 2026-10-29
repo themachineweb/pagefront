@@ -4,7 +4,7 @@ The prompt set's own semver; see "Versioning" in [`README.md`](README.md).
 
 ## Unreleased
 
-## 1.5.0 — unreleased
+## 1.5.0 — 2026-10-29
 
 For commerce release 0.5.0.
 
