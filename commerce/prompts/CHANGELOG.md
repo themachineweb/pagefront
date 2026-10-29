@@ -25,6 +25,10 @@ For commerce release 0.5.0.
   country in the URL as a source, which the spec forbids.
 - The header describes the spec as a field reference whose design notes
   are not needed to write a sheet.
+- Text taken from structured data or from HTML is decoded, so a value
+  reads as the page shows it. A Shopify run had copied sixteen FAQ answers
+  with `&#39;` where the page shows an apostrophe, and a description with
+  the HTML's indentation.
 
 ## 1.4.0 — 2026-10-28
 
