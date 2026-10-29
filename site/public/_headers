@@ -17,6 +17,8 @@
 	Content-Type: text/markdown; charset=utf-8
 /pagefront/spec/commerce/collection.md
 	Content-Type: text/markdown; charset=utf-8
+/pagefront/spec/commerce/collection-notes.md
+	Content-Type: text/markdown; charset=utf-8
 /pagefront/spec/commerce/vocabulary.md
 	Content-Type: text/markdown; charset=utf-8
 /pagefront/spec/commerce/rules.md

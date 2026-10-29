@@ -89,6 +89,9 @@ pagefront/
 │   │   ├── organization.md         Organization sheet, the field reference
 │   │   ├── organization-notes.md   Organization sheet design notes (non-normative)
 │   │   ├── organization.json       Organization sheet JSON Schema, editable head
+│   │   ├── collection.md           Collection sheet, the field reference
+│   │   ├── collection-notes.md     Collection sheet design notes (non-normative)
+│   │   ├── collection.json         Collection sheet JSON Schema, editable head
 │   │   ├── vocabulary.md           pagefront: extension vocabulary
 │   │   ├── releases.md             Versioning scheme, release table and notes
 │   │   ├── releases.json           The release table, for machines
