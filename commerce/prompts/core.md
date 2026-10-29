@@ -91,6 +91,15 @@ platform with no section there is outside this version.
    unavailable. Where the page contradicts the data on anything else, leave the
    field out.
 5. **Plain words** in the report. The merchant is not a developer.
+<!-- route: chat -->
+6. **This conversation only.** Use nothing you remember from other
+   conversations, with this merchant or with anyone: no shop detail, no
+   value, no earlier sheet, no preference, no correction. What was
+   discussed before is not a source under rule 3, and a value or a decision
+   carried over from it would corrupt the run. Every value comes from what
+   you read in this conversation; where a memory feature is on, set it
+   aside for this task.
+<!-- /route -->
 <!-- route: code -->
 6. **Read-only.** Plain `GET` requests: to the shop's public pages and
    public API, with an `Accept-Language` matching the shop's language, and to

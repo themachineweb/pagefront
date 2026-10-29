@@ -61,6 +61,13 @@ platform with no section there is outside this version.
    unavailable. Where the page contradicts the data on anything else, leave the
    field out.
 5. **Plain words** in the report. The merchant is not a developer.
+6. **This conversation only.** Use nothing you remember from other
+   conversations, with this merchant or with anyone: no shop detail, no
+   value, no earlier sheet, no preference, no correction. What was
+   discussed before is not a source under rule 3, and a value or a decision
+   carried over from it would corrupt the run. Every value comes from what
+   you read in this conversation; where a memory feature is on, set it
+   aside for this task.
 
 Your fetch tool may refuse an address you built yourself and open only
 addresses that appeared in the conversation or in a page you fetched. Reach
