@@ -86,7 +86,8 @@ pagefront/
 │   │   ├── product.md              Product sheet, the field reference
 │   │   ├── product-notes.md        Product sheet design notes (non-normative)
 │   │   ├── product.json            Product sheet JSON Schema, editable head
-│   │   ├── organization.md         Organization sheet, prose spec
+│   │   ├── organization.md         Organization sheet, the field reference
+│   │   ├── organization-notes.md   Organization sheet design notes (non-normative)
 │   │   ├── organization.json       Organization sheet JSON Schema, editable head
 │   │   ├── vocabulary.md           pagefront: extension vocabulary
 │   │   ├── releases.md             Versioning scheme, release table and notes

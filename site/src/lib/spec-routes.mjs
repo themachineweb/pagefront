@@ -47,6 +47,11 @@ export const SPEC_DOCS = {
       `Normative. Organization Sheet spec ${currentSheetSpec('organization')}, in commerce release ${CURRENT_RELEASE}: ${MATURITY}`,
     blurb:
       'The publisher’s own statement of who they are — the entity behind the products.',
+    notes: {
+      id: 'commerce/spec/organization-notes',
+      source: 'commerce/spec/organization-notes.md',
+      route: 'commerce/organization-notes',
+    },
   },
   'commerce/spec/collection': {
     route: 'commerce/collection',
