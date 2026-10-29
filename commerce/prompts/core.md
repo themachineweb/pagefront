@@ -5,7 +5,7 @@
 # Pagefront — write your shop's sheets (code assistant)
 <!-- /route -->
 
-- Prompt set 1.6.0, for commerce release 0.5.0.
+- Prompt set 1.7.0, for commerce release 0.5.0.
 - Writes Product sheets (spec 0.11.0), Collection sheets (spec 0.1.0) and the Organization sheet (spec 0.5.0), commerce release 0.5.0.
 - Product spec: https://themachineweb.org/pagefront/spec/commerce/product.md (page: https://themachineweb.org/pagefront/spec/commerce/product)
 - Product schema: https://themachineweb.org/pagefront/spec/commerce/product/v0.11.0.json
@@ -30,7 +30,7 @@ alone. A Pagefront sheet is a small JSON document that states what a
 <!-- /route -->
 product, or the business that sells it, is, in the merchant's own words, for
 <!-- route: chat -->
-machines to read. Your output is the sheets, as files in a folder, and a report. Serving
+machines to read. Your output is the sheets, in one zip archive, and a report. Serving
 <!-- /route -->
 <!-- route: code -->
 machines to read. Your output is the sheets, as files in a folder, and a
@@ -204,23 +204,25 @@ to satisfy the linter: rule 3 outranks it. Keep each sheet's final report.
 
 ### Step 7 — Hand them over
 <!-- route: chat -->
-The sheets as one folder the merchant can download, named `commerce`, laid
-out as their addresses are (ADDRESSES): one subfolder per kind, each sheet
-named `<id>.<lang>.json` inside it.
+One file the merchant can download: `commerce.zip`, a zip archive holding
+one folder named `commerce` at its root, laid out as the sheets' addresses
+are (ADDRESSES): one subfolder per kind, each sheet named `<id>.<lang>.json`
+inside it.
 
 ```
-commerce/
-  product/<id>.<lang>.json
-  organization/<id>.<lang>.json
-  collection/<id>.<lang>.json
+commerce.zip
+└── commerce/
+    ├── product/<id>.<lang>.json
+    ├── organization/<id>.<lang>.json
+    └── collection/<id>.<lang>.json
 ```
 
-Hand it over as one archive of that folder where you can make files, with
-the folder at its root. If you cannot make files, give each sheet as one
-JSON code block with its path from `commerce/` above it
-(`commerce/product/<id>.<lang>.json`). The merchant uploads the folder as it
-is to the storage behind their sheet path (serve step); every address then
-resolves. Then the report (OUTPUT).
+Nothing else goes in the archive: no report, no sources, no folder for the
+shop. The merchant unpacks it and uploads the `commerce` folder as it is to
+the storage behind their sheet path (serve step); every address then
+resolves. If you cannot make files at all, say so, and give each sheet as
+one JSON code block with its path from `commerce/` above it
+(`commerce/product/<id>.<lang>.json`). Then the report (OUTPUT).
 <!-- /route -->
 <!-- route: code -->
 In the working directory, one folder for the shop:
@@ -434,7 +436,7 @@ the sets you wrote a sheet for).
 ## OUTPUT
 
 <!-- route: chat -->
-The folder (Step 7), then the report, in plain words:
+`commerce.zip` (Step 7), then the report, in plain words:
 <!-- /route -->
 <!-- route: code -->
 The folder (Step 7), then the report, in plain words, also saved as
