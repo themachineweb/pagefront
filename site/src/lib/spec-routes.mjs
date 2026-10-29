@@ -58,6 +58,11 @@ export const SPEC_DOCS = {
       `Normative. Collection Sheet spec ${currentSheetSpec('collection')}, in commerce release ${CURRENT_RELEASE}: ${MATURITY}`,
     blurb:
       'The listing page: categories, curated collections and brand collections, with their members, their parents and the catalogue entry point.',
+    notes: {
+      id: 'commerce/spec/collection-notes',
+      source: 'commerce/spec/collection-notes.md',
+      route: 'commerce/collection-notes',
+    },
   },
   'commerce/spec/vocabulary': {
     route: 'commerce/vocabulary',
