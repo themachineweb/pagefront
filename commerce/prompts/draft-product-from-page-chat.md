@@ -1,6 +1,6 @@
 # Pagefront — draft a product sheet from a page
 
-- Prompt set 1.5.0, for commerce release 0.5.0.
+- Prompt set 1.5.1, for commerce release 0.5.0.
 - Targets the Product sheet, spec version 0.11.0, in commerce release 0.5.0. Source: https://themachineweb.org/pagefront/publish/assistant
 - Spec: https://themachineweb.org/pagefront/spec/commerce/product.md (page: https://themachineweb.org/pagefront/spec/commerce/product)
 - Schema: https://themachineweb.org/pagefront/spec/commerce/product/v0.11.0.json
@@ -140,11 +140,13 @@ and do not print it.
 Draft the sheet, then validate it before presenting anything, and correct
 it until it passes. Use the first of these you can:
 
-- If you can fetch URLs: fetch
+- If you can fetch URLs: POST the sheet JSON as the request body to
+  `https://themachineweb.org/pagefront/commerce/validate.json` where your
+  tool allows it; otherwise fetch
   `https://themachineweb.org/pagefront/commerce/validate.json?sheet=<the sheet JSON, URL-encoded>`.
-  The URL form takes sheets up to about 60 KB once encoded, many times the
-  size of a first sheet. If you can send a request body, POST the JSON to
-  the same URL instead.
+  The URL form takes a sheet up to about 60 KB once encoded, many times the
+  size of a first sheet; a longer one is refused at the edge before the
+  checker sees it, so serialize the JSON compactly, without indentation.
   The response is JSON. `"kind": "report"` carries `summary` and `findings`;
   `"kind": "layer1"` carries `schemaErrors`, meaning the structure is wrong;
   `"invalid-json"` and `"scope-error"` mean the envelope is wrong.

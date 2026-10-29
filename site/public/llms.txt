@@ -28,7 +28,7 @@ Commerce release 0.5.0 is the current release. It bundles the Product Sheet spec
 - [Collection sheet JSON Schema 0.1.0](https://themachineweb.org/pagefront/spec/commerce/collection/v0.1.0.json)
 - [Property Registry](https://themachineweb.org/pagefront/commerce/registry/properties.json): the registered variant dimensions, registry version 0.1.0.
 - [Check](https://themachineweb.org/pagefront/commerce/validate): the hosted checker for people. Given a page URL it checks discovery, the hop to the sheet and the envelope's coherence with the page, then the conformance report; given a sheet URL, the conformance report.
-- [Check endpoint](https://themachineweb.org/pagefront/commerce/validate.json): the same report as JSON. `?url=` with a page URL or a served sheet's URL, `?sheet=` with the sheet JSON URL-encoded (up to about 60 KB), or a POST with the JSON body. Report only, rate-limited.
+- [Check endpoint](https://themachineweb.org/pagefront/commerce/validate.json): the same report as JSON. `?url=` with a page URL or a served sheet's URL, `?sheet=` with the sheet JSON URL-encoded (up to about 60 KB; a longer URL is refused at the edge), or a POST with the JSON body (up to 1 MB), the form to prefer. Report only, rate-limited.
 
 ## Publishing and consuming
 

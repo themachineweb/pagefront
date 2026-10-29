@@ -62,7 +62,7 @@ const legacyFormat = LEGACY_FORMATS[LEGACY_FORMATS.length - 1];
 
     <p class="tool-meta">
       Commerce release {CURRENT_RELEASE} (Product Sheet spec {currentSheetSpec('product')}, Organization Sheet spec {currentSheetSpec('organization')}) and legacy sheets carrying <code>format_version</code> {legacyFormat}.
-      Programs can ask for the same result as JSON from <code>/pagefront/commerce/validate.json</code> with <code>?url=…</code>, <code>?sheet=…</code> or a POST body.
+      Programs can ask for the same result as JSON from <code>/pagefront/commerce/validate.json</code> with <code>?url=…</code>, <code>?sheet=…</code> (a sheet up to about 60 KB once URL-encoded) or a POST body (up to 1 MB).
       Rule catalogue: <a href={RULES_URL}>{RULES_URL}</a>.
       Linter design: <a href={LINTER_URL}>{LINTER_URL}</a>.
     </p>

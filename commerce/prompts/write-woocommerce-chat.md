@@ -1,6 +1,6 @@
 # Pagefront — write your shop's sheets
 
-- Prompt set 1.5.0, for commerce release 0.5.0.
+- Prompt set 1.5.1, for commerce release 0.5.0.
 - Writes Product sheets (spec 0.11.0), Collection sheets (spec 0.1.0) and the Organization sheet (spec 0.5.0), commerce release 0.5.0.
 - Product spec: https://themachineweb.org/pagefront/spec/commerce/product.md (page: https://themachineweb.org/pagefront/spec/commerce/product)
 - Product schema: https://themachineweb.org/pagefront/spec/commerce/product/v0.11.0.json
@@ -105,9 +105,13 @@ Per PRODUCT SHEETS, reading the platform as its section says.
 Per ORGANIZATION SHEET.
 
 ### Step 6 — Check what you can
-If your fetch tool will open it, check each sheet with
-`https://themachineweb.org/pagefront/commerce/validate.json?sheet=<the sheet,
-URL-encoded>`; correct every schema error and every finding of severity
+If your fetch tool will open it, check each sheet at
+`https://themachineweb.org/pagefront/commerce/validate.json`: POST the sheet
+JSON as the request body where the tool allows it; otherwise fetch the URL
+with `?sheet=<the sheet, URL-encoded>`. The URL form takes a sheet up to
+about 60 KB once encoded, and a longer one is refused at the edge before the
+checker sees it, so serialize the JSON compactly, without indentation.
+Correct every schema error and every finding of severity
 `error` using only what the sources state, and check again. Never add a value
 no source states to satisfy the Check: rule 3 outranks it. If the address is
 refused, say so in the report.
