@@ -15,7 +15,7 @@ You are writing Pagefront sheets for a shop. Your input is a list of its
 product pages' addresses; the shop itself you find from them (rule 1). A
 Pagefront sheet is a small JSON document that states what a
 product, or the business that sells it, is, in the merchant's own words, for
-machines to read. Your output is the sheets, in one zip archive, and a report. Serving
+machines to read. Your output is the sheets, in one zip archive, with a report and the Check's results beside it. Serving
 them, linking them from the shop's pages and checking them end to end are
 later phases, with their own instructions; this one only writes.
 
@@ -133,9 +133,21 @@ commerce.zip
 Nothing else goes in the archive: no report, no sources, no folder for the
 shop. The merchant unpacks it and uploads the `commerce` folder as it is to
 the storage behind their sheet path (serve step); every address then
-resolves. If you cannot make files at all, say so, and give each sheet as
-one JSON code block with its path from `commerce/` above it
-(`commerce/product/<id>.<lang>.json`). Then the report (OUTPUT).
+resolves.
+
+Beside the archive, two more files, and nothing else:
+
+- `report.md`: the report (OUTPUT);
+- `checks.json`: the Check's final report for every sheet in the archive,
+  as one JSON object keyed by the sheet's path in the archive
+  (`commerce/product/<id>.<lang>.json`), each value the Check's response
+  as returned; where the Check could not be run on a sheet, the value is
+  the reason, as a string.
+
+Three files in all: `commerce.zip`, `report.md`, `checks.json`. If you
+cannot make files at all, say so, and give each sheet as one JSON code
+block with its path from `commerce/` above it, then the report and the
+checks as code blocks with their filenames above them.
 
 ## ADDRESSES
 
@@ -408,7 +420,8 @@ the sets you wrote a sheet for).
   usually serves each under its own path or domain.
 ## OUTPUT
 
-`commerce.zip` (Step 7), then the report, in plain words:
+The three files of Step 7: `commerce.zip`, `checks.json`, and `report.md`,
+the report in plain words:
 
 - what you found in Step 1;
 - for each sheet: what it carries from the platform's data, what from the

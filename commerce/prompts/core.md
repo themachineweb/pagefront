@@ -30,7 +30,7 @@ alone. A Pagefront sheet is a small JSON document that states what a
 <!-- /route -->
 product, or the business that sells it, is, in the merchant's own words, for
 <!-- route: chat -->
-machines to read. Your output is the sheets, in one zip archive, and a report. Serving
+machines to read. Your output is the sheets, in one zip archive, with a report and the Check's results beside it. Serving
 <!-- /route -->
 <!-- route: code -->
 machines to read. Your output is the sheets, as files in a folder, and a
@@ -220,9 +220,21 @@ commerce.zip
 Nothing else goes in the archive: no report, no sources, no folder for the
 shop. The merchant unpacks it and uploads the `commerce` folder as it is to
 the storage behind their sheet path (serve step); every address then
-resolves. If you cannot make files at all, say so, and give each sheet as
-one JSON code block with its path from `commerce/` above it
-(`commerce/product/<id>.<lang>.json`). Then the report (OUTPUT).
+resolves.
+
+Beside the archive, two more files, and nothing else:
+
+- `report.md`: the report (OUTPUT);
+- `checks.json`: the Check's final report for every sheet in the archive,
+  as one JSON object keyed by the sheet's path in the archive
+  (`commerce/product/<id>.<lang>.json`), each value the Check's response
+  as returned; where the Check could not be run on a sheet, the value is
+  the reason, as a string.
+
+Three files in all: `commerce.zip`, `report.md`, `checks.json`. If you
+cannot make files at all, say so, and give each sheet as one JSON code
+block with its path from `commerce/` above it, then the report and the
+checks as code blocks with their filenames above them.
 <!-- /route -->
 <!-- route: code -->
 In the working directory, one folder for the shop:
@@ -436,7 +448,8 @@ the sets you wrote a sheet for).
 ## OUTPUT
 
 <!-- route: chat -->
-`commerce.zip` (Step 7), then the report, in plain words:
+The three files of Step 7: `commerce.zip`, `checks.json`, and `report.md`,
+the report in plain words:
 <!-- /route -->
 <!-- route: code -->
 The folder (Step 7), then the report, in plain words, also saved as

@@ -10,9 +10,11 @@ For commerce release 0.5.0.
 
 - Chat route, Step 7: the handover is one file, `commerce.zip`, a zip
   archive with the `commerce` folder at its root and nothing else in it.
-  The merchant unpacks it and uploads the folder as it is. Code blocks with
-  paths remain the fallback only where the assistant cannot make files at
-  all, and it says so.
+  The merchant unpacks it and uploads the folder as it is. Beside it,
+  `report.md` (the report) and `checks.json` (the Check's final report per
+  sheet, keyed by the sheet's path in the archive), and nothing else: three
+  files in all. Code blocks with paths remain the fallback only where the
+  assistant cannot make files at all, and it says so.
 
 ## 1.6.0 — 2026-10-29
 
