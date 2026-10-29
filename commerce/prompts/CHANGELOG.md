@@ -4,6 +4,16 @@ The prompt set's own semver; see "Versioning" in [`README.md`](README.md).
 
 ## Unreleased
 
+## 1.7.0 — 2026-10-29
+
+For commerce release 0.5.0.
+
+- Chat route, Step 7: the handover is one file, `commerce.zip`, a zip
+  archive with the `commerce` folder at its root and nothing else in it.
+  The merchant unpacks it and uploads the folder as it is. Code blocks with
+  paths remain the fallback only where the assistant cannot make files at
+  all, and it says so.
+
 ## 1.6.0 — 2026-10-29
 
 For commerce release 0.5.0.

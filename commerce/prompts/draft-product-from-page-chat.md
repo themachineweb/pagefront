@@ -1,6 +1,6 @@
 # Pagefront — draft a product sheet from a page
 
-- Prompt set 1.6.0, for commerce release 0.5.0.
+- Prompt set 1.7.0, for commerce release 0.5.0.
 - Targets the Product sheet, spec version 0.11.0, in commerce release 0.5.0. Source: https://themachineweb.org/pagefront/publish/assistant
 - Spec: https://themachineweb.org/pagefront/spec/commerce/product.md (page: https://themachineweb.org/pagefront/spec/commerce/product)
 - Schema: https://themachineweb.org/pagefront/spec/commerce/product/v0.11.0.json
