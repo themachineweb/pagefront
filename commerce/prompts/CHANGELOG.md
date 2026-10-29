@@ -15,6 +15,10 @@ For commerce release 0.5.0.
   sheet, keyed by the sheet's path in the archive), and nothing else: three
   files in all. Code blocks with paths remain the fallback only where the
   assistant cannot make files at all, and it says so.
+- Chat route, rule 6: the assistant uses nothing it remembers from other
+  conversations, with the merchant or with anyone; every value comes from
+  what it reads in this conversation. What a merchant discussed earlier is
+  not a source, and a value or decision carried over would corrupt the run.
 
 ## 1.6.0 — 2026-10-29
 
