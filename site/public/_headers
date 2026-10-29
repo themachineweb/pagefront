@@ -13,6 +13,8 @@
 	Content-Type: text/markdown; charset=utf-8
 /pagefront/spec/commerce/organization.md
 	Content-Type: text/markdown; charset=utf-8
+/pagefront/spec/commerce/organization-notes.md
+	Content-Type: text/markdown; charset=utf-8
 /pagefront/spec/commerce/collection.md
 	Content-Type: text/markdown; charset=utf-8
 /pagefront/spec/commerce/vocabulary.md

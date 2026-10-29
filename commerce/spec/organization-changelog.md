@@ -7,6 +7,7 @@ _Entries dated before 2026-10-01 were written under the legacy scheme, in which 
 ### Unreleased
 
 - **Editorial: the changelog moves to this file.** `organization.md` keeps a one-line Changelog section that points here; the entries are unchanged.
+- **Editorial: the document becomes a field reference; its rationale moves to design notes.** Every section is restyled into one entry per field, with its meaning, shape, source and linter check, and the reasoning behind the fields moves verbatim to [`organization-notes.md`](organization-notes.md), non-normative, one note per heading, each linked from the field it explains with a `why` link; the site renders the notes as footnotes under the spec. The version history under "Versioning" and the ratification clause of the status line move to the notes as well; the reference keeps an example only where a shape is hard to picture. Every heading, every requirement, every rule ID and every anchor the rule catalogue, the linter and the Product Sheet spec link are kept. No rule, field, shape or source changes; no schema change. The notes carry this document's version line and log their changes here.
 - **Editorial: case-study sheet links.** The worked examples link the case-study sheets under their new filenames, which follow the recommended `{id}.{lang}.json` shape (`nitto-knitwear.fr.json`, `zalando.de.json`, `friboo.de.json`); the files carried a `-v0_9` suffix from the legacy format line.
 
 ### 0.5.0 — 2026-10-18

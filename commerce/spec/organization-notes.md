@@ -1,0 +1,282 @@
+# Design notes: Organization Sheet spec
+
+Status: non-normative. These notes explain the Organization Sheet spec, [`organization.md`](organization.md), which governs; a note adds no requirement.
+Design notes for the Organization Sheet spec 0.5.0, commerce release 0.5.0.
+
+Each note opens with a link to the field or section it explains. The reference links a note from the field it explains; on the published page the notes render as footnotes under the spec.
+
+## Why one sheet type carries three shapes
+
+For "One sheet type, three shapes" in [`organization.md`](organization.md#one-sheet-type-three-shapes).
+
+There are two commercially distinct entities behind a product: the manufacturer or brand-of-record (the target of Schema.org `Product.brand`) and the retailer or merchant (the target of Schema.org `Offer.seller`). Schema.org already keeps these on separate link targets in every Product Sheet. They collapse into a single sheet type because the entity's role is a property of the entity. The DTC shape, manufacturer and merchant as one entity playing both roles, is the corpus's founding shape (Nitto, Kimaï, AFS).
+
+One sheet type carries all three because the sheet MUST declare its role(s) explicitly and all role-specific content is optional and role-scoped. A consumer that dereferenced `Product.brand` can confirm the sheet claims `brand_owner`; one that dereferenced `Offer.seller` can confirm it claims `seller`.
+
+## Why a stable sheet URL is desirable
+
+For "Sheet URL and stability" in [`organization.md`](organization.md#sheet-url-and-stability).
+
+A stable URL is desirable: consumers that cached the address keep finding the sheet, and the `pagefront:sheetUrl` hints that product sheets carry stay correct for longer. The organization's domain, a registration number, or a stable slug all make good identifier material for whatever shape the publisher chooses; none is prescribed.
+
+## Why the sheet roots on `Organization` and nests the Brand
+
+For "Base type and the Brand node" in [`organization.md`](organization.md#base-type-and-the-brand-node).
+
+Rooting on `Brand` instead would fail twice over. A brand is a trading name; the company identity block (legal name, registration, address) belongs to an `Organization`, and conflating the two collapses the trading-name/legal-name distinction real merchants rely on. And a pure retailer is nobody's `Product.brand`, so a `Brand`-rooted sheet type could not describe it at all.
+
+- A brand-owner sheet is *"an Organization that owns a Brand."*
+- A retailer sheet is *"an Organization that sells."*
+- A DTC sheet is both, on one node.
+
+## Why `@id` and `name` are the only identifier requirement
+
+For "Required core fields" in [`organization.md`](organization.md#required-core-fields).
+
+There is no GTIN-equivalent identifier requirement. Brands and companies have no universal product-style ID, so the identifier rule for this sheet type is `@id` + `name` only. A `sameAs` authority record SHOULD be declared where one exists (omission is the normal small-brand case). The registration-identity ladder (see "Company identity") adds machine keys where they exist, and none is required.
+
+## Why `sameAs` excludes social profiles
+
+For `sameAs` in [`organization.md`](organization.md#recommended-core-fields).
+
+Social profiles are NOT `sameAs` entries: a handle is platform presence, and it belongs in `pagefront:socialAccount`. Omission is the normal small-brand case: identity then rests on the publisher's domain, the format's primary trust anchor, and no linter rule may warn on absence. Social accounts are not automatically contact channels: an account also offered for support additionally appears in `contactPoint`.
+
+## Why the role values reuse the legal-entity names
+
+For "Role discriminator" in [`organization.md`](organization.md#role-discriminator--pagefrontcommercerole).
+
+The values reuse the role names minted for `pagefront:legalEntity`, adding `seller`, which the product-scoped legalEntity enum lacks. `licensee`, `importer`, and `authorized_representative` remain legalEntity-only: they are per-product compliance declarations.
+
+## Why each brand gets one sheet
+
+For "Cardinality" in [`organization.md`](organization.md#cardinality--one-sheet-per-brand).
+
+Keying each Commerce Organization Sheet by the Brand's `@id` keeps `Product.brand.@id` → sheet resolution deterministic: a brand identity resolves to exactly one sheet. There is no such thing as "the sheet that happens to contain this brand among several."
+
+A private-label brand with no domain of its own anchors on the owner's storefront because that storefront is the only web presence the brand has. The sheet is still one-sheet-per-brand; anchoring changes where the sheet lives, and the count stays one.
+
+The owning `Organization` repeats across that company's brand sheets, carrying the same `Organization.@id` in each, so consumers deduplicate the company by identity while keeping brands distinct.
+
+A multi-brand company that sells all its brands through one storefront states store-wide terms once, on the store's sheet: the same de-duplication the return-policy move buys at product level, applied one level up.
+
+## Why registration identity is a ladder
+
+For "Company registration identity" in [`organization.md`](organization.md#company-registration-identity).
+
+Schema.org has no dedicated property for a company registration number and its register, and machine-key coverage of national registers is uneven. A Commerce Organization Sheet therefore carries registration identity as a ladder of machine keys plus a display form, every rung conditional on the data existing. `leiCode` is global and register-independent; common for large or listed entities. `iso6523Code` coverage is uneven: the German Handelsregister has no ICD, and US state corporate registries have none.
+
+```json
+"identifier": {
+  "@type": "PropertyValue",
+  "propertyID": "RCS",
+  "value": "808 641 435 R.C.S. Nanterre"
+}
+```
+
+or, for a register with no machine key of its own:
+
+```json
+"identifier": {
+  "@type": "PropertyValue",
+  "propertyID": "Handelsregister",
+  "value": "HRB 158855 B, Amtsgericht Charlottenburg Berlin"
+}
+```
+
+The sheet is for machines, but consumers present results to humans, and the display form carries the register court a local reader recognizes. A typical private US company has no LEI, no ISO 6523-covered register (US incorporation is state-level), and publishes no registration number at all. Jurisdiction of incorporation gets no field of its own; Schema.org offers nothing better than the display-form `identifier` value. The sheet is the publisher's authoritative statement, which is why registry-verifiable facts absent from the publisher's own pages are never added. No `pagefront:` term is minted; this is normative guidance over Schema.org-native properties.
+
+## Why authorized resellers are admitted on this sheet
+
+For "Authorized resellers" in [`organization.md`](organization.md#authorized-resellers).
+
+`pagefront:authorizedResellers` is the brand's statement of which sellers it authorizes to sell its products. It is an **authorization claim**. It is admitted on this sheet, which otherwise enumerates neither products nor carried brands (see "What this spec does not address"), on two grounds. First, it is the brand exercising authority over its own distribution: a statement only the brand can make, for which the brand is the sole source. Second, brands already publish and maintain this list (a "Revendeurs" page, a stockists page, a where-to-buy page), so the sheet types an existing publisher statement and imposes no new maintenance burden. It is the one outbound organization→organization edge on the sheet, and it sets no precedent for enumeration: still no products and no carried brands. The sheet's other outbound edge, `hasOfferCatalog`, points at the storefront's root collections and is admitted on its own grounds (see "Catalogue entry point").
+
+The field answers two consumer questions, and each kind of entry serves one of them: the online authorization check, "is this listing grey-market or counterfeit?", where an `Offer.seller` is matched against the `reseller` entries by `@id` when the reseller has its own sheet, or by `url` domain when it does not; and the physical-stockist question, "is this shop an authorized stockist?", "where can I buy this near X?", answered by entries carrying an `address`. Brands' published stockist lists are commonly of this kind, a store locator of physical shops with no web store to name. The `exhaustive` flag applies across both kinds of entry; it is a claim about the list as a whole, online and physical alike, so a brand cannot declare its web resellers complete and its stockists open-ended with one flag.
+
+Schema.org has no authorization relation between a brand and a seller (`member` / `memberOf` is membership, `seller` / `offeredBy` are offer-level, and `availableAtOrFrom` is a place), which is the extension trigger for the `pagefront:` term (see `pagefront:AuthorizedResellers` in the Pagefront Vocabulary).
+
+The example in the reference shows the three entry forms: a department store with its own organization sheet, referenced by `@id` and authorized for France only; an online boutique without a sheet, inline with its `url`; a physical shop without a sheet or a web store, inline with its address.
+
+The consumer's read rides the existing `Product.brand` edge and stays `@id`-keyed, adding no graph structure. It is a read a consumer makes of the brand's sheet in its own right, scoped to this one question. It is not a cross-sheet dependency in the return-policy sense, because no Product Sheet field defers to it.
+
+## Why the return policy lives on the seller sheet
+
+For "Return policy" in [`organization.md`](organization.md#return-policy).
+
+A store's return policy is a property of the store. It lives on the seller block, as `hasMerchantReturnPolicy`, the store-wide default, stated once. Restating it on every Product Sheet would duplicate it and let the copies drift.
+
+This is the format's one semantic cross-sheet dependency, and its cost is accepted. "Can I return this product" is not answerable from the Product Sheet alone when the product is silent; the consumer must also fetch the seller sheet. The read rides the *existing* `Offer.seller` edge and stays `@id`-keyed for identity; `pagefront:sheetUrl` on the reference says where the seller sheet is. It is the one exception to each-sheet-is-self-contained. It is scoped to return and shipping terms and MUST NOT be generalized to other fields.
+
+## Why fulfillment terms reuse `OfferShippingDetails`
+
+For "Fulfillment terms" in [`organization.md`](organization.md#fulfillment-terms).
+
+The term is composition over inheritance. Schema.org scopes `OfferShippingDetails` to the Offer, so the Pagefront term is only the org-level attachment point Schema.org lacks; the payload stays plain Schema.org, and no parallel shipping vocabulary is minted.
+
+An org-level home for store-wide warranty terms is tracked pending a worked example.
+
+## Why store locations use Schema.org's `location`
+
+For "Store locations" in [`organization.md`](organization.md#store-locations).
+
+A seller's own physical stores are self-description, expressed with Schema.org's native `Organization.location`. No `pagefront:` term is minted, because Schema.org already carries it. The consumer question served: "does this retailer have a store near me — where is it, when is it open."
+
+The boundary against `pagefront:authorizedResellers` is the direction of the statement. `location` is the **seller's** statement about its own stores, self-description in Schema.org-native terms. `pagefront:authorizedResellers` is the **brand's** statement about third parties, an authorization relation Schema.org lacks, hence the minted term. A DTC merchant with a boutique declares it in `location`; it does not list itself in `authorizedResellers`, since its own selling is the `seller` role (see "Authorized resellers").
+
+There is no per-store sheet: stores are inline entries on the seller's sheet, and a large chain's list is bounded by what the retailer already publishes in its store locator.
+
+```json
+"location": [
+  {
+    "@type": "Place",
+    "name": "Maison Example — Marais",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "12 rue des Archives",
+      "postalCode": "75004",
+      "addressLocality": "Paris",
+      "addressCountry": "FR"
+    },
+    "openingHoursSpecification": [
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+        "opens": "10:00",
+        "closes": "19:00"
+      }
+    ]
+  }
+]
+```
+
+## Why the catalogue entry point is admitted
+
+For "Catalogue entry point (any role)" in [`organization.md`](organization.md#catalogue-entry-point-any-role).
+
+A consumer holding a product sheet or a listing page can enter the collection tree from `hasOfferCatalog`, and nothing else gives it the roots. A manufacturer's range is organised in categories as a retailer's is, which is why any `pagefront:commerceRole` may carry it.
+
+The field is this sheet's second admitted outbound edge, after `pagefront:authorizedResellers` (see "Linking contract"). The freshness objection that keeps enumeration off this sheet does not apply to it: roots are few and change rarely, and what changes daily, membership, lives in the collection sheets.
+
+No separate catalog sheet exists and none is planned. A Sheet describes a page, a catalog has no page, and the enumeration a catalog sheet would have carried is `hasOfferCatalog` plus the tree below it.
+
+## Why `pagefront:legalEntity` stays on the product
+
+For "Legal entities" in [`organization.md`](organization.md#legal-entities--reference-or-inline).
+
+`pagefront:legalEntity` on the Product Sheet (role-typed accountable entities) partially overlaps this sheet. The overlap is real for `brand_owner` and `manufacturer`, which are stable, catalog-wide facts a Commerce Organization Sheet already states. For the other roles there is no overlap.
+
+```json
+{
+  "@type": "pagefront:LegalEntity",
+  "role": "brand_owner",
+  "organization": { "@type": "Organization", "@id": "https://merchant.com/#org" }
+}
+```
+
+The reference stub removes the drift-prone duplication of stable org data across every product. As facts of legacy format 0.9: the product schema accepts the stub form (`organization.name` is optional when `@id` is present), and linter rule PDP-W-024, the no-postal-address warning, exempts reference stubs, whose address lives on the referenced sheet.
+
+When the entity is a third party with no sheet, there is nothing to reference, and GPSR Art. 19 wants the responsible entity resolvable at the listing itself; compliance-grade data does not move off the product.
+
+`legalEntity` is therefore not redundant with this sheet and is not folded into it: `authorized_representative` and `importer` are per-product, per-market facts about third parties, and `manufacturer` ≠ `brand_owner` for licensed goods, where the manufacturing licensee is named only at the product. Mechanically, a Schema.org `Organization` reduced to `@type` + `@id` is already a reference stub, and the linter's existing stub-vs-inline distinction (PDP-E-001 / PDP-W-020) applies unchanged.
+
+## Why the linking contract is identity only
+
+For "Linking contract (identity only)" in [`organization.md`](organization.md#linking-contract-identity-only).
+
+The whole cross-sheet story is identity resolution by exact-string `@id` match. There is no structured traversal. `@id` identifies the entity, `pagefront:sheetUrl` locates its sheet, and `url` locates its page: the same split as `@id`, `sheet_url` and `url` on variant entries in the Pagefront Spec.
+
+`pagefront:sheetUrl` MAY be stale because the organization sheet's address can change between updates of the product sheet that carries the reference.
+
+The host check differs by edge for a reason each. For `Offer.seller`, the seller is the publisher of the offer, so its terms come from where it publishes. For `Product.brand`, the brand may be a third party, and its statements, `pagefront:authorizedResellers` among them, count only when served from its own origin. For a reference-form `pagefront:legalEntity`, it is the product publisher's own declaration; resolving it grants no inherited trust.
+
+The identity match is checked at the data block's `@id` and at `data.brand` only because a sheet vouches only for itself and its own brand.
+
+Because a seller sheet always resolves on the product sheet's host, return and shipping terms inherited along `Offer.seller` are always the publisher's own statement.
+
+When a seller's `@id` host differs from its sheet's host, the organization's identity is asserted by the publisher, and the identity domain has not confirmed it. A domain-association mechanism, by which an identity domain confirms the storefront domains it controls, is deferred; no catalog sheet is planned, and the catalogue entry point is `hasOfferCatalog` on this sheet (see "Catalogue entry point"). `pagefront:sheetUrl` remains the direct path from a reference.
+
+Step 3 relies on one brand per organization sheet (see "Cardinality"), so `data.brand` is a single node. If multi-brand organization sheets are ever permitted, this rule must be revisited.
+
+The organization sheet's own anchor, its `canonical_url` and the `alternate` link on that page, is unchanged. `pagefront:sheetUrl` is how a sheet is reached by reference; page-based discovery continues to find it from its own page.
+
+## Worked example: two hosts for a retailer and a brand
+
+For "Linking contract (identity only)" in [`organization.md`](organization.md#linking-contract-identity-only).
+
+**A retailer and a brand on two hosts.** A department store on `www.grand-magasin.example` sells a headlamp made by Meridian Gear, whose own site is `meridiangear.com`. The store's product sheet carries:
+
+```json
+"brand": {
+  "@type": "Brand",
+  "@id": "https://meridiangear.com/#brand",
+  "name": "Meridian Gear",
+  "pagefront:sheetUrl": "https://meridiangear.com/pagefront/commerce/organization/meridian-gear.en.json"
+},
+"offers": [
+  {
+    "@type": "Offer",
+    "price": "89.00",
+    "priceCurrency": "EUR",
+    "seller": {
+      "@type": "Organization",
+      "@id": "https://www.grand-magasin.example/#org",
+      "pagefront:sheetUrl": "https://www.grand-magasin.example/pagefront/commerce/organization/grand-magasin.fr.json"
+    }
+  }
+]
+```
+
+- The brand reference passes step 2 because its sheet URL's host, `meridiangear.com`, is the host of its `@id`. In step 3 the consumer finds `https://meridiangear.com/#brand` at `data.brand` in Meridian Gear's sheet, whose `commerceRole` includes `brand_owner`. The consumer can then read that sheet's `pagefront:authorizedResellers` and look for the store (see "Authorized resellers").
+- The seller reference passes step 2 because its sheet URL's host, `www.grand-magasin.example`, is the product sheet's own host. In step 3 the consumer finds `https://www.grand-magasin.example/#org` as the data block's `@id` in the store's sheet, whose `commerceRole` includes `seller`. The store's return and shipping terms apply to the offer where it is silent.
+
+**Identity domain and storefront on two hosts.** A company whose legal identity lives on `boardco.example` sells its board brand from the storefront `boards.example`. Product sheet and organization sheet are both served from `boards.example`; the organization `@id` is minted on the company domain so a second brand's sheet can share it:
+
+```json
+"brand": {
+  "@type": "Brand",
+  "@id": "https://boards.example/#brand",
+  "pagefront:sheetUrl": "https://boards.example/pagefront/commerce/organization/boardco.en.json"
+},
+"offers": [
+  {
+    "@type": "Offer",
+    "seller": {
+      "@type": "Organization",
+      "@id": "https://boardco.example/#org",
+      "pagefront:sheetUrl": "https://boards.example/pagefront/commerce/organization/boardco.en.json"
+    }
+  }
+]
+```
+
+The seller reference passes step 2 on the product sheet's host, `boards.example`; the brand reference passes on its `@id`'s host, also `boards.example`. The sheet declares `https://boardco.example/#org` as its data block `@id` and `https://boards.example/#brand` at `data.brand`. The seller's return and shipping terms are inherited; the seller identity on `boardco.example` is publisher-asserted, and the consumer does not treat it as origin-verified. The AFS Blackbird case study has this shape.
+
+## Why the sheet enumerates neither products nor brands
+
+For "Linking contract (identity only)" in [`organization.md`](organization.md#linking-contract-identity-only).
+
+The organization sheet does not list its products or its carried brands: the graph closes on the identifiers products already emit. It carries two outbound edges, each admitted on its own grounds. `pagefront:authorizedResellers` is a brand's sheet naming the seller organizations it authorizes (see "Authorized resellers"); where a named reseller has its own sheet, the edge resolves by the same exact-string `@id` match. `hasOfferCatalog` is the catalogue entry point (see "Catalogue entry point"): the storefront's root collections, each a Commerce Collection Sheet reached by `pagefront:sheetUrl` and confirmed by exact-string `@id` match at the data block of the fetched sheet.
+
+One read travels the product-to-organization links beyond identity confirmation: return- and shipping-policy resolution (product-else-seller) walks the `Offer.seller` link when a product is silent. It reuses that existing link, locates the seller sheet by the reference's `pagefront:sheetUrl` under the steps above, and is the one accepted exception to self-containment (see "Return policy").
+
+## Worked examples from the case studies
+
+For "Worked examples" in [`organization.md`](organization.md#worked-examples).
+
+- **DTC, all three roles**: the Nitto organization sheet ([`../case-studies/nitto/nitto-knitwear.fr.json`](../case-studies/nitto/nitto-knitwear.fr.json)). MBTJM SAS behind the Nitto Knitwear brand, with the full ten-entry `pagefront:fulfillmentTerms` store policy, the store return policy, registration identity on the `iso6523Code` rung plus the RCS display form, and, since 2026-08-31, a `pagefront:authorizedResellers` statement transcribed from the brand's Revendeurs page: 148 physical stockists across eighteen countries, each an inline `Organization` keyed by name and postal address (the page publishes no websites), with no `exhaustive` claim because a store locator makes none.
+- **Seller-only**: the Zalando organization sheet ([`../case-studies/zalando/zalando.de.json`](../case-studies/zalando/zalando.de.json)). A pure-retailer sheet with `commerceRole: ["seller"]`, registration identity on the `leiCode` rung (`529900YRFFGH5AXU4S86`) plus the Handelsregister display form, that register having no ISO 6523 ICD.
+- **Private-label brand sheet**: the Friboo sheet ([`../case-studies/zalando/friboo.de.json`](../case-studies/zalando/friboo.de.json)). A brand with no domain of its own, anchored on the owner's storefront per the cardinality rule.
+
+## Why these questions stay open
+
+For "What this spec does not address" in [`organization.md`](organization.md#what-this-spec-does-not-address).
+
+Product and carried-brand enumeration stay off the sheet because "what does this store sell" is answered by `hasOfferCatalog` and the Commerce Collection Sheets below it, where membership lives and carries its own freshness. A typed `pagefront:` ownership-structure extension (independent / PE-owned / public / cooperative) is a candidate only if real consumer demand surfaces. A marketplace listing where a third-party partner is the `Offer.seller` needs no new vocabulary; no case study has exercised the shape yet, so the gap is noted as a gap rather than as a design question.
+
+## How this spec reached 0.5.0
+
+For "Versioning" in [`organization.md`](organization.md#versioning).
+
+Ratified 2026-08-14 from the initial sketch, in legacy format version 0.9. It reached 0.3.0 in three minors: the ratified text of 2026-08-14 (0.1.0), `pagefront:authorizedResellers` on 2026-08-31 (0.2.0) and `pagefront:sheetUrl` on 2026-09-30 (0.3.0). 0.4.0, on 2026-10-02, makes `$schema` required; 0.5.0, on 2026-10-18, admits `hasOfferCatalog` as the catalogue entry point and makes `sheet_url` optional.
+
+The next paragraph is history, in legacy format versions. Commerce format 0.9 brings, for this sheet type and its Product Sheet companions: `pagefront:commerceRole`, `pagefront:fulfillmentTerms`, `pagefront:socialAccount` with the `sameAs` tightening (a 2026-08-14 revision, permitted in the pre-1.0 draft phase), `pagefront:authorizedResellers` (added 2026-08-31), the `organization` certification scope value, the product-schema relaxation making `legalEntity` `organization.name` optional when `@id` is present, and the PDP-W-024 exemption for reference stubs. All are additive, with no term renamed or removed, and existing v0.8 sheets stay valid. `pagefront:commerceRole`, `pagefront:fulfillmentTerms`, `pagefront:socialAccount`, and `pagefront:authorizedResellers` are covered by the stability policy from 1.0, under the Pagefront Vocabulary's "Versioning and stability".
