@@ -4,6 +4,22 @@ The prompt set's own semver; see "Versioning" in [`README.md`](README.md).
 
 ## Unreleased
 
+## 1.6.0 — 2026-10-29
+
+For commerce release 0.5.0.
+
+- Chat route, Step 7: the sheets are handed over as one folder named
+  `commerce`, laid out as the addresses are (`commerce/<kind>/<id>.<lang>.json`),
+  as an archive where the assistant can make files and otherwise as code
+  blocks with their path above them. The merchant uploads the folder as it
+  is to the storage behind their sheet path, so the serve step needs no
+  renaming or placing; ADDRESSES states that the path after the sheet path
+  is the file's path in the folder. The code route's folder is unchanged
+  for now.
+- One-product prompt: the placeholder `sheet_url` takes the same shape,
+  `<origin>/pagefront/commerce/product/<id>.<lang>.json`, and the merchant
+  is told where the file goes.
+
 ## 1.5.1 — 2026-10-29
 
 For commerce release 0.5.0.
