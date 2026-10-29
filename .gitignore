@@ -20,3 +20,5 @@ commerce/lint/src/generated/
 # Local tooling state
 site/.wrangler/
 .claude/
+CLAUDE.md
+.claude/

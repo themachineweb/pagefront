@@ -73,7 +73,6 @@ Not yet: verticals beyond commerce (`media/` is reserved).
 pagefront/
 ├── manifesto.md                  Why this exists
 ├── CONTRIBUTING.md               How to contribute
-├── CLAUDE.md                     Working rules for Claude in this repository
 ├── GOVERNANCE.md                 How decisions are made
 ├── LICENSE                       CC BY 4.0 (the specification)
 ├── package.json                  npm workspaces root (lint packages)
