@@ -42,7 +42,10 @@ not settle, you leave out and say so at the end.
    If the page already carries structured data of its own — JSON-LD in a
    script tag, Open Graph meta tags — read it and prefer it. That is the
    merchant's own prior statement, not an inference. Tell them which values
-   you took from it, so they can check that markup was accurate. The price
+   you took from it, so they can check that markup was accurate. Text taken
+   from structured data or from HTML is decoded: an entity such as `&#39;`
+   becomes its character, and markup whitespace is dropped, so the value
+   reads as the page shows it. The price
    is the exception: take it from what the page displays and use the
    structured-data price only to check it. If the two differ, omit the
    offer and flag it at the end.

@@ -77,6 +77,9 @@ platform with no section there is outside this version.
    costs a little completeness; an invented one is worse than publishing
    nothing, because an agent will act on it. inLanguage (the page's declared
    language) and generated_at (the time you write) are exempt.
+   Text taken from structured data or from HTML is decoded: an entity such
+   as `&#39;` becomes its character, and markup whitespace is dropped, so
+   the value reads as the page shows it.
 4. **The platform's data comes first, except for the price and the
    availability.** Where the platform's data states a value, use it; take a
    value from the page only where the data does not hold it. The price is
