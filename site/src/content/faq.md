@@ -87,6 +87,23 @@ of its own. Your feeds keep working exactly as before. A sheet is for a
 broader audience: every machine that reads the web, not the one destination
 a feed was built for.
 
+## How is Pagefront different from UCP?
+
+[UCP](https://ucp.dev/) is a protocol for carrying out a sale. An agent
+finds a business, looks up its catalogue, builds a cart, checks out and
+pays, through endpoints the business runs. Pagefront is a document: a file
+on your domain that states what a product is, read by anything that reads
+the web, with nothing to run.
+
+UCP describes a product as far as a checkout needs: a title, a price, which
+sizes are in stock, a picture, a SKU. What the product is made of, where, by
+whom and to what standard has no field in UCP; it sits in the description
+text, for a machine to extract. A sheet states those as fields.
+
+The two meet rather than compete. A sheet is what an agent reads to decide;
+UCP is how it buys. You can publish a sheet today without running UCP, and
+running UCP is no reason not to.
+
 ## What does it cost, and who do I sign up with?
 
 The standard costs nothing, and you sign up with nobody. There is no
