@@ -35,7 +35,6 @@ Commerce release 0.5.0 is the current release. It bundles the Product Sheet spec
 ## Publishing and consuming
 
 - [Publish](https://themachineweb.org/pagefront/publish): the whole procedure in four steps: write, serve, link, check.
-- [Write prompt, any shop](https://themachineweb.org/pagefront/publish/write/generic.md): a prompt for a chat assistant that drafts a first product sheet from a product page. It asks for the page addresses, reads the specification and the page, writes the sheet and presents it. It never invents a value.
 - [Write prompt, Shopify](https://themachineweb.org/pagefront/publish/write/shopify.md)
 - [Write prompt, WooCommerce](https://themachineweb.org/pagefront/publish/write/woocommerce.md)
 - [Consume](https://themachineweb.org/pagefront/consume): how to find a sheet from the page that links to it, fetch it, read the envelope and the data, and follow references. No key, no account, no permission.

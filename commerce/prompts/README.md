@@ -62,8 +62,10 @@ prompts from `main`.
 ## Where the site renders them
 
 - The built chat prompts: `/pagefront/publish/write/<platform>`, for
-  `generic`, `shopify` and `woocommerce`, each with a markdown twin at the
-  same path plus `.md`.
+  `shopify` and `woocommerce`, each with a markdown twin at the same path
+  plus `.md`. The generic prompts (`write-generic-chat.md`,
+  `write-generic-code.md`) are built and committed with the set and are not
+  rendered on the site.
 - The one-product prompt: `/pagefront/publish/assistant`, with its twin at
   `/pagefront/publish/assistant.md`.
 - The code-route prompts are in the site's collection and have no page yet.

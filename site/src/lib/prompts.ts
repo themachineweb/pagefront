@@ -6,9 +6,12 @@
  */
 import { getCollection, type CollectionEntry } from 'astro:content';
 
-/** The platforms with a write page, in the order the pages list them. */
+/**
+ * The platforms with a write page, in the order the pages list them. The
+ * generic prompts (write-generic-*.md) are built and committed with the set
+ * and have no page: on another platform, the developer version is the route.
+ */
 export const WRITE_PLATFORMS = {
-  generic: { label: 'any shop', titleSuffix: 'any platform' },
   shopify: { label: 'Shopify', titleSuffix: 'Shopify' },
   woocommerce: { label: 'WooCommerce', titleSuffix: 'WooCommerce' },
 } as const;
