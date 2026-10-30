@@ -49,6 +49,22 @@ For the spec as a whole, [`product.md`](product.md).
 
 A completeness score is a valuation, and valuations differ per consumer: a compliance agent weights legal entities heavily, a visual-shopping agent weights media. No single score would be right for both, so the sheet carries none. Scoring is consumer-side, over the shared dimension taxonomy in [`scoring.md`](scoring.md); the linter judges correctness only.
 
+## Why a platform-served value is a merchant statement
+
+For "Merchant statements" in [`product.md`](product.md#merchant-statements).
+
+The reference had two kinds of source scattered through its entries, the page and "the platform's data", and a third kind it forbade field by field: a checkout address built from a URL pattern, a tax basis read off a domain, a market read off a currency. The section names the three once so that an entry can refer to them. The trigger was a platform turning a commerce protocol on for every shop it hosts unless the merchant turns it off: in 2026 Shopify began serving UCP from its eligible merchants' storefronts by default. A value served that way is one the merchant never composed, and the question was whether a producer may publish it as the merchant's.
+
+It may, on three grounds. The value is served from the merchant's own domain, so it is the merchant's publication in the sense Pagefront already relies on for the page. It is read from the merchant's own store data, the same records the dashboard shows the merchant, so it states nothing the merchant has not entered somewhere. And the merchant can turn the protocol off, so leaving it on is an acceptance, in the way leaving a product feed on is. The merchant of record is the merchant. What distinguishes the third category is that the merchant stated nothing at all: a producer that expands a platform's cart-link pattern for a shop that has not enabled cart links is the author of that address, and a producer that reads a value from an aggregator is publishing the aggregator's statement under the merchant's name.
+
+A platform-served statement covers what a transaction needs: a title, a price, which variants are in stock, a picture, an identifier, a checkout hand-off. What the product is made of, where, by whom and to what standard has no field there and stays in the merchant's authored content. The two sources therefore overlap on few fields, and where they do the reference keeps the rule it already had: `price` and `availability` are what the shopper is shown on the page, and a platform-served amount or stock signal only checks them (see "Why `price` is the displayed consumer price"). An agent channel may be quoted a price the page does not show, and a sheet states the page's.
+
+Three questions stay open:
+
+1. **Precedence on other fields.** Where an authored value and a platform-served value disagree on a field whose entry names no source, the producer leaves the field out and reports it. Whether an entry should name a precedence instead, field by field, waits for cases where the disagreement is common.
+2. **A provenance annotation.** A sheet does not say which source each value came from. A consumer that wants to weigh an authored value over a platform-served one has no field to read, and nothing is minted for it until a consumer asks for it.
+3. **Protocol hand-off addresses.** Whether a checkout address a commerce protocol hands over is a checkout link in the template's sense, with `quantity` as its one variable, is decided once such addresses are seen in practice; until then it qualifies as a source and the template rules apply unchanged.
+
 ## Why a product carries more than one GTIN
 
 For "Multiple GTINs" in [`product.md`](product.md#multiple-gtins).
