@@ -62,7 +62,9 @@ others, and reports what it could not find.
 Pick the platform where your catalogue lives. The prompt works out what
 renders your pages.
 
-<p><a class="pf-cta" href="/pagefront/publish/write/shopify">Shopify <span aria-hidden="true">→</span></a> <a class="pf-cta" href="/pagefront/publish/write/woocommerce">WooCommerce <span aria-hidden="true">→</span></a> <a class="pf-cta" href="/pagefront/publish/write/generic">Any other platform <span aria-hidden="true">→</span></a></p>
+<p><a class="pf-cta" href="/pagefront/publish/write/shopify">Shopify <span aria-hidden="true">→</span></a> <a class="pf-cta" href="/pagefront/publish/write/woocommerce">WooCommerce <span aria-hidden="true">→</span></a></p>
+
+On another platform, the upcoming developer version is the route.
 
 What comes back is a draft. The assistant reads your shop the way a visitor
 does, and it will get things wrong: a struck-through price taken as the price,
