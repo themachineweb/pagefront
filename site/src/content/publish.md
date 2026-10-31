@@ -27,8 +27,8 @@ your-shop.example/product/anorak.en.json  the sheet you add
 
 Four steps: write it, serve it, link it, check it.
 
-A version for developers and agencies, with one code-assistant prompt
-that does all four steps, is coming.
+This page takes you through them by hand, to your first sheets, live on
+your domain. For your whole catalogue, use the upcoming developer version.
 
 ## 1. Write the sheet
 
