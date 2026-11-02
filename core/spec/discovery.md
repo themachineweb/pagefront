@@ -43,7 +43,7 @@ Link: <https://merchant.example/api/sheets/anorak.en.json>;
 
 **Carriers (non-exhaustive).** At v0.9 the declaration is carried by `Link: rel="alternate"` on the canonical page response, with the HTML `<link>` element as fallback; both together are recommended. A publisher that cannot set response headers declares the sheet with the `<link>` element alone; that carrier conforms on its own. Later versions may register additional carriers. A carrier is conformant if the declaration originates from the publisher's origin, or from the DNS zone of the publisher's domain.
 
-Non-normative serving recommendation: publishers should serve sheets with `Access-Control-Allow-Origin: *`. Sheets are machine-facing public documents, and open CORS lets browser-based consumers (including the hosted checker at `/pagefront/commerce/validate`) read them directly. Publishers should also let search crawlers index sheet URLs and list them in the sitemap: consumers that reach the web through a search index fetch only what that index holds, and a sheet the index has never seen is out of their reach even when the page declares it. A sitemap entry is a reachability aid for those consumers and nothing more; discovery still follows the declaration, and a consumer MUST NOT take a sitemap entry as one.
+Non-normative serving recommendation: publishers should serve sheets with `Access-Control-Allow-Origin: *`. Sheets are machine-facing public documents, and open CORS lets browser-based consumers (including the hosted checker at `/pagefront/commerce/validate`) read them directly. Publishers should also let search crawlers index sheet URLs and list them in the sitemap: consumers that reach the web through a search index fetch only what that index holds, and a sheet the index has never seen is out of their reach even when the page declares it. A sitemap entry is a reachability aid for those consumers and nothing more; discovery still follows the declaration, and a consumer MUST NOT take a sitemap entry as one. A Sheet found through an index needs the check in (b) under "Provenance" before a consumer presents it as the publisher's statement.
 
 ## Entry point
 
@@ -65,7 +65,26 @@ The suffix `pagefront` is intended for registration in the IANA Well-Known URIs 
 
 **Confirmation.** A consumer following a hint reads the Sheet URL it carries, fetches the Sheet, and confirms the fetched Sheet's data-block `@id` matches the reference's `@id` by exact string. On a mismatch, or when the hint is absent or fails, it fetches the reference's `url` and follows the `alternate` link that page declares.
 
-**Sheets reached by reference.** Page-based discovery (`alternate`) finds the Sheet for the page being read. A Sheet reached by reference from another Sheet is located by the URL the referencing Sheet declares, under the rule above. The prohibition on constructing Sheet URLs is unchanged: a reference that declares no URL leaves its Sheet undiscovered.
+**Sheets reached by reference.** Page-based discovery (`alternate`) finds the Sheet for the page being read. A Sheet reached by reference from another Sheet is located by the URL the referencing Sheet declares, under the rule above. The prohibition on constructing Sheet URLs is unchanged: a reference that declares no URL leaves its Sheet undiscovered. Whether the Sheet a consumer starts from is its publisher's statement at all is settled under "Provenance" below.
+
+## Provenance (normative)
+
+A consumer can hold a Sheet it did not reach through a declaration: a search index, a sitemap, a conversation or a page on another site can hand it the Sheet's URL directly. `canonical_url` is the Sheet's own claim about which page it describes, `sheet_url` is informational, and the confirmation step under "Traversal hints" covers only a Sheet reached from another Sheet. Nothing inside a Sheet shows that the publisher of the page it names made it.
+
+**Attribution (normative).** A Sheet is the statement of the origin of its `canonical_url` only when one of these holds:
+
+- (a) the consumer reached the Sheet through a declaration from that origin: a page-based carrier under "Page-based carriers", or an entry-point carrier under "Entry point", a delegation by DNS included; or
+- (b) the consumer fetches `canonical_url`, following redirects, and finds a `Link` header or a `<link>` element with `rel="alternate"` and `type="application/pagefront+json"` whose target, resolved against the page and followed through the Sheet's own redirects, is exactly the URL the consumer fetched the Sheet from.
+
+A HEAD request on the canonical page satisfies (b) when the header is present, as under "Selection".
+
+**Unattributed Sheets (normative).** A Sheet that meets neither condition is unattributed. A consumer MUST NOT present the contents of an unattributed Sheet as the publisher's statement; this covers its price, its availability, its offer URLs and its identity. A consumer MUST NOT follow the traversal hints of an unattributed Sheet as if they carried the publisher's trust.
+
+**Scope.** A Sheet reached by reference passes the host and `@id` checks its vertical's sheet spec defines. Those checks run after attribution of the Sheet the consumer started from, and they do not replace it.
+
+**What does not establish attribution.** `canonical_url` alone, `sheet_url`, a sitemap entry, a search-index result, the host the Sheet is served from, its Content-Type, its `$schema` and a passing validator report. Each is the Sheet's own claim, or a fact about where its bytes came from, and none is a declaration by the publisher of the page.
+
+**Cache.** Attribution holds while the canonical page's declaration is unchanged. A consumer that keeps an attribution re-checks it when the page's declaration changes, which is the rule under "Traversal hints" on caching a Sheet URL across the target's page changes.
 
 ## Filename convention
 

@@ -7,6 +7,7 @@ The history of [`discovery.md`](discovery.md). Changes land under "Unreleased" a
 Changes land here and are versioned at the next release; see "Releasing" in [`../../CONTRIBUTING.md`](../../CONTRIBUTING.md).
 
 - **Editorial: the changelog moves to this file.** `discovery.md` keeps a one-line Changelog section that points here; the entries are unchanged.
+- **Addition: provenance.** A new section "Provenance" states when a Sheet is the statement of the origin of its `canonical_url`: the consumer reached it through a declaration from that origin (a page-based or entry-point carrier, DNS delegation included), or it fetches `canonical_url` and finds a Pagefront `alternate` link whose target is exactly the URL it fetched the Sheet from. A Sheet that meets neither condition is unattributed: a consumer MUST NOT present its contents as the publisher's statement, price, availability, offer URLs and identity included, and MUST NOT follow its traversal hints on the publisher's trust. The vertical specs' host and `@id` checks on referenced Sheets run after attribution; `canonical_url` alone, `sheet_url`, a sitemap entry, a search-index result, the host, the Content-Type, `$schema` and a validator report establish none of it. "Sheets reached by reference" and the serving note's indexing sentence each point to the section.
 
 ### 0.1.0 — 2026-10-18
 
