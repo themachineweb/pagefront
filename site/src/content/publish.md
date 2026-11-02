@@ -59,6 +59,11 @@ for. It reads your platform's own data, writes a sheet for each product, the she
 belong to, and the organization sheet for your shop, each linked to the
 others, and reports what it could not find.
 
+<figure class="diagram">
+<!-- diagram: write-sheets -->
+<figcaption>One product address in. Out: its sheet, the sheet of the category it belongs to, and the organization sheet, each pointing at the others by <code>@id</code>. What comes back is a draft, for you to check.</figcaption>
+</figure>
+
 Pick the platform where your catalogue lives. The prompt works out what
 renders your pages.
 
