@@ -85,49 +85,53 @@ document](/pagefront/spec/core/discovery).
 
 ## 2. Serve it
 
-The sheet lives at a URL **on your own domain**, and nowhere else. A sheet is
-your own statement about your own resource, and it carries weight because it
-comes from you.
+The sheet is served on your own domain. The file itself lives on a small
+server of your own, and your shop platform forwards a path on your domain to
+it, the way it forwards to any app. A server behind your domain is hosting,
+as Shopify or WordPress is hosting; the link on your page is what makes the
+sheet yours.
 
-Four things to get right:
+<figure class="diagram">
+<!-- diagram: sheet-server -->
+<figcaption>A machine asks your domain for the sheet. Your shop platform forwards the request to your sheet server and returns the file as its own, from your address. The machine only ever sees your domain; the server is in your own account.</figcaption>
+</figure>
 
-- **Stable, if you can.** The page is the identity: the sheet lives wherever
-  the page's link says today, and a reader that follows the link finds it
-  after a move. A URL that survives your next redesign and your next platform
-  migration is still worth having, because readers that cached it keep
-  finding the sheet and the hints other sheets carry stay correct for longer.
-  Pick a shape you can keep: alongside the page (`/product/anorak.en.json`) or
-  under a path of your own (`/sheets/anorak.en.json`).
-- **`Content-Type`.** Serve the sheet as `application/pagefront+json` if you
-  control response headers; `application/json` is accepted too. Some static
-  hosts guess wrong on unusual extensions. Check what yours actually sends.
-- **Reachable by machines.** Not behind a login, not behind a bot challenge, and
-  not blocked in `robots.txt`. If the machines reading your sheets run in a
-  browser, allow cross-origin reads.
-- **Indexable.** Let search crawlers reach the sheet URLs and list them in your
-  sitemap, alongside the pages. Many assistants reach the web through a search
-  index and can only fetch what that index holds. So
-  send no `noindex` for sheets, in `X-Robots-Tag` or in a robots rule, and do
-  not disallow the crawlers you want reading them. The page's `alternate` link
-  already tells a crawler that the sheet is a representation of the page.
-- **One sheet per resource per language.** The `inLanguage` field says which
-  one this is. Publish a second document for a second language rather than
-  mixing them.
+**Why a server of your own.**
 
-Before you link it, check the URL from outside your admin, signed out:
+- It sees every sheet fetch, so for the first time you can count the
+  machines reading you, which your page analytics never will.
+- It hardly touches your shop: one proxy, one line in a template, nothing in
+  the theme or the checkout.
+- Machine reads stop costing you page renders.
+- It holds your catalogue as sheets, which is where anything you build on
+  the machine side later will read from.
 
-- It answers `200` with the sheet itself, byte for byte. A redirect, or your
-  theme's page around it, does not count.
-- It sends the content type above, and `Access-Control-Allow-Origin: *` if you
-  allow cross-origin reads.
-- It stays the same after you update the sheet. Edit one value, publish, and
-  load the same URL again: the new value is there.
-- It answers `404` when there is no sheet: a product you have unpublished, or
-  a language you have not written. A `200` page that says "not found" tells a
-  machine the sheet exists.
+**What you set up, once.** A sheet server in your own hosting account: the
+prompts use a Cloudflare Worker, and the free tier covers a shop. The spec
+asks for nothing but a URL on your domain, and any host that can serve a
+file would do; the prompts pick one so they can take you through it step by
+step, and this one costs nothing at a shop's scale. Pagefront has no
+relationship with Cloudflare. A proxy in your platform that forwards the
+sheet path to it: on Shopify a custom app with an app proxy, on WooCommerce
+a small plugin. Then you import the sheets from step 1. The prompt for your
+platform walks you through all three, and you need no developer for any of
+it.
 
-Until the prompt for this step exists, the four things above are the brief.
-Give them to whoever runs your site; they are what Check will test.
+<p><a class="pf-cta" href="/pagefront/publish/serve/shopify">Shopify <span aria-hidden="true">→</span></a> · <a class="pf-cta" href="/pagefront/publish/serve/woocommerce">WooCommerce <span aria-hidden="true">→</span></a></p>
+
+On another platform, the upcoming developer version is the route.
+
+**What the server does for you.** Serves each sheet at a stable address that
+survives a redesign. Sends `Content-Type: application/pagefront+json`, and
+allows cross-origin reads for machines that run in a browser. Answers 404
+when there is no sheet, rather than a page that says "not found." Keeps the
+sheets indexable, with no `noindex`, so assistants that reach the web
+through a search index can reach them. One sheet per resource per language,
+the `inLanguage` field saying which.
+
+**Before you link it**, open a sheet address from outside your admin, signed
+out. It answers with the sheet itself, byte for byte. Change one value,
+import again, load it again: the new value is there.
 
 ## 3. Link it
 

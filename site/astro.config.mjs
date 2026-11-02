@@ -226,6 +226,34 @@ const UNLISTED = new Set(
   Object.values(CASE_STUDIES).filter((c) => c.unlinked).map((c) => `${CASE_STUDIES_BASE}/${c.route}`)
 );
 
+/**
+ * Inline diagrams in site copy. A markdown file puts `<!-- diagram: <name> -->`
+ * inside its own <figure>; the marker becomes the SVG at src/assets/<name>.svg,
+ * inlined so its var(--token) colours resolve against the page's stylesheet,
+ * as the landing page inlines its layers diagram. Raw HTML reaches rehype as
+ * `raw` nodes (Astro parses them after the plugins run), so the marker is
+ * replaced in the node's text. A name with no SVG fails the build.
+ */
+const DIAGRAM = /<!-- diagram: ([a-z0-9-]+) -->/g;
+
+function inlineDiagrams() {
+  return (tree, file) => {
+    const visit = (node) => {
+      if (node.type === 'raw' && DIAGRAM.test(node.value)) {
+        node.value = node.value.replace(DIAGRAM, (_, name) => {
+          const svg = new URL(`./src/assets/${name}.svg`, import.meta.url);
+          if (!fs.existsSync(svg)) {
+            throw new Error(`${file.path}: diagram "${name}" has no file at site/src/assets/${name}.svg`);
+          }
+          return fs.readFileSync(svg, 'utf8').trim();
+        });
+      }
+      for (const child of node.children ?? []) visit(child);
+    };
+    visit(tree);
+  };
+}
+
 export default defineConfig({
   site: 'https://themachineweb.org',
   integrations: [
@@ -243,7 +271,7 @@ export default defineConfig({
       // as black slabs in the spec documents.
       theme: 'github-light',
     },
-    rehypePlugins: [rehypeHeadingIds, renderDesignNotes, rewriteSpecRelativeLinks],
+    rehypePlugins: [rehypeHeadingIds, renderDesignNotes, rewriteSpecRelativeLinks, inlineDiagrams],
   },
   vite: {
     resolve: {

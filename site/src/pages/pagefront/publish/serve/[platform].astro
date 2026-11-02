@@ -1,0 +1,114 @@
+---
+/**
+ * /pagefront/publish/serve/<platform> — the prompt a merchant hands to a
+ * chat assistant to put the sheets the write prompt produced online, on
+ * the shop's own domain. The prompt text is
+ * commerce/prompts/serve-<platform>-chat.md, read through the prompts
+ * collection, and is also served verbatim at the same path plus ".md";
+ * this page wraps it with a short brief and a copy button, as the write
+ * pages do.
+ */
+import Section from '../../../../layouts/Section.astro';
+import { LINKS } from '../../../../lib/links';
+import { SERVE_PLATFORMS, promptBody, promptSetLine, type ServePlatform } from '../../../../lib/prompts';
+
+export function getStaticPaths() {
+  return Object.keys(SERVE_PLATFORMS).map((platform) => ({ params: { platform } }));
+}
+
+const platform = Astro.params.platform as ServePlatform;
+const meta = SERVE_PLATFORMS[platform];
+const prompt = await promptBody(`serve-${platform}-chat`);
+const setLine = promptSetLine(prompt);
+const PATH = `${LINKS.publish}/serve/${platform}`;
+const RAW_URL = `${PATH}.md`;
+const WRITE_URL = `${LINKS.publish}/write/${platform}`;
+const title = `Serve your sheets — ${meta.titleSuffix}`;
+---
+
+<Section
+  title={`${title} — Pagefront`}
+  description={`A prompt to hand a chat assistant to put a ${meta.label} shop's Pagefront sheets online on its own domain: give it the commerce.zip the write prompt handed back and it walks you through Cloudflare R2, a Worker and the forwarding on ${meta.label}, then checks every sheet at its address.`}
+  path={PATH}
+>
+  <header class="doc-head">
+    <p class="pf-kicker"><a href={LINKS.landing}>Pagefront</a> · <a href={LINKS.publish}>Publish</a></p>
+    <h1>{title}</h1>
+  </header>
+
+  <div class="doc-body">
+    <p>
+      Copy the prompt below into ChatGPT, Claude or another chat assistant,
+      attach <code>commerce.zip</code>, the archive the
+      <a href={WRITE_URL}>write prompt</a> handed back, and send both
+      together. The assistant reads the sheets, works out your shop from
+      their addresses, reads Cloudflare's and {meta.label}'s documentation,
+      and gives you the steps in plain words: a Cloudflare account, R2
+      storage, one bucket with the sheets uploaded into it, one Worker that
+      answers requests for them, and the forwarding on {meta.label} that
+      sends one path of your domain to that Worker. Every file you have to
+      paste comes in one kit, <code>pagefront-serving-kit.zip</code>, which
+      the first step has you download. When you tell it you are done, it
+      checks every sheet at its address and hands you a report. The
+      assistant needs to be able to fetch web pages and make files; one
+      that cannot will say so.
+    </p>
+    <p>
+      The prompt describes the Cloudflare and {meta.label} screens as they
+      looked on the dates it states. Where a screen differs from what it
+      says, tell the assistant what you see and it guides you from there.
+      Once every sheet answers, the next step is to link each sheet from
+      the page it describes; the <a href={LINKS.publish}>publishing
+      page</a> has the whole procedure.
+    </p>
+    <p class="pf-note">
+      Markdown version: <a href={RAW_URL}>{RAW_URL}</a>
+    </p>
+  </div>
+
+  <div class="prompt-box">
+    <div class="prompt-bar">
+      <span class="prompt-title">Prompt · {meta.titleSuffix} · {setLine}</span>
+      <button type="button" class="prompt-copy" id="prompt-copy">Copy prompt</button>
+    </div>
+    <pre id="prompt-text">{prompt}</pre>
+  </div>
+</Section>
+
+<style is:global>
+  .prompt-box{
+    margin-top: clamp(1.5rem,4vw,2.25rem);
+    border:1px solid var(--rule);
+    border-radius:6px;
+    overflow:hidden;
+  }
+  .prompt-bar{
+    display:flex; align-items:center; justify-content:space-between; gap:1rem;
+    padding:.6rem .9rem;
+    border-bottom:1px solid var(--rule);
+    font-family:var(--sans); font-size:.85rem; color:var(--ink-soft);
+  }
+  .prompt-title{ font-weight:600; }
+  .prompt-copy{
+    font:inherit; font-weight:600; font-size:.8rem;
+    padding:.25rem .75rem; border:1px solid var(--rule); border-radius:999px;
+    background:transparent; color:var(--ink-soft); cursor:pointer;
+  }
+  .prompt-copy:hover{ color:var(--ink); border-color:var(--ink); }
+  .prompt-box pre{
+    margin:0; padding:1rem 1.1rem;
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:.78rem; line-height:1.55;
+    white-space:pre-wrap; overflow-wrap:anywhere;
+    background:#efe9db;
+  }
+</style>
+
+<script>
+  const button = document.getElementById('prompt-copy') as HTMLButtonElement;
+  const text = document.getElementById('prompt-text') as HTMLPreElement;
+  button.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(text.textContent ?? '');
+    button.textContent = 'Copied';
+    setTimeout(() => { button.textContent = 'Copy prompt'; }, 1500);
+  });
+</script>

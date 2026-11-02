@@ -18,6 +18,18 @@ export const WRITE_PLATFORMS = {
 
 export type WritePlatform = keyof typeof WRITE_PLATFORMS;
 
+/**
+ * The platforms with a serve page: those whose serve path has been walked
+ * end to end (commerce/prompts/README.md). The pages are
+ * /pagefront/publish/serve/<platform>, chat route only.
+ */
+export const SERVE_PLATFORMS = {
+  shopify: { label: 'Shopify', titleSuffix: 'Shopify' },
+  woocommerce: { label: 'WooCommerce', titleSuffix: 'WooCommerce' },
+} as const;
+
+export type ServePlatform = keyof typeof SERVE_PLATFORMS;
+
 /** The prompt whose file is commerce/prompts/<stem>.md; throws when absent. */
 export async function promptBody(stem: string): Promise<string> {
   const entries: CollectionEntry<'prompts'>[] = await getCollection('prompts');

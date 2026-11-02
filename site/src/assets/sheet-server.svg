@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 250" role="img" aria-labelledby="ss-title ss-desc">
+  <title id="ss-title">A machine fetches a sheet from your domain; your shop platform forwards the request to your sheet server</title>
+  <desc id="ss-desc">
+    Three columns. On the left, a machine. In the middle, your domain, holding
+    the product page at /product/anorak and the sheet address at
+    /apps/pagefront/anorak.en.json. On the right, your sheet server, in your
+    own account, holding anorak.en.json. The machine requests the sheet address
+    on your domain; your shop platform forwards the request to the sheet
+    server, and returns the file as its own, from your address. The machine only
+    ever sees your domain.
+  </desc>
+  <style>
+    .label { font-family: var(--sans, -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, Arial, sans-serif); font-size: 11px; letter-spacing: .09em; fill: var(--ink-soft, #5a554c); text-anchor: middle; }
+    .kind  { font-family: var(--body, Charter, Georgia, serif); font-style: italic; font-size: 13px; fill: var(--ink, #1a1814); text-anchor: middle; }
+    .mono  { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; fill: var(--ink, #1a1814); }
+    .mono-soft { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; fill: var(--ink-soft, #5a554c); }
+    .small { font-family: var(--sans, -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, Arial, sans-serif); font-size: 10px; fill: var(--ink-soft, #5a554c); text-anchor: middle; }
+    .box   { fill: none; stroke: var(--rule, #d9d2c2); stroke-width: 1; }
+    .doc   { fill: var(--ink, #1a1814); }
+    .link  { stroke: var(--ink, #1a1814); stroke-width: 1.25; }
+    .head  { fill: var(--ink, #1a1814); }
+    .ico path { fill: none; stroke: var(--ink-soft, #5a554c); stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+  </style>
+
+  <!-- column labels -->
+  <text class="label" x="85" y="30">A MACHINE</text>
+  <text class="kind"  x="85" y="48">reads</text>
+  <text class="label" x="320" y="30">YOUR DOMAIN</text>
+  <text class="kind"  x="320" y="48">serves</text>
+  <text class="label" x="545" y="30">YOUR SHEET SERVER</text>
+  <text class="kind"  x="545" y="48">stores</text>
+
+  <!-- a machine: Tabler robot -->
+  <g class="ico" transform="translate(55 130) scale(2.5)">
+    <path d="M6 6a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v4a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2l0 -4" vector-effect="non-scaling-stroke"/>
+    <path d="M12 2v2" vector-effect="non-scaling-stroke"/>
+    <path d="M9 12v9" vector-effect="non-scaling-stroke"/>
+    <path d="M15 12v9" vector-effect="non-scaling-stroke"/>
+    <path d="M5 16l4 -2" vector-effect="non-scaling-stroke"/>
+    <path d="M15 14l4 2" vector-effect="non-scaling-stroke"/>
+    <path d="M9 18h6" vector-effect="non-scaling-stroke"/>
+    <path d="M10 8v.01" vector-effect="non-scaling-stroke"/>
+    <path d="M14 8v.01" vector-effect="non-scaling-stroke"/>
+  </g>
+
+  <!-- your domain -->
+  <rect class="box" x="206" y="75" width="234" height="125" rx="6"/>
+  <text class="mono-soft" x="320" y="97" text-anchor="middle">your-shop.example</text>
+  <circle class="doc" cx="225" cy="124" r="4"/>
+  <text class="mono" x="235" y="128">/product/anorak</text>
+  <circle class="doc" cx="225" cy="160" r="4"/>
+  <text class="mono" x="235" y="164">/apps/pagefront/anorak.en.json</text>
+
+  <!-- your sheet server: Tabler server -->
+  <g class="ico" transform="translate(515 130) scale(2.5)">
+    <path d="M3 7a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v2a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3v-2" vector-effect="non-scaling-stroke"/>
+    <path d="M3 15a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v2a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3l0 -2" vector-effect="non-scaling-stroke"/>
+    <path d="M7 8l0 .01" vector-effect="non-scaling-stroke"/>
+    <path d="M7 16l0 .01" vector-effect="non-scaling-stroke"/>
+  </g>
+  <circle class="doc" cx="545" cy="210" r="4"/>
+  <text class="mono" x="545" y="230" text-anchor="middle">anorak.en.json</text>
+
+  <!-- the request, machine to your domain, and the sheet coming back -->
+  <line class="link" x1="123" y1="151" x2="198" y2="151"/>
+  <path class="head" d="M 206,151 L 196,146.5 L 196,155.5 Z"/>
+  <text class="small" x="164" y="141">GET</text>
+  <line class="link" x1="131" y1="169" x2="206" y2="169"/>
+  <path class="head" d="M 123,169 L 133,164.5 L 133,173.5 Z"/>
+  <text class="small" x="162" y="184">the sheet URL</text>
+
+  <!-- forwarded to your sheet server, and the sheet coming back -->
+  <line class="link" x1="440" y1="151" x2="507" y2="151"/>
+  <path class="head" d="M 515,151 L 505,146.5 L 505,155.5 Z"/>
+  <text class="small" x="477" y="141">forwarded</text>
+  <line class="link" x1="448" y1="169" x2="515" y2="169"/>
+  <path class="head" d="M 440,169 L 450,164.5 L 450,173.5 Z"/>
+  <text class="small" x="477" y="184">the file</text>
+</svg>

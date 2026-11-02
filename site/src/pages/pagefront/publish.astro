@@ -58,4 +58,14 @@ const toc = headings.filter((h) => h.depth === 2);
   }
   .doc-body a.pf-cta:hover{ background:var(--ink-soft); text-decoration:none; }
   .doc-body a.pf-cta span{ margin-left:.35em; }
+
+  /* The sheet-server diagram in step 2: the SVG is inlined by the
+     inlineDiagrams plugin so its colour tokens resolve; styled as the
+     landing page's layers diagram. */
+  .doc-body figure.diagram{ margin:2.5rem 0; }
+  .doc-body figure.diagram svg{ width:100%; height:auto; display:block; }
+  .doc-body figure.diagram figcaption{
+    font-family:var(--sans); font-size:.82rem; line-height:1.55;
+    color:var(--ink-soft); margin-top:1rem;
+  }
 </style>
