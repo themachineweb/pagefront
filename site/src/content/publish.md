@@ -117,7 +117,7 @@ a small plugin. Then you import the sheets from step 1. The prompt for your
 platform walks you through all three, and you need no developer for any of
 it.
 
-<p><a class="pf-cta" href="/pagefront/publish/serve/shopify">Shopify <span aria-hidden="true">→</span></a> · <a class="pf-cta" href="/pagefront/publish/serve/woocommerce">WooCommerce <span aria-hidden="true">→</span></a></p>
+<p><a class="pf-cta" href="/pagefront/publish/serve/shopify">Shopify <span aria-hidden="true">→</span></a> <a class="pf-cta" href="/pagefront/publish/serve/woocommerce">WooCommerce <span aria-hidden="true">→</span></a></p>
 
 On another platform, the upcoming developer version is the route.
 
