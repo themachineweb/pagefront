@@ -5,6 +5,8 @@
 	Content-Type: text/markdown; charset=utf-8
 /pagefront/publish/write/*.md
 	Content-Type: text/markdown; charset=utf-8
+/pagefront/publish/serve/*.md
+	Content-Type: text/markdown; charset=utf-8
 
 # The spec documents' markdown twins, and the model-facing index.
 /pagefront/spec/commerce/product.md
