@@ -14,7 +14,7 @@
  * $schema), whatever its Content-Type says. Nothing here constructs a
  * sheet URL: every URL fetched is one the page declared.
  */
-import { buildResult, type RenderModel } from '../src/lib/validate-model.ts';
+import { buildResult, canonicalHostOf, type Provenance, type RenderModel } from '../src/lib/validate-model.ts';
 
 export const SHEET_MEDIA_TYPE = 'application/pagefront+json';
 export const MAX_REDIRECTS = 3;
@@ -46,6 +46,8 @@ export interface PageCheck {
   /** The conformance result for the declared sheet; null when no sheet was reached. */
   conformance: RenderModel | null;
   sheet_url?: string;
+  /** Who published the sheet; present when a sheet was reached and judged. */
+  provenance?: Provenance;
 }
 
 const pass = (check: string, detail?: string): Line => ({ check, status: 'pass', detail });
@@ -747,5 +749,152 @@ export async function checkPage(input: PageCheckInput): Promise<PageCheck> {
   const conformance = buildResult(text, 'url');
   if (conformance.kind === 'scope-error') conformance.declared = conformance.declared.slice(0, 200);
   result.conformance = conformance;
+
+  // Provenance: the sheet was reached through a declaration, the page's
+  // carriers or the entry point ("Provenance" in core/spec/discovery.md,
+  // condition (a)). It is the statement of the origin its canonical_url
+  // names when that origin is the one that declared it.
+  if (conformance.kind === 'report' || conformance.kind === 'layer1') {
+    const origin = canonicalHostOf(text);
+    const declaringHost = entry ? new URL(entry.origin).host : new URL(finalUrl).host;
+    const declaredBy = entry ? describeCarrier(entry.carrier ?? 'well-known', entry.origin) : `the page at ${finalUrl}`;
+    const base: Provenance = { status: 'attributed', via: 'page_declaration', origin, checked_url: sheetFinalUrl, declared_url: sheetUrl, reason: null };
+    result.provenance = origin === null
+      ? { ...base, status: 'unattributed', reason: 'canonical_url is missing or is not an absolute URL, so the sheet names no origin' }
+      : origin === declaringHost
+        ? base
+        : { ...base, status: 'unattributed', reason: `${declaredBy} declares the sheet, but canonical_url names ${origin}` };
+    if (result.provenance.status === 'unattributed') result.provenance.via = null;
+  }
   return result;
+}
+
+/** A URL for exact comparison: scheme and host lowercased, a default port dropped, nothing else changed. */
+export function normaliseUrl(url: string): string | undefined {
+  try {
+    const u = new URL(url);
+    // The WHATWG parser lowercases the scheme and the host and drops a default port.
+    return u.href;
+  } catch {
+    return undefined;
+  }
+}
+
+export interface BackLinkInput {
+  /** The sheet's text, for its canonical_url. */
+  text: string;
+  /** The URL the sheet was fetched from, after its redirects: F. */
+  fetchedUrl: string;
+  fetcher: Fetcher;
+  allowedProtocols: string[];
+  /** Reads a page response to the end of its head; an empty string for a body with no head. */
+  readHead: (response: Response, url: string) => Promise<string>;
+  /** Called before the canonical page is fetched on another host; false means rate-limited. */
+  admit?: (host: string) => Promise<boolean>;
+}
+
+/**
+ * The back-link check ("Provenance" in core/spec/discovery.md, condition
+ * (b)), for a sheet the checker was handed by its URL and not through a
+ * declaration: fetch the sheet's canonical_url, HEAD first and GET when
+ * HEAD is refused or carries no Link declaration, following redirects;
+ * select the declaration as "Selection" does, by rel="alternate" and the
+ * sheet media type together, the header authoritative where both
+ * carriers declare one; resolve it against the page, follow its own
+ * redirects, and compare it with the URL the sheet was fetched from by
+ * exact string after normalisation. Anything else, a page that cannot
+ * be fetched included, is unattributed with the reason; never
+ * not_checked.
+ */
+export async function checkBackLink(input: BackLinkInput): Promise<Provenance> {
+  const { text, fetchedUrl, fetcher, allowedProtocols } = input;
+  const checked = normaliseUrl(fetchedUrl) ?? fetchedUrl;
+  const origin = canonicalHostOf(text);
+  const unattributed = (reason: string, declared: string | null = null): Provenance =>
+    ({ status: 'unattributed', via: null, origin, checked_url: checked, declared_url: declared, reason });
+
+  let canonical: string | undefined;
+  try {
+    const parsed = JSON.parse(text) as Record<string, unknown>;
+    canonical = typeof parsed.canonical_url === 'string' ? parsed.canonical_url : undefined;
+  } catch {
+    canonical = undefined;
+  }
+  if (canonical === undefined || origin === null) return unattributed('canonical_url is missing or is not an absolute URL, so there is no page to ask');
+  let canonicalUrl: URL;
+  try {
+    canonicalUrl = new URL(canonical);
+  } catch {
+    return unattributed('canonical_url is not an absolute URL, so there is no page to ask');
+  }
+  if (!allowedProtocols.includes(canonicalUrl.protocol)) {
+    return unattributed(`canonical_url ${canonical} does not use ${allowedProtocols.join(' or ')}`);
+  }
+  if (input.admit && canonicalUrl.host !== new URL(fetchedUrl).host && !(await input.admit(canonicalUrl.host))) {
+    return unattributed(`rate limit reached for ${canonicalUrl.host}; try again in a minute`);
+  }
+
+  // The page: HEAD first, since the header alone can settle it; GET when
+  // HEAD is refused or declares nothing, since the <head> may.
+  const accept = { accept: 'text/html, application/xhtml+xml;q=0.9, */*;q=0.8' };
+  let followed: Followed | undefined;
+  let headerRefs: LinkRef[] = [];
+  let headRefs: LinkRef[] = [];
+  let lastError: string | undefined;
+  for (const method of ['HEAD', 'GET'] as const) {
+    try {
+      followed = await fetchFollowing(canonical, { method, headers: accept }, fetcher, allowedProtocols);
+    } catch (error) {
+      lastError = (error as Error).name === 'TimeoutError' ? 'no response in time' : ((error as Error).message || 'the page could not be fetched');
+      followed = undefined;
+      continue;
+    }
+    if (!followed.response.ok) {
+      await followed.response.body?.cancel();
+      if (method === 'HEAD') continue;
+      return unattributed(`canonical_url ${canonical} answered HTTP ${followed.response.status}`);
+    }
+    headerRefs = parseLinkHeader(followed.response.headers.get('link')).filter(isSheetLink);
+    if (method === 'HEAD') {
+      await followed.response.body?.cancel();
+      if (headerRefs.length > 0) break;
+      continue;
+    }
+    try {
+      headRefs = parseHeadLinks(await input.readHead(followed.response, followed.finalUrl)).filter(isSheetLink);
+    } catch (error) {
+      return unattributed(`canonical_url ${canonical} could not be read (${(error as Error).name === 'TimeoutError' || (error as Error).name === 'AbortError' ? 'no response in time' : 'the response could not be read'})`);
+    }
+    break;
+  }
+  if (followed === undefined) return unattributed(`canonical_url ${canonical} could not be fetched (${lastError ?? 'the page could not be fetched'})`);
+  const pageUrl = followed.finalUrl;
+
+  // Selection: the header is authoritative where both carriers declare.
+  const chosen = headerRefs.length > 0 ? headerRefs : headRefs;
+  const carrier = headerRefs.length > 0 ? 'Link header' : 'page head';
+  if (chosen.length === 0) return unattributed(`${pageUrl} declares no sheet`);
+  if (chosen.length > 1) {
+    return unattributed(`${pageUrl} declares ${chosen.length} sheets in its ${carrier}: ${chosen.map((r) => r.href).join(', ')}`);
+  }
+  const declaredRaw = resolve(chosen[0].href, pageUrl);
+  if (declaredRaw === undefined) return unattributed(`${pageUrl} declares ${chosen[0].href}, which does not resolve to a URL`);
+  if (!allowedProtocols.includes(new URL(declaredRaw).protocol)) {
+    return unattributed(`${pageUrl} declares ${declaredRaw}, which does not use ${allowedProtocols.join(' or ')}`, declaredRaw);
+  }
+
+  // The declaration's own redirects: F is where the sheet came from, so the declared URL is followed the same way.
+  let declaredFinal: string;
+  try {
+    const target = await fetchFollowing(declaredRaw, { method: 'HEAD', headers: { accept: `${SHEET_MEDIA_TYPE}, application/json;q=0.9` } }, fetcher, allowedProtocols);
+    await target.response.body?.cancel();
+    declaredFinal = target.finalUrl;
+  } catch (error) {
+    return unattributed(`${pageUrl} declares ${declaredRaw}, which could not be followed (${(error as Error).name === 'TimeoutError' ? 'no response in time' : ((error as Error).message || 'the URL could not be fetched')})`, declaredRaw);
+  }
+  const declared = normaliseUrl(declaredFinal) ?? declaredFinal;
+  if (declared !== checked) {
+    return unattributed(`${pageUrl} declares ${declared}, which is not the URL the sheet was fetched from`, declared);
+  }
+  return { status: 'attributed', via: 'back_link', origin, checked_url: checked, declared_url: declared, reason: null };
 }

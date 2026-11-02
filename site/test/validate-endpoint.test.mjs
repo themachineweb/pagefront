@@ -138,6 +138,208 @@ test("rate limits: per host and total, 429 when either refuses", async () => {
 });
 
 /**
+ * A local publisher for the back-link check ("Provenance" in
+ * core/spec/discovery.md): sheets reached by their URL, whose
+ * canonical_url is a page on this server that declares, or fails to
+ * declare, that very URL. Scenario name → the page's answer; the sheet
+ * at /sheets/<name>.json always names /page/<name> as its canonical_url.
+ */
+function attributionPublisher() {
+  let base = "";
+  const SHEET_TYPE = "application/pagefront+json";
+  const element = (href) => `<link rel="alternate" type="${SHEET_TYPE}" href="${href}">`;
+  const header = (href) => `<${href}>; rel="alternate"; type="${SHEET_TYPE}"`;
+  const page = (links) => `<!doctype html><html><head><title>Anorak</title>${links}</head><body><h1>Anorak</h1></body></html>`;
+  const sheetFor = (name) => {
+    const sheet = JSON.parse(CLEAN);
+    sheet.canonical_url = `${base}/page/${name}`;
+    sheet.sheet_url = `${base}/sheets/${name}.json`;
+    return JSON.stringify(sheet);
+  };
+  let headCount = 0;
+  const scenarios = {
+    // The element declares the sheet's own URL.
+    match: (n) => ({ html: page(element(`/sheets/${n}.json`)) }),
+    // Only the header declares it; HEAD alone settles the check.
+    "header-match": (n) => ({ html: page(""), headers: { link: header(`${base}/sheets/${n}.json`) } }),
+    // The page and the declaration both redirect: /page/redirect → /page/redirect-final, which declares /old/redirect.json → /sheets/redirect.json.
+    redirect: () => ({ status: 301, location: "/page/redirect-final" }),
+    "redirect-final": () => ({ html: page(element(`/old/redirect.json`)) }),
+    elsewhere: (n) => ({ html: page(element(`/sheets/${n}-other.json`)) }),
+    none: () => ({ html: page(`<link rel="alternate" type="application/rss+xml" href="/feed">`) }),
+    two: (n) => ({ html: page(element(`/sheets/${n}.json`) + element(`/sheets/${n}-fr.json`)) }),
+    // The header names the sheet's URL and the head names another: the header wins.
+    disagree: (n) => ({ html: page(element(`/sheets/${n}-other.json`)), headers: { link: header(`${base}/sheets/${n}.json`) } }),
+    // The reverse: the header names another URL, so the matching element does not count.
+    "disagree-reverse": (n) => ({ html: page(element(`/sheets/${n}.json`)), headers: { link: header(`${base}/sheets/${n}-other.json`) } }),
+    gone: () => ({ status: 404 }),
+    slow: () => ({ slow: true }),
+    // A server that refuses HEAD: GET is tried next.
+    "head-refused": (n) => ({ html: page(element(`/sheets/${n}.json`)), refuseHead: true }),
+    // The victim's page declares its own sheet; the forged sheet names that page.
+    victim: (n) => ({ html: page(element(`/sheets/${n}.json`)) }),
+  };
+  const server = createServer((req, res) => {
+    const url = new URL(req.url, base);
+    const path = url.pathname;
+    let m;
+    if ((m = /^\/page\/([a-z-]+)$/.exec(path))) {
+      const scenario = scenarios[m[1]];
+      if (!scenario) { res.writeHead(404); return res.end(); }
+      const s = scenario(m[1]);
+      if (s.slow) return;
+      if (req.method === "HEAD") headCount++;
+      if (s.refuseHead && req.method === "HEAD") { res.writeHead(405); return res.end(); }
+      if (s.status) { res.writeHead(s.status, s.location ? { location: s.location } : {}); return res.end(); }
+      res.writeHead(200, { "content-type": "text/html; charset=utf-8", ...(s.headers ?? {}) });
+      return res.end(req.method === "HEAD" ? undefined : s.html);
+    }
+    if ((m = /^\/old\/([a-z-]+)\.json$/.exec(path))) {
+      res.writeHead(307, { location: `/sheets/${m[1]}.json` });
+      return res.end();
+    }
+    if ((m = /^\/sheets\/([a-z-]+?)(-other|-fr)?\.json$/.exec(path))) {
+      const name = m[1];
+      // The forged sheet lints clean and names the victim's page.
+      const body = name === "forged" ? sheetFor("victim") : sheetFor(name);
+      res.writeHead(200, { "content-type": SHEET_TYPE, "access-control-allow-origin": "*" });
+      return res.end(req.method === "HEAD" ? undefined : body);
+    }
+    res.writeHead(404);
+    res.end();
+  });
+  return {
+    async start() {
+      await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
+      base = `http://127.0.0.1:${server.address().port}`;
+      return base;
+    },
+    stop() { server.closeAllConnections?.(); server.close(); },
+    headCount: () => headCount,
+  };
+}
+
+test("provenance of a sheet by its URL: the back link from canonical_url, matched by exact string after redirects on both sides", async () => {
+  const pub = attributionPublisher();
+  const base = await pub.start();
+  const check = async (name) => {
+    const { body } = await validateSheetUrl(`${base}/sheets/${name}.json`, {}, local);
+    assert.equal(body.kind, "report", name);
+    assert.ok(body.provenance, `${name}: no provenance block`);
+    return body;
+  };
+  try {
+    const match = await check("match");
+    assert.deepEqual(match.provenance, {
+      status: "attributed", via: "back_link", origin: new URL(base).host,
+      checked_url: `${base}/sheets/match.json`, declared_url: `${base}/sheets/match.json`, reason: null,
+    });
+
+    // The Link header on HEAD settles it: no GET needed.
+    const headerMatch = await check("header-match");
+    assert.equal(headerMatch.provenance.status, "attributed");
+    assert.equal(headerMatch.provenance.via, "back_link");
+
+    // Both sides redirect: the sheet at /old/redirect.json lands at /sheets/redirect.json (F), the page redirects to its final URL, which declares /old/redirect.json.
+    const redirected = await validateSheetUrl(`${base}/old/redirect.json`, {}, local);
+    assert.equal(redirected.body.kind, "report");
+    assert.equal(redirected.body.provenance.status, "attributed");
+    assert.equal(redirected.body.provenance.checked_url, `${base}/sheets/redirect.json`);
+    assert.equal(redirected.body.provenance.declared_url, `${base}/sheets/redirect.json`);
+
+    const elsewhere = await check("elsewhere");
+    assert.equal(elsewhere.provenance.status, "unattributed");
+    assert.equal(elsewhere.provenance.via, null);
+    assert.equal(elsewhere.provenance.declared_url, `${base}/sheets/elsewhere-other.json`);
+    assert.equal(elsewhere.provenance.reason, `${base}/page/elsewhere declares ${base}/sheets/elsewhere-other.json, which is not the URL the sheet was fetched from`);
+
+    const none = await check("none");
+    assert.equal(none.provenance.status, "unattributed");
+    assert.equal(none.provenance.reason, `${base}/page/none declares no sheet`);
+    assert.equal(none.provenance.declared_url, null);
+
+    const two = await check("two");
+    assert.equal(two.provenance.status, "unattributed");
+    assert.match(two.provenance.reason, /declares 2 sheets in its page head/);
+
+    const gone = await check("gone");
+    assert.equal(gone.provenance.status, "unattributed");
+    assert.equal(gone.provenance.reason, `canonical_url ${base}/page/gone answered HTTP 404`);
+    assert.equal(gone.provenance.origin, new URL(base).host);
+
+    const slow = await validateSheetUrl(`${base}/sheets/slow.json`, {}, { ...local, fetchTimeoutMs: 300 });
+    assert.equal(slow.body.kind, "report");
+    assert.equal(slow.body.provenance.status, "unattributed", "a timeout is unattributed, never not_checked");
+    assert.match(slow.body.provenance.reason, /could not be fetched \(no response in time\)/);
+
+    // The header is authoritative where both carriers declare.
+    const disagree = await check("disagree");
+    assert.equal(disagree.provenance.status, "attributed");
+    assert.equal(disagree.provenance.declared_url, `${base}/sheets/disagree.json`);
+    const reverse = await check("disagree-reverse");
+    assert.equal(reverse.provenance.status, "unattributed");
+    assert.equal(reverse.provenance.declared_url, `${base}/sheets/disagree-reverse-other.json`);
+
+    // HEAD refused: GET reads the head.
+    const headRefused = await check("head-refused");
+    assert.equal(headRefused.provenance.status, "attributed");
+    assert.ok(pub.headCount() > 0, "HEAD is tried first");
+
+    // The forgery: a sheet that lints clean and names another publisher's page comes back unattributed.
+    const forged = await check("forged");
+    assert.equal(forged.report.summary.errors, 0);
+    assert.equal(forged.provenance.status, "unattributed");
+    assert.equal(forged.provenance.origin, new URL(base).host);
+    assert.equal(forged.provenance.checked_url, `${base}/sheets/forged.json`);
+    assert.equal(forged.provenance.declared_url, `${base}/sheets/victim.json`);
+    assert.equal(forged.provenance.reason, `${base}/page/victim declares ${base}/sheets/victim.json, which is not the URL the sheet was fetched from`);
+    assert.equal("provenance" in forged.report, false, "provenance never enters the report");
+    assert.deepEqual(forged.report.summary, { errors: 0, warnings: 0, info: 0, rules_fired: [] });
+
+    // Through the endpoint, the block travels with the JSON body.
+    const viaEndpoint = await (await handle(new Request(`https://themachineweb.org${VALIDATE_PATH}?url=${encodeURIComponent(`${base}/sheets/match.json`)}`), env, local)).json();
+    assert.equal(viaEndpoint.provenance.status, "attributed");
+  } finally {
+    pub.stop();
+  }
+});
+
+test("provenance through a page: attributed via the page's declaration; a pasted or posted sheet is not checked", async () => {
+  const pub = publisher();
+  const base = await pub.start();
+  try {
+    const { body } = await validateSheetUrl(`${base}/page/both`, {}, local);
+    assert.equal(body.kind, "page-check");
+    assert.equal(body.conformance.kind, "report");
+    assert.deepEqual(body.provenance, {
+      status: "attributed", via: "page_declaration", origin: new URL(base).host,
+      checked_url: `${base}/sheets/page/both.json`, declared_url: `${base}/sheets/page/both.json`, reason: null,
+    });
+    assert.equal("provenance" in body.conformance, false, "the block sits beside conformance, at the top level");
+
+    // The page declares a sheet whose canonical_url names another origin: the declaring origin is not the one the sheet claims.
+    const mismatch = await validateSheetUrl(`${base}/page/canonical-mismatch`, {}, local);
+    assert.equal(mismatch.body.provenance.status, "attributed", "same host: the page is the origin");
+    const noSheet = await validateSheetUrl(`${base}/page/neither`, {}, local);
+    assert.equal(noSheet.body.provenance, undefined, "no sheet reached, no provenance");
+  } finally {
+    pub.stop();
+  }
+
+  const pasted = await validateSheetText(CLEAN, {});
+  assert.equal(pasted.body.kind, "report");
+  assert.deepEqual(pasted.body.provenance, {
+    status: "not_checked", via: null, origin: new URL(JSON.parse(CLEAN).canonical_url).host,
+    checked_url: null, declared_url: null, reason: "a sheet with no address cannot be attributed; serve it and check it by URL",
+  });
+  const posted = await (await call(VALIDATE_PATH, { method: "POST", body: CLEAN, headers: { "content-type": "application/json" } })).json();
+  assert.equal(posted.provenance.status, "not_checked");
+  const inline = await (await call(`${VALIDATE_PATH}?sheet=${encodeURIComponent(BROKEN)}`)).json();
+  assert.equal(inline.kind, "layer1");
+  assert.equal(inline.provenance.status, "not_checked");
+});
+
+/**
  * A local publisher. Pages and sheets are generated per scenario so the
  * sheet's canonical_url can name the page that declares it.
  */

@@ -10,6 +10,11 @@
  * gets the conformance report alone; a pasted sheet is judged here in
  * the browser. The sheet type is read from the document, the $schema
  * URL first and the data block second, and is never asked for.
+ * Above every conformance report sits one line of provenance, who
+ * published the sheet ("Provenance" in core/spec/discovery.md): yes
+ * through the page's declaration or the back link from canonical_url,
+ * no with the reason, or not checked for a pasted sheet. A forged sheet
+ * that lints clean never reads as all-green.
  *
  * Standing rules for this page (inherit them, don't relitigate):
  *
@@ -48,7 +53,8 @@ const legacyFormat = LEGACY_FORMATS[LEGACY_FORMATS.length - 1];
   <p class="lede">
     Paste a page URL to check discovery and the sheet it declares, a bare
     origin to check its entry point, or a sheet URL or the sheet itself to
-    check conformance alone.
+    check conformance alone. Conformance says the sheet is well-formed;
+    provenance says who published it.
   </p>
 
   <div class="checker" id="checker">
@@ -89,6 +95,11 @@ const legacyFormat = LEGACY_FORMATS[LEGACY_FORMATS.length - 1];
   #result .clean { color: #15803d; }
   #result .problem { color: #b91c1c; }
   #result .note { color: var(--ink-soft); margin: .5rem 0; }
+  #result .provenance { font-weight: 600; margin: 0 0 1rem; padding: .5rem .75rem;
+          border: 1px solid var(--rule); border-left: 4px solid var(--ink-soft); border-radius: 6px; overflow-wrap: anywhere; }
+  #result .provenance.yes { border-left-color: #15803d; color: #15803d; }
+  #result .provenance.no { border-left-color: #b91c1c; color: #b91c1c; background: #fbf1ef; }
+  #result .provenance.unchecked { border-left-color: #b45309; color: #b45309; background: #fbf5ea; }
   #result ol, #result ul { list-style: none; margin: 1rem 0; padding: 0; }
   #result ul.lines { margin: .5rem 0; }
   #result ul.lines li { display: grid; grid-template-columns: 1.5rem 1fr; gap: 0 .5rem; padding: .3rem 0;
@@ -126,9 +137,9 @@ const legacyFormat = LEGACY_FORMATS[LEGACY_FORMATS.length - 1];
 </style>
 
 <script>
-  import { buildResult, SHEET_LABEL } from '../../../lib/validate-model';
+  import { buildResult, notCheckedProvenance, SHEET_LABEL } from '../../../lib/validate-model';
   import { CURRENT_RELEASE, LEGACY_FORMATS } from '../../../lib/releases.mjs';
-  import type { RenderModel } from '../../../lib/validate-model';
+  import type { Provenance, RenderModel } from '../../../lib/validate-model';
 
   const ENDPOINT = '/pagefront/commerce/validate.json';
   const SPECS = [
@@ -140,6 +151,7 @@ const legacyFormat = LEGACY_FORMATS[LEGACY_FORMATS.length - 1];
   type PageCheck = {
     kind: 'page-check'; page_url: string; final_url: string; redirects: number; entry_point?: Line[];
     discovery: Line[]; hop: Line[]; coherence: Line[]; conformance: RenderModel | null; sheet_url?: string;
+    provenance?: Provenance;
   };
   type Outcome = (RenderModel | PageCheck | { kind: 'bad-request'; detail: string } | { kind: 'rate-limited' }) & { entry_point?: Line[] };
 
@@ -168,6 +180,19 @@ const legacyFormat = LEGACY_FORMATS[LEGACY_FORMATS.length - 1];
       list.append(item);
     }
     into.append(list);
+  }
+
+  /** The one line of provenance, above the conformance report, in a treatment a clean report never shares. */
+  function renderProvenance(p: Provenance | undefined, into: HTMLElement): void {
+    if (!p) return;
+    const origin = p.origin ?? 'an unknown origin';
+    if (p.status === 'attributed') {
+      into.append(el('p', 'provenance yes', `Published by ${origin}: yes`));
+    } else if (p.status === 'unattributed') {
+      into.append(el('p', 'provenance no', `Published by ${origin}: no — ${p.reason ?? 'the sheet could not be attributed'}`));
+    } else {
+      into.append(el('p', 'provenance unchecked', 'Publisher not checked — serve the sheet and check it by URL'));
+    }
   }
 
   function renderSheet(model: RenderModel, into: HTMLElement): void {
@@ -307,6 +332,7 @@ const legacyFormat = LEGACY_FORMATS[LEGACY_FORMATS.length - 1];
       renderLines('Coherence', outcome.coherence, result);
       result.append(el('h2', null, 'Conformance'));
       if (outcome.conformance) {
+        renderProvenance(outcome.provenance, result);
         renderSheet(outcome.conformance, result);
       } else {
         result.append(el('p', 'note', 'No sheet was reached, so nothing was judged.'));
@@ -317,6 +343,7 @@ const legacyFormat = LEGACY_FORMATS[LEGACY_FORMATS.length - 1];
       renderLines('Entry point', outcome.entry_point, result);
       result.append(el('h2', null, 'Conformance'));
     }
+    if (outcome.kind === 'report' || outcome.kind === 'layer1') renderProvenance(outcome.provenance, result);
     renderSheet(outcome, result);
   }
 
@@ -336,7 +363,10 @@ const legacyFormat = LEGACY_FORMATS[LEGACY_FORMATS.length - 1];
     event.preventDefault();
     const value = input.value.trim();
     if (value.startsWith('{') || value.startsWith('[')) {
-      render(buildResult(value, 'paste'));
+      // A pasted sheet has no address: its provenance is not checked, and the line says so.
+      const model = buildResult(value, 'paste');
+      if (model.kind === 'report' || model.kind === 'layer1') model.provenance = notCheckedProvenance(value);
+      render(model);
       return;
     }
     let url: URL | null = null;

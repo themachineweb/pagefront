@@ -88,9 +88,63 @@ export type RenderModel =
   /** A sheet type the specs define and the pinned linter has no schema for yet. */
   | { kind: "unsupported-type"; sheet_type: DeclaredType }
   /** Layer 1 (JSON Schema) failed — structural errors, no findings. */
-  | { kind: "layer1"; sheet_type: DeclaredType; schemaErrors: SchemaError[] }
+  | { kind: "layer1"; sheet_type: DeclaredType; schemaErrors: SchemaError[]; provenance?: Provenance }
   /** Layer 2 ran — the canonical report. */
-  | { kind: "report"; sheet_type: DeclaredType; report: Report };
+  | { kind: "report"; sheet_type: DeclaredType; report: Report; provenance?: Provenance };
+
+/**
+ * Who published the sheet, beside what the sheet is ("Provenance" in
+ * core/spec/discovery.md). Conformance says the sheet is well-formed;
+ * provenance says whether it is the statement of the origin its
+ * `canonical_url` names. Never folded into the report's summary, its
+ * findings or its counts.
+ *
+ * - `attributed`: the consumer reached the sheet through a declaration
+ *   from that origin (`page_declaration`: the page's carriers or the
+ *   entry point), or fetched `canonical_url` and found a declaration
+ *   whose target is exactly the URL the sheet was fetched from
+ *   (`back_link`).
+ * - `unattributed`: neither holds, with the reason.
+ * - `not_checked`: the sheet has no address (pasted or posted), so
+ *   nothing can attribute it.
+ */
+export interface Provenance {
+  status: "attributed" | "unattributed" | "not_checked";
+  via: "page_declaration" | "back_link" | null;
+  /** The host of `canonical_url`, or null when it has none. */
+  origin: string | null;
+  /** The URL the sheet was fetched from, after redirects. */
+  checked_url: string | null;
+  /** The declaration found on the canonical page, resolved. */
+  declared_url: string | null;
+  /** Null when attributed. */
+  reason: string | null;
+}
+
+/** The host of a sheet's `canonical_url`, read from its text; null when absent or unparsable. */
+export function canonicalHostOf(text: string): string | null {
+  try {
+    const parsed = JSON.parse(text) as unknown;
+    const canonical = typeof parsed === "object" && parsed !== null && !Array.isArray(parsed) ? (parsed as Record<string, unknown>).canonical_url : undefined;
+    if (typeof canonical !== "string") return null;
+    const host = new URL(canonical).host;
+    return host === "" ? null : host;
+  } catch {
+    return null;
+  }
+}
+
+/** The provenance of a sheet with no address: a paste or a POST body. */
+export function notCheckedProvenance(text: string): Provenance {
+  return {
+    status: "not_checked",
+    via: null,
+    origin: canonicalHostOf(text),
+    checked_url: null,
+    declared_url: null,
+    reason: "a sheet with no address cannot be attributed; serve it and check it by URL",
+  };
+}
 
 /**
  * Build the render model from raw sheet text. `source` decides how a
