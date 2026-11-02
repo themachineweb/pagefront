@@ -40,6 +40,16 @@
  * It is the same pipeline as the page (src/lib/validate-model.ts), so
  * the two never disagree.
  *
+ * Beside the conformance result, every outcome that carries a sheet
+ * (report, and layer1 when the sheet was fetched) carries `provenance`,
+ * who published it ("Provenance" in core/spec/discovery.md): attributed
+ * through the page's declaration when the sheet was reached from a
+ * page or an entry point; through the back link when a sheet URL was
+ * submitted and its canonical_url declares exactly that URL; otherwise
+ * unattributed with the reason; not checked for a pasted or posted
+ * sheet, which has no address. Provenance never enters the report's
+ * summary, findings or counts, and nothing combines the two.
+ *
  * The route is a checker, not a fetcher, and these limits keep it so:
  *
  *   - it returns the report only, never the fetched bytes;
@@ -65,8 +75,8 @@
  * run_worker_first lists these three paths, so no other request pays
  * for the Worker.
  */
-import { buildResult, type RenderModel } from '../src/lib/validate-model.ts';
-import { checkPage, classifyBody, fetchFollowing, labelMismatch, probeEntryPoint, txtRecordValue, type EntryPoint, type Fetcher, type Followed, type Line, type PageCheck, type TxtResolver } from './page-check.ts';
+import { buildResult, notCheckedProvenance, type RenderModel } from '../src/lib/validate-model.ts';
+import { checkBackLink, checkPage, classifyBody, fetchFollowing, labelMismatch, probeEntryPoint, txtRecordValue, type EntryPoint, type Fetcher, type Followed, type Line, type PageCheck, type TxtResolver } from './page-check.ts';
 
 export const VALIDATE_PATH = '/pagefront/commerce/validate.json';
 /** The paths the endpoint had before it became the site-wide checker. */
@@ -375,6 +385,21 @@ export async function validateSheetUrl(
     // The declared value is the document's own; keep the echo short.
     result.declared = result.declared.slice(0, 200);
   }
+  // The sheet was handed over by its URL, not through a declaration: ask
+  // its canonical page whether it declares this very URL.
+  if (result.kind === 'report' || result.kind === 'layer1') {
+    result.provenance = await checkBackLink({
+      text: document.text,
+      fetchedUrl: finalUrl,
+      fetcher,
+      allowedProtocols: allowed,
+      admit,
+      readHead: async (res, url) => {
+        const page = await readDocument(res, maxBytes, url);
+        return page.kind === 'page' ? page.head : '';
+      },
+    });
+  }
   return { status: 200, body: { ...result, sheet_url, ...withEntry } };
 }
 
@@ -397,6 +422,8 @@ export async function validateSheetText(
   }
   const result = buildResult(text, 'paste');
   if (result.kind === 'scope-error') result.declared = result.declared.slice(0, 200);
+  // A sheet with no address: nothing can attribute it.
+  if (result.kind === 'report' || result.kind === 'layer1') result.provenance = notCheckedProvenance(text);
   return { status: 200, body: result };
 }
 
