@@ -1,0 +1,29 @@
+{
+  "sheet": "https://merchant.example/products/aurora-lamp",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.6.0",
+  "sheet_spec_version": "0.12.0",
+  "catalogue_version": "0.19.0",
+  "findings": [
+    {
+      "rule": "PDP-W-041",
+      "severity": "warning",
+      "path": "$['data']['offers'][0]['url']",
+      "values": {
+        "purchaseHost": "checkout.merchant.example",
+        "host": "merchant.example"
+      },
+      "message": "Purchase URL at `$['data']['offers'][0]['url']` is on host `checkout.merchant.example`; the canonical page is on `merchant.example`.",
+      "remediation": "Move the purchase to the canonical host, or declare the host in `pagefront:checkoutHosts` on the seller's organization sheet."
+    }
+  ],
+  "summary": {
+    "errors": 0,
+    "warnings": 1,
+    "info": 0,
+    "rules_fired": [
+      "PDP-W-041"
+    ]
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "sheet": "https://merchant.example/pages/about",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.6.0",
+  "sheet_spec_version": "0.6.0",
+  "catalogue_version": "0.19.0",
+  "findings": [
+    {
+      "rule": "ORG-W-008",
+      "severity": "warning",
+      "path": "$['data']['pagefront:checkoutHosts'][0]",
+      "values": {
+        "problem": "entry `https://checkout.merchant.example` carries a scheme"
+      },
+      "message": "`pagefront:checkoutHosts` at `$['data']['pagefront:checkoutHosts'][0]`: entry `https://checkout.merchant.example` carries a scheme.",
+      "remediation": "List bare host names only (`checkout.merchant.example`), and only on the seller's own sheet, one whose `pagefront:commerceRole` includes `seller`; otherwise remove the field."
+    },
+    {
+      "rule": "ORG-W-008",
+      "severity": "warning",
+      "path": "$['data']['pagefront:checkoutHosts'][1]",
+      "values": {
+        "problem": "entry `checkout.merchant.example/cart` carries a path"
+      },
+      "message": "`pagefront:checkoutHosts` at `$['data']['pagefront:checkoutHosts'][1]`: entry `checkout.merchant.example/cart` carries a path.",
+      "remediation": "List bare host names only (`checkout.merchant.example`), and only on the seller's own sheet, one whose `pagefront:commerceRole` includes `seller`; otherwise remove the field."
+    },
+    {
+      "rule": "ORG-W-008",
+      "severity": "warning",
+      "path": "$['data']['pagefront:checkoutHosts'][2]",
+      "values": {
+        "problem": "entry `checkout.merchant.example:8443` carries a port"
+      },
+      "message": "`pagefront:checkoutHosts` at `$['data']['pagefront:checkoutHosts'][2]`: entry `checkout.merchant.example:8443` carries a port.",
+      "remediation": "List bare host names only (`checkout.merchant.example`), and only on the seller's own sheet, one whose `pagefront:commerceRole` includes `seller`; otherwise remove the field."
+    },
+    {
+      "rule": "ORG-W-008",
+      "severity": "warning",
+      "path": "$['data']['pagefront:checkoutHosts'][3]",
+      "values": {
+        "problem": "an entry is empty or whitespace-only"
+      },
+      "message": "`pagefront:checkoutHosts` at `$['data']['pagefront:checkoutHosts'][3]`: an entry is empty or whitespace-only.",
+      "remediation": "List bare host names only (`checkout.merchant.example`), and only on the seller's own sheet, one whose `pagefront:commerceRole` includes `seller`; otherwise remove the field."
+    }
+  ],
+  "summary": {
+    "errors": 0,
+    "warnings": 4,
+    "info": 0,
+    "rules_fired": [
+      "ORG-W-008"
+    ]
+  }
+}

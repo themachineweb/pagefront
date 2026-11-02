@@ -4,6 +4,7 @@ The history of [`vocabulary.md`](vocabulary.md). Changes land under "Unreleased"
 
 ### Unreleased
 
+- **Addition (release 0.6.0): `pagefront:checkoutHosts`.** Minted with the purchase-host rule of the Product Sheet spec and the seller block of the Organization Sheet spec ([`organization.md`](organization.md)): on the `Organization` data block of a seller sheet, an array of bare host names outside the canonical host on which the seller's offers are bought or checked out, publisher-stated only, read by a consumer on the seller sheet reached through the linking contract. Not used on Product Sheets. The JSON-LD context block gains its `checkoutHosts` mapping, a set.
 - **Editorial: the changelog moves to this file.** `vocabulary.md` keeps a one-line Changelog section that points here; the entries are unchanged.
 - **Editorial: link to the Product Sheet design notes.** The relationships paragraph pointed at the Product Sheet spec's open design questions; those moved to [`product-notes.md`](product-notes.md), and the link now names the note. No term changes.
 - **Editorial: case-study sheet link.** The registration-identity paragraph links the Nitto organization sheet under its new filename, `nitto-knitwear.fr.json`; the file carried a `-v0_9` suffix from the legacy format line.
