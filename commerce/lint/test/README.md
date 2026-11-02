@@ -48,6 +48,11 @@ conformance by producing structurally identical reports for these inputs.
   `commerce/spec/collection.json`, which equals the frozen
   `commerce/schemas/collection/v0.1.0.json`. Production never reads the
   hook: it keeps the bundled manifest and the compiled validators.
+- The purchase-host fixtures (PDP-W-041 and ORG-W-008) declare release
+  0.6.0 too; the test manifest's 0.6.0 row also resolves Organization
+  Sheet spec 0.6.0 to the editable head `commerce/spec/organization.json`,
+  and `purchase-host.test.mjs` validates both directories at Layer 1
+  against the two heads.
 - The "Where to buy" fixtures are validated at Layer 1 against
   the editable product head `commerce/spec/product.json` (spec 0.11.0) by
   `where-to-buy.test.mjs`, through the same hook. Their

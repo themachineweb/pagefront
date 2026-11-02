@@ -171,6 +171,7 @@ Store-wide commercial terms an agent needs before it reaches a specific offer. A
 - **`paymentAccepted`**.
 - **`location`**: the seller's own physical stores ("Store locations").
 - **`aggregateRating`**: seller reputation, where the publisher asserts it.
+- **`pagefront:checkoutHosts`** *(optional)*: the hosts outside this sheet's canonical host on which the seller's offers are bought or checked out (a checkout domain, a payment provider's hosted page), as an array of bare host names: no scheme, no path, no port. Admitted only where `pagefront:commerceRole` includes `seller`. It counts only on the seller sheet a consumer reaches through the linking contract: that sheet is on the product sheet's canonical host, so a product sheet cannot extend the list. A consumer reads it to tell an on-host purchase URL from an off-host one ("Where to buy" in [`product.md`](product.md#where-to-buy)). Source: entries MUST be hosts the publisher's own checkout sends the shopper to; guessed or searched-up hosts are non-conformant. Checks: ORG-W-008 (present without the `seller` role, or an entry that is not a bare host).
 
 ### Return policy
 

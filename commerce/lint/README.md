@@ -27,12 +27,12 @@ sheet type.
 
 ## Catalogue
 
-Catalogue 0.18.0, supporting commerce releases 0.5.0 (Product Sheet spec
+Catalogue 0.19.0, supporting commerce releases 0.5.0 (Product Sheet spec
 0.11.0, Organization Sheet spec 0.5.0, Collection Sheet spec 0.1.0), 0.4.0
 (Product Sheet spec 0.10.0, Organization Sheet spec 0.4.0) and 0.3.0, and the
-legacy draft line (format 0.9): 63 product rules (`PDP-E-001` to `PDP-E-022`, `PDP-W-001` to
-`PDP-W-040`, `PDP-I-001`), 11 organization rules (`ORG-E-001` to
-`ORG-E-004`, `ORG-W-001` to `ORG-W-007`) and 10 collection rules
+legacy draft line (format 0.9): 64 product rules (`PDP-E-001` to `PDP-E-022`, `PDP-W-001` to
+`PDP-W-041`, `PDP-I-001`), 12 organization rules (`ORG-E-001` to
+`ORG-E-004`, `ORG-W-001` to `ORG-W-008`) and 10 collection rules
 (`COL-E-001` to `COL-E-005`, `COL-W-001`, `COL-W-002`, `COL-W-004` to
 `COL-W-006`; `COL-W-003` is reserved), each defined in
 [`rules.md`](https://github.com/themachineweb/pagefront/blob/main/commerce/spec/rules.md)
@@ -206,8 +206,15 @@ with the Commerce Collection Sheet spec
   `pagefront:sheetUrl`), `COL-W-004` (brand reference and brand kind
   disagree), `COL-W-005` (parent of another kind), `COL-W-006` (duplicate
   member).
+- `PDP-W-041` (applies from release 0.6.0) — a purchase URL off the
+  canonical host: an Offer's `url`, or its `checkoutPageURLTemplate`
+  expanded with `quantity` set to 1, on another host than the canonical
+  host. The linter cannot see the seller's `pagefront:checkoutHosts`.
 - `ORG-W-007` — a `hasOfferCatalog` entry whose `pagefront:sheetUrl` is on
   another host than the canonical host.
+- `ORG-W-008` (applies from release 0.6.0) — `pagefront:checkoutHosts`
+  without the `seller` role, and one finding per entry that is not a bare
+  host (not a string, empty, or carrying a scheme, a path or a port).
 - Until a release bundles the Collection Sheet spec, Layer 1 reports that
   the declared release bundles no Collection Sheet schema (one error at
   `/release`), and a legacy-line sheet of that type that the legacy line has

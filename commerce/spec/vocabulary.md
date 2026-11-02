@@ -383,6 +383,10 @@ Each `url` is a traversal hint under "Traversal hints" in Pagefront Discovery ([
 
 Used on `Product` to express care instructions. Value is an array of strings, each a single care instruction.
 
+### pagefront:checkoutHosts
+
+Used on the `Organization` data block of a Commerce Organization Sheet whose `commerceRole` includes `seller` (see [`organization.md`](organization.md)) to list the hosts outside the sheet's canonical host on which the seller's offers are bought or checked out. Value is an array of bare host names, with no scheme, path or port; publisher-stated only, as `pagefront:socialAccount` is. A consumer reads it on the seller sheet reached through the linking contract to tell an on-host purchase URL from an off-host one ("Where to buy" in [`product.md`](product.md)). Not used on Product Sheets. Added in release 0.6.0.
+
 ### pagefront:collectionKind
 
 Used on the `Collection` data block of a Commerce Collection Sheet (see [`collection.md`](collection.md)) as the sheet's kind discriminator, and on `Collection` member entries (`hasPart`, `isPartOf`, the `itemListElement` of an organization sheet's `hasOfferCatalog`, a product sheet's `isPartOf`) so a consumer can tell a subcategory from a nested collection before fetching it. Value is a single string from the closed Collection kinds enum (see "Enumerated values"). Required on the data block of that sheet type; recommended on a `Collection` entry; not used elsewhere. Added in release 0.5.0, with the Commerce Collection Sheet.
@@ -665,6 +669,10 @@ The following is the machine-readable JSON-LD context for the pagefront vocabula
     "careInstructions": {
       "@id": "pagefront:careInstructions",
       "@container": "@list"
+    },
+    "checkoutHosts": {
+      "@id": "pagefront:checkoutHosts",
+      "@container": "@set"
     },
     "collectionKind": {
       "@id": "pagefront:collectionKind"

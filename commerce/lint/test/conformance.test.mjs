@@ -36,8 +36,12 @@ const WHERE_TO_BUY = new Set(["pdp-e-019", "pdp-e-020", "pdp-e-021", "pdp-w-040"
 // release. The directories' other fixtures declare earlier releases,
 // which the test manifest lists identically.
 const UNAVAILABLE_OFFERS = new Set(["pdp-e-022", "pdp-w-016", "pdp-w-028", "pdp-w-029"]);
+// The purchase-host rules ("Purchase host" in product.md, the seller block
+// in organization.md): their fixtures declare release 0.6.0, whose row in
+// the test manifest resolves both sheet specs to the editable heads.
+const PURCHASE_HOST = new Set(["pdp-w-041", "org-w-008"]);
 const runsAgainstTestManifest = (ruleDir) =>
-  ruleDir.startsWith("col-") || ruleDir === "org-w-007" || WHERE_TO_BUY.has(ruleDir) || UNAVAILABLE_OFFERS.has(ruleDir);
+  ruleDir.startsWith("col-") || ruleDir === "org-w-007" || WHERE_TO_BUY.has(ruleDir) || UNAVAILABLE_OFFERS.has(ruleDir) || PURCHASE_HOST.has(ruleDir);
 
 const ruleDirs = readdirSync(fixturesDir, { withFileTypes: true })
   .filter((entry) => entry.isDirectory())

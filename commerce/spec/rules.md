@@ -1,7 +1,7 @@
 # Pagefront Commerce Linter — Rule Catalogue
 
 Status: draft / design document, not yet a published normative artifact.
-Catalogue version: 0.18.0
+Catalogue version: 0.19.0
 Supports: commerce releases 0.5.0 (Product Sheet spec 0.11.0, Organization Sheet spec 0.5.0, Collection Sheet spec 0.1.0), 0.4.0 (Product Sheet spec 0.10.0, Organization Sheet spec 0.4.0) and 0.3.0 (Product Sheet spec 0.9.0, Organization Sheet spec 0.3.0), and the legacy draft line (format 0.9).
 
 This document is the normative linter rule catalogue for Pagefront commerce Sheets. Its version is a semver of its own, independent of the commerce release and of the sheet specs ([`releases.md`](releases.md)); the "Supports" line above states which releases this catalogue version applies to. It implements the rule structure, severity levels, and output format defined in the vertical-agnostic linter design at [`../../core/spec/linter.md`](../../core/spec/linter.md).
@@ -28,8 +28,10 @@ Rules that do not follow the default:
 | PDP-E-018, ORG-E-004, COL-E-004 | every declared release (they judge the declared release itself) | no (a legacy Sheet declares no release) |
 | PDP-E-019, PDP-E-020, PDP-E-021, PDP-W-040 | release 0.5.0, whose Product Sheet spec 0.11.0 adds "Where to buy" | no |
 | PDP-E-022 | release 0.6.0, whose Product Sheet spec 0.12.0 adds "Unavailable offers without a price" | no |
+| PDP-W-041 | release 0.6.0, whose Product Sheet spec 0.12.0 adds "Purchase host" under "Where to buy" | no |
 | COL-E-001, COL-E-002, COL-E-003, COL-E-005, COL-W-001 to COL-W-006 | release 0.5.0, the release that bundles Collection Sheet spec 0.1.0 | no (the Collection Sheet spec has no legacy draft line) |
 | ORG-W-007 | release 0.5.0, which admits `hasOfferCatalog` | no |
+| ORG-W-008 | release 0.6.0, which admits `pagefront:checkoutHosts` | no |
 
 ### Definitions
 
@@ -787,6 +789,20 @@ The `{problem}` placeholder carries one of: `states no modifier for option `{opt
 **Applies from:** release 0.5.0, with "Where to buy" in Product Sheet spec 0.11.0; not the legacy line.
 **Spec reference:** `product.md#where-to-buy`
 
+#### PDP-W-041 — Purchase URL off the canonical host
+
+**Severity:** warning
+**Target:** `$.data.offers[*]` (the finding sits at the Offer's `url` or `checkoutPageURLTemplate`)
+**Description:** A purchase URL is an Offer's `url`, or its `checkoutPageURLTemplate` expanded with `quantity` set to 1 ("Purchase host" under "Where to buy"). A consumer hands the shopper to it, and a purchase URL off the canonical host sends the shopper's purchase to another host, whether the sheet was compromised, injected through a plugin or copied from injected structured data. The Product Sheet spec lets a seller declare the hosts its checkout uses in `pagefront:checkoutHosts` on its organization sheet, and the consumer rule there, which shows the shopper the destination host and asks for confirmation before any off-host hand-off, is the enforcement. The linter cannot see the seller's list: it reads the product sheet alone and never fetches, as ORG-W-007 states for its own hint, so a declared host still warns here.
+**Check:** Fires once for an Offer's `url` when its *host* differs from the *canonical host* (see Definitions), and once for the Offer's `checkoutPageURLTemplate` when the template is a valid one (PDP-E-019 is silent on it) and the host of its expansion with `quantity` set to 1 differs from the canonical host. A `url` with no host is PDP-E-021's concern and a template with no absolute `https` expansion is PDP-E-019's; this rule stays silent on both. Silent on an Offer with neither field.
+**Message:** Purchase URL at `{path}` is on host `{purchaseHost}`; the canonical page is on `{host}`.
+The `{host}` placeholder renders `(none)` when `canonical_url` has no host, which is unreachable on Layer-1-valid input.
+**Remediation:** Move the purchase to the canonical host, or declare the host in `pagefront:checkoutHosts` on the seller's organization sheet.
+**Introduced:** release 0.6.0
+**Applies from:** release 0.6.0, with "Purchase host" in Product Sheet spec 0.12.0; not the legacy line.
+**Fixtures:** `fires-url` (an off-host `url`), `fires-template` (an off-host template expansion), `fires-subdomain` (a `url` on a subdomain of the canonical host), `clean` (both on the canonical host), `clean-no-url` (an Offer with neither field); all declare release 0.6.0 and run against the test manifest.
+**Spec reference:** `product.md#where-to-buy`
+
 ### Information
 
 #### PDP-I-001 — Property outside Pagefront's modeled set
@@ -802,7 +818,7 @@ The `{problem}` placeholder carries one of: `states no modifier for option `{opt
 
 ## Commerce Organization Sheet rules
 
-The organization-sheet catalogue, applying to Commerce Organization Sheets ([`organization.md`](organization.md)) only, per the sheet-type dispatch described at the top of this document. Layer 1 for this sheet type is the published organization JSON Schema the sheet names (`../schemas/organization/`); these rules assume a schema-valid sheet. The warning rules implement organization.md's role-scoped-content guidance ("each declared role SHOULD have its corresponding content present … and content SHOULD NOT appear without its role declared": ORG-W-001–004, and ORG-W-006 for the brand-owner-only authorized-resellers statement), a shape check on the registration machine keys (ORG-W-005), and the host rule of the catalogue entry point (ORG-W-007). Per the registration-identity rules in organization.md, **no rule in this catalogue warns on absent registration identifiers** (`leiCode`, `iso6523Code`, `identifier`, `sameAs`): absence is jurisdiction-dependent and carries no quality signal. Three further error rules, ORG-E-002, ORG-E-003 and ORG-E-004, check the envelope's version fields and are the counterparts of PDP-E-016, PDP-E-002 and PDP-E-018.
+The organization-sheet catalogue, applying to Commerce Organization Sheets ([`organization.md`](organization.md)) only, per the sheet-type dispatch described at the top of this document. Layer 1 for this sheet type is the published organization JSON Schema the sheet names (`../schemas/organization/`); these rules assume a schema-valid sheet. The warning rules implement organization.md's role-scoped-content guidance ("each declared role SHOULD have its corresponding content present … and content SHOULD NOT appear without its role declared": ORG-W-001–004, and ORG-W-006 for the brand-owner-only authorized-resellers statement), a shape check on the registration machine keys (ORG-W-005), the host rule of the catalogue entry point (ORG-W-007), and the role and shape rule of the checkout hosts (ORG-W-008). Per the registration-identity rules in organization.md, **no rule in this catalogue warns on absent registration identifiers** (`leiCode`, `iso6523Code`, `identifier`, `sameAs`): absence is jurisdiction-dependent and carries no quality signal. Three further error rules, ORG-E-002, ORG-E-003 and ORG-E-004, check the envelope's version fields and are the counterparts of PDP-E-016, PDP-E-002 and PDP-E-018.
 
 #### ORG-E-001 — `pagefront:` term without the vocabulary prefix in `@context`
 
@@ -929,6 +945,20 @@ The `{host}` placeholder renders `(none)` when `canonical_url` has no host, whic
 **Applies from:** release 0.5.0; not the legacy line.
 **Fixtures:** `fires` (one entry on another host), `clean`; both declare release 0.5.0 and run against the test manifest, as the collection fixtures do.
 **Spec reference:** `organization.md#catalogue-entry-point-any-role`
+
+#### ORG-W-008 — Checkout hosts without seller role, or not a bare host
+
+**Severity:** warning
+**Target:** `$.data` (the finding sits at `pagefront:checkoutHosts`, or at the entry)
+**Description:** `pagefront:checkoutHosts` lists the hosts outside the sheet's canonical host on which the seller's offers are bought or checked out ("Seller block" in `organization.md`), so that a consumer can tell an on-host purchase URL from an off-host one ("Purchase host" in `product.md`). Only the seller states where its checkout sends the shopper, so the field is admitted only where `pagefront:commerceRole` includes `seller`; on any other sheet it carries no weight. Each entry is a bare host name, the form a consumer compares with a purchase URL's host; an entry carrying a scheme, a path or a port matches no host. The rule reads the entries as written and never fetches.
+**Check:** Fires once, at the field, when `pagefront:checkoutHosts` is present and the data block's `pagefront:commerceRole` does not include `seller`. Fires once per entry that is not a bare host: a value that is not a string, one that is *empty or whitespace-only* (see Definitions), or one that carries a scheme (a scheme name followed by `://`), a path (a `/`) or a port (a `:`). The two conditions are independent: a sheet can earn both. Silent when the field is absent.
+**Message:** `pagefront:checkoutHosts` at `{path}`: {problem}.
+The `{problem}` placeholder renders "the sheet does not declare the `seller` role", "an entry is empty or whitespace-only", or "entry `<value>` carries a scheme" / "a path" / "a port", or "entry <value as JSON> is not a string".
+**Remediation:** List bare host names only (`checkout.merchant.example`), and only on the seller's own sheet, one whose `pagefront:commerceRole` includes `seller`; otherwise remove the field.
+**Introduced:** release 0.6.0
+**Applies from:** release 0.6.0; not the legacy line.
+**Fixtures:** `fires-no-seller` (the field on a brand-owner sheet), `fires-malformed` (one entry each with a scheme, a path, a port, and an empty one, on a seller sheet), `clean`; all declare release 0.6.0 and run against the test manifest.
+**Spec reference:** `organization.md#seller-block-seller`
 
 ## Commerce Collection Sheet rules
 
