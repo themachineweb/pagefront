@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 245" role="img" aria-labelledby="ws-title ws-desc">
+  <title id="ws-title">One product address in; three linked sheets out</title>
+  <desc id="ws-desc">
+    Three blocks. On the left, what you give: one product address,
+    /product/anorak. An arrow labelled reads goes from it to the assistant,
+    and under the arrow is what the assistant reads your available data from:
+    your pages' HTML, their JSON-LD structured data, and your storefront API. In the middle, the
+    assistant, a chat assistant with the prompt. An arrow labelled writes goes
+    from it to what you get, three linked sheets: the organization sheet
+    about.en.json, the category sheet jackets.en.json and the product sheet
+    anorak.en.json, each pointing at the others by @id.
+  </desc>
+  <style>
+    .label { font-family: var(--sans, -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, Arial, sans-serif); font-size: 11px; letter-spacing: .09em; fill: var(--ink-soft, #5a554c); text-anchor: middle; }
+    .kind  { font-family: var(--body, Charter, Georgia, serif); font-style: italic; font-size: 13px; fill: var(--ink, #1a1814); text-anchor: middle; }
+    .mono  { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; fill: var(--ink, #1a1814); }
+    .small { font-family: var(--sans, -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, Arial, sans-serif); font-size: 10px; fill: var(--ink-soft, #5a554c); text-anchor: middle; }
+    .lead  { font-family: var(--sans, -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, Arial, sans-serif); font-size: 11px; fill: var(--ink, #1a1814); text-anchor: middle; }
+    .role  { font-family: var(--sans, -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, Arial, sans-serif); font-size: 10px; fill: var(--ink-soft, #5a554c); }
+    .box   { fill: none; stroke: var(--rule, #d9d2c2); stroke-width: 1; }
+    .doc   { fill: var(--ink, #1a1814); }
+    .link  { stroke: var(--ink, #1a1814); stroke-width: 1.25; }
+    .head  { fill: var(--ink, #1a1814); }
+    .chain { stroke: var(--rule, #d9d2c2); stroke-width: 1; }
+  </style>
+
+  <!-- column labels -->
+  <text class="label" x="70" y="30">YOU GIVE</text>
+  <text class="kind"  x="70" y="48">one address</text>
+  <text class="label" x="320" y="30">THE ASSISTANT</text>
+  <text class="label" x="555" y="30">YOU GET</text>
+  <text class="kind"  x="555" y="48">a linked set</text>
+
+  <!-- what you give -->
+  <circle class="doc" cx="70" cy="140" r="5.5"/>
+  <text class="role" x="70" y="108" text-anchor="middle">the page</text>
+  <text class="mono" x="70" y="124" text-anchor="middle">/product/anorak</text>
+
+  <!-- reads, and what it reads from -->
+  <line class="link" x1="82" y1="140" x2="257" y2="140"/>
+  <path class="head" d="M 265,140 L 255,135.5 L 255,144.5 Z"/>
+  <text class="small" x="173" y="130">reads</text>
+  <text class="small" x="170" y="162">your available data from</text>
+  <text class="small" x="170" y="180">your pages' HTML</text>
+  <text class="small" x="170" y="198">their JSON-LD structured data</text>
+  <text class="small" x="170" y="216">your storefront API</text>
+
+  <!-- the assistant -->
+  <rect class="box" x="265" y="105" width="110" height="70" rx="6"/>
+  <text class="lead" x="320" y="136">a chat assistant</text>
+  <text class="small" x="320" y="154">with the prompt</text>
+
+  <!-- writes -->
+  <line class="link" x1="381" y1="140" x2="484" y2="140"/>
+  <path class="head" d="M 492,140 L 482,135.5 L 482,144.5 Z"/>
+  <text class="small" x="432" y="130">writes</text>
+  <text class="small" x="432" y="162">three linked sheets</text>
+
+  <!-- what you get -->
+  <line class="chain" x1="500" y1="90" x2="500" y2="190"/>
+  <circle class="doc" cx="500" cy="90" r="5.5"/>
+  <text class="mono" x="514" y="94">about.en.json</text>
+  <text class="role" x="514" y="108">the organization</text>
+  <circle class="doc" cx="500" cy="140" r="5.5"/>
+  <text class="mono" x="514" y="144">jackets.en.json</text>
+  <text class="role" x="514" y="158">its category</text>
+  <circle class="doc" cx="500" cy="190" r="5.5"/>
+  <text class="mono" x="514" y="194">anorak.en.json</text>
+  <text class="role" x="514" y="208">the product</text>
+</svg>
