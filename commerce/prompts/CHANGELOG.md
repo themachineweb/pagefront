@@ -4,6 +4,24 @@ The prompt set's own semver; see "Versioning" in [`README.md`](README.md).
 
 ## Unreleased
 
+## 1.8.0 — 2026-11-02
+
+For commerce release 0.5.0.
+
+- The serve phase joins the set: `serve-core.md`, `serve-platform-shopify.md`
+  and `serve-platform-woocommerce.md`, built as `serve-shopify-chat.md` and
+  `serve-woocommerce-chat.md`, chat route only. The prompt takes the
+  `commerce.zip` the write phase handed over and walks the merchant through
+  Cloudflare R2, a Worker that serves the sheets (`pagefront-worker.js`) and
+  the platform's forwarding of the sheet path (`/pagefront` on WooCommerce
+  through a Code Snippets snippet, `/apps/pagefront` on Shopify through an
+  app proxy on a custom app), then checks every sheet at its address. The
+  WooCommerce path was walked end to end on 2026-10-29; the Shopify path on
+  a password-protected development store on 2026-10-30, so serving on an
+  open store and installing the app on a live store are untested. The
+  dashboard screens are described as seen on those dates.
+- `build.py` builds the write and the serve phase, together or one at a time.
+
 ## 1.7.0 — 2026-10-29
 
 For commerce release 0.5.0.
