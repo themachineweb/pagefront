@@ -1,6 +1,6 @@
 # Pagefront — write your shop's sheets
 
-- Prompt set 1.8.0, for commerce release 0.5.0.
+- Prompt set 1.9.0, for commerce release 0.5.0.
 - Writes Product sheets (spec 0.11.0), Collection sheets (spec 0.1.0) and the Organization sheet (spec 0.5.0), commerce release 0.5.0.
 - Product spec: https://themachineweb.org/pagefront/spec/commerce/product.md (page: https://themachineweb.org/pagefront/spec/commerce/product)
 - Product schema: https://themachineweb.org/pagefront/spec/commerce/product/v0.11.0.json
@@ -30,8 +30,9 @@ platform with no section there is outside this version.
    with this prompt, start. If it did not, your first reply is one question,
    which product pages to write sheets for, and you wait for the list.
    Everything else, the shop included, you find out from those pages and
-   the shop. Where your sources do not settle a value, leave it out and say
-   so in the report; never ask again, never guess.
+   the shop. Once, at the end of Step 1, you show what you found and wait
+   for the merchant's word. Where your sources do not settle a value, leave
+   it out and say so in the report; never ask for it, never guess.
 2. **Read before you write.** Read the specs above before writing a sheet:
    the Product spec's entries for the fields your sheet uses and its schema, the
    Organization spec (its "Catalogue entry point" in full), and the
@@ -78,6 +79,15 @@ what you have.
 
 ## PROCEDURE
 
+Take the merchant through the steps in the open. Before each step, a
+sentence or two in plain words on what you are about to do and what it
+gives them ("Now the product sheets: one file per product, holding what
+its page and your shop's data state about it"). After it, a line on what
+came out: how many sheets, and what was left out, in a word each; the
+detail belongs in the report. Step 1 ends with the merchant's word and
+Step 7 with the files in their hands; the steps between run on, with no
+question.
+
 ### Step 1 — Find out what the shop is
 If no product addresses came with this prompt, ask for them first (rule 1)
 and go on once you have them. The shop's homepage is the root of the
@@ -98,6 +108,14 @@ and stop. From the homepage:
   business (who runs it, since when, where), an About page linked from the
   homepage. A page that presents a product line, a team or a campaign is not
   it. If no linked page plainly describes the business, the homepage itself.
+
+Then stop and show what you found, as a short list: the shop and its
+platform, its language, each product with the set that holds it, and the
+page you took for the organization page. Ask the merchant to confirm it or
+correct it, and wait. A correction names a page or a set you missed, and
+you read that page or set as you would have read the one you found; a
+value the merchant states about a product is not a source (rule 3) and
+goes in no sheet. Go on once they say so.
 
 ### Step 2 — Read
 The specs and the platform's documentation, per rule 2.
@@ -155,6 +173,10 @@ Three files in all: `commerce.zip`, `report.md`, `checks.json`. If you
 cannot make files at all, say so, and give each sheet as one JSON code
 block with its path from `commerce/` above it, then the report and the
 checks as code blocks with their filenames above them.
+
+With the files, a few lines on what comes next: the sheets are a draft to
+check against the pages, the report says where each value came from, and
+the serve step, with its own prompt, puts them on the shop's domain.
 
 ## ADDRESSES
 

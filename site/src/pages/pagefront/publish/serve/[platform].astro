@@ -46,10 +46,12 @@ const title = `Serve your sheets — ${meta.titleSuffix}`;
       and gives you the steps in plain words: a Cloudflare account, R2
       storage, one bucket with the sheets uploaded into it, one Worker that
       answers requests for them, and the forwarding on {meta.label} that
-      sends one path of your domain to that Worker. Every file you have to
+      sends one path of your domain to that Worker. It gives you one step
+      at a time, says what each is for and what you should see, and waits
+      for you to say it is done before the next. Every file you have to
       paste comes in one kit, <code>pagefront-serving-kit.zip</code>, which
-      the first step has you download. When you tell it you are done, it
-      checks every sheet at its address and hands you a report. The
+      the first step has you download. When you tell it the last step is
+      done, it checks every sheet at its address and hands you a report. The
       assistant needs to be able to fetch web pages and make files; one
       that cannot will say so.
     </p>

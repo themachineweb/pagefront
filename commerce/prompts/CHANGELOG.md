@@ -4,6 +4,23 @@ The prompt set's own semver; see "Versioning" in [`README.md`](README.md).
 
 ## Unreleased
 
+## 1.9.0 — 2026-11-05
+
+For commerce release 0.5.0.
+
+- Chat route of the write phase: the assistant says, before each step,
+  what it is about to do and what it gives the merchant, and after it what
+  came out. At the end of Step 1 it shows what it found (the shop and its
+  platform, the language, each product's set, the organization page) and
+  waits for the merchant to confirm or correct it before writing a sheet;
+  rule 1 names this one pause. A correction names a page or a set the
+  assistant missed; a value the merchant states is still no source. The
+  handover ends with what comes next.
+- Serve phase: the eight setup steps go one per message. Each opens with
+  what the step is for, says what to do and what the merchant should see,
+  and waits for the merchant's word that it is done before the next. The
+  first message says how many steps follow and what they lead to.
+
 ## 1.8.0 — 2026-11-02
 
 For commerce release 0.5.0.
