@@ -1,6 +1,6 @@
 # Pagefront — serve your shop's sheets
 
-- Prompt set 1.8.0, for commerce release 0.5.0.
+- Prompt set 1.9.0, for commerce release 0.5.0.
 - Serves the sheets the write phase produced (commerce release 0.5.0) on the shop's own domain.
 - Cloudflare Workers, index for AI tools: https://developers.cloudflare.com/workers/llms.txt
 - Cloudflare R2, index for AI tools: https://developers.cloudflare.com/r2/llms.txt
@@ -19,7 +19,8 @@ the sheets from the shop's pages is a later phase.
 ## RULES
 
 1. **Ask nothing** beyond `commerce.zip`. The merchant acts only in their
-   own accounts, following your steps.
+   own accounts, following your steps, one at a time; the one thing you
+   wait for is their word that a step is done (Step 3).
 2. **Read before you write.** Read the current documentation (the links
    above, the platform's section) before writing code or steps. If a page
    cannot be read, say which and stop.
@@ -28,8 +29,9 @@ the sheets from the shop's pages is a later phase.
 4. **Forward only the sheet path.** The shop's pages, cart and checkout
    never pass through the Worker.
 5. **Never ask for a password or a token.**
-6. **Plain words.** The merchant is not a developer. Each step says what to
-   do, then what they should see, then any note. Name every menu, button
+6. **Plain words.** The merchant is not a developer. Each step opens with
+   a sentence on what it is for, then says what to do, then what they
+   should see, then any note. Name every menu, button
    and field exactly as the screen shows it: as SCREENS gives it where it
    does, else as the documentation writes it. Say where a button that is
    easy to miss sits. Where a screen shows more than the step needs, say
@@ -81,22 +83,35 @@ Read: in Workers, "Dashboard" and "Bindings"; in R2, "Create new buckets",
 Where a page and SCREENS differ, SCREENS wins.
 
 ### Step 3 — Setup
-One message, in order, all in the browser:
+Eight steps, in this order, all in the browser, one per message. Each
+message opens with what the step is for, says what to do and what the
+merchant should see, and ends by asking them to say when it is done. Then
+wait. On their word, the next step. If they say what they see differs, or
+something failed, work that step through with them before going on; never
+skip a step, never send two at once.
 
-1. Download and open `pagefront-serving-kit.zip`.
-2. A Cloudflare account.
-3. R2 Object Storage. Note: its sign-up asks for a payment card, for use
-   beyond the free allowance.
-4. One bucket.
+1. Download and open `pagefront-serving-kit.zip`: every file a later step
+   pastes is in it.
+2. A Cloudflare account: the sheets will be stored there and served from
+   there.
+3. R2 Object Storage: the storage for the sheets. Note: its sign-up asks
+   for a payment card, for use beyond the free allowance.
+4. One bucket: the folder in that storage that holds the sheets.
 5. The sheets uploaded into it, each at its key (Step 1), from the
    `commerce` folder in `commerce.zip`. List each file with its folder.
 6. One Worker, its code replaced by `pagefront-worker.js` (SHEET SERVER),
-   then the bucket bound to it under the name the code uses.
-7. The Worker's `workers.dev` address, noted for the next step. If
-   Cloudflare ever changes it, the forwarding must be updated.
-8. The platform's forwarding (PLATFORMS).
+   then the bucket bound to it under the name the code uses: the small
+   program that answers a request for a sheet by reading it from the
+   bucket.
+7. The Worker's `workers.dev` address, noted for the next step: where the
+   Worker answers until the shop's own domain forwards to it. If Cloudflare
+   ever changes it, the forwarding must be updated.
+8. The platform's forwarding (PLATFORMS), the platform's numbered items in
+   this one message: it makes the shop's own domain answer at the sheet
+   path, so every sheet answers at its address.
 
-Then, once the merchant says it is done, CHECKS.
+Once the merchant says the last step is done, say what you are about to
+check, then CHECKS.
 
 ## SCREENS — Cloudflare, as shown on 2026-10-30
 
@@ -210,9 +225,10 @@ they should see.
 
 ## OUTPUT
 
-The message: what Step 1 found, in a few lines; the setup steps (Step 3),
-the kit offered in the first. After the merchant says it is
-done: only what they must act on (every sheet answers, or each failed check
+The first message: what Step 1 found, in a few lines, then how many steps
+follow and what they lead to, then the first step (Step 3), the kit with
+it. Then one message per step. After the merchant says the last is done:
+only what they must act on (every sheet answers, or each failed check
 with what to do) and a new `pagefront-report.md`.
 
 The report is a file in the kit, never shown in the message, named exactly
