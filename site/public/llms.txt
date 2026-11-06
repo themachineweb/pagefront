@@ -39,6 +39,8 @@ Commerce release 0.5.0 is the current release. It bundles the Product Sheet spec
 - [Write prompt, WooCommerce](https://themachineweb.org/pagefront/publish/write/woocommerce.md)
 - [Serve prompt, Shopify](https://themachineweb.org/pagefront/publish/serve/shopify.md): puts the sheets the write prompt produced online on the shop's domain, through Cloudflare R2, a Worker and an app proxy.
 - [Serve prompt, WooCommerce](https://themachineweb.org/pagefront/publish/serve/woocommerce.md): the same, the forwarding a Code Snippets snippet.
+- [Link prompt, Shopify](https://themachineweb.org/pagefront/publish/link/shopify.md): makes the served sheets findable from the shop's pages, through a metafield per page and one block in the theme.
+- [Link prompt, WooCommerce](https://themachineweb.org/pagefront/publish/link/woocommerce.md): the same, through a custom field per page and a Code Snippets snippet, which also serves the entry point.
 - [Consume](https://themachineweb.org/pagefront/consume): how to find a sheet from the page that links to it, fetch it, read the envelope and the data, and follow references. No key, no account, no permission.
 - [FAQ](https://themachineweb.org/pagefront/faq): what Pagefront is, who it is for, how it relates to Schema.org and feeds, and what it costs.
 

@@ -30,6 +30,19 @@ export const SERVE_PLATFORMS = {
 
 export type ServePlatform = keyof typeof SERVE_PLATFORMS;
 
+/**
+ * The platforms with a link page: those with a link section in the prompt
+ * set (commerce/prompts/README.md). The pages are
+ * /pagefront/publish/link/<platform>, chat route only. `codeHome` names,
+ * in the merchant's words, where the one piece of code goes.
+ */
+export const LINK_PLATFORMS = {
+  shopify: { label: 'Shopify', titleSuffix: 'Shopify', codeHome: 'theme' },
+  woocommerce: { label: 'WooCommerce', titleSuffix: 'WooCommerce', codeHome: 'WordPress admin, as a Code Snippets snippet' },
+} as const;
+
+export type LinkPlatform = keyof typeof LINK_PLATFORMS;
+
 /** The prompt whose file is commerce/prompts/<stem>.md; throws when absent. */
 export async function promptBody(stem: string): Promise<string> {
   const entries: CollectionEntry<'prompts'>[] = await getCollection('prompts');

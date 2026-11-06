@@ -167,7 +167,12 @@ Link: <https://your-shop.example/product/anorak.en.json>; rel="alternate"; type=
 Either form is enough. Most publishers should use the element, because they
 cannot edit headers.
 
-A prompt that adds the link to your product pages is coming.
+The prompt for your platform walks you through it: one piece of code, pasted
+once, that prints the link on every page whose field is set, then each
+sheet's address to paste into its page's field. It checks each page as you
+go.
+
+<p><a class="pf-cta" href="/pagefront/publish/link/shopify">Shopify <span aria-hidden="true">→</span></a> <a class="pf-cta" href="/pagefront/publish/link/woocommerce">WooCommerce <span aria-hidden="true">→</span></a></p>
 
 ## 4. Check it
 
