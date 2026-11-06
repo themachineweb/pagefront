@@ -1,7 +1,8 @@
 # Pagefront prompts
 
 The prompts a merchant hands to a chat assistant or a code assistant to
-write Pagefront sheets, and then to serve them on the shop's own domain.
+write Pagefront sheets, then to serve them on the shop's own domain, then to
+link them from the shop's pages.
 The site renders the write prompts; this folder is the source.
 
 ## What the folder holds
@@ -36,6 +37,20 @@ Worker and the platform's forwarding:
   belongs to a code route, which does not exist yet.
 - `serve-<platform>-chat.md`: the two built serve prompts, chat route only.
 
+The link phase, which makes the served sheets findable from the shop's
+pages per Discovery: the merchant pastes each sheet's address into a field
+of its page, and one piece of code prints the declaration on every page
+whose field is set:
+
+- `link-core.md`: the shared body of the link-phase prompts, with the same
+  markers.
+- `link-platform-shopify.md`, `link-platform-woocommerce.md`: one section
+  per platform, its admin paths dated observations. WooCommerce was walked
+  end to end; Shopify for one product on a development store, so its
+  collection and page definitions and the public checks on an open store
+  are untested.
+- `link-<platform>-chat.md`: the two built link prompts, chat route only.
+
 `build.py` assembles every built prompt from the cores and the platform
 sections.
 
@@ -47,7 +62,7 @@ After editing a core or a platform section:
 python3 commerce/prompts/build.py
 ```
 
-Commit the sources and the eight outputs together. A pull request that
+Commit the sources and the ten outputs together. A pull request that
 edits a source without rebuilding leaves the served prompt behind the
 source.
 
@@ -58,7 +73,7 @@ independent of the commerce release, stating which release they target.
 The version is the second line of every prompt's header block:
 
 ```
-- Prompt set 1.9.0, for commerce release 0.5.0.
+- Prompt set 1.10.0, for commerce release 0.5.0.
 ```
 
 The whole set shares one version. The rule:
@@ -89,6 +104,9 @@ prompts from `main`.
 - The one-product prompt: `/pagefront/publish/assistant`, with its twin at
   `/pagefront/publish/assistant.md`.
 - The built serve prompts: `/pagefront/publish/serve/<platform>`, for
+  `shopify` and `woocommerce`, each with a markdown twin at the same path
+  plus `.md`.
+- The built link prompts: `/pagefront/publish/link/<platform>`, for
   `shopify` and `woocommerce`, each with a markdown twin at the same path
   plus `.md`.
 - The code-route prompts are in the site's collection and have no page yet.

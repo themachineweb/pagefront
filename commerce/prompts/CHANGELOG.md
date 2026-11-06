@@ -4,6 +4,34 @@ The prompt set's own semver; see "Versioning" in [`README.md`](README.md).
 
 ## Unreleased
 
+## 1.10.0 — 2026-11-06
+
+For commerce release 0.5.0.
+
+- The link phase joins the set: `link-core.md`, `link-platform-shopify.md`
+  and `link-platform-woocommerce.md`, built as `link-shopify-chat.md` and
+  `link-woocommerce-chat.md`, chat route only. The prompt takes the
+  `commerce.zip` the write phase handed over and the serve phase put online,
+  lists each sheet's page from its `canonical_url`, and walks the merchant
+  through one piece of code pasted once (a block in the theme on Shopify,
+  a Code Snippets snippet on WooCommerce) and one field per page holding
+  the sheet's `sheet_url`, one step per message, each step's pages checked
+  before the next. The code prints the declaration only where a field holds
+  an address under the shop's sheet path. On WooCommerce the snippet also
+  carries the `Link` header and the entry point (`/.well-known/pagefront`
+  and the `Pagefront:` line in `robots.txt`); Shopify has neither, by
+  decision, and the report says so once. The WooCommerce path was walked
+  end to end on 2026-11-05; the Shopify path on 2026-11-06 for one product
+  on a password-protected development store, so its collection and page
+  definitions and the public checks on an open store are untested. The
+  admin screens are described as seen on those dates.
+- Serve phase, Step 3: each message opens by naming what the merchant is
+  about to make or change, as their dashboard calls it, and what it does
+  for the shop; and each step carries its check, run before the next
+  step: none for the first six, one sheet fetched at the Worker's address
+  after the seventh, the full checks after the eighth.
+- `build.py` builds the link phase too; ten outputs.
+
 ## 1.9.0 — 2026-11-05
 
 For commerce release 0.5.0.

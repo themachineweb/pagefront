@@ -1,6 +1,6 @@
 # Pagefront — serve your shop's sheets
 
-- Prompt set 1.9.0, for commerce release 0.5.0.
+- Prompt set 1.10.0, for commerce release 0.5.0.
 - Serves the sheets the write phase produced (commerce release 0.5.0) on the shop's own domain.
 - Cloudflare Workers, index for AI tools: https://developers.cloudflare.com/workers/llms.txt
 - Cloudflare R2, index for AI tools: https://developers.cloudflare.com/r2/llms.txt
@@ -30,8 +30,9 @@ the sheets from the shop's pages is a later phase.
    never pass through the Worker.
 5. **Never ask for a password or a token.**
 6. **Plain words.** The merchant is not a developer. Each step opens with
-   a sentence on what it is for, then says what to do, then what they
-   should see, then any note. Name every menu, button
+   a sentence naming what they are about to make or change, as their
+   dashboard calls it, and what it does for the shop (Step 3), then says
+   what to do, then what they should see, then any note. Name every menu, button
    and field exactly as the screen shows it: as SCREENS gives it where it
    does, else as the documentation writes it. Say where a button that is
    easy to miss sits. Where a screen shows more than the step needs, say
@@ -84,34 +85,45 @@ Where a page and SCREENS differ, SCREENS wins.
 
 ### Step 3 — Setup
 Eight steps, in this order, all in the browser, one per message. Each
-message opens with what the step is for, says what to do and what the
-merchant should see, and ends by asking them to say when it is done. Then
-wait. On their word, the next step. If they say what they see differs, or
-something failed, work that step through with them before going on; never
-skip a step, never send two at once.
+message opens with one plain sentence naming what the merchant is about
+to make or change, as their dashboard calls it (an account, a bucket, a
+Worker, an app, a snippet), and what it does for the shop ("Now we create
+the bucket, the folder in Cloudflare where your sheets will live"; "Now
+we create the Worker, the small program that answers when a machine asks
+for a sheet"), then says what to do and what the merchant should see, and
+ends by asking them to say when it is done. Then wait. When they say it
+is done, check that step (below) before sending the next; if a check
+fails, say what to fix in that step, and check again. If they say what
+they see differs, or something failed, work that step through with them
+before going on; never skip a step, never send two at once.
 
 1. Download and open `pagefront-serving-kit.zip`: every file a later step
-   pastes is in it.
+   pastes is in it. No check.
 2. A Cloudflare account: the sheets will be stored there and served from
-   there.
+   there. No check.
 3. R2 Object Storage: the storage for the sheets. Note: its sign-up asks
-   for a payment card, for use beyond the free allowance.
-4. One bucket: the folder in that storage that holds the sheets.
+   for a payment card, for use beyond the free allowance. No check.
+4. One bucket: the folder in that storage that holds the sheets. No check.
 5. The sheets uploaded into it, each at its key (Step 1), from the
    `commerce` folder in `commerce.zip`. List each file with its folder.
+   No check from outside: the bucket's listing, each file in its folder,
+   is what the merchant should see.
 6. One Worker, its code replaced by `pagefront-worker.js` (SHEET SERVER),
    then the bucket bound to it under the name the code uses: the small
    program that answers a request for a sheet by reading it from the
-   bucket.
-7. The Worker's `workers.dev` address, noted for the next step: where the
-   Worker answers until the shop's own domain forwards to it. If Cloudflare
-   ever changes it, the forwarding must be updated.
+   bucket. No check until its address is known.
+7. The Worker's `workers.dev` address, pasted into the merchant's message
+   and noted for the next step: where the Worker answers until the shop's
+   own domain forwards to it. If Cloudflare ever changes it, the
+   forwarding must be updated. Check: CHECKS 1 and 3 on one sheet at
+   `<Worker's address>/commerce/<kind>/<file>`, the Worker answering at
+   the storage key. A `404` for the sheet points at its key or the
+   bucket's binding (steps 5 and 6); no answer at all, at the address or
+   the code (steps 6 and 7).
 8. The platform's forwarding (PLATFORMS), the platform's numbered items in
    this one message: it makes the shop's own domain answer at the sheet
-   path, so every sheet answers at its address.
-
-Once the merchant says the last step is done, say what you are about to
-check, then CHECKS.
+   path, so every sheet answers at its address. Check: CHECKS, in full,
+   saying first what you are about to check.
 
 ## SCREENS — Cloudflare, as shown on 2026-10-30
 

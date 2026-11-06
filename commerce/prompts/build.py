@@ -1,7 +1,8 @@
 """Assemble the phase prompts from the sources in this folder.
 
 A phase has a core and one section per platform: the write phase `core.md` and
-`platform-<name>.md`, the serve phase `serve-core.md` and `serve-platform-<name>.md`.
+`platform-<name>.md`, the serve phase `serve-core.md` and `serve-platform-<name>.md`, the
+link phase `link-core.md` and `link-platform-<name>.md`.
 Blocks between `<!-- route: chat -->` (or `code`) and `<!-- /route -->` appear only in that
 route's prompt; `<!-- platform -->` in the core is replaced by the platform's section.
 Output: <phase>-<platform>-<route>.md in this folder, committed with the sources, so the
@@ -16,6 +17,7 @@ HERE = pathlib.Path(__file__).resolve().parent
 PHASES = {
     "write": ("core.md", "platform-", ("chat", "code")),
     "serve": ("serve-core.md", "serve-platform-", ("chat",)),
+    "link": ("link-core.md", "link-platform-", ("chat",)),
 }
 BLOCK = re.compile(r"<!-- route: (\w+) -->\n(.*?)<!-- /route -->\n", re.S)
 

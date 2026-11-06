@@ -1,0 +1,114 @@
+---
+/**
+ * /pagefront/publish/link/<platform> — the prompt a merchant hands to a
+ * chat assistant to make the served sheets findable from the shop's own
+ * pages, per Pagefront Discovery. The prompt text is
+ * commerce/prompts/link-<platform>-chat.md, read through the prompts
+ * collection, and is also served verbatim at the same path plus ".md";
+ * this page wraps it with a short brief and a copy button, as the write
+ * and serve pages do.
+ */
+import Section from '../../../../layouts/Section.astro';
+import { LINKS } from '../../../../lib/links';
+import { LINK_PLATFORMS, promptBody, promptSetLine, type LinkPlatform } from '../../../../lib/prompts';
+
+export function getStaticPaths() {
+  return Object.keys(LINK_PLATFORMS).map((platform) => ({ params: { platform } }));
+}
+
+const platform = Astro.params.platform as LinkPlatform;
+const meta = LINK_PLATFORMS[platform];
+const prompt = await promptBody(`link-${platform}-chat`);
+const setLine = promptSetLine(prompt);
+const PATH = `${LINKS.publish}/link/${platform}`;
+const RAW_URL = `${PATH}.md`;
+const SERVE_URL = `${LINKS.publish}/serve/${platform}`;
+const title = `Link your sheets — ${meta.titleSuffix}`;
+---
+
+<Section
+  title={`${title} — Pagefront`}
+  description={`A prompt to hand a chat assistant to make a ${meta.label} shop's Pagefront sheets findable from its pages: give it the commerce.zip the write prompt handed back and it walks you through one piece of code for your ${meta.codeHome} and one field per page, then checks that every page declares its sheet.`}
+  path={PATH}
+>
+  <header class="doc-head">
+    <p class="pf-kicker"><a href={LINKS.landing}>Pagefront</a> · <a href={LINKS.publish}>Publish</a></p>
+    <h1>{title}</h1>
+  </header>
+
+  <div class="doc-body">
+    <p>
+      Copy the prompt below into ChatGPT, Claude or another chat assistant,
+      attach <code>commerce.zip</code>, the archive the write prompt handed
+      back and the <a href={SERVE_URL}>serve prompt</a> put online, and
+      send both together. The assistant reads the sheets, works out your
+      shop from their addresses, reads the Pagefront Discovery spec and
+      {meta.label}'s documentation, and gives you the steps in plain words:
+      one piece of code pasted once into your {meta.codeHome}, which prints
+      the link on every page whose field is set, then each page's sheet
+      address to paste into that page's field in your admin. It gives you
+      one step at a time, says what each changes and what you should see,
+      and checks the pages of each step before the next. Every file you
+      have to paste comes in one kit, <code>pagefront-linking-kit.zip</code>,
+      which the first step has you download. After the last step it checks
+      every page and hands you a report. The assistant needs to be able to
+      fetch web pages and make files; one that cannot will say so.
+    </p>
+    <p>
+      The prompt describes the {meta.label} screens as they looked on the
+      dates it states. Where a screen differs from what it says, tell the
+      assistant what you see and it guides you from there. Once every page
+      declares its sheet, the last step is to check one from outside; the
+      <a href={LINKS.publish}>publishing page</a> has the whole procedure.
+    </p>
+    <p class="pf-note">
+      Markdown version: <a href={RAW_URL}>{RAW_URL}</a>
+    </p>
+  </div>
+
+  <div class="prompt-box">
+    <div class="prompt-bar">
+      <span class="prompt-title">Prompt · {meta.titleSuffix} · {setLine}</span>
+      <button type="button" class="prompt-copy" id="prompt-copy">Copy prompt</button>
+    </div>
+    <pre id="prompt-text">{prompt}</pre>
+  </div>
+</Section>
+
+<style is:global>
+  .prompt-box{
+    margin-top: clamp(1.5rem,4vw,2.25rem);
+    border:1px solid var(--rule);
+    border-radius:6px;
+    overflow:hidden;
+  }
+  .prompt-bar{
+    display:flex; align-items:center; justify-content:space-between; gap:1rem;
+    padding:.6rem .9rem;
+    border-bottom:1px solid var(--rule);
+    font-family:var(--sans); font-size:.85rem; color:var(--ink-soft);
+  }
+  .prompt-title{ font-weight:600; }
+  .prompt-copy{
+    font:inherit; font-weight:600; font-size:.8rem;
+    padding:.25rem .75rem; border:1px solid var(--rule); border-radius:999px;
+    background:transparent; color:var(--ink-soft); cursor:pointer;
+  }
+  .prompt-copy:hover{ color:var(--ink); border-color:var(--ink); }
+  .prompt-box pre{
+    margin:0; padding:1rem 1.1rem;
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:.78rem; line-height:1.55;
+    white-space:pre-wrap; overflow-wrap:anywhere;
+    background:#efe9db;
+  }
+</style>
+
+<script>
+  const button = document.getElementById('prompt-copy') as HTMLButtonElement;
+  const text = document.getElementById('prompt-text') as HTMLPreElement;
+  button.addEventListener('click', async () => {
+    await navigator.clipboard.writeText(text.textContent ?? '');
+    button.textContent = 'Copied';
+    setTimeout(() => { button.textContent = 'Copy prompt'; }, 1500);
+  });
+</script>
