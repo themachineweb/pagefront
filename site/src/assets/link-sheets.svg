@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 270" role="img" aria-labelledby="ls-title ls-desc">
+  <title id="ls-title">One template edit and one field per product put the link on every page</title>
+  <desc id="ls-desc">
+    Two inputs on the left, one result on the right. Top left, the theme,
+    edited once: the product template gains one piece of code, which prints a
+    link element when the product's sheet address field is set. Bottom left,
+    the field, one per product: anorak and parka carry their sheet addresses,
+    beanie has none yet. Both feed the pages on the right: the anorak and
+    parka pages carry the link element in their head, the beanie page carries
+    none.
+  </desc>
+  <style>
+    .label { font-family: var(--sans, -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, Arial, sans-serif); font-size: 11px; letter-spacing: .09em; fill: var(--ink-soft, #5a554c); text-anchor: middle; }
+    .kind  { font-family: var(--body, Charter, Georgia, serif); font-style: italic; font-size: 13px; fill: var(--ink, #1a1814); text-anchor: middle; }
+    .mono  { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; fill: var(--ink, #1a1814); }
+    .mono-soft { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; fill: var(--ink-soft, #5a554c); }
+    .small { font-family: var(--sans, -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, Arial, sans-serif); font-size: 10px; fill: var(--ink-soft, #5a554c); }
+    .box   { fill: none; stroke: var(--rule, #d9d2c2); stroke-width: 1; }
+    .doc   { fill: var(--ink, #1a1814); }
+    .none  { fill: none; stroke: var(--rule, #d9d2c2); stroke-width: 1; }
+    .link  { stroke: var(--ink, #1a1814); stroke-width: 1.25; fill: none; }
+    .head  { fill: var(--ink, #1a1814); }
+  </style>
+
+  <!-- column labels -->
+  <text class="label" x="160" y="30">THE THEME</text>
+  <text class="kind"  x="160" y="48">edited once</text>
+  <text class="label" x="505" y="30">YOUR PAGES</text>
+  <text class="kind"  x="505" y="48">as served</text>
+
+  <!-- the template, once -->
+  <rect class="box" x="40" y="68" width="240" height="62" rx="6"/>
+  <text class="mono-soft" x="52" y="86">the product template</text>
+  <text class="small" x="52" y="104">if the sheet address is set, print</text>
+  <text class="mono" x="52" y="120">&lt;link rel="alternate" href="…"&gt;</text>
+
+  <!-- the field, per product -->
+  <text class="label" x="160" y="166">THE FIELD</text>
+  <text class="kind"  x="160" y="184">one per product</text>
+  <text class="mono" x="52" y="208">anorak</text>
+  <text class="mono-soft" x="110" y="208">…/anorak.en.json</text>
+  <text class="mono" x="52" y="226">parka</text>
+  <text class="mono-soft" x="110" y="226">…/parka.en.json</text>
+  <text class="mono" x="52" y="244">beanie</text>
+  <text class="small" x="110" y="244">empty, no sheet yet</text>
+
+  <!-- both feed the pages -->
+  <path class="link" d="M 288,99 C 315,99 315,150 340,150"/>
+  <path class="link" d="M 288,222 C 315,222 315,150 340,150"/>
+  <line class="link" x1="340" y1="150" x2="382" y2="150"/>
+  <path class="head" d="M 390,150 L 380,145.5 L 380,154.5 Z"/>
+  <text class="small" x="364" y="140" text-anchor="middle">prints</text>
+
+  <!-- the pages -->
+  <circle class="doc" cx="402" cy="94" r="4"/>
+  <text class="mono" x="412" y="98">/product/anorak</text>
+  <text class="mono-soft" x="412" y="114">&lt;link … href="…/anorak.en.json"&gt;</text>
+
+  <circle class="doc" cx="402" cy="146" r="4"/>
+  <text class="mono" x="412" y="150">/product/parka</text>
+  <text class="mono-soft" x="412" y="166">&lt;link … href="…/parka.en.json"&gt;</text>
+
+  <circle class="none" cx="402" cy="198" r="4"/>
+  <text class="mono" x="412" y="202">/product/beanie</text>
+  <text class="small" x="412" y="218">no link, until its field is set</text>
+</svg>

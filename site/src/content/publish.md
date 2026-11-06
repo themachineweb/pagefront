@@ -154,6 +154,11 @@ In the `<head>` of the product page, one per sheet.
 On a shop platform this is one line in the product page template, not one
 edit per product: the template fills in each product's sheet address.
 
+<figure class="diagram">
+<!-- diagram: link-sheets -->
+<figcaption>One edit to the theme prints the link on every product page whose field is set. One field per product holds its sheet address. A page with an empty field carries no link, and nothing breaks.</figcaption>
+</figure>
+
 The `type` is what tells
 the sheet apart from the other `alternate` links a page carries, such as feeds,
 so keep it exactly as written. If you can set response
