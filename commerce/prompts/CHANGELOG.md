@@ -4,6 +4,28 @@ The prompt set's own semver; see "Versioning" in [`README.md`](README.md).
 
 ## Unreleased
 
+## 1.12.0 — 2026-11-09
+
+For commerce release 0.5.0.
+
+- Each chat prompt asks the merchant one more thing with its input: whether
+  this is the shop's first run or an addition. Write phase: with the
+  product addresses, whether sheets exist already, online or written and
+  not yet online (then the earlier run's `commerce.zip` is attached). Step 1
+  finds the sheets that exist, by fetching the address of each sheet the
+  run's sheets reference or by reading the attached archive, and the
+  merchant sees in the Step 1 summary which of them the run will rewrite.
+  A sheet points at another's address when that sheet exists, written in
+  this run or found in Step 1, so a later run keeps the hints of earlier
+  ones instead of dropping them when a shared parent or the organization
+  sheet is rewritten. The archive holds the sheets of this run alone, new
+  and rewritten, uploaded over what is there; the report lists which is
+  which. Serve phase: on an addition, the steps are the kit and the upload
+  into the merchant's existing bucket, then the checks on the sheets of
+  this run. Link phase: on an addition the code step is left out, its
+  check run before the first field step and the step given if the check
+  fails. The code route is unchanged.
+
 ## 1.11.0 — 2026-11-09
 
 For commerce release 0.5.0.
