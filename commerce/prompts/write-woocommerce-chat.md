@@ -1,6 +1,6 @@
 # Pagefront — write your shop's sheets
 
-- Prompt set 1.12.0, for commerce release 0.5.0.
+- Prompt set 1.12.1, for commerce release 0.5.0.
 - Writes Product sheets (spec 0.11.0), Collection sheets (spec 0.1.0) and the Organization sheet (spec 0.5.0), commerce release 0.5.0.
 - Product spec: https://themachineweb.org/pagefront/spec/commerce/product.md (page: https://themachineweb.org/pagefront/spec/commerce/product)
 - Product schema: https://themachineweb.org/pagefront/spec/commerce/product/v0.11.0.json
@@ -30,7 +30,8 @@ platform with no section there is outside this version.
    sheets for, as addresses, and the merchant's word on what exists
    already: this is the shop's first run; or sheets are already online; or
    sheets were written and are not online yet, in which case they attach
-   that run's `commerce.zip`. If both came with this prompt, start. If
+   every `commerce.zip` not yet online, one per run. If both came with this
+   prompt, start. If
    either is missing, your first reply asks for what is missing, in one
    message, and you wait. Everything else, the shop included, you find out
    from those pages and the shop. Once, at the end of Step 1, you show
@@ -110,13 +111,14 @@ and stop. From the homepage:
   products directly, and each of its parents up to the top level of the
   tree (COLLECTION SHEETS).
 - **The sheets that exist**, from the merchant's answer (rule 1). A first
-  run: none. Sheets online: for the organization sheet, each set you will
-  write and each product and set those sets list, fetch the address
-  ADDRESSES gives it; one that answers with a JSON document whose data
-  block carries the `@id` IDENTITIES gives it exists. Sheets attached: every
-  sheet in the attached archive exists, at its path. A sheet that exists
-  and that this run writes again is rewritten; one this run does not write
-  is left as it is, and its address stays good.
+  run: none. Sheets online: for the organization sheet, each set it will
+  list in `hasOfferCatalog`, each set you will write and each product and
+  set those sets list, fetch the address ADDRESSES gives it; one that
+  answers with a JSON document whose data block carries the `@id`
+  IDENTITIES gives it exists. Sheets attached: every sheet in the attached
+  archives exists, at its path. A sheet that exists and that this run
+  writes again is rewritten; one this run does not write is left as it is,
+  and its address stays good.
 - **The organization page**: the page that describes the shop as a
   business (who runs it, since when, where), an About page linked from the
   homepage. A page that presents a product line, a team or a campaign is not
@@ -214,7 +216,7 @@ sheet's `seller`), a collection sheet's (from `isPartOf`, `hasPart` and the
 organization sheet's `hasOfferCatalog`) and a product sheet's (from
 `hasPart`). A sheet points at another sheet's address only when that sheet
 exists,
-one you write in this run or one Step 1 found online or in the archive the
+one you write in this run or one Step 1 found online or in the archives the
 merchant attached;
 a reference to a product or set with no sheet carries no
 `pagefront:sheetUrl`.

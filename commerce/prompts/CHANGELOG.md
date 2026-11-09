@@ -4,6 +4,19 @@ The prompt set's own semver; see "Versioning" in [`README.md`](README.md).
 
 ## Unreleased
 
+## 1.12.1 — 2026-11-09
+
+For commerce release 0.5.0.
+
+- Write phase, chat route, two gaps in the Step 1 rule on the sheets that
+  exist. The top-level sets the organization sheet lists in
+  `hasOfferCatalog` are fetched too, so a run under one root keeps the
+  hints on the roots of earlier runs when it rewrites the organization
+  sheet; until now only the sets of the run's own chain were fetched and
+  the other roots lost their hint. And a merchant with more than one run
+  written and not yet online attaches every archive, one per run, since
+  each holds its own run's sheets alone.
+
 ## 1.12.0 — 2026-11-09
 
 For commerce release 0.5.0.
