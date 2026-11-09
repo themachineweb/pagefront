@@ -1,6 +1,7 @@
 ### Shopify
 
 - Documentation: https://shopify.dev/docs/apps/build/online-store/app-proxies and https://shopify.dev/docs/apps/build/dev-dashboard
+- Link prompt, the next phase: https://themachineweb.org/pagefront/publish/link/shopify
 - **Signs**: `<origin>/products/<handle>.js` answers with the product as
   JSON (Shopify's Ajax API). Every address redirecting to `/password`: the
   store is closed. Go on with the setup; tell the merchant the sheets answer

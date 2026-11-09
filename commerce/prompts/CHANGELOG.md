@@ -27,6 +27,11 @@ For commerce release 0.5.0.
   fields WooCommerce uses for shipping rates, and a run left a product's
   published weight and dimensions out of its sheet on the spec's rule that
   a shipping weight or a parcel size is never the product's own.
+- Serve phase: the closing message, after the last step, ends with what
+  comes next, as the write phase's handover does: the sheets answer and no
+  page points at them yet, and the link phase, with its own prompt, makes
+  each sheet findable from its page. Each platform's section carries the
+  address of its link prompt. A run had closed on the checks alone.
 
 ## 1.12.1 — 2026-11-09
 
