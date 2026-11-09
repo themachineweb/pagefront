@@ -186,11 +186,6 @@ Added in 0.12.0 (catalogue 0.16.0), with commerce release 0.4.0. Requires
   Offer with neither `areaServed` nor `eligibleRegion`; an Offer `url` that
   is not an absolute http or https URL; and an Offer without `url` on a
   sheet carrying several offers.
-- `PDP-E-022` (applies from release 0.6.0, unreleased) — "Unavailable offers
-  without a price" in the Product Sheet spec: a `checkoutPageURLTemplate` on
-  an Offer whose `availability` is `OutOfStock`, `SoldOut` or `Discontinued`.
-  From the same change, `PDP-W-016` is silent on such an Offer, which the
-  spec publishes without a price.
 
 Added in 0.13.0 (catalogue 0.17.0), released with commerce release 0.5.0,
 with the Commerce Collection Sheet spec
@@ -205,21 +200,37 @@ with the Commerce Collection Sheet spec
   edge's host), `COL-W-001` (empty `hasPart`), `COL-W-002` (member without
   `pagefront:sheetUrl`), `COL-W-004` (brand reference and brand kind
   disagree), `COL-W-005` (parent of another kind), `COL-W-006` (duplicate
-  member), `COL-W-007` (parent without `pagefront:sheetUrl`).
-- `PDP-W-041` (applies from release 0.6.0) — a purchase URL off the
-  canonical host: an Offer's `url`, or its `checkoutPageURLTemplate`
-  expanded with `quantity` set to 1, on another host than the canonical
-  host. The linter cannot see the seller's `pagefront:checkoutHosts`.
+  member).
 - `ORG-W-007` — a `hasOfferCatalog` entry whose `pagefront:sheetUrl` is on
   another host than the canonical host.
-- `ORG-W-008` (applies from release 0.6.0) — `pagefront:checkoutHosts`
-  without the `seller` role, and one finding per entry that is not a bare
-  host (not a string, empty, or carrying a scheme, a path or a port).
 - Until a release bundles the Collection Sheet spec, Layer 1 reports that
   the declared release bundles no Collection Sheet schema (one error at
   `/release`), and a legacy-line sheet of that type that the legacy line has
   no such schema (at `/format_version`).
 - New export: `collectionCatalogue`. `SheetType` gains `"collection"`.
+
+Added in 0.14.0 (catalogue 0.20.0; catalogues 0.18.0 and 0.19.0 were never
+published on their own). Requires `@pagefront/lint-core` 0.4.0, unchanged.
+
+- `PDP-E-022` (applies from release 0.6.0) — "Unavailable offers
+  without a price" in the Product Sheet spec: a `checkoutPageURLTemplate` on
+  an Offer whose `availability` is `OutOfStock`, `SoldOut` or `Discontinued`.
+  From the same change, `PDP-W-016` is silent on such an Offer, which the
+  spec publishes without a price.
+- `PDP-W-041` (applies from release 0.6.0) — a purchase URL off the
+  canonical host: an Offer's `url`, or its `checkoutPageURLTemplate`
+  expanded with `quantity` set to 1, on another host than the canonical
+  host. The linter cannot see the seller's `pagefront:checkoutHosts`.
+- `ORG-W-008` (applies from release 0.6.0) — `pagefront:checkoutHosts`
+  without the `seller` role, and one finding per entry that is not a bare
+  host (not a string, empty, or carrying a scheme, a path or a port).
+- `COL-W-007` (applies from release 0.5.0) — a parent entry in `isPartOf`
+  without `pagefront:sheetUrl`, or with a blank one: the counterpart of
+  `COL-W-002` for a sheet's parents. A category's parents are category
+  sheets, so the producer that emitted the sheet knows their addresses.
+- The three rules gated to release 0.6.0 wait for that release: the bundled
+  release manifest has no 0.6.0 row yet, and a sheet declaring 0.6.0 fails
+  Layer 1 (`PDP-E-018`, `ORG-E-004`) until it lands.
 
 Changed in 0.12.1 (catalogue 0.16.1):
 
