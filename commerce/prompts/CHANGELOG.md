@@ -4,6 +4,23 @@ The prompt set's own semver; see "Versioning" in [`README.md`](README.md).
 
 ## Unreleased
 
+## 1.13.0 — 2026-11-09
+
+For commerce release 0.5.0.
+
+- Each chat prompt asks for its input one question at a time, and gives an
+  instruction only when an answer calls for it. Write phase: the first
+  reply asks for the product addresses alone; with them in hand, the
+  assistant asks whether the shop has sheets already; a merchant who says
+  no is on a first run and the run starts, one who says yes is asked
+  whether those sheets are online or written and waiting, and only one
+  with sheets waiting is told to attach the archives. Serve and link
+  phases: the archive is asked for alone, then whether this is a first
+  setup (first linking) or an addition. Until now each prompt's first
+  reply asked for everything in one message, with the archive instruction
+  in it, which a merchant on a first run had no use for. The code route is
+  unchanged.
+
 ## 1.12.1 — 2026-11-09
 
 For commerce release 0.5.0.
