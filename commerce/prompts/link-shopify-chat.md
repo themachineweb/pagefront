@@ -111,7 +111,12 @@ next; if a check fails, say what to fix in that step, and check again.
    address they see), and below it the sheet address alone in its own code
    block, so the copy button copies that address and nothing else. No
    table: its copy button copies the whole table. Check: CHECKS 1 and 2 on
-   each page of that kind.
+   each page of that kind. On an addition, run CHECKS 1 and 2 on each page
+   of the kind before giving the step: a page that already declares the
+   sheet at the address in the list is linked, so it is left out of the
+   step and named in one line as already linked; a kind whose every page
+   is linked gets no step, that line alone. A step names only the pages
+   with something to do.
 
 After the last step: CHECKS, in full.
 
@@ -210,8 +215,8 @@ failed check with what to do) and a new `pagefront-report.md`.
 The report is a file in the kit, never shown in the message, named exactly
 `pagefront-report.md` in any language. In plain words:
 
-- the pages linked, each with its sheet address, and every sheet left out,
-  with why;
+- the pages linked, each with its sheet address, the pages found linked
+  already, and every sheet left out, with why;
 - each check's result, page by page, and the checks left to the merchant;
 - every address your fetch tool refused;
 - the documentation you read, with links;
