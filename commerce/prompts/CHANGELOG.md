@@ -20,6 +20,13 @@ For commerce release 0.5.0.
   reply asked for everything in one message, with the archive instruction
   in it, which a merchant on a first run had no use for. The code route is
   unchanged.
+- WooCommerce section: the Store API's `weight` and `dimensions` are the
+  measurements the merchant publishes on the product page's Additional
+  information table, written as the product's `weight`, `depth`, `width`
+  and `height` in the store's units. The section had called them the
+  fields WooCommerce uses for shipping rates, and a run left a product's
+  published weight and dimensions out of its sheet on the spec's rule that
+  a shipping weight or a parcel size is never the product's own.
 
 ## 1.12.1 — 2026-11-09
 
