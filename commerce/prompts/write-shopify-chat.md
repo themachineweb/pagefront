@@ -198,7 +198,8 @@ checks as code blocks with their filenames above them.
 
 With the files, a few lines on what comes next: the sheets are a draft to
 check against the pages, the report says where each value came from, and
-the serve step, with its own prompt, puts them on the shop's domain.
+the serve step, with its own prompt, puts them on the shop's domain, at
+the address the platform's section gives.
 
 ## ADDRESSES
 
@@ -377,6 +378,7 @@ the sets whose sheet exists).
 ### Shopify
 
 - Documentation: https://shopify.dev/docs/api/ajax/reference/product
+- Serve prompt, the next phase: https://themachineweb.org/pagefront/publish/serve/shopify
 - **How it shows itself**: Shopify documents no marker for its storefront
   pages. Its product pages live at `/products/<handle>`, and the documented
   Ajax API answers `<origin>/products/<handle>.js` with that product as JSON

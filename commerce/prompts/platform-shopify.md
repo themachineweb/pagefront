@@ -1,6 +1,9 @@
 ### Shopify
 
 - Documentation: https://shopify.dev/docs/api/ajax/reference/product
+<!-- route: chat -->
+- Serve prompt, the next phase: https://themachineweb.org/pagefront/publish/serve/shopify
+<!-- /route -->
 - **How it shows itself**: Shopify documents no marker for its storefront
   pages. Its product pages live at `/products/<handle>`, and the documented
   Ajax API answers `<origin>/products/<handle>.js` with that product as JSON

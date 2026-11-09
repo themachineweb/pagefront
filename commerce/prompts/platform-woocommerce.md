@@ -1,6 +1,9 @@
 ### WooCommerce
 
 - Documentation: https://developer.woocommerce.com/docs/apis/store-api/
+<!-- route: chat -->
+- Serve prompt, the next phase: https://themachineweb.org/pagefront/publish/serve/woocommerce
+<!-- /route -->
 - **How it shows itself**: WordPress names its REST index in the page head
   (`<link rel="https://api.w.org/">`); WooCommerce's public Store API is the
   `wc/store/v1` namespace of that index, whose routes carry their own

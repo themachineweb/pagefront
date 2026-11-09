@@ -198,7 +198,8 @@ checks as code blocks with their filenames above them.
 
 With the files, a few lines on what comes next: the sheets are a draft to
 check against the pages, the report says where each value came from, and
-the serve step, with its own prompt, puts them on the shop's domain.
+the serve step, with its own prompt, puts them on the shop's domain, at
+the address the platform's section gives.
 
 ## ADDRESSES
 
@@ -377,6 +378,7 @@ the sets whose sheet exists).
 ### WooCommerce
 
 - Documentation: https://developer.woocommerce.com/docs/apis/store-api/
+- Serve prompt, the next phase: https://themachineweb.org/pagefront/publish/serve/woocommerce
 - **How it shows itself**: WordPress names its REST index in the page head
   (`<link rel="https://api.w.org/">`); WooCommerce's public Store API is the
   `wc/store/v1` namespace of that index, whose routes carry their own
