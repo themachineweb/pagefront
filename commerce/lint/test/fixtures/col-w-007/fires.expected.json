@@ -1,0 +1,38 @@
+{
+  "sheet": "https://merchant.example/collections/knitwear",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.5.0",
+  "sheet_spec_version": "0.1.0",
+  "catalogue_version": "0.20.0",
+  "findings": [
+    {
+      "rule": "COL-W-007",
+      "severity": "warning",
+      "path": "$['data']['isPartOf'][0]",
+      "values": {
+        "name": "Women"
+      },
+      "message": "Parent `Women` at `$['data']['isPartOf'][0]` carries no `pagefront:sheetUrl`; consumers must reach its sheet via `url` + `alternate`.",
+      "remediation": "Emit the parent's sheet and add `pagefront:sheetUrl` with its address. A category's parents are category sheets, and a collection nests only in a collection that has a sheet."
+    },
+    {
+      "rule": "COL-W-007",
+      "severity": "warning",
+      "path": "$['data']['isPartOf'][1]",
+      "values": {
+        "name": "Gifts"
+      },
+      "message": "Parent `Gifts` at `$['data']['isPartOf'][1]` carries no `pagefront:sheetUrl`; consumers must reach its sheet via `url` + `alternate`.",
+      "remediation": "Emit the parent's sheet and add `pagefront:sheetUrl` with its address. A category's parents are category sheets, and a collection nests only in a collection that has a sheet."
+    }
+  ],
+  "summary": {
+    "errors": 0,
+    "warnings": 2,
+    "info": 0,
+    "rules_fired": [
+      "COL-W-007"
+    ]
+  }
+}
