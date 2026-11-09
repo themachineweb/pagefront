@@ -1,6 +1,6 @@
 # Pagefront — write your shop's sheets
 
-- Prompt set 1.11.0, for commerce release 0.5.0.
+- Prompt set 1.12.0, for commerce release 0.5.0.
 - Writes Product sheets (spec 0.11.0), Collection sheets (spec 0.1.0) and the Organization sheet (spec 0.5.0), commerce release 0.5.0.
 - Product spec: https://themachineweb.org/pagefront/spec/commerce/product.md (page: https://themachineweb.org/pagefront/spec/commerce/product)
 - Product schema: https://themachineweb.org/pagefront/spec/commerce/product/v0.11.0.json
@@ -25,14 +25,18 @@ platform with no section there is outside this version.
 
 ## RULES — not negotiable
 
-1. **Ask for the product addresses, and nothing else.** Your one input is
-   the list of product pages to write sheets for, as addresses. If it came
-   with this prompt, start. If it did not, your first reply is one question,
-   which product pages to write sheets for, and you wait for the list.
-   Everything else, the shop included, you find out from those pages and
-   the shop. Once, at the end of Step 1, you show what you found and wait
-   for the merchant's word. Where your sources do not settle a value, leave
-   it out and say so in the report; never ask for it, never guess.
+1. **Ask for the product addresses and for what exists, and nothing
+   else.** Your input is two things: the list of product pages to write
+   sheets for, as addresses, and the merchant's word on what exists
+   already: this is the shop's first run; or sheets are already online; or
+   sheets were written and are not online yet, in which case they attach
+   that run's `commerce.zip`. If both came with this prompt, start. If
+   either is missing, your first reply asks for what is missing, in one
+   message, and you wait. Everything else, the shop included, you find out
+   from those pages and the shop. Once, at the end of Step 1, you show
+   what you found and wait for the merchant's word. Where your sources do
+   not settle a value, leave it out and say so in the report; never ask
+   for it, never guess.
 2. **Read before you write.** Read the specs above before writing a sheet:
    the Product spec's entries for the fields your sheet uses and its schema, the
    Organization spec (its "Catalogue entry point" in full), and the
@@ -105,6 +109,14 @@ and stop. From the homepage:
 - **The sets**: the category or collection that holds each of those
   products directly, and each of its parents up to the top level of the
   tree (COLLECTION SHEETS).
+- **The sheets that exist**, from the merchant's answer (rule 1). A first
+  run: none. Sheets online: for the organization sheet, each set you will
+  write and each product and set those sets list, fetch the address
+  ADDRESSES gives it; one that answers with a JSON document whose data
+  block carries the `@id` IDENTITIES gives it exists. Sheets attached: every
+  sheet in the attached archive exists, at its path. A sheet that exists
+  and that this run writes again is rewritten; one this run does not write
+  is left as it is, and its address stays good.
 - **The organization page**: the page that describes the shop as a
   business (who runs it, since when, where), an About page linked from the
   homepage. A page that presents a product line, a team or a campaign is not
@@ -112,8 +124,8 @@ and stop. From the homepage:
 
 Then stop and show what you found, as a short list: the shop and its
 platform, its language, each product with the set that holds it and the
-sets above it up to the top of the tree, and the page you took for the
-organization page. Ask the merchant to confirm it or
+sets above it up to the top of the tree, the page you took for the
+organization page, and the sheets that exist and this run will rewrite. Ask the merchant to confirm it or
 correct it, and wait. A correction names a page or a set you missed, and
 you read that page or set as you would have read the one you found; a
 value the merchant states about a product is not a source (rule 3) and
@@ -158,9 +170,10 @@ commerce.zip
 ```
 
 Nothing else goes in the archive: no report, no sources, no folder for the
-shop. The merchant unpacks it and uploads the `commerce` folder as it is to
-the storage behind their sheet path (serve step); every address then
-resolves.
+shop, and no sheet from an earlier run: the archive holds the sheets of
+this run, new and rewritten. The merchant unpacks it and uploads the
+`commerce` folder as it is to the storage behind their sheet path (serve
+step), over what is already there; every address then resolves.
 
 Beside the archive, two more files, and nothing else:
 
@@ -199,9 +212,12 @@ A sheet's own `sheet_url` is its address. The same scheme gives the
 addresses the sheets point at: the organization sheet's (from each product
 sheet's `seller`), a collection sheet's (from `isPartOf`, `hasPart` and the
 organization sheet's `hasOfferCatalog`) and a product sheet's (from
-`hasPart`). A sheet points at another sheet's address only when you write
-that sheet in this run; a reference to a product or set without one carries
-no `pagefront:sheetUrl`.
+`hasPart`). A sheet points at another sheet's address only when that sheet
+exists,
+one you write in this run or one Step 1 found online or in the archive the
+merchant attached;
+a reference to a product or set with no sheet carries no
+`pagefront:sheetUrl`.
 
 ## IDENTITIES
 
@@ -322,7 +338,7 @@ the spec leaves the choice to the producer or the platform settles it:
   seller: a reference to the organization, with the organization sheet's
   `@id`, name and url, and `pagefront:sheetUrl` the organization sheet's
   address.
-- isPartOf: one entry per set you wrote a sheet for whose direct members
+- isPartOf: one entry per set whose sheet exists and whose direct members
   include the product, in the member entry shape, with that sheet's address
   as `pagefront:sheetUrl`.
 - Images as the platform's data lists them, with the roles the spec
@@ -347,7 +363,7 @@ shop does not show is not listed), and the top-level collections the
 platform's section names, as the spec's catalogue entry point gives them:
 each in the member entry shape, with `@id` per IDENTITIES, its name, url and
 `pagefront:collectionKind`, and `pagefront:sheetUrl` per ADDRESSES (only for
-the sets you wrote a sheet for).
+the sets whose sheet exists).
 
 ## PLATFORMS
 
@@ -462,5 +478,7 @@ the report in plain words:
   countries, a missing identifier or brand);
 - the sets left without a sheet, and why (a collection filled by a rule, a listing not
   read in full, outside what the platform's data lets you list);
+- which sheets are new and which rewrite a sheet that exists (Step 1), by
+  path;
 - what the Check said, or why it could not be run;
 - every address your fetch tool refused.

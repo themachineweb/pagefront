@@ -1,6 +1,6 @@
 # Pagefront — write your shop's sheets (code assistant)
 
-- Prompt set 1.11.0, for commerce release 0.5.0.
+- Prompt set 1.12.0, for commerce release 0.5.0.
 - Writes Product sheets (spec 0.11.0), Collection sheets (spec 0.1.0) and the Organization sheet (spec 0.5.0), commerce release 0.5.0.
 - Product spec: https://themachineweb.org/pagefront/spec/commerce/product.md (page: https://themachineweb.org/pagefront/spec/commerce/product)
 - Product schema: https://themachineweb.org/pagefront/spec/commerce/product/v0.11.0.json
@@ -169,9 +169,11 @@ A sheet's own `sheet_url` is its address. The same scheme gives the
 addresses the sheets point at: the organization sheet's (from each product
 sheet's `seller`), a collection sheet's (from `isPartOf`, `hasPart` and the
 organization sheet's `hasOfferCatalog`) and a product sheet's (from
-`hasPart`). A sheet points at another sheet's address only when you write
-that sheet in this run; a reference to a product or set without one carries
-no `pagefront:sheetUrl`.
+`hasPart`). A sheet points at another sheet's address only when that sheet
+exists,
+one you write in this run;
+a reference to a product or set with no sheet carries no
+`pagefront:sheetUrl`.
 
 ## IDENTITIES
 
@@ -290,7 +292,7 @@ the spec leaves the choice to the producer or the platform settles it:
   seller: a reference to the organization, with the organization sheet's
   `@id`, name and url, and `pagefront:sheetUrl` the organization sheet's
   address.
-- isPartOf: one entry per set you wrote a sheet for whose direct members
+- isPartOf: one entry per set whose sheet exists and whose direct members
   include the product, in the member entry shape, with that sheet's address
   as `pagefront:sheetUrl`.
 - Images as the platform's data lists them, with the roles the spec
@@ -315,7 +317,7 @@ shop does not show is not listed), and the top-level collections the
 platform's section names, as the spec's catalogue entry point gives them:
 each in the member entry shape, with `@id` per IDENTITIES, its name, url and
 `pagefront:collectionKind`, and `pagefront:sheetUrl` per ADDRESSES (only for
-the sets you wrote a sheet for).
+the sets whose sheet exists).
 
 ## PLATFORMS
 

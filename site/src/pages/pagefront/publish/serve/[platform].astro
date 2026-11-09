@@ -40,13 +40,16 @@ const title = `Serve your sheets — ${meta.titleSuffix}`;
     <p>
       Copy the prompt below into ChatGPT, Claude or another chat assistant,
       attach <code>commerce.zip</code>, the archive the
-      <a href={WRITE_URL}>write prompt</a> handed back, and send both
-      together. The assistant reads the sheets, works out your shop from
-      their addresses, reads Cloudflare's and {meta.label}'s documentation,
-      and gives you the steps in plain words: a Cloudflare account, R2
-      storage, one bucket with the sheets uploaded into it, one Worker that
-      answers requests for them, and the forwarding on {meta.label} that
-      sends one path of your domain to that Worker. It gives you one step
+      <a href={WRITE_URL}>write prompt</a> handed back, say whether this is
+      your first setup or an addition to sheets already online, and send
+      it all together. The assistant reads the sheets, works out your shop
+      from their addresses, reads Cloudflare's and {meta.label}'s
+      documentation, and gives you the steps in plain words: a Cloudflare
+      account, R2 storage, one bucket with the sheets uploaded into it, one
+      Worker that answers requests for them, and the forwarding on
+      {meta.label} that sends one path of your domain to that Worker. On an
+      addition, the steps are the upload into your bucket and the checks.
+      It gives you one step
       at a time, says what each is for and what you should see, and waits
       for you to say it is done before the next. Every file you have to
       paste comes in one kit, <code>pagefront-serving-kit.zip</code>, which

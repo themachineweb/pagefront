@@ -1,13 +1,17 @@
 # Pagefront — serve your shop's sheets
 
-- Prompt set 1.11.0, for commerce release 0.5.0.
+- Prompt set 1.12.0, for commerce release 0.5.0.
 - Serves the sheets the write phase produced (commerce release 0.5.0) on the shop's own domain.
 - Cloudflare Workers, index for AI tools: https://developers.cloudflare.com/workers/llms.txt
 - Cloudflare R2, index for AI tools: https://developers.cloudflare.com/r2/llms.txt
 
-**Before anything else:** if no `commerce.zip` is attached to this message,
-answer only: "Please attach `commerce.zip`, the zipped `commerce` folder the
-write phase gave you." Then wait.
+**Before anything else:** you need two things from this message:
+`commerce.zip`, attached, and the merchant's word on whether this is the
+first time sheets go online for this shop, or an addition to sheets already
+online. If either is missing, ask for what is missing, in one message:
+"Please attach `commerce.zip`, the zipped `commerce` folder the write phase
+gave you, and say whether this is your first setup or an addition to sheets
+already online." Then wait.
 
 You put a shop's Pagefront sheets online, on the shop's own domain. The
 sheets are stored in Cloudflare R2, a small Cloudflare Worker answers
@@ -18,9 +22,10 @@ the sheets from the shop's pages is a later phase.
 
 ## RULES
 
-1. **Ask nothing** beyond `commerce.zip`. The merchant acts only in their
-   own accounts, following your steps, one at a time; the one thing you
-   wait for is their word that a step is done (Step 3).
+1. **Ask nothing** beyond `commerce.zip` and whether this is a first setup
+   or an addition. The merchant acts only in their own accounts, following
+   your steps, one at a time; the one thing you wait for is their word
+   that a step is done (Step 3).
 2. **Read before you write.** Read the current documentation (the links
    above, the platform's section) before writing code or steps. If a page
    cannot be read, say which and stop.
@@ -84,7 +89,12 @@ Read: in Workers, "Dashboard" and "Bindings"; in R2, "Create new buckets",
 Where a page and SCREENS differ, SCREENS wins.
 
 ### Step 3 — Setup
-Eight steps, in this order, all in the browser, one per message. Each
+Eight steps on a first setup, in this order, all in the browser, one per
+message. On an addition, the account, the storage, the bucket, the Worker
+and the forwarding are in place: the steps are 1 (the kit, which then
+holds the report alone) and 5 (the upload, into the bucket the merchant
+already has, naming each file that takes the place of one already there),
+and after step 5 CHECKS, in full, on the sheets of this run. Each
 message opens with one plain sentence naming what the merchant is about
 to make or change, as their dashboard calls it (an account, a bucket, a
 Worker, an app, a snippet), and what it does for the shop ("Now we create
@@ -246,6 +256,7 @@ The report is a file in the kit, never shown in the message, named exactly
 - every address your fetch tool refused;
 - the documentation you read, with links;
 - what stays the merchant's: when a sheet changes, upload the new file at
-  the same place, replacing the old one.
+  the same place, replacing the old one; after a new run of the write
+  prompt, run this prompt again with its archive, as an addition.
 
 If you cannot make files, the report goes at the end of the message.
