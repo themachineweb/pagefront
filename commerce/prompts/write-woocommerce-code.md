@@ -406,8 +406,15 @@ the sets whose sheet exists).
   `validThrough` as December 31 of next year when the merchant set no sale
   end date; those are not the merchant's statement. The sale end date is
   the merchant's only when the product has one.
-- **Weight and dimensions**: the Store API's `weight` and `dimensions` are
-  the fields WooCommerce uses for shipping rates, in the store's units.
+- **Weight and dimensions**: the Store API's `weight` and `dimensions`
+  (`length`, `width`, `height`) are the measurements the merchant
+  publishes on the product page, in its Additional information table under
+  Weight and Dimensions, in the store's units; `formatted_weight` and
+  `formatted_dimensions` name the unit. Write them as the product's
+  `weight`, `depth` (the length), `width` and `height`, with the spec's
+  unit codes. WooCommerce also uses them for shipping rates, and they
+  remain the product's own; the Store API returns them though its
+  documentation's example response leaves them out.
 - **On its own front**: the front renders its pages itself, so what this
   section says of WooCommerce's pages does not hold there:
   - addresses: the categories and pages the Store API links are on
