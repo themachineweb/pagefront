@@ -42,7 +42,8 @@ const title = `Link your sheets — ${meta.titleSuffix}`;
       attach <code>commerce.zip</code>, the archive the write prompt handed
       back and the <a href={SERVE_URL}>serve prompt</a> put online, and
       send both. The assistant asks whether this is your first linking or
-      an addition, then reads the sheets, works out your
+      an addition, on which it skips the code and the pages already
+      linked, then reads the sheets, works out your
       shop from their addresses, reads the Pagefront Discovery spec and
       {meta.label}'s documentation, and gives you the steps in plain words:
       one piece of code pasted once into your {meta.codeHome}, which prints

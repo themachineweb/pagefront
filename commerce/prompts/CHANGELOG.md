@@ -36,6 +36,13 @@ For commerce release 0.5.0.
   the serve prompt's address, which each platform's section carries; the
   generic section says no serve prompt exists for other platforms yet and
   points at the publishing page.
+- Link phase, on an addition: the checks on a kind of page run before its
+  step, and a page that already declares its sheet at the listed address
+  is left out of the step and named as already linked; a kind whose every
+  page is linked gets no step. The report names the pages found linked.
+  A run had given the merchant the full field instructions for the
+  organization page, whose field held the address from the earlier run,
+  with a line saying to leave it as it was.
 
 ## 1.12.1 — 2026-11-09
 
