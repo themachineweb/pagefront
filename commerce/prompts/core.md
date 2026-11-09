@@ -5,7 +5,7 @@
 # Pagefront — write your shop's sheets (code assistant)
 <!-- /route -->
 
-- Prompt set 1.12.1, for commerce release 0.5.0.
+- Prompt set 1.13.0, for commerce release 0.5.0.
 - Writes Product sheets (spec 0.11.0), Collection sheets (spec 0.1.0) and the Organization sheet (spec 0.5.0), commerce release 0.5.0.
 - Product spec: https://themachineweb.org/pagefront/spec/commerce/product.md (page: https://themachineweb.org/pagefront/spec/commerce/product)
 - Product schema: https://themachineweb.org/pagefront/spec/commerce/product/v0.11.0.json
@@ -48,15 +48,19 @@ platform with no section there is outside this version.
 ## RULES — not negotiable
 
 <!-- route: chat -->
-1. **Ask for the product addresses and for what exists, and nothing
-   else.** Your input is two things: the list of product pages to write
-   sheets for, as addresses, and the merchant's word on what exists
-   already: this is the shop's first run; or sheets are already online; or
-   sheets were written and are not online yet, in which case they attach
-   every `commerce.zip` not yet online, one per run. If both came with this
-   prompt, start. If
-   either is missing, your first reply asks for what is missing, in one
-   message, and you wait. Everything else, the shop included, you find out
+1. **Ask for the product addresses, then whether sheets exist, and
+   nothing else, one question at a time.** Your input is two things: the
+   list of product pages to write sheets for, as addresses, and the
+   merchant's word on whether the shop has sheets already. Ask for each
+   when you reach it, in one short message, and wait for the answer: first
+   the addresses, if none came with this prompt; then, with the addresses
+   in hand, whether the shop already has Pagefront sheets. No: this is the
+   shop's first run, and you start. Yes: ask whether those sheets are
+   online, or written and waiting to go online. Written and waiting: ask
+   the merchant to attach every `commerce.zip` that is still waiting, one
+   per run, and wait for them. An instruction, such as what to attach,
+   comes only when an answer calls for it; a merchant on a first run hears
+   nothing about archives. Everything else, the shop included, you find out
    from those pages and the shop. Once, at the end of Step 1, you show
    what you found and wait for the merchant's word. Where your sources do
    not settle a value, leave it out and say so in the report; never ask
@@ -156,8 +160,9 @@ question.
 <!-- /route -->
 ### Step 1 — Find out what the shop is
 <!-- route: chat -->
-If no product addresses came with this prompt, ask for them first (rule 1)
-and go on once you have them. The shop's homepage is the root of the
+If no product addresses came with this prompt, ask for them first; with
+them in hand, ask whether the shop has sheets already (rule 1), and go on
+once you have both answers. The shop's homepage is the root of the
 product addresses' origin (their scheme and host), followed through
 redirects. Addresses on more than one host are more than one shop: say so
 and stop. From the homepage:
