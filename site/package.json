@@ -12,7 +12,7 @@
   "dependencies": {
     "@astrojs/markdown-remark": "^7.3.0",
     "@astrojs/sitemap": "^3.7.4",
-    "@pagefront/lint-commerce": "^0.14.0",
+    "@pagefront/lint-commerce": "^0.14.1",
     "astro": "^7.2.10",
     "github-slugger": "^2.0.0"
   }
