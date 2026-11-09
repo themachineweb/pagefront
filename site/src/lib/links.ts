@@ -2,10 +2,11 @@
  * Pagefront section destinations, shared by the section landing
  * (/pagefront) and the pages that carry its masthead (Check).
  *
- * Every destination is on this domain now; the repository link is the
- * one outbound pointer.
+ * Every destination is on this domain, except the repository and the
+ * journal, which the footer links out to.
  */
 export const REPO = 'https://github.com/themachineweb/pagefront';
+export const JOURNAL = 'https://journal.themachineweb.org';
 
 export const LINKS = {
   // Live on this domain today.
@@ -23,6 +24,7 @@ export const LINKS = {
   faq: '/pagefront/faq',
 
   repo: REPO,
+  journal: JOURNAL,
 } as const;
 
 /** The Pagefront section nav; `current` marks the page rendering it. */
