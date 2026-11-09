@@ -1,6 +1,7 @@
 ### WooCommerce
 
 - Documentation: https://developer.wordpress.org/plugins/hooks/ and https://developer.wordpress.org/apis/rewrite/
+- Link prompt, the next phase: https://themachineweb.org/pagefront/publish/link/woocommerce
 - **Signs**: the homepage's head has `<link rel="https://api.w.org/">`, and
   that REST index lists `wc/store/v1`. Without it (a storefront served by
   another application) there is no WordPress to forward from: say so and

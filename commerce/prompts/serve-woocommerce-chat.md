@@ -191,6 +191,7 @@ before going on; never skip a step, never send two at once.
 ### WooCommerce
 
 - Documentation: https://developer.wordpress.org/plugins/hooks/ and https://developer.wordpress.org/apis/rewrite/
+- Link prompt, the next phase: https://themachineweb.org/pagefront/publish/link/woocommerce
 - **Signs**: the homepage's head has `<link rel="https://api.w.org/">`, and
   that REST index lists `wc/store/v1`. Without it (a storefront served by
   another application) there is no WordPress to forward from: say so and
@@ -247,7 +248,10 @@ The first message: what Step 1 found, in a few lines, then how many steps
 follow and what they lead to, then the first step (Step 3), the kit with
 it. Then one message per step. After the merchant says the last is done:
 only what they must act on (every sheet answers, or each failed check
-with what to do) and a new `pagefront-report.md`.
+with what to do), a new `pagefront-report.md`, and a few lines on what
+comes next: the sheets answer at their addresses and no page points at
+them yet; to let a reader find each sheet from its page, the link phase,
+with its own prompt, at the address the platform's section gives.
 
 The report is a file in the kit, never shown in the message, named exactly
 `pagefront-report.md` in any language. In plain words:
