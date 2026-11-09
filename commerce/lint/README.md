@@ -209,6 +209,16 @@ with the Commerce Collection Sheet spec
   no such schema (at `/format_version`).
 - New export: `collectionCatalogue`. `SheetType` gains `"collection"`.
 
+Changed in 0.14.1 (catalogue 0.20.1). Requires `@pagefront/lint-core` 0.4.0,
+unchanged.
+
+- `PDP-W-011` reads the canonical URL alone. A language label in the
+  sheet's filename (`.en.`, `.en-US.`) is no longer a signal, since the
+  filename convention `{id}.{lang}.json` puts one on every sheet; the
+  signal is a two-letter language path segment, with an optional region
+  subtag, in the canonical URL. A warning narrowed: no sheet gains a
+  finding.
+
 Added in 0.14.0 (catalogue 0.20.0; catalogues 0.18.0 and 0.19.0 were never
 published on their own). Requires `@pagefront/lint-core` 0.4.0, unchanged.
 
