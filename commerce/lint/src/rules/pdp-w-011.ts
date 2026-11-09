@@ -4,19 +4,17 @@ import type { Rule } from "@pagefront/lint-core";
  * PDP-W-011 — Multi-language reference without availableLanguages.
  * Transcribed from commerce/spec/rules.md (normative).
  *
- * The catalogue's "recognizable language segment (`/fr/`, `/en/`,
- * `.fr.`, `.en.`, etc.)" is realized as: a path segment that is a
- * two-letter lowercase code optionally followed by a region subtag
- * (`/fr/`, `/en-GB/`), or a two-letter lowercase dotted label
- * (`.fr.`). Both the canonical URL and the Sheet's `sheet_url` are
- * inspected — the dotted-label form covers language-suffixed Sheet
- * names such as `….en.json` (pass #6, from the case-study run). The
- * catalogue declares the check heuristic and false positives
- * acceptable. "Does not declare" covers both an absent
- * `pagefront:availableLanguages` and an empty array (an empty
- * declaration declares nothing).
+ * The signal is a language segment in the canonical URL alone: a path
+ * segment that is a two-letter lowercase code optionally followed by a
+ * region subtag (`/fr/`, `/en-GB/`). The Sheet's `sheet_url` is not
+ * inspected, and a language label in the sheet's filename is not a
+ * signal: the filename convention (`{id}.{lang}.json`) puts one on
+ * every sheet, monolingual or not (catalogue 0.20.1). The catalogue
+ * declares the check heuristic and false positives acceptable. "Does
+ * not declare" covers both an absent `pagefront:availableLanguages`
+ * and an empty array (an empty declaration declares nothing).
  */
-const LANGUAGE_SEGMENT = /\/[a-z]{2}(?:-[A-Za-z]{2,4})?\/|\.[a-z]{2}\./;
+const LANGUAGE_SEGMENT = /\/[a-z]{2}(?:-[A-Za-z]{2,4})?\//;
 
 export const pdpW011: Rule = {
   id: "PDP-W-011",
@@ -26,11 +24,7 @@ export const pdpW011: Rule = {
   check: (match, ctx) => {
     const canonicalUrl = ctx.sheet.canonical_url;
     if (typeof canonicalUrl !== "string") return null;
-    const sheetUrl = ctx.sheet.sheet_url;
-    const signal =
-      LANGUAGE_SEGMENT.test(canonicalUrl) ||
-      (typeof sheetUrl === "string" && LANGUAGE_SEGMENT.test(sheetUrl));
-    if (!signal) return null;
+    if (!LANGUAGE_SEGMENT.test(canonicalUrl)) return null;
     const data = match.value;
     const declared =
       typeof data === "object" && data !== null
