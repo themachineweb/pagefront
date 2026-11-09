@@ -7,6 +7,11 @@
   `/products/<handle>.js` answers with product JSON), say so in the report and
   tell the merchant those instructions read more of their shop; then go on
   with these.
+<!-- route: chat -->
+- **Serve prompt**: none for other platforms yet. The publishing page,
+  https://themachineweb.org/pagefront/publish, says what the serve step
+  does.
+<!-- /route -->
 - **No platform data.** These instructions read only the shop's pages. Where
   rule 4 says "the platform's data", read: the page's structured data. Values
   come from the page in this order, the first that states a value:

@@ -291,7 +291,8 @@ checks as code blocks with their filenames above them.
 
 With the files, a few lines on what comes next: the sheets are a draft to
 check against the pages, the report says where each value came from, and
-the serve step, with its own prompt, puts them on the shop's domain.
+the serve step, with its own prompt, puts them on the shop's domain, at
+the address the platform's section gives.
 <!-- /route -->
 <!-- route: code -->
 In the working directory, one folder for the shop:

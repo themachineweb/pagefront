@@ -32,6 +32,10 @@ For commerce release 0.5.0.
   page points at them yet, and the link phase, with its own prompt, makes
   each sheet findable from its page. Each platform's section carries the
   address of its link prompt. A run had closed on the checks alone.
+- Write phase, chat route: the handover's lines on what comes next point at
+  the serve prompt's address, which each platform's section carries; the
+  generic section says no serve prompt exists for other platforms yet and
+  points at the publishing page.
 
 ## 1.12.1 — 2026-11-09
 
