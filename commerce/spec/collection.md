@@ -77,7 +77,7 @@ Explicit, required, single-valued. The closed enum:
 - `collection`: a set outside the tree. It MAY carry `isPartOf` pointing at another `collection` sheet (a series inside a family). It MUST NOT point at a `category`: a collection is reached from the entry point or from its own page, and a tree does not contain it.
 - `brand`: the products a store sells under one label. The sheet carries `brand`, a reference to the `Brand` node: `{"@type": "Brand", "@id": "…", "pagefront:sheetUrl": "…"}`, resolving under the brand edge of the Organization Sheet's linking contract. A `brand` collection has no `isPartOf`. [why](collection-notes.md#why-brand-is-a-collection-kind)
 
-Additional values require a spec amendment. Checks: COL-E-002 (absent or outside the enum), COL-W-004 (a `brand` kind without `brand`), COL-W-005 (a `category` whose `isPartOf` resolves to a sheet of another kind).
+Additional values require a spec amendment. Checks: COL-E-002 (absent or outside the enum), COL-W-004 (a `brand` kind without `brand`), COL-W-005 (a `category` whose `isPartOf` resolves to a sheet of another kind), COL-W-007 (a parent entry without `pagefront:sheetUrl`).
 
 What separates a category from a collection is the tree: a listing the storefront's menu or category model places in a hierarchy is a `category`; a set outside it is a `collection`. The mapping per platform is under "Producer guidance". [why](collection-notes.md#what-separates-a-category-from-a-collection)
 
@@ -153,7 +153,7 @@ The Knitwear category holds one subcategory and two products directly. The cardi
 
 ## Hierarchy
 
-`isPartOf` is an array of parent references, each in the entry shape above. A node MAY have more than one parent, and every parent is stated. A node with no `isPartOf` is a root, and a consumer walking up stops there. [why](collection-notes.md#why-a-node-may-have-several-parents)
+`isPartOf` is an array of parent references, each in the entry shape above. A node MAY have more than one parent, and every parent is stated. A node with no `isPartOf` is a root, and a consumer walking up stops there. Check: COL-W-007 (a parent entry without `pagefront:sheetUrl`). [why](collection-notes.md#why-a-node-may-have-several-parents)
 
 Nesting is allowed for every kind that permits `isPartOf`. A category tree has whatever depth the storefront has. A collection nests inside a collection when the catalog is organised as family → series → product. [why](collection-notes.md#why-collections-nest)
 

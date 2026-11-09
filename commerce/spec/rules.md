@@ -1,7 +1,7 @@
 # Pagefront Commerce Linter — Rule Catalogue
 
 Status: draft / design document, not yet a published normative artifact.
-Catalogue version: 0.19.0
+Catalogue version: 0.20.0
 Supports: commerce releases 0.5.0 (Product Sheet spec 0.11.0, Organization Sheet spec 0.5.0, Collection Sheet spec 0.1.0), 0.4.0 (Product Sheet spec 0.10.0, Organization Sheet spec 0.4.0) and 0.3.0 (Product Sheet spec 0.9.0, Organization Sheet spec 0.3.0), and the legacy draft line (format 0.9).
 
 This document is the normative linter rule catalogue for Pagefront commerce Sheets. Its version is a semver of its own, independent of the commerce release and of the sheet specs ([`releases.md`](releases.md)); the "Supports" line above states which releases this catalogue version applies to. It implements the rule structure, severity levels, and output format defined in the vertical-agnostic linter design at [`../../core/spec/linter.md`](../../core/spec/linter.md).
@@ -29,7 +29,7 @@ Rules that do not follow the default:
 | PDP-E-019, PDP-E-020, PDP-E-021, PDP-W-040 | release 0.5.0, whose Product Sheet spec 0.11.0 adds "Where to buy" | no |
 | PDP-E-022 | release 0.6.0, whose Product Sheet spec 0.12.0 adds "Unavailable offers without a price" | no |
 | PDP-W-041 | release 0.6.0, whose Product Sheet spec 0.12.0 adds "Purchase host" under "Where to buy" | no |
-| COL-E-001, COL-E-002, COL-E-003, COL-E-005, COL-W-001 to COL-W-006 | release 0.5.0, the release that bundles Collection Sheet spec 0.1.0 | no (the Collection Sheet spec has no legacy draft line) |
+| COL-E-001, COL-E-002, COL-E-003, COL-E-005, COL-W-001 to COL-W-007 | release 0.5.0, the release that bundles Collection Sheet spec 0.1.0 | no (the Collection Sheet spec has no legacy draft line) |
 | ORG-W-007 | release 0.5.0, which admits `hasOfferCatalog` | no |
 | ORG-W-008 | release 0.6.0, which admits `pagefront:checkoutHosts` | no |
 
@@ -962,7 +962,7 @@ The `{problem}` placeholder renders "the sheet does not declare the `seller` rol
 
 ## Commerce Collection Sheet rules
 
-The collection-sheet catalogue, applying to Commerce Collection Sheets ([`collection.md`](collection.md)) only, per the sheet-type dispatch described at the top of this document. Layer 1 for this sheet type is the published collection JSON Schema the release bundles (`../schemas/collection/`, once a release publishes one; [`collection.json`](collection.json) is its editable head); these rules assume a schema-valid sheet. The schema enforces the array form of `@context` with the `pagefront` prefix, so this catalogue has no counterpart of PDP-E-003 and ORG-E-001. The error rules check the identity of member entries (COL-E-001), the kind discriminator (COL-E-002), the envelope's version fields (COL-E-003 and COL-E-004, the counterparts of ORG-E-003 and ORG-E-004) and the host of every sheet URL the sheet carries (COL-E-005). The warning rules cover membership (COL-W-001, COL-W-002, COL-W-006) and the kind rules (COL-W-004, COL-W-005). COL-W-003 is reserved and awaiting implementation. The rules apply from release 0.5.0, the release that bundles Collection Sheet spec 0.1.0, and never to the legacy draft line, which has no Collection Sheet; COL-E-004 judges the declared release itself and applies to every one. Until release 0.5.0 lands, the collection fixtures declare it and run against a test manifest, [`../lint/test/manifest/releases.json`](../lint/test/manifest/releases.json): the real manifest plus the 0.5.0 row, with Collection Sheet spec 0.1.0 resolved to the editable head [`collection.json`](collection.json) at Layer 1. The release pull request adds the 0.5.0 row to `commerce/spec/releases.json` and to the release table in `releases.md`, and freezes the head as `commerce/schemas/collection/v0.1.0.json`; the fixtures and their expected reports do not change.
+The collection-sheet catalogue, applying to Commerce Collection Sheets ([`collection.md`](collection.md)) only, per the sheet-type dispatch described at the top of this document. Layer 1 for this sheet type is the published collection JSON Schema the release bundles (`../schemas/collection/`, once a release publishes one; [`collection.json`](collection.json) is its editable head); these rules assume a schema-valid sheet. The schema enforces the array form of `@context` with the `pagefront` prefix, so this catalogue has no counterpart of PDP-E-003 and ORG-E-001. The error rules check the identity of member entries (COL-E-001), the kind discriminator (COL-E-002), the envelope's version fields (COL-E-003 and COL-E-004, the counterparts of ORG-E-003 and ORG-E-004) and the host of every sheet URL the sheet carries (COL-E-005). The warning rules cover membership (COL-W-001, COL-W-002, COL-W-006), the kind rules (COL-W-004, COL-W-005) and the hierarchy (COL-W-007). COL-W-003 is reserved and awaiting implementation. The rules apply from release 0.5.0, the release that bundles Collection Sheet spec 0.1.0, and never to the legacy draft line, which has no Collection Sheet; COL-E-004 judges the declared release itself and applies to every one. Until release 0.5.0 lands, the collection fixtures declare it and run against a test manifest, [`../lint/test/manifest/releases.json`](../lint/test/manifest/releases.json): the real manifest plus the 0.5.0 row, with Collection Sheet spec 0.1.0 resolved to the editable head [`collection.json`](collection.json) at Layer 1. The release pull request adds the 0.5.0 row to `commerce/spec/releases.json` and to the release table in `releases.md`, and freezes the head as `commerce/schemas/collection/v0.1.0.json`; the fixtures and their expected reports do not change.
 
 #### COL-E-001 — Member entry without `@id`
 
@@ -1113,6 +1113,20 @@ The `{name}` placeholder renders the entry's `name`; when absent, the fixed fall
 **Applies from:** release 0.5.0; not the legacy line.
 **Fixtures:** `fires` (one member listed twice), `clean`.
 **Spec reference:** `collection.md#members`
+
+#### COL-W-007 — Parent entry without `pagefront:sheetUrl`
+
+**Severity:** warning
+**Target:** `$.data.isPartOf` (the Check walks the entries)
+**Description:** A category's `isPartOf` entries each resolve to another `category` sheet, and a `collection` nests only in another `collection` sheet ("Kind discriminator" in `collection.md`), so the producer that emits a sheet with parents has emitted those parents and knows their addresses. `pagefront:sheetUrl` is recommended on every entry ("Hierarchy", with the entry shape under "Members"); when it is absent, a consumer reaches the parent through `url` and the `alternate` link that page declares. The hint is a traversal hint that MAY be stale ("Traversal hints" in Pagefront Discovery); the rule asks for its presence and never checks that it resolves. A parent entry without the hint is the mark of a producer that wrote the sheet and left its parent unwritten, which the spec does not describe, and a warning because the hint's absence alone is permitted.
+**Check:** An entry of `isPartOf` is an object whose `pagefront:sheetUrl` is absent, or a string that is empty or whitespace-only, which "Members" in `collection.md` treats as absent. One finding per entry, at the entry's path. A blank value is this rule's finding alone: COL-E-005 skips a hint with no host. A sheet with no `isPartOf` is a root and never fires.
+**Message:** Parent `{name}` at `{path}` carries no `pagefront:sheetUrl`; consumers must reach its sheet via `url` + `alternate`.
+The `{name}` placeholder renders the entry's `name`; when absent, the fixed fallback `(unnamed)`.
+**Remediation:** Emit the parent's sheet and add `pagefront:sheetUrl` with its address. A category's parents are category sheets, and a collection nests only in a collection that has a sheet.
+**Introduced:** catalogue 0.20.0
+**Applies from:** release 0.5.0, the release that bundles Collection Sheet spec 0.1.0, whose hierarchy rule this enforces; not the legacy line.
+**Fixtures:** `fires` (two parent entries without the hint), `fires-whitespace` (one parent entry whose hint is whitespace-only, and no other finding), `clean` (two hinted parents), `clean-root` (a root category with no `isPartOf`).
+**Spec reference:** `collection.md#hierarchy`
 
 ## Status
 

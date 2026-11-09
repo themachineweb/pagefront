@@ -27,14 +27,14 @@ sheet type.
 
 ## Catalogue
 
-Catalogue 0.19.0, supporting commerce releases 0.5.0 (Product Sheet spec
+Catalogue 0.20.0, supporting commerce releases 0.5.0 (Product Sheet spec
 0.11.0, Organization Sheet spec 0.5.0, Collection Sheet spec 0.1.0), 0.4.0
 (Product Sheet spec 0.10.0, Organization Sheet spec 0.4.0) and 0.3.0, and the
 legacy draft line (format 0.9): 64 product rules (`PDP-E-001` to `PDP-E-022`, `PDP-W-001` to
 `PDP-W-041`, `PDP-I-001`), 12 organization rules (`ORG-E-001` to
-`ORG-E-004`, `ORG-W-001` to `ORG-W-008`) and 10 collection rules
+`ORG-E-004`, `ORG-W-001` to `ORG-W-008`) and 11 collection rules
 (`COL-E-001` to `COL-E-005`, `COL-W-001`, `COL-W-002`, `COL-W-004` to
-`COL-W-006`; `COL-W-003` is reserved), each defined in
+`COL-W-007`; `COL-W-003` is reserved), each defined in
 [`rules.md`](https://github.com/themachineweb/pagefront/blob/main/commerce/spec/rules.md)
 with its target, check, message and remediation. Every report carries the
 `catalogue_version` it was produced with.
@@ -205,7 +205,7 @@ with the Commerce Collection Sheet spec
   edge's host), `COL-W-001` (empty `hasPart`), `COL-W-002` (member without
   `pagefront:sheetUrl`), `COL-W-004` (brand reference and brand kind
   disagree), `COL-W-005` (parent of another kind), `COL-W-006` (duplicate
-  member).
+  member), `COL-W-007` (parent without `pagefront:sheetUrl`).
 - `PDP-W-041` (applies from release 0.6.0) — a purchase URL off the
   canonical host: an Offer's `url`, or its `checkoutPageURLTemplate`
   expanded with `quantity` set to 1, on another host than the canonical

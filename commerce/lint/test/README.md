@@ -61,8 +61,10 @@ conformance by producing structurally identical reports for these inputs.
   carries the PDP-W-029 warning its region-less offer earns on every
   release.
 - A blank (empty or whitespace-only) `pagefront:sheetUrl` on a member
-  entry is treated as absent: COL-W-002 reports it, and COL-E-005 skips a
-  hint with no host (`fixtures/col-w-002/fires-whitespace.json`).
+  entry is treated as absent: COL-W-002 reports it on a member, COL-W-007
+  on a parent, and COL-E-005 skips a hint with no host
+  (`fixtures/col-w-002/fires-whitespace.json`,
+  `fixtures/col-w-007/fires-whitespace.json`).
 
 ## Regenerating expected reports
 

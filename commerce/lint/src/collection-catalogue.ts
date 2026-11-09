@@ -10,6 +10,7 @@ import { colW002 } from "./rules/col-w-002.js";
 import { colW004 } from "./rules/col-w-004.js";
 import { colW005 } from "./rules/col-w-005.js";
 import { colW006 } from "./rules/col-w-006.js";
+import { colW007 } from "./rules/col-w-007.js";
 
 /**
  * The Commerce Collection Sheet rule catalogue — the executable form
@@ -27,6 +28,6 @@ import { colW006 } from "./rules/col-w-006.js";
 export const collectionCatalogue: Catalogue = {
   vertical: "commerce",
   releases: KNOWN_RELEASES,
-  catalogueVersion: "0.19.0",
-  rules: [colE001, colE002, colE003, colE004, colE005, colW001, colW002, colW004, colW005, colW006],
+  catalogueVersion: "0.20.0",
+  rules: [colE001, colE002, colE003, colE004, colE005, colW001, colW002, colW004, colW005, colW006, colW007],
 };
