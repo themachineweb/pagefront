@@ -27,7 +27,7 @@ sheet type.
 
 ## Catalogue
 
-Catalogue 0.20.0, supporting commerce releases 0.5.0 (Product Sheet spec
+Catalogue 0.20.1, supporting commerce releases 0.5.0 (Product Sheet spec
 0.11.0, Organization Sheet spec 0.5.0, Collection Sheet spec 0.1.0), 0.4.0
 (Product Sheet spec 0.10.0, Organization Sheet spec 0.4.0) and 0.3.0, and the
 legacy draft line (format 0.9): 64 product rules (`PDP-E-001` to `PDP-E-022`, `PDP-W-001` to

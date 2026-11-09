@@ -1,7 +1,7 @@
 # Pagefront Commerce Linter — Rule Catalogue
 
 Status: draft / design document, not yet a published normative artifact.
-Catalogue version: 0.20.0
+Catalogue version: 0.20.1
 Supports: commerce releases 0.5.0 (Product Sheet spec 0.11.0, Organization Sheet spec 0.5.0, Collection Sheet spec 0.1.0), 0.4.0 (Product Sheet spec 0.10.0, Organization Sheet spec 0.4.0) and 0.3.0 (Product Sheet spec 0.9.0, Organization Sheet spec 0.3.0), and the legacy draft line (format 0.9).
 
 This document is the normative linter rule catalogue for Pagefront commerce Sheets. Its version is a semver of its own, independent of the commerce release and of the sheet specs ([`releases.md`](releases.md)); the "Supports" line above states which releases this catalogue version applies to. It implements the rule structure, severity levels, and output format defined in the vertical-agnostic linter design at [`../../core/spec/linter.md`](../../core/spec/linter.md).
@@ -450,8 +450,8 @@ The `{reason}` placeholder carries either `past` or `trivially close to generate
 
 **Severity:** warning
 **Target:** `$.data`
-**Description:** When a Sheet's canonical URL is part of a multi-language site (typically indicated by language-specific URL segments in the page URL or the Sheet URL, or by the merchant publishing parallel sheets in other languages), the Sheet should declare `pagefront:availableLanguages` listing the sibling sheets. Consumers reading one language variant should be able to discover the others without separate crawling.
-**Check:** The canonical URL or the Sheet's `sheet_url`, when present, contains a language segment (a lowercase two-letter language path segment with optional region subtag, e.g. `/fr/`, `/en-GB/`, or a two-letter dotted label, e.g. `.fr.`; the dotted-label form covers language-suffixed Sheet names such as `….en.json`) but the Sheet does not declare `pagefront:availableLanguages`. "Does not declare" covers both an absent field and an empty array. This check is heuristic; false positives are acceptable.
+**Description:** When a Sheet's canonical URL is part of a multi-language site (typically indicated by language-specific segments in the page's canonical URL, or by the merchant publishing parallel sheets in other languages), the Sheet should declare `pagefront:availableLanguages` listing the sibling sheets. Consumers reading one language variant should be able to discover the others without separate crawling.
+**Check:** The canonical URL contains a lowercase two-letter language path segment with an optional region subtag (`/fr/`, `/en-GB/`) and the Sheet does not declare `pagefront:availableLanguages`. "Does not declare" covers both an absent field and an empty array. A language label in the sheet's filename is not a signal: the filename convention puts one on every sheet. This check is heuristic; false positives are acceptable.
 **Message:** Sheet at `{canonical_url}` appears to be part of a multi-language site but does not declare `pagefront:availableLanguages`.
 **Remediation:** Add a `pagefront:availableLanguages` array listing the URLs of sibling sheets in other languages, with their BCP 47 language tags.
 **Introduced:** v0.6
