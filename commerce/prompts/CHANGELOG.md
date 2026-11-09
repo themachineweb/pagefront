@@ -4,6 +4,22 @@ The prompt set's own semver; see "Versioning" in [`README.md`](README.md).
 
 ## Unreleased
 
+## 1.11.0 — 2026-11-09
+
+For commerce release 0.5.0.
+
+- Write phase, chat route: the assistant writes a sheet for the set that
+  holds each product directly and for each of its parents up to the top
+  level of the tree, the sets the organization sheet lists in
+  `hasOfferCatalog`, each with its direct members read as the platform's
+  section says. Every `isPartOf` entry of a category sheet then names a
+  sheet written in the run, as the Collection spec's kind rule requires of
+  a category's parents. Until now the route wrote the direct set alone and
+  named its parents by page address with no sheet, which left those
+  entries resolving to nothing. Step 1 shows the merchant each product's
+  set and the sets above it; the report's line on sheetless parents goes.
+  The code route and the platform sections are unchanged.
+
 ## 1.10.0 — 2026-11-06
 
 For commerce release 0.5.0.

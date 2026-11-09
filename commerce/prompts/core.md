@@ -5,7 +5,7 @@
 # Pagefront — write your shop's sheets (code assistant)
 <!-- /route -->
 
-- Prompt set 1.10.0, for commerce release 0.5.0.
+- Prompt set 1.11.0, for commerce release 0.5.0.
 - Writes Product sheets (spec 0.11.0), Collection sheets (spec 0.1.0) and the Organization sheet (spec 0.5.0), commerce release 0.5.0.
 - Product spec: https://themachineweb.org/pagefront/spec/commerce/product.md (page: https://themachineweb.org/pagefront/spec/commerce/product)
 - Product schema: https://themachineweb.org/pagefront/spec/commerce/product/v0.11.0.json
@@ -176,7 +176,8 @@ From the homepage:
 <!-- /route -->
 <!-- route: chat -->
 - **The sets**: the category or collection that holds each of those
-  products directly, and the parents it names (COLLECTION SHEETS).
+  products directly, and each of its parents up to the top level of the
+  tree (COLLECTION SHEETS).
 <!-- /route -->
 <!-- route: code -->
 - **The sets**: the categories and collections that list those products,
@@ -189,8 +190,9 @@ From the homepage:
 
 <!-- route: chat -->
 Then stop and show what you found, as a short list: the shop and its
-platform, its language, each product with the set that holds it, and the
-page you took for the organization page. Ask the merchant to confirm it or
+platform, its language, each product with the set that holds it and the
+sets above it up to the top of the tree, and the page you took for the
+organization page. Ask the merchant to confirm it or
 correct it, and wait. A correction names a page or a set you missed, and
 you read that page or set as you would have read the one you found; a
 value the merchant states about a product is not a source (rule 3) and
@@ -344,10 +346,11 @@ Which sets:
 
 <!-- route: chat -->
 - the set that holds a product you write a sheet for directly, the one its
-  page names as holding it (the platform's section says where). Its
-  parents, up to the top level of the tree, get no sheet in this run: the
-  sheet names them in `isPartOf` by page address, with no
-  `pagefront:sheetUrl`, and a later run or the code route writes them;
+  page names as holding it (the platform's section says where), and each
+  of its parents up to the top level of the tree, the sets the
+  organization sheet lists in `hasOfferCatalog`. Each gets a sheet in this
+  run, its direct members read as the platform's section says, so that
+  every `isPartOf` entry names a sheet you wrote;
 <!-- /route -->
 <!-- route: code -->
 - the sets that list a product you write a sheet for, and each of their
@@ -499,8 +502,6 @@ The folder (Step 7), then the report, in plain words, also saved as
 - the sets left without a sheet, and why (a collection filled by a rule, a listing not
   read in full, outside what the platform's data lets you list);
 <!-- route: chat -->
-- the parents of each product's set, named by page address without a
-  sheet, as this route's rule has it;
 - what the Check said, or why it could not be run;
 - every address your fetch tool refused.
 <!-- /route -->
