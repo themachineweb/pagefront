@@ -4,6 +4,25 @@ The prompt set's own semver; see "Versioning" in [`README.md`](README.md).
 
 ## Unreleased
 
+## 1.15.0 — 2026-11-10
+
+For commerce release 0.5.0.
+
+- Link phase, Shopify: the entry point. A URL redirect made in the admin
+  (Content › Menus › "View URL Redirects") answers `/.well-known/pagefront`
+  with a redirect to the root's address, the organization sheet's. Shopify
+  answers it with `301`, which no setting changes, where Discovery says
+  `303 See Other`; the Check warns on that line, and the report says so
+  once. The step comes after the pages, only when the archive holds a
+  root, and the merchant's notes say to edit the redirect when the root's
+  address changes and that a `301` may be kept by clients without limit.
+  The redirect was walked on 2026-11-10 on a password-protected
+  development store, with the documentation's labels. What Shopify still
+  cannot do: a `Link` header and a `Pagefront:` line in `robots.txt`.
+- Link phase, Step 3: a fourth step, the entry point, where the platform's
+  section gives an admin step for it; on an addition its check runs first
+  and a passing one leaves the step out.
+
 ## 1.14.0 — 2026-11-10
 
 For commerce release 0.5.0.

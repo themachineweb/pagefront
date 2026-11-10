@@ -12,7 +12,8 @@
 - **Pages with a field**: a product (`/products/<handle>`), a collection
   (`/collections/<handle>`), the organization page if it is a page of the
   online store (`/pages/<handle>`). The homepage has no field: an
-  organization sheet whose page is the homepage is left out and reported.
+  organization sheet whose page is the homepage gets no page link and is
+  reported so, with the entry point as the way a reader reaches it.
 - **The field**: a metafield, one definition each for Products,
   Collections and Pages: name "Pagefront sheet", namespace and key
   `custom.pagefront_sheet`, type URL (not Link), one value, Storefront
@@ -26,11 +27,20 @@
 - **Sign the code runs**: none until a field is filled; the code step has
   no check.
 - **What Shopify cannot do**, said plainly in the report: a theme sets no
-  response header, so no `Link` header; no entry point (no
-  `/.well-known/pagefront` and no `Pagefront:` line in `robots.txt`): an
-  agent finds the sheets from the pages.
+  response header, so no `Link` header; no `Pagefront:` line in
+  `robots.txt`. The entry point is the redirect below, on its own.
+- **Entry point**: a URL redirect the merchant makes in the admin (step 4),
+  one step of its own after the pages, only when Step 1 found a root.
+  Shopify answers it with `301`, which no setting changes; Discovery says
+  `303 See Other`, so the Check warns on that line: say so once, in the
+  report, never per check. Its checks, at full addresses:
+  `<origin>/.well-known/pagefront` and `<origin>/.well-known/pagefront/`
+  answer a redirect whose `Location`, resolved against the address asked
+  (Shopify stores the target as a path on the same host), is the root's
+  address.
 - **Admin, in English, from the documentation; steps 1 (Products) and 2 as
-  shown on 2026-11-06** (the rest not yet walked):
+  shown on 2026-11-06, step 4 walked on 2026-11-10 with the
+  documentation's labels** (the rest not yet walked):
   1. The field, once per kind: in the admin, Settings (the very bottom of
      the left menu) › Metafields and metaobjects ›
      Products (then Collections, then Pages) › "Add definition" (top
@@ -53,6 +63,16 @@
   3. A product, collection or page: open it; in the Metafields section,
      next to "Pagefront sheet", "+ Add" (or "View all" if it is not
      listed); paste the address; "Save".
+  4. The entry point, once, when there is a root: Content › Menus › "View
+     URL Redirects" › "Create URL redirect". "Redirect from"
+     `/.well-known/pagefront`; "Redirect to" the root's address, in full;
+     "Save redirect". Shopify redirects only an address that answers 404,
+     which `/.well-known/pagefront` does on a Shopify store.
 - **What stays the merchant's** (report): a theme update can drop code
   edits ("Theme added: code edits could not be included"); after one,
-  paste the block again. A new theme needs the block too.
+  paste the block again. A new theme needs the block too. When the root
+  sheet's address changes, edit the redirect (Content › Menus › "View URL
+  Redirects", the redirect's row); a redirect deleted there removes the
+  entry point. Browsers and crawlers may keep a `301` without limit, so a
+  reader that followed the old one can hold the old address for a while
+  after a change.

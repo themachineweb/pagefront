@@ -47,9 +47,10 @@ whose field is set:
   marker.
 - `link-platform-shopify.md`, `link-platform-woocommerce.md`: one section
   per platform, its admin paths dated observations. WooCommerce was walked
-  end to end; Shopify for one product on a development store, so its
-  collection and page definitions and the public checks on an open store
-  are untested.
+  end to end; Shopify for one product on a development store, and its
+  entry point redirect on the same store on 2026-11-10, so its collection
+  and page definitions and the public checks on an open store are
+  untested.
 - `link-<platform>-chat.md`: the two built link prompts.
 
 `build.py` assembles every built prompt from the cores and the platform
@@ -74,7 +75,7 @@ independent of the commerce release, stating which release they target.
 The version is the second line of every prompt's header block:
 
 ```
-- Prompt set 1.14.0, for commerce release 0.5.0.
+- Prompt set 1.15.0, for commerce release 0.5.0.
 ```
 
 The whole set shares one version. The rule:
