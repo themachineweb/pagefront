@@ -1,6 +1,6 @@
 # Pagefront — link your shop's sheets
 
-- Prompt set 1.14.0, for commerce release 0.5.0.
+- Prompt set 1.15.0, for commerce release 0.5.0.
 - Links the sheets the serve phase put online (commerce release 0.5.0) from the shop's own pages.
 - Pagefront Discovery: https://themachineweb.org/pagefront/spec/core/discovery.md (page: https://themachineweb.org/pagefront/spec/core/discovery)
 
@@ -117,6 +117,10 @@ next; if a check fails, say what to fix in that step, and check again.
    step and named in one line as already linked; a kind whose every page
    is linked gets no step, that line alone. A step names only the pages
    with something to do.
+4. The entry point, where the platform's section gives an admin step for
+   it, once, when Step 1 found a root. Check: CHECKS 4. On an addition,
+   run that check first; if it passes, this step is left out and the
+   report says the entry point was in place.
 
 After the last step: CHECKS, in full.
 

@@ -1,6 +1,6 @@
 # Pagefront — link your shop's sheets
 
-- Prompt set 1.14.0, for commerce release 0.5.0.
+- Prompt set 1.15.0, for commerce release 0.5.0.
 - Links the sheets the serve phase put online (commerce release 0.5.0) from the shop's own pages.
 - Pagefront Discovery: https://themachineweb.org/pagefront/spec/core/discovery.md (page: https://themachineweb.org/pagefront/spec/core/discovery)
 
@@ -117,6 +117,10 @@ next; if a check fails, say what to fix in that step, and check again.
    step and named in one line as already linked; a kind whose every page
    is linked gets no step, that line alone. A step names only the pages
    with something to do.
+4. The entry point, where the platform's section gives an admin step for
+   it, once, when Step 1 found a root. Check: CHECKS 4. On an addition,
+   run that check first; if it passes, this step is left out and the
+   report says the entry point was in place.
 
 After the last step: CHECKS, in full.
 
@@ -136,7 +140,8 @@ After the last step: CHECKS, in full.
 - **Pages with a field**: a product (`/products/<handle>`), a collection
   (`/collections/<handle>`), the organization page if it is a page of the
   online store (`/pages/<handle>`). The homepage has no field: an
-  organization sheet whose page is the homepage is left out and reported.
+  organization sheet whose page is the homepage gets no page link and is
+  reported so, with the entry point as the way a reader reaches it.
 - **The field**: a metafield, one definition each for Products,
   Collections and Pages: name "Pagefront sheet", namespace and key
   `custom.pagefront_sheet`, type URL (not Link), one value, Storefront
@@ -150,11 +155,20 @@ After the last step: CHECKS, in full.
 - **Sign the code runs**: none until a field is filled; the code step has
   no check.
 - **What Shopify cannot do**, said plainly in the report: a theme sets no
-  response header, so no `Link` header; no entry point (no
-  `/.well-known/pagefront` and no `Pagefront:` line in `robots.txt`): an
-  agent finds the sheets from the pages.
+  response header, so no `Link` header; no `Pagefront:` line in
+  `robots.txt`. The entry point is the redirect below, on its own.
+- **Entry point**: a URL redirect the merchant makes in the admin (step 4),
+  one step of its own after the pages, only when Step 1 found a root.
+  Shopify answers it with `301`, which no setting changes; Discovery says
+  `303 See Other`, so the Check warns on that line: say so once, in the
+  report, never per check. Its checks, at full addresses:
+  `<origin>/.well-known/pagefront` and `<origin>/.well-known/pagefront/`
+  answer a redirect whose `Location`, resolved against the address asked
+  (Shopify stores the target as a path on the same host), is the root's
+  address.
 - **Admin, in English, from the documentation; steps 1 (Products) and 2 as
-  shown on 2026-11-06** (the rest not yet walked):
+  shown on 2026-11-06, step 4 walked on 2026-11-10 with the
+  documentation's labels** (the rest not yet walked):
   1. The field, once per kind: in the admin, Settings (the very bottom of
      the left menu) › Metafields and metaobjects ›
      Products (then Collections, then Pages) › "Add definition" (top
@@ -177,9 +191,19 @@ After the last step: CHECKS, in full.
   3. A product, collection or page: open it; in the Metafields section,
      next to "Pagefront sheet", "+ Add" (or "View all" if it is not
      listed); paste the address; "Save".
+  4. The entry point, once, when there is a root: Content › Menus › "View
+     URL Redirects" › "Create URL redirect". "Redirect from"
+     `/.well-known/pagefront`; "Redirect to" the root's address, in full;
+     "Save redirect". Shopify redirects only an address that answers 404,
+     which `/.well-known/pagefront` does on a Shopify store.
 - **What stays the merchant's** (report): a theme update can drop code
   edits ("Theme added: code edits could not be included"); after one,
-  paste the block again. A new theme needs the block too.
+  paste the block again. A new theme needs the block too. When the root
+  sheet's address changes, edit the redirect (Content › Menus › "View URL
+  Redirects", the redirect's row); a redirect deleted there removes the
+  entry point. Browsers and crawlers may keep a `301` without limit, so a
+  reader that followed the old one can hold the old address for a while
+  after a change.
 ## CHECKS
 
 For every page in the list, at its address:
