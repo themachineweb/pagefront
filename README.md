@@ -54,8 +54,8 @@ What this repository contains today:
   these files verbatim, so a published schema URL never changes or
   disappears.
 - [`commerce/prompts/`](commerce/prompts/) — the prompts a merchant hands
-  to a chat or code assistant to write sheets: the sources, the built
-  prompts the site serves, and the prompt set's own version and changelog.
+  to a chat assistant to write sheets: the sources, the built prompts the
+  site serves, and the prompt set's own version and changelog.
 - [`site/`](site/) — themachineweb.org, including
   [Check](https://themachineweb.org/pagefront/commerce/validate), which reads a
   page's sheet declaration and judges the sheet it points at.

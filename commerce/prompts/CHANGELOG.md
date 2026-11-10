@@ -4,6 +4,19 @@ The prompt set's own semver; see "Versioning" in [`README.md`](README.md).
 
 ## Unreleased
 
+## 1.14.0 — 2026-11-10
+
+For commerce release 0.5.0.
+
+- The write phase's code route leaves the set. Its last builds, from 1.13.0,
+  are kept in `code-route/` as the starting point of the developer version,
+  unbuilt and unserved. The sources carry no route markers: `core.md` and
+  the platform sections read as the chat prompt reads, and `build.py` builds
+  one prompt per platform and phase, seven outputs. No chat prompt changes
+  beyond the version line. The two routes will diverge, and a chat-only line
+  in a shared section needed markers or the code builds moved; the chat set
+  now carries nothing for the other route.
+
 ## 1.13.0 — 2026-11-09
 
 For commerce release 0.5.0.

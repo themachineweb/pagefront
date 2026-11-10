@@ -1,8 +1,6 @@
-<!-- route: chat -->
 # Pagefront — link your shop's sheets
-<!-- /route -->
 
-- Prompt set 1.13.0, for commerce release 0.5.0.
+- Prompt set 1.14.0, for commerce release 0.5.0.
 - Links the sheets the serve phase put online (commerce release 0.5.0) from the shop's own pages.
 - Pagefront Discovery: https://themachineweb.org/pagefront/spec/core/discovery.md (page: https://themachineweb.org/pagefront/spec/core/discovery)
 

@@ -1,9 +1,7 @@
 ### Shopify
 
 - Documentation: https://shopify.dev/docs/api/ajax/reference/product
-<!-- route: chat -->
 - Serve prompt, the next phase: https://themachineweb.org/pagefront/publish/serve/shopify
-<!-- /route -->
 - **How it shows itself**: Shopify documents no marker for its storefront
   pages. Its product pages live at `/products/<handle>`, and the documented
   Ajax API answers `<origin>/products/<handle>.js` with that product as JSON
@@ -15,20 +13,7 @@
   Ajax API, which "can only be used by themes that are hosted by Shopify";
   a shop whose product address does not answer `.js` but whose images are
   served from `cdn.shopify.com` is a Shopify store on its own front.
-<!-- route: chat -->
   Read it as "On its own front" below says.
-<!-- /route -->
-<!-- route: code -->
-  The Admin API reads it as any other store; only the page's own reading
-  differs (prices and addresses as the shop's pages show them).
-<!-- /route -->
-<!-- route: code -->
-  You can also look up the shop's domain in DNS: Shopify's documentation
-  has a connected domain's `A` record point to `23.227.38.65` (another last
-  number is allowed by region, such as `23.227.38.32`) and its `www` `CNAME` to
-  `shops.myshopify.com.`. These are shared by every Shopify store: they say
-  the shop is on Shopify, not which store it is.
-<!-- /route -->
 - **Sheet path**: `/apps/pagefront`.
 - **Ids**: a product's `handle` from the Ajax API. A collection's handle and a
   page's handle are the last segment of their addresses, `/collections/<handle>`
@@ -45,7 +30,6 @@
   (`/cart/<variant id>:<quantity>`) for apps to generate; they are the
   platform's pattern, not the merchant's statement: never write one as
   `checkoutPageURLTemplate`.
-<!-- route: chat -->
 - **The catalogue**: Shopify documents no public product or collection
   listing. Read the catalogue from the shop's own pages: the main navigation
   on the homepage, its links to `/collections/<handle>` pages, and those
@@ -139,74 +123,3 @@
   page displays, as rule 4 requires; a price shown only after options are
   chosen is read by choosing each combination where your browser can, and
   otherwise left out, saying so; the script data's amounts only check it.
-<!-- /route -->
-<!-- route: code -->
-- **Access**: no key in `.env` on Shopify. Use the Shopify CLI
-  (https://shopify.dev/docs/api/shopify-cli/store): tell the merchant that a
-  browser window will open where they approve read-only access, then run
-  `shopify store auth --store <store>.myshopify.com --scopes
-  read_products,read_markets,read_locales,read_content,read_online_store_navigation`.
-  The CLI keeps the token itself. Run every query with `shopify store execute
-  --store <store>.myshopify.com --query-file <file>`, which refuses changes
-  unless given `--allow-mutations`: never give it. `<store>.myshopify.com` is
-  the store's own Shopify address, not its custom domain. Look for it in the
-  page's scripts (a `Shopify.shop` value); Shopify does not document that
-  value, so say in the report where you found it. If it is not there, give
-  the merchant the command with `<store>.myshopify.com` for them to fill in
-  with their store's address, which their Shopify admin shows. If they do
-  not approve, go on with the Ajax API alone (as below) and say what access
-  would have settled.
-- **The catalogue**: the Admin API's `products` and `collections`; the
-  storefront's main navigation is the menu with handle `main-menu`
-  (`menus`, scope `read_online_store_navigation`), whose first-level items
-  that link to collections are the top-level product categories.
-- **The sets**: a product's collections are its `collections`. A collection
-  the main menu links to is a `category`, nested as the menu nests it (up to
-  three levels; a menu item that links to no collection has no page: its
-  children attach to the nearest collection above it); any other collection
-  is a `collection`, top-level, and goes in `hasOfferCatalog`. A collection
-  with a `ruleSet` is filled by a rule: a `collection` gets no sheet, a
-  `category` keeps its sheet with an `expires_at`. Members: the collection's
-  `products` in its own sort order (`sortOrder`), leaving out any whose
-  `onlineStoreUrl` is null, each a `ProductGroup` with more than one variant
-  and a `Product` otherwise, its url `<origin>/products/<handle>`; a Shopify
-  collection is its own list, and a parent collection often holds its
-  subcategories' products too: a product that is also in one of its
-  subcategories, at any depth, is a direct member of the subcategory only.
-  Check the
-  order against the collection's page as the shop shows it.
-- **A product's data**: `productByIdentifier(identifier: { handle })` with
-  `title`, `description` (plain text), `vendor`, `productType`, `status`,
-  `onlineStoreUrl`, `options { name values }`, `media` (with `alt`), and
-  `variants` with `sku`, `selectedOptions`, `availableForSale`,
-  `barcodes { type value }` (`barcode` is deprecated) and
-  `contextualPricing(context: { country })` per country the store sells to
-  (`price`, `compareAtPrice`: "The final price after all adjustments are
-  applied"). `status` other than ACTIVE, or a null `onlineStoreUrl` ("the
-  product isn't published to the online store"): no sheet. More than one
-  variant: a ProductGroup.
-- **Values**: as for the Ajax API, with `media` alt text as the caption where
-  it is not empty. `vendor` and `productType` as above: not a brand unless the
-  page presents it as one, never a category.
-- **Prices**: Admin amounts are decimal strings ("100.57"). Each country's
-  `contextualPricing.price`, checked against the price the page displays for
-  that country.
-- **Availability**: the page's, as rule 4 says; `availableForSale` checks it.
-- **Identifiers**: `barcodes` carry a type: EAN, and GTIN with 13 digits, go
-  in gtin13; UPC, and GTIN with 8, 12 or 14 digits, in gtin; a 13-digit ISBN is
-  an EAN-13; ASIN and NS_PID are not GTINs: leave them out of the gtin fields;
-  a barcode with no type, by its digit count as for the Ajax API.
-- **The tax basis**: the store's markets (`markets`, each with
-  `priceInclusions { inclusiveTaxPricingStrategy }`):
-  `INCLUDES_TAXES_IN_PRICE` is valueAddedTaxIncluded true and
-  `ADD_TAXES_AT_CHECKOUT` false, for that market's countries;
-  `INCLUDES_TAXES_IN_PRICE_BASED_ON_COUNTRY` states no single basis: no flag.
-  With no markets, `shop { taxesIncluded }`.
-- **The countries sold to**: each market's countries,
-  `conditions { regionsCondition { regions } }` (`regions` on the market is
-  deprecated). A market names its countries: areaServed is that list, one
-  offer per country or per group of countries with the same price and
-  currency.
-- **Languages**: `shopLocales` lists the store's languages and its primary
-  one.
-<!-- /route -->
