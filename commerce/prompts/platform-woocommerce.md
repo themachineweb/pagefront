@@ -1,9 +1,7 @@
 ### WooCommerce
 
 - Documentation: https://developer.woocommerce.com/docs/apis/store-api/
-<!-- route: chat -->
 - Serve prompt, the next phase: https://themachineweb.org/pagefront/publish/serve/woocommerce
-<!-- /route -->
 - **How it shows itself**: WordPress names its REST index in the page head
   (`<link rel="https://api.w.org/">`); WooCommerce's public Store API is the
   `wc/store/v1` namespace of that index, whose routes carry their own
@@ -131,29 +129,6 @@
     check. A field those properties do not name is the front's own: leave it
     out. Where the script data and the Store API disagree on a value, leave
     it out.
-<!-- route: chat -->
 - **Not readable**: the tax setting and the selling countries are admin
   settings, absent from the Store API; only the shop's pages can state them.
-<!-- /route -->
-<!-- route: code -->
-- **The read-only key**: WooCommerce › Settings › Advanced › REST API › Add
-  key, for an administrator, with Read access; it gives a consumer key and a
-  consumer secret. In `.env`: `WC_CONSUMER_KEY=ck_…` and
-  `WC_CONSUMER_SECRET=cs_…`. Send them as HTTP Basic credentials over HTTPS to
-  the REST API (`/wp-json/wc/v3/…`, the `wc/v3` namespace of the REST index).
-  Documentation: https://woocommerce.github.io/woocommerce-rest-api-docs/
-- **With the key**:
-  - the GTIN: the REST product's `global_unique_id` ("GTIN, UPC, EAN or
-    ISBN"), on the product and on each variation;
-  - the tax basis: `settings/general` `woocommerce_calc_taxes`; when it is
-    `yes`, `settings/tax` `woocommerce_tax_display_shop` states how shop
-    prices are displayed: `incl` is valueAddedTaxIncluded true, `excl` false.
-    When taxes are off, the store states no basis: no flag;
-  - the countries sold to: `settings/general` `woocommerce_allowed_countries`
-    (`all`, `all_except`, `specific`), with `woocommerce_specific_allowed_countries`
-    listing the countries for `specific`. Only `specific` names the market:
-    areaServed is that list. `all` and `all_except` name none.
-- **Without the key**: the tax setting and the selling countries are not in
-  the Store API; only the shop's pages can state them.
-<!-- /route -->
 
