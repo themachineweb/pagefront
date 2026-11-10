@@ -209,7 +209,13 @@ Every sheet's address is `<origin><sheet path>/commerce/<kind>/<id>.<lang>.json`
   section under PLATFORMS gives it;
 - `<kind>` is `product`, `organization` or `collection`;
 - `<id>` is the platform's own handle for the thing the sheet describes, as
-  the platform's data states it (never cut from a URL);
+  the platform's data states it (never cut from a URL); the homepage has no
+  handle, so an organization sheet whose page is the homepage takes the
+  origin's registrable domain, the host without its subdomains
+  (`merchant.com` for `www.merchant.com` and for `shop.merchant.com`), as
+  the Public Suffix List defines it; read the list,
+  https://publicsuffix.org/list/public_suffix_list.dat, only where the host
+  leaves you in doubt;
 - `<lang>` is the sheet's `inLanguage`.
 
 The part after `<sheet path>`, `commerce/<kind>/<id>.<lang>.json`, is the
