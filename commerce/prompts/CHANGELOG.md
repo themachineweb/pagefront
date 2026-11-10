@@ -22,6 +22,10 @@ For commerce release 0.5.0.
 - Link phase, Step 3: a fourth step, the entry point, where the platform's
   section gives an admin step for it; on an addition its check runs first
   and a passing one leaves the step out.
+- Write phase, ADDRESSES: an organization sheet whose page is the homepage,
+  which has no handle, takes the origin's registrable domain as its id
+  (`merchant.com` for `www.merchant.com`), as the Public Suffix List
+  defines it, the list read only in doubt. No rule gave that id before.
 
 ## 1.14.0 — 2026-11-10
 
