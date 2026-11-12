@@ -70,7 +70,19 @@
 - **A product's data**: `<origin>/products/<handle>.js`. A product with more
   than one variant is a ProductGroup, one hasVariant entry per entry of
   `variants` (at most 250 are returned); a product with one variant is a
-  Product.
+  Product. Where the `.js` address cannot be read (a browser that refuses
+  an address ending in `.js` as a script), the fallback is
+  `<origin>/products/<handle>.json`, which Shopify does not document: the
+  same product under a `product` key, with `title`, `body_html` (the
+  description, as HTML), `vendor`, `product_type`, `handle`, `options` as
+  objects with `name` and `values`, `images` with `src`, `alt`, `width` and
+  `height`, and `variants` with `sku`, `barcode`, `option1` to `option3`,
+  and `price` and `compare_at_price` as decimal strings in the currency
+  `price_currency` names (`"749.95"` is 749.95: written as it is, never
+  divided by 100; an empty `compare_at_price` is no former price). It
+  carries no `available`: availability comes from the page, as rule 4
+  says. Every `id` in it is Shopify's internal number. Say in the report
+  which address was read.
 - **A variant's page**: the product page with `?variant=<the variant's id>`,
   the structure Shopify documents for variant links.
 - **Values**: name `title`; description the plain text of `description`
