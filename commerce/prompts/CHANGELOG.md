@@ -16,6 +16,13 @@ For commerce release 0.5.0.
   shape as read that day: the product under a `product` key, prices as
   decimal strings in the currency `price_currency` names, no `available`.
   The report says which address was read.
+- Write phase, Shopify: a product's `isPartOf` follows the core rule, every
+  set whose sheet exists and whose listing shows the product among its
+  direct members. The breadcrumb and the collection path keep their role,
+  which is to say which sets a product adds to the run; until now the
+  section's sentence on a collection the product page does not name also
+  kept it out of `isPartOf`, so a theme with no breadcrumb left the product
+  sheet with no set while the set's sheet listed the product.
 
 ## 1.15.0 — 2026-11-10
 

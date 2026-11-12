@@ -422,14 +422,17 @@ the sets whose sheet exists).
   navigation nests them (up to three levels), kind `category`; a menu entry
   that links to no collection has no page: its children attach to the
   nearest collection above it. A collection the navigation does not link to
-  cannot be listed from public data: none; say so. Which collections hold a
-  product: its page's breadcrumb, which names the collection that holds it
-  last and that collection's ancestors before it, the set's parents for its
-  `isPartOf`; a theme that links the
-  product under a collection's path (`/collections/<handle>/products/<product
-  handle>`) names that collection too. A collection the product page does
-  not name is not listed for the product: say so in the report, naming the
-  page as the source. Members: the collection's page and every page its
+  cannot be listed from public data: none; say so. Which collections a
+  product adds to the run: its page's breadcrumb, which names the
+  collection that holds it last and that collection's ancestors before it,
+  the set's parents for its `isPartOf`; a theme that links the product
+  under a collection's path (`/collections/<handle>/products/<product
+  handle>`) names that collection too. A product page that names no
+  collection adds no set to the run: say so in the report, naming the page
+  as the source. The product's own `isPartOf` follows the core rule: every
+  set whose sheet exists, written in this run or found online, and whose
+  listing shows the product among its direct members, breadcrumb or none.
+  Members: the collection's page and every page its
   pagination links to, the product tiles in the order shown. A Shopify
   collection is its own list, and a
   parent collection often holds its subcategories' products too, added by
