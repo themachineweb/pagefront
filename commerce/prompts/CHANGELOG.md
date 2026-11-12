@@ -4,6 +4,19 @@ The prompt set's own semver; see "Versioning" in [`README.md`](README.md).
 
 ## Unreleased
 
+## 1.16.0 — 2026-11-12
+
+For commerce release 0.5.0.
+
+- Write phase, Shopify: `/products/<handle>.json` is the fallback source
+  for a product's data where the `.js` address cannot be read, as a
+  browser that refuses a script address does (met on 2026-11-12, with a
+  chat assistant reading a password-protected development store through
+  its own browser). Shopify does not document it; the section gives its
+  shape as read that day: the product under a `product` key, prices as
+  decimal strings in the currency `price_currency` names, no `available`.
+  The report says which address was read.
+
 ## 1.15.0 — 2026-11-10
 
 For commerce release 0.5.0.
