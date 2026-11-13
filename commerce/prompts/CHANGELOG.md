@@ -4,6 +4,17 @@ The prompt set's own semver; see "Versioning" in [`README.md`](README.md).
 
 ## Unreleased
 
+## 1.17.0 — 2026-11-13
+
+For commerce release 0.5.0.
+
+- Each phase's report is named for its phase: `write-report.md` beside
+  `commerce.zip` and `checks.json`, `serve-report.md` in the serving kit,
+  `link-report.md` in the linking kit. A merchant who runs the three
+  phases, and runs one again, no longer gets several reports under one
+  name (`report.md`, then `pagefront-report.md` twice). `checks.json` and
+  the kits keep their names.
+
 ## 1.16.0 — 2026-11-12
 
 For commerce release 0.5.0.

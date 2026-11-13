@@ -1,6 +1,6 @@
 # Pagefront — write your shop's sheets
 
-- Prompt set 1.16.0, for commerce release 0.5.0.
+- Prompt set 1.17.0, for commerce release 0.5.0.
 - Writes Product sheets (spec 0.11.0), Collection sheets (spec 0.1.0) and the Organization sheet (spec 0.5.0), commerce release 0.5.0.
 - Product spec: https://themachineweb.org/pagefront/spec/commerce/product.md (page: https://themachineweb.org/pagefront/spec/commerce/product)
 - Product schema: https://themachineweb.org/pagefront/spec/commerce/product/v0.11.0.json
@@ -184,14 +184,15 @@ step), over what is already there; every address then resolves.
 
 Beside the archive, two more files, and nothing else:
 
-- `report.md`: the report (OUTPUT);
+- `write-report.md`: the report (OUTPUT), named for its phase so the
+  reports of the three phases stay apart;
 - `checks.json`: the Check's final report for every sheet in the archive,
   as one JSON object keyed by the sheet's path in the archive
   (`commerce/product/<id>.<lang>.json`), each value the Check's response
   as returned; where the Check could not be run on a sheet, the value is
   the reason, as a string.
 
-Three files in all: `commerce.zip`, `report.md`, `checks.json`. If you
+Three files in all: `commerce.zip`, `write-report.md`, `checks.json`. If you
 cannot make files at all, say so, and give each sheet as one JSON code
 block with its path from `commerce/` above it, then the report and the
 checks as code blocks with their filenames above them.
@@ -523,7 +524,7 @@ the sets whose sheet exists).
   otherwise left out, saying so; the script data's amounts only check it.
 ## OUTPUT
 
-The three files of Step 7: `commerce.zip`, `checks.json`, and `report.md`,
+The three files of Step 7: `commerce.zip`, `checks.json`, and `write-report.md`,
 the report in plain words:
 
 - what you found in Step 1;

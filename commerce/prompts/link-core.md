@@ -1,6 +1,6 @@
 # Pagefront — link your shop's sheets
 
-- Prompt set 1.16.0, for commerce release 0.5.0.
+- Prompt set 1.17.0, for commerce release 0.5.0.
 - Links the sheets the serve phase put online (commerce release 0.5.0) from the shop's own pages.
 - Pagefront Discovery: https://themachineweb.org/pagefront/spec/core/discovery.md (page: https://themachineweb.org/pagefront/spec/core/discovery)
 
@@ -158,10 +158,11 @@ merchant with a terminal, and what they should see.
 The first message: what Step 1 found, in a few lines, and Step 3's first
 step, the kit. Then one step per message (Step 3). After the last step's
 check: only what they must act on (every page declares its sheet, or each
-failed check with what to do) and a new `pagefront-report.md`.
+failed check with what to do) and a new `link-report.md`.
 
 The report is a file in the kit, never shown in the message, named exactly
-`pagefront-report.md` in any language. In plain words:
+`link-report.md` in any language, for its phase, so the reports of the
+three phases stay apart. In plain words:
 
 - the pages linked, each with its sheet address, the pages found linked
   already, and every sheet left out, with why;
