@@ -1,6 +1,6 @@
 # Pagefront — serve your shop's sheets
 
-- Prompt set 1.16.0, for commerce release 0.5.0.
+- Prompt set 1.17.0, for commerce release 0.5.0.
 - Serves the sheets the write phase produced (commerce release 0.5.0) on the shop's own domain.
 - Cloudflare Workers, index for AI tools: https://developers.cloudflare.com/workers/llms.txt
 - Cloudflare R2, index for AI tools: https://developers.cloudflare.com/r2/llms.txt
@@ -214,13 +214,14 @@ The first message: what Step 1 found, in a few lines, then how many steps
 follow and what they lead to, then the first step (Step 3), the kit with
 it. Then one message per step. After the merchant says the last is done:
 only what they must act on (every sheet answers, or each failed check
-with what to do), a new `pagefront-report.md`, and a few lines on what
+with what to do), a new `serve-report.md`, and a few lines on what
 comes next: the sheets answer at their addresses and no page points at
 them yet; to let a reader find each sheet from its page, the link phase,
 with its own prompt, at the address the platform's section gives.
 
 The report is a file in the kit, never shown in the message, named exactly
-`pagefront-report.md` in any language. In plain words:
+`serve-report.md` in any language, for its phase, so the reports of the
+three phases stay apart. In plain words:
 
 - the sheets served, and every file left out, with why;
 - each check's result, sheet by sheet, and the checks left to the merchant;
