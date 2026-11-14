@@ -1,7 +1,7 @@
 """Assemble the phase prompts from the sources in this folder.
 
-A phase has a core and one section per platform: the write phase `core.md` and
-`platform-<name>.md`, the serve phase `serve-core.md` and `serve-platform-<name>.md`, the
+A phase has a core and one section per platform: the write phase `write-core.md` and
+`write-platform-<name>.md`, the serve phase `serve-core.md` and `serve-platform-<name>.md`, the
 link phase `link-core.md` and `link-platform-<name>.md`.
 `<!-- platform -->` in the core is replaced by the platform's section.
 Output: <phase>-<platform>-chat.md in this folder, committed with the sources, so the
@@ -14,7 +14,7 @@ import pathlib, sys
 HERE = pathlib.Path(__file__).resolve().parent
 # phase: (core file, prefix of its platform sections)
 PHASES = {
-    "write": ("core.md", "platform-"),
+    "write": ("write-core.md", "write-platform-"),
     "serve": ("serve-core.md", "serve-platform-"),
     "link": ("link-core.md", "link-platform-"),
 }
