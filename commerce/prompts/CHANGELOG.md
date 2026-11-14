@@ -37,6 +37,9 @@ For commerce release 0.5.0.
 - Shopify, link: a URL redirect edited in the admin can keep answering its
   old target for some hours; a check right after an edit is run again
   later before it counts as failed.
+- Write, Step 6: an assistant whose tools ask the merchant's approval
+  before sending the sheets to the Check asks for it in one sentence and
+  goes on; the Check is never skipped for want of it.
 
 ## 1.17.0 — 2026-11-13
 

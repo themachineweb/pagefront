@@ -174,7 +174,13 @@ checker sees it, so serialize the JSON compactly, without indentation.
 Correct every schema error and every finding of severity
 `error` using only what the sources state, and check again. Never add a value
 no source states to satisfy the Check: rule 3 outranks it. If the address is
-refused, say so in the report.
+refused, say so in the report. Where your tools ask the merchant's approval
+before sending the sheets (a review of what leaves the conversation, since
+a sheet holds the shop's data and may hold a published contact address),
+ask for it in one sentence, the one question rule 1 does not list: what is
+sent, to that address, and that the sheets are written to be published on
+the shop's domain, so the Check sees nothing the public will not. Wait,
+then check. Never skip the Check for want of that approval.
 
 ### Step 7 — Hand them over
 One file the merchant can download: `commerce.zip`, a zip archive holding
