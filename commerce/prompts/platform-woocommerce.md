@@ -11,6 +11,8 @@
   `/wp-json/` index lists `wc/store/v1` with products whose `permalink` are
   the shop's own pages, it is a WooCommerce store on its own front: its Store
   API is the platform's data, read as below, with what "On its own front"
+  says. A homepage that shows a password form or a coming-soon page a
+  plugin put in place of the shop is closed: read it as "A closed shop"
   says.
 - **Sheet path**: `/pagefront`.
 - **Ids**: a product's and a category's `slug` in the Store API; a page's

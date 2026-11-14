@@ -1,6 +1,6 @@
 # Pagefront — write your shop's sheets
 
-- Prompt set 1.17.0, for commerce release 0.5.0.
+- Prompt set 1.18.0, for commerce release 0.5.0.
 - Writes Product sheets (spec 0.11.0), Collection sheets (spec 0.1.0) and the Organization sheet (spec 0.5.0), commerce release 0.5.0.
 - Product spec: https://themachineweb.org/pagefront/spec/commerce/product.md (page: https://themachineweb.org/pagefront/spec/commerce/product)
 - Product schema: https://themachineweb.org/pagefront/spec/commerce/product/v0.11.0.json
@@ -86,6 +86,18 @@ index, a listing's links to its items). If an address you need is refused
 and no fetched response carries it, say which in the report and go on with
 what you have.
 
+**A closed shop.** A shop that shows a password form or a coming-soon page
+in place of its pages (each platform's section says how its own looks) can
+be read only through a browser you drive and the merchant can take over.
+Where you have one: say which address to open there, ask the merchant to
+enter the password on the shop's own page themselves and to say when the
+shop shows, then read everything in that session; if the session is lost,
+open the page again and ask again. The password is never asked for and
+never passes through this conversation. Where you have no such browser,
+say so and stop: the pages cannot be read until the shop is open. The
+report says the shop was closed and its pages were read through the
+merchant's session.
+
 ## PROCEDURE
 
 Take the merchant through the steps in the open. Before each step, a
@@ -103,7 +115,9 @@ them in hand, ask whether the shop has sheets already (rule 1), and go on
 once you have both answers. The shop's homepage is the root of the
 product addresses' origin (their scheme and host), followed through
 redirects. Addresses on more than one host are more than one shop: say so
-and stop. From the homepage:
+and stop. A homepage that shows a password form or a coming-soon page in
+place of the shop is closed: "A closed shop" above, before anything else.
+From the homepage:
 
 - **The origin**: the homepage address after redirects.
 - **The platform**: each section under PLATFORMS says how its platform
@@ -392,16 +406,17 @@ the sets whose sheet exists).
   ("an unauthenticated API. It doesn't require access tokens"); a page whose
   product address answers so is a Shopify storefront. A store whose pages all
   show a password page ("all of your online store's pages are hidden from
-  visitors") is closed: say so and stop. A store on its own front (a custom
+  visitors"), every address redirecting to `/password`, is closed: read it
+  as "A closed shop" says. A store on its own front (a custom
   storefront, built with Hydrogen or another framework) does not answer the
   Ajax API, which "can only be used by themes that are hosted by Shopify";
   a shop whose product address does not answer `.js` but whose images are
   served from `cdn.shopify.com` is a Shopify store on its own front.
   Read it as "On its own front" below says.
 - **Sheet path**: `/apps/pagefront`.
-- **Ids**: a product's `handle` from the Ajax API. A collection's handle and a
-  page's handle are the last segment of their addresses, `/collections/<handle>`
-  and `/pages/<handle>`, the URL structure Shopify documents; this is the one
+- **Ids**: a product's `handle` from the Ajax API and a collection's from
+  the collections feed. A page's handle is the last segment of its address,
+  `/pages/<handle>`, the URL structure Shopify documents; this is the one
   place an id is read from an address.
 - **The family identifier**: a Shopify product has no SKU of its own, only
   its variants do. A ProductGroup's productGroupID is the product's
@@ -415,45 +430,50 @@ the sets whose sheet exists).
   platform's pattern, not the merchant's statement: never write one as
   `checkoutPageURLTemplate`.
 - **The catalogue**: Shopify documents no public product or collection
-  listing. Read the catalogue from the shop's own pages: the main navigation
-  on the homepage, its links to `/collections/<handle>` pages, and those
-  pages' links to products. The top-level product categories are the
-  collections the main navigation links to at its first level.
-- **The sets**: the collections the main navigation links to, nested as the
-  navigation nests them (up to three levels), kind `category`; a menu entry
-  that links to no collection has no page: its children attach to the
-  nearest collection above it. A collection the navigation does not link to
-  cannot be listed from public data: none; say so. Which collections a
-  product adds to the run: its page's breadcrumb, which names the
-  collection that holds it last and that collection's ancestors before it,
-  the set's parents for its `isPartOf`; a theme that links the product
-  under a collection's path (`/collections/<handle>/products/<product
-  handle>`) names that collection too. A product page that names no
-  collection adds no set to the run: say so in the report, naming the page
-  as the source. The product's own `isPartOf` follows the core rule: every
-  set whose sheet exists, written in this run or found online, and whose
-  listing shows the product among its direct members, breadcrumb or none.
-  Members: the collection's page and every page its
-  pagination links to, the product tiles in the order shown. A Shopify
-  collection is its own list, and a
-  parent collection often holds its subcategories' products too, added by
-  the merchant so its page shows them all: its direct members are the
-  products on its pages that are on none of its subcategories' pages, at
-  any depth, so read those pages too. A tile links to the product's page
-  (sometimes under the collection's path, `/collections/<handle>/products/<product
-  handle>`); the member is `<origin>/products/<product handle>`, and its type
-  is the product's own: more than one variant is `ProductGroup`, one is
-  `Product`. Most shops answer
-  `<origin>/collections/<handle>/products.json?limit=250&page=<n>` with the
-  collection's products, each with its `handle` and `variants`, 250 a page
-  until a page comes back empty; Shopify does not document it, a shop can
-  switch it off, and the storefront's rate limit applies to it. Where it
-  answers, take each member's type from its `variants` there; its order is
-  the shop's own and differs from the listing's, so the listing page keeps
-  membership and order. Where it does not answer, the product's `.js`,
-  member by member; a member whose data is refused: say so in the report.
-  Whether a collection is filled by a rule is an admin setting,
-  not readable from public data: say so in the report.
+  listing, and most shops answer two feeds it does not document, which a
+  shop can switch off and the storefront's rate limit applies to:
+  `<origin>/collections.json?limit=250&page=<n>`, every collection
+  published to the online store, each with its `handle`, `title`,
+  `description`, `image` and `products_count`, 250 a page until a page
+  comes back empty; and
+  `<origin>/collections/<handle>/products.json?limit=250&page=<n>`, that
+  collection's products in its own order, each with its `handle` and
+  `variants`. Read the catalogue from them: the collections from the
+  first, each one's members from the second, one request per collection,
+  spaced. The main navigation on the homepage gives the tree alone, as the
+  next bullet says. Where the feeds do not answer, read the catalogue
+  from the shop's pages instead, the main navigation's links to
+  `/collections/<handle>` pages and those pages' links to products, and
+  say so in the report.
+- **The sets**: every collection the collections feed lists. Its kind
+  comes from the main navigation: a collection the navigation links to is
+  a `category`, nested as the navigation nests it (up to three levels),
+  its parent the collection of the menu entry above it; a menu entry that
+  links to no collection has no page, and its children attach to the
+  nearest collection above it; a collection the navigation does not link
+  to is a `collection`, top-level. The listing of every product at
+  `/collections/all` is no collection: the feed does not list it, and a
+  menu entry pointing at it is an entry with no collection behind it.
+  Which collections hold a product: every collection whose feed lists it,
+  at any depth; a product no feed lists has no set, and the report says
+  so. The product's own `isPartOf` follows the core rule: every set whose
+  sheet exists, written in this run or found online, and whose listing
+  shows the product among its direct members. Members: the collection's
+  feed, in its order, which is the collection's own. A parent collection
+  often holds its subcategories' products too, added by the merchant so
+  its page shows them all: its direct members are the products in its
+  feed that are in none of its subcategories' feeds, at any depth. The
+  member is `<origin>/products/<product handle>`, and its type is the
+  product's own: more than one entry in `variants` is `ProductGroup`, one
+  is `Product`. The collection's `name` is its `title`, its `description`
+  the plain text of the feed's `description`, its `image` the feed's where
+  there is one, its page `<origin>/collections/<handle>`. Where the feeds
+  do not answer: the collection's page and every page its pagination
+  links to, the product tiles in the order shown, a tile's product read
+  from its `.js`, member by member, and a member whose data is refused
+  said so in the report. Whether a collection is filled by a rule is an
+  admin setting that public data does not show: the Collection spec's
+  default applies, assembled by hand, and the report says so.
 - **A product's data**: `<origin>/products/<handle>.js`. A product with more
   than one variant is a ProductGroup, one hasVariant entry per entry of
   `variants` (at most 250 are returned); a product with one variant is a
@@ -516,8 +536,8 @@ the sets whose sheet exists).
   out. The front's addresses are its own: a collection's id and a page's are
   the last segment of their addresses on the shop's domain, and a variant
   has a page of its own only where the shop links one. Its navigation and
-  listing pages are its own too: read the sets from them as above, a member's
-  url as its tile links it, its type from its page's script data or
+  listing pages are its own too: read the sets from them as "The sets" says
+  where the feeds do not answer, a member's url as its tile links it, its type from its page's script data or
   structured data (several variants: `ProductGroup`). Prices: the one the
   page displays, as rule 4 requires; a price shown only after options are
   chosen is read by choosing each combination where your browser can, and
@@ -527,7 +547,8 @@ the sets whose sheet exists).
 The three files of Step 7: `commerce.zip`, `checks.json`, and `write-report.md`,
 the report in plain words:
 
-- what you found in Step 1;
+- what you found in Step 1, and whether the shop was closed and read
+  through the merchant's session;
 - for each sheet: what it carries from the platform's data, what from the
   pages, and what was left out and why, including every value a question
   would have settled (the tax basis where no page states it, the selling

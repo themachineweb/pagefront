@@ -1,6 +1,6 @@
 # Pagefront — serve your shop's sheets
 
-- Prompt set 1.17.0, for commerce release 0.5.0.
+- Prompt set 1.18.0, for commerce release 0.5.0.
 - Serves the sheets the write phase produced (commerce release 0.5.0) on the shop's own domain.
 - Cloudflare Workers, index for AI tools: https://developers.cloudflare.com/workers/llms.txt
 - Cloudflare R2, index for AI tools: https://developers.cloudflare.com/r2/llms.txt
@@ -57,7 +57,24 @@ the sheets from the shop's pages is a later phase.
 Your fetch tool may refuse an address it was not given; each sheet's
 `sheet_url` counts as given. If it refuses one and you can run code,
 request it directly from your code. Refused both ways: note it for the
-report and give the merchant the check to run instead.
+report and give the merchant the check where CHECKS allows it.
+
+**A closed shop.** A shop that shows a password form or a coming-soon page
+in place of its pages (the platform's section says how its own looks) is
+set up all the same: the steps are work in the merchant's accounts and need
+no open shop. Its checks are another matter. Where you have a browser you
+drive and the merchant can take over: before the first check, say which
+address to open there, ask the merchant to enter the password on the shop's
+own page themselves and to say when the shop shows, then run in that
+session every check that session can show (what an address serves); if the
+session is lost, open the page again and ask again. The password is never
+asked for and never passes through this conversation. A check that needs a
+response header, a `HEAD` or a status that browser does not show waits;
+where you have no such browser, every check waits. A check that waits is
+given to no one: the report lists it, says it waits for the shop to open,
+and says that running this prompt again then, with the same archive, as an
+addition, runs them all. Tell the merchant the sheets answer publicly
+only once the shop is open.
 
 ## PROCEDURE
 
@@ -75,7 +92,9 @@ From `commerce.zip`, without asking:
   stop.
 - **Shop**: open the origin's homepage. It must answer without redirecting
   to another host and show the platform's signs; if not, say so and stop.
-  If your tool cannot open it, go on: CHECKS covers it.
+  If your tool cannot open it, go on: CHECKS covers it. A homepage that
+  shows a password form or a coming-soon page in place of the shop is
+  closed ("A closed shop"): go on.
 - A sheet is served if its address is
   `<origin><sheet path>/commerce/<kind>/<file>`, `<kind>` being `product`,
   `collection` or `organization` and `<file>` ending in `.json`. Its
@@ -195,7 +214,8 @@ before going on; never skip a step, never send two at once.
 - **Signs**: the homepage's head has `<link rel="https://api.w.org/">`, and
   that REST index lists `wc/store/v1`. Without it (a storefront served by
   another application) there is no WordPress to forward from: say so and
-  stop.
+  stop. A homepage showing a password form or a coming-soon page a plugin
+  put in place of the shop: closed, as "A closed shop" says.
 - **Sheet path**: `/pagefront`.
 - **Forwarding**: a Code Snippets snippet, the file `pagefront-snippet.txt`:
   plain PHP for the shop's WordPress version, no opening tag, names
@@ -237,10 +257,12 @@ For every sheet served, at its address:
 3. Its address with `-missing` before `.json`: `404`, empty.
 4. Its folder (the address up to the last `/`): `404`, empty.
 
-Run them yourself where you can. Where you cannot (a `HEAD`, a refused
-address, headers your tool hides), give the merchant the check: the address
-to open, or `curl -i` / `curl -I` for a merchant with a terminal, and what
-they should see.
+Run them yourself where you can. A check you cannot run (a `HEAD`, a
+refused address, a header your tool hides) goes to the merchant only where
+opening an address in their browser shows its result: the address to open
+and what they should see. Never a command to type, never code to run in a
+browser's console or anywhere else. A check an address cannot show is
+listed in the report as not run, with what it needs.
 
 ## OUTPUT
 
@@ -258,7 +280,10 @@ The report is a file in the kit, never shown in the message, named exactly
 three phases stay apart. In plain words:
 
 - the sheets served, and every file left out, with why;
-- each check's result, sheet by sheet, and the checks left to the merchant;
+- each check's result, sheet by sheet; the checks given to the merchant,
+  each with its address and what to see; the checks not run, each with
+  what it waits for; and whether the shop was closed and the checks ran in
+  the merchant's session;
 - every address your fetch tool refused;
 - the documentation you read, with links;
 - what stays the merchant's: when a sheet changes, upload the new file at

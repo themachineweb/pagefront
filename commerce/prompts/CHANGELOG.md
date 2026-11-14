@@ -4,6 +4,40 @@ The prompt set's own semver; see "Versioning" in [`README.md`](README.md).
 
 ## Unreleased
 
+## 1.18.0 — 2026-11-14
+
+For commerce release 0.5.0.
+
+- Closed shops, all three phases: a shop that shows a password form or a
+  coming-soon page in place of its pages is read through a browser the
+  assistant drives and the merchant can take over, where it has one; the
+  merchant enters the password on the shop's own page, and it never passes
+  through the conversation. Without such a browser the write phase says so
+  and stops, and the serve and link phases set up all the same and let the
+  checks wait. A check that waits is given to no one: the report lists it
+  and says that running the prompt again as an addition, once the shop is
+  open, runs it. The Shopify sections point at the rule from their
+  password sign; the WooCommerce sections gain the sign.
+- Merchant checks, serve and link phases: a check the assistant cannot run
+  goes to the merchant only as an address to open and what to see. The
+  `curl` option is gone, and code to run in a browser's console or
+  anywhere else is ruled out. A check an address cannot show is listed in
+  the report as not run.
+- Shopify, write: the catalogue is read from the store's feeds, which
+  Shopify does not document: `/collections.json` for every collection
+  published to the online store, and each collection's `products.json`
+  for its members, in its own order. A product's sets are every
+  collection whose feed lists it, at any depth, whatever the theme prints
+  on the product page; the main navigation gives the tree alone, a
+  collection it links being a `category` and one it does not a
+  `collection`. The listing of every product at `/collections/all` is no
+  collection: the feed does not list it. The pages are the fallback where
+  the feeds do not answer. Before this, a product's sets came from its
+  page's breadcrumb, which most themes do not print.
+- Shopify, link: a URL redirect edited in the admin can keep answering its
+  old target for some hours; a check right after an edit is run again
+  later before it counts as failed.
+
 ## 1.17.0 — 2026-11-13
 
 For commerce release 0.5.0.

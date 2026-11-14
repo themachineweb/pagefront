@@ -1,6 +1,6 @@
 # Pagefront — link your shop's sheets
 
-- Prompt set 1.17.0, for commerce release 0.5.0.
+- Prompt set 1.18.0, for commerce release 0.5.0.
 - Links the sheets the serve phase put online (commerce release 0.5.0) from the shop's own pages.
 - Pagefront Discovery: https://themachineweb.org/pagefront/spec/core/discovery.md (page: https://themachineweb.org/pagefront/spec/core/discovery)
 
@@ -56,7 +56,25 @@ declares its sheet.
 Your fetch tool may refuse an address it was not given; each sheet's
 `canonical_url` and `sheet_url` count as given. If it refuses one and you can
 run code, request it directly from your code. Refused both ways: note it for
-the report and give the merchant the check to run instead.
+the report and give the merchant the check where CHECKS allows it.
+
+**A closed shop.** A shop that shows a password form or a coming-soon page
+in place of its pages (the platform's section says how its own looks) is
+set up all the same: the steps are work in the merchant's accounts and need
+no open shop. Its checks are another matter. Where you have a browser you
+drive and the merchant can take over: before the first check, say which
+address to open there, ask the merchant to enter the password on the shop's
+own page themselves and to say when the shop shows, then run in that
+session every check that session can show (what an address serves); if the
+session is lost, open the page again and ask again. The password is never
+asked for and never passes through this conversation. A check that needs a
+response header, a `HEAD` or a status that browser does not show waits;
+where you have no such browser, every check waits. A check that waits is
+given to no one: the report lists it, says it waits for the shop to open,
+and says that running this prompt again then, with the same archive, as an
+addition, runs every check first and reports what is in place; a check that
+cannot run before a step counts as not passed, and the step is given. Tell the merchant the links show publicly
+only once the shop is open.
 
 ## PROCEDURE
 
@@ -74,7 +92,9 @@ From `commerce.zip`, without asking:
   stop.
 - **Shop**: open the origin's homepage. It must answer without redirecting
   to another host and show the platform's signs; if not, say so and stop.
-  If your tool cannot open it, go on: CHECKS covers it.
+  If your tool cannot open it, go on: CHECKS covers it. A homepage that
+  shows a password form or a coming-soon page in place of the shop is
+  closed ("A closed shop"): go on.
 - **Each sheet's page**: its `canonical_url`, on the origin; and which kind
   of page it is: a product, a category or collection, or the organization
   page (the organization sheet's). A page on another host, or one the
@@ -131,9 +151,9 @@ After the last step: CHECKS, in full.
 - Documentation: https://help.shopify.com/en/manual/custom-data/metafields/metafield-definitions/creating-custom-metafield-definitions , https://help.shopify.com/en/manual/custom-data/metafields/adding-values-to-metafields , https://shopify.dev/docs/api/liquid/objects/metafield and https://help.shopify.com/en/manual/online-store/themes/customizing-themes/edit-code/edit-theme-code
 - **Signs**: `<origin>/products/<handle>.js` answers with the product as
   JSON (Shopify's Ajax API). Every address redirecting to `/password`: the
-  store is closed. Go on with the setup; tell the merchant the links show
-  publicly only once the store is open; the shop's signs and CHECKS wait
-  until they say it is open. A product address with no `.js` answer: a
+  store is closed, as "A closed shop" says; its signs are read in the
+  merchant's session, where there is one. A product address with no `.js`
+  answer: a
   storefront served by another application, whose pages the theme does not
   make; say so and stop.
 - **Sheet path**: `/apps/pagefront`.
@@ -165,7 +185,12 @@ After the last step: CHECKS, in full.
   `<origin>/.well-known/pagefront` and `<origin>/.well-known/pagefront/`
   answer a redirect whose `Location`, resolved against the address asked
   (Shopify stores the target as a path on the same host), is the root's
-  address.
+  address. A redirect edited in the admin can keep answering its old
+  target for some hours after the save (seen on 2026-11-13 on a
+  development store; Shopify's documentation says a redirect works at
+  once): a check run right after an edit that still shows the old target
+  is run again later before it counts as failed, and the merchant is never
+  told to make the redirect again for it.
 - **Admin, in English, from the documentation; steps 1 (Products) and 2 as
   shown on 2026-11-06, step 4 walked on 2026-11-10 with the
   documentation's labels** (the rest not yet walked):
@@ -200,7 +225,8 @@ After the last step: CHECKS, in full.
   edits ("Theme added: code edits could not be included"); after one,
   paste the block again. A new theme needs the block too. When the root
   sheet's address changes, edit the redirect (Content › Menus › "View URL
-  Redirects", the redirect's row); a redirect deleted there removes the
+  Redirects", the redirect's row), and the old target can answer for some
+  hours after the save; a redirect deleted there removes the
   entry point. Browsers and crawlers may keep a `301` without limit, so a
   reader that followed the old one can hold the old address for a while
   after a change.
@@ -224,10 +250,12 @@ Then:
    the report says once what the platform cannot do, in its section's
    words.
 
-Run them yourself where you can. Where you cannot (a `HEAD`, a refused
-address, headers your tool hides), give the merchant the check: the address
-to open and what to look for in the page's source, or `curl -I` for a
-merchant with a terminal, and what they should see.
+Run them yourself where you can. A check you cannot run (a `HEAD`, a
+refused address, a header your tool hides) goes to the merchant only where
+opening an address in their browser shows its result: the address to open
+and what to look for, in the page or its source. Never a command to type, never code to run in a
+browser's console or anywhere else. A check an address cannot show is
+listed in the report as not run, with what it needs.
 
 ## OUTPUT
 
@@ -242,7 +270,10 @@ three phases stay apart. In plain words:
 
 - the pages linked, each with its sheet address, the pages found linked
   already, and every sheet left out, with why;
-- each check's result, page by page, and the checks left to the merchant;
+- each check's result, page by page; the checks given to the merchant,
+  each with its address and what to see; the checks not run, each with
+  what it waits for; and whether the shop was closed and the checks ran in
+  the merchant's session;
 - every address your fetch tool refused;
 - the documentation you read, with links;
 - what stays the merchant's, only what they will do later, never the
