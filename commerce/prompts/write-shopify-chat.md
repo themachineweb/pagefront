@@ -460,6 +460,11 @@ the sets whose sheet exists).
   to is a `collection`, top-level. The listing of every product at
   `/collections/all` is no collection: the feed does not list it, and a
   menu entry pointing at it is an entry with no collection behind it.
+  Shopify's default collection, handle `frontpage` whatever its title
+  (every store starts with it, "a collection of products that are shown
+  on the front page of the online store"), holds the products the theme
+  shows on the homepage: no set, left out of the sets and of the
+  organization sheet's catalogue, and the report says so.
   Which collections hold a product: every collection whose feed lists it,
   at any depth; a product no feed lists has no set, and the report says
   so. The product's own `isPartOf` follows the core rule: every set whose
