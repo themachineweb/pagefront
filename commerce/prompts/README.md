@@ -9,11 +9,12 @@ The site renders the write prompts; this folder is the source.
 
 The write phase:
 
-- `core.md`: the shared body of the write-phase prompts; `<!-- platform -->`
+- `write-core.md`: the shared body of the write-phase prompts; `<!-- platform -->`
   marks where the platform section goes.
-- `platform-generic.md`, `platform-shopify.md`, `platform-woocommerce.md`:
-  one section per platform, read into `core.md` at the marker.
-- `write-<platform>-chat.md`: the three built write prompts, `core.md` plus
+- `write-platform-generic.md`, `write-platform-shopify.md`,
+  `write-platform-woocommerce.md`: one section per platform, read into
+  `write-core.md` at the marker.
+- `write-<platform>-chat.md`: the three built write prompts, `write-core.md` plus
   one platform section. They are committed, so the site build never runs
   Python and a reader gets the prompt as served.
 - `draft-product-from-page-chat.md`: the one-product prompt, which drafts a
