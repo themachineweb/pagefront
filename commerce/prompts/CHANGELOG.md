@@ -31,7 +31,9 @@ For commerce release 0.5.0.
   on the product page; the main navigation gives the tree alone, a
   collection it links being a `category` and one it does not a
   `collection`. The listing of every product at `/collections/all` is no
-  collection: the feed does not list it. The pages are the fallback where
+  collection: the feed does not list it. Shopify's default collection,
+  handle `frontpage`, the products the theme shows on the homepage, is no
+  set either. The pages are the fallback where
   the feeds do not answer. Before this, a product's sets came from its
   page's breadcrumb, which most themes do not print.
 - Shopify, link: a URL redirect edited in the admin can keep answering its
