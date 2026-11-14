@@ -3,9 +3,9 @@
 - Documentation: https://help.shopify.com/en/manual/custom-data/metafields/metafield-definitions/creating-custom-metafield-definitions , https://help.shopify.com/en/manual/custom-data/metafields/adding-values-to-metafields , https://shopify.dev/docs/api/liquid/objects/metafield and https://help.shopify.com/en/manual/online-store/themes/customizing-themes/edit-code/edit-theme-code
 - **Signs**: `<origin>/products/<handle>.js` answers with the product as
   JSON (Shopify's Ajax API). Every address redirecting to `/password`: the
-  store is closed. Go on with the setup; tell the merchant the links show
-  publicly only once the store is open; the shop's signs and CHECKS wait
-  until they say it is open. A product address with no `.js` answer: a
+  store is closed, as "A closed shop" says; its signs are read in the
+  merchant's session, where there is one. A product address with no `.js`
+  answer: a
   storefront served by another application, whose pages the theme does not
   make; say so and stop.
 - **Sheet path**: `/apps/pagefront`.
@@ -37,7 +37,12 @@
   `<origin>/.well-known/pagefront` and `<origin>/.well-known/pagefront/`
   answer a redirect whose `Location`, resolved against the address asked
   (Shopify stores the target as a path on the same host), is the root's
-  address.
+  address. A redirect edited in the admin can keep answering its old
+  target for some hours after the save (seen on 2026-11-13 on a
+  development store; Shopify's documentation says a redirect works at
+  once): a check run right after an edit that still shows the old target
+  is run again later before it counts as failed, and the merchant is never
+  told to make the redirect again for it.
 - **Admin, in English, from the documentation; steps 1 (Products) and 2 as
   shown on 2026-11-06, step 4 walked on 2026-11-10 with the
   documentation's labels** (the rest not yet walked):
@@ -72,7 +77,8 @@
   edits ("Theme added: code edits could not be included"); after one,
   paste the block again. A new theme needs the block too. When the root
   sheet's address changes, edit the redirect (Content › Menus › "View URL
-  Redirects", the redirect's row); a redirect deleted there removes the
+  Redirects", the redirect's row), and the old target can answer for some
+  hours after the save; a redirect deleted there removes the
   entry point. Browsers and crawlers may keep a `301` without limit, so a
   reader that followed the old one can hold the old address for a while
   after a change.

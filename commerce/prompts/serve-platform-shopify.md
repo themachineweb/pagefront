@@ -4,9 +4,9 @@
 - Link prompt, the next phase: https://themachineweb.org/pagefront/publish/link/shopify
 - **Signs**: `<origin>/products/<handle>.js` answers with the product as
   JSON (Shopify's Ajax API). Every address redirecting to `/password`: the
-  store is closed. Go on with the setup; tell the merchant the sheets answer
-  publicly only once the store is open; the shop's signs and CHECKS wait
-  until they say it is open. A product address with no `.js` answer: a
+  store is closed, as "A closed shop" says; its signs are read in the
+  merchant's session, where there is one. A product address with no `.js`
+  answer: a
   storefront served by another application, with no app proxy; say so and
   stop.
 - **Sheet path**: `/apps/pagefront`.

@@ -5,7 +5,8 @@
 - **Signs**: the homepage's head has `<link rel="https://api.w.org/">`, and
   that REST index lists `wc/store/v1`. Without it (a storefront served by
   another application) there is no WordPress to forward from: say so and
-  stop.
+  stop. A homepage showing a password form or a coming-soon page a plugin
+  put in place of the shop: closed, as "A closed shop" says.
 - **Sheet path**: `/pagefront`.
 - **Forwarding**: a Code Snippets snippet, the file `pagefront-snippet.txt`:
   plain PHP for the shop's WordPress version, no opening tag, names

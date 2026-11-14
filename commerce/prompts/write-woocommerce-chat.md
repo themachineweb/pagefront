@@ -1,6 +1,6 @@
 # Pagefront — write your shop's sheets
 
-- Prompt set 1.17.0, for commerce release 0.5.0.
+- Prompt set 1.18.0, for commerce release 0.5.0.
 - Writes Product sheets (spec 0.11.0), Collection sheets (spec 0.1.0) and the Organization sheet (spec 0.5.0), commerce release 0.5.0.
 - Product spec: https://themachineweb.org/pagefront/spec/commerce/product.md (page: https://themachineweb.org/pagefront/spec/commerce/product)
 - Product schema: https://themachineweb.org/pagefront/spec/commerce/product/v0.11.0.json
@@ -86,6 +86,18 @@ index, a listing's links to its items). If an address you need is refused
 and no fetched response carries it, say which in the report and go on with
 what you have.
 
+**A closed shop.** A shop that shows a password form or a coming-soon page
+in place of its pages (each platform's section says how its own looks) can
+be read only through a browser you drive and the merchant can take over.
+Where you have one: say which address to open there, ask the merchant to
+enter the password on the shop's own page themselves and to say when the
+shop shows, then read everything in that session; if the session is lost,
+open the page again and ask again. The password is never asked for and
+never passes through this conversation. Where you have no such browser,
+say so and stop: the pages cannot be read until the shop is open. The
+report says the shop was closed and its pages were read through the
+merchant's session.
+
 ## PROCEDURE
 
 Take the merchant through the steps in the open. Before each step, a
@@ -103,7 +115,9 @@ them in hand, ask whether the shop has sheets already (rule 1), and go on
 once you have both answers. The shop's homepage is the root of the
 product addresses' origin (their scheme and host), followed through
 redirects. Addresses on more than one host are more than one shop: say so
-and stop. From the homepage:
+and stop. A homepage that shows a password form or a coming-soon page in
+place of the shop is closed: "A closed shop" above, before anything else.
+From the homepage:
 
 - **The origin**: the homepage address after redirects.
 - **The platform**: each section under PLATFORMS says how its platform
@@ -395,6 +409,8 @@ the sets whose sheet exists).
   `/wp-json/` index lists `wc/store/v1` with products whose `permalink` are
   the shop's own pages, it is a WooCommerce store on its own front: its Store
   API is the platform's data, read as below, with what "On its own front"
+  says. A homepage that shows a password form or a coming-soon page a
+  plugin put in place of the shop is closed: read it as "A closed shop"
   says.
 - **Sheet path**: `/pagefront`.
 - **Ids**: a product's and a category's `slug` in the Store API; a page's
@@ -521,7 +537,8 @@ the sets whose sheet exists).
 The three files of Step 7: `commerce.zip`, `checks.json`, and `write-report.md`,
 the report in plain words:
 
-- what you found in Step 1;
+- what you found in Step 1, and whether the shop was closed and read
+  through the merchant's session;
 - for each sheet: what it carries from the platform's data, what from the
   pages, and what was left out and why, including every value a question
   would have settled (the tax basis where no page states it, the selling

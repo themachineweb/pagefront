@@ -3,7 +3,9 @@
 - Documentation: https://developer.wordpress.org/plugins/hooks/ and https://wordpress.org/documentation/article/assign-custom-fields/
 - **Signs**: the homepage's head has `<link rel="https://api.w.org/">`, and
   that REST index lists `wc/store/v1`. Without it (a storefront served by
-  another application) say so and stop.
+  another application) say so and stop. A homepage showing a password form
+  or a coming-soon page a plugin put in place of the shop: closed, as "A
+  closed shop" says.
 - **Sheet path**: `/pagefront`.
 - **Pages with a field**: a product; a product category; the organization
   page if it is a WordPress page (the homepage counts when the site shows a
