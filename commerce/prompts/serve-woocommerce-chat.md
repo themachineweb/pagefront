@@ -1,6 +1,6 @@
 # Pagefront — serve your shop's sheets
 
-- Prompt set 1.18.0, for commerce release 0.5.0.
+- Prompt set 1.19.0, for commerce release 0.5.0.
 - Serves the sheets the write phase produced (commerce release 0.5.0) on the shop's own domain.
 - Cloudflare Workers, index for AI tools: https://developers.cloudflare.com/workers/llms.txt
 - Cloudflare R2, index for AI tools: https://developers.cloudflare.com/r2/llms.txt
@@ -52,7 +52,9 @@ the sheets from the shop's pages is a later phase.
    A later step names a file only where it is used: open it from the kit,
    copy all of it, paste it where the step says. If you cannot make a zip,
    offer each file in the step that uses it; if you cannot make files, put
-   the code in the message.
+   the code in the message. On an addition there is no kit and no step
+   to open one: nothing is pasted, and the report comes at the end as a
+   file on its own.
 
 Your fetch tool may refuse an address it was not given; each sheet's
 `sheet_url` counts as given. If it refuses one and you can run code,
@@ -111,10 +113,10 @@ Where a page and SCREENS differ, SCREENS wins.
 ### Step 3 — Setup
 Eight steps on a first setup, in this order, all in the browser, one per
 message. On an addition, the account, the storage, the bucket, the Worker
-and the forwarding are in place: the steps are 1 (the kit, which then
-holds the report alone) and 5 (the upload, into the bucket the merchant
-already has, naming each file that takes the place of one already there),
-and after step 5 CHECKS, in full, on the sheets of this run. Each
+and the forwarding are in place: the one step is 5 (the upload, into
+the bucket the merchant already has, naming each file that takes the
+place of one already there), with no kit before it, and after it CHECKS,
+in full, on the sheets of this run. Each
 message opens with one plain sentence naming what the merchant is about
 to make or change, as their dashboard calls it (an account, a bucket, a
 Worker, an app, a snippet), and what it does for the shop ("Now we create
@@ -268,14 +270,16 @@ listed in the report as not run, with what it needs.
 
 The first message: what Step 1 found, in a few lines, then how many steps
 follow and what they lead to, then the first step (Step 3), the kit with
-it. Then one message per step. After the merchant says the last is done:
+it on a first setup, the upload step alone on an addition. Then one
+message per step. After the merchant says the last is done:
 only what they must act on (every sheet answers, or each failed check
 with what to do), a new `serve-report.md`, and a few lines on what
 comes next: the sheets answer at their addresses and no page points at
 them yet; to let a reader find each sheet from its page, the link phase,
 with its own prompt, at the address the platform's section gives.
 
-The report is a file in the kit, never shown in the message, named exactly
+The report is a file, in the kit on a first setup and on its own on an
+addition, never shown in the message, named exactly
 `serve-report.md` in any language, for its phase, so the reports of the
 three phases stay apart. In plain words:
 

@@ -1,6 +1,6 @@
 # Pagefront — link your shop's sheets
 
-- Prompt set 1.18.0, for commerce release 0.5.0.
+- Prompt set 1.19.0, for commerce release 0.5.0.
 - Links the sheets the serve phase put online (commerce release 0.5.0) from the shop's own pages.
 - Pagefront Discovery: https://themachineweb.org/pagefront/spec/core/discovery.md (page: https://themachineweb.org/pagefront/spec/core/discovery)
 
@@ -51,7 +51,10 @@ declares its sheet.
    later step names a file only where it is used: open it from the kit,
    copy all of it, paste it where the step says. If you cannot make a zip,
    offer each file in the step that uses it; if you cannot make files, put
-   the code in the message.
+   the code in the message. On an addition there is no kit and no step
+   to open one: where the code step is given after all (Step 3), its file
+   is offered in that step, and the report comes at the end as a file on
+   its own.
 
 Your fetch tool may refuse an address it was not given; each sheet's
 `canonical_url` and `sheet_url` count as given. If it refuses one and you can
@@ -120,11 +123,13 @@ step, and ends by asking the merchant to say when it is done. Then
 wait. When they say it is done, check that step (below) before sending the
 next; if a check fails, say what to fix in that step, and check again.
 
-1. Download and open `pagefront-linking-kit.zip`. No check.
+1. Download and open `pagefront-linking-kit.zip`. No check. On an
+   addition this step is left out: there is no kit.
 2. The code, once (PLATFORMS). Check: where the platform's section names
    one, the sign that the code runs. On an addition this step is left
    out, the code being in place: run its check before the first step of
-   kind 3, and if the check fails, give this step after all.
+   kind 3, and if the check fails, give this step after all, its file
+   offered in the step.
 3. Then one step per kind of page, in the order the admin lists them:
    first how to fill its field (PLATFORMS), then each page: its name as
    the admin lists it, never its address (the merchant copies the first
@@ -260,11 +265,13 @@ listed in the report as not run, with what it needs.
 ## OUTPUT
 
 The first message: what Step 1 found, in a few lines, and Step 3's first
-step, the kit. Then one step per message (Step 3). After the last step's
+step: the kit on a first linking, on an addition the first step with
+something to do. Then one step per message (Step 3). After the last step's
 check: only what they must act on (every page declares its sheet, or each
 failed check with what to do) and a new `link-report.md`.
 
-The report is a file in the kit, never shown in the message, named exactly
+The report is a file, in the kit on a first linking and on its own on an
+addition, never shown in the message, named exactly
 `link-report.md` in any language, for its phase, so the reports of the
 three phases stay apart. In plain words:
 
