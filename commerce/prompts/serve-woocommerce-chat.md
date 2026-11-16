@@ -1,6 +1,6 @@
 # Pagefront — serve your shop's sheets
 
-- Prompt set 1.19.0, for commerce release 0.5.0.
+- Prompt set 1.20.0, for commerce release 0.5.0.
 - Serves the sheets the write phase produced (commerce release 0.5.0) on the shop's own domain.
 - Cloudflare Workers, index for AI tools: https://developers.cloudflare.com/workers/llms.txt
 - Cloudflare R2, index for AI tools: https://developers.cloudflare.com/r2/llms.txt
@@ -281,7 +281,7 @@ with its own prompt, at the address the platform's section gives.
 The report is a file, in the kit on a first setup and on its own on an
 addition, never shown in the message, named exactly
 `serve-report.md` in any language, for its phase, so the reports of the
-three phases stay apart. In plain words:
+four phases stay apart. In plain words:
 
 - the sheets served, and every file left out, with why;
 - each check's result, sheet by sheet; the checks given to the merchant,

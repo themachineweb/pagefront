@@ -1,6 +1,7 @@
 ### Shopify
 
 - Documentation: https://help.shopify.com/en/manual/custom-data/metafields/metafield-definitions/creating-custom-metafield-definitions , https://help.shopify.com/en/manual/custom-data/metafields/adding-values-to-metafields , https://shopify.dev/docs/api/liquid/objects/metafield and https://help.shopify.com/en/manual/online-store/themes/customizing-themes/edit-code/edit-theme-code
+- Check prompt, the next phase: https://themachineweb.org/pagefront/publish/check/shopify
 - **Signs**: `<origin>/products/<handle>.js` answers with the product as
   JSON (Shopify's Ajax API). Every address redirecting to `/password`: the
   store is closed, as "A closed shop" says; its signs are read in the

@@ -1,6 +1,7 @@
 ### WooCommerce
 
 - Documentation: https://developer.wordpress.org/plugins/hooks/ and https://wordpress.org/documentation/article/assign-custom-fields/
+- Check prompt, the next phase: https://themachineweb.org/pagefront/publish/check/woocommerce
 - **Signs**: the homepage's head has `<link rel="https://api.w.org/">`, and
   that REST index lists `wc/store/v1`. Without it (a storefront served by
   another application) say so and stop. A homepage showing a password form

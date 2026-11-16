@@ -2,7 +2,7 @@
 
 The prompts a merchant hands to a chat assistant to write Pagefront
 sheets, then to serve them on the shop's own domain, then to link them from
-the shop's pages.
+the shop's pages, then to check that an agent finds them.
 The site renders the write prompts; this folder is the source.
 
 ## What the folder holds
@@ -54,6 +54,23 @@ whose field is set:
   untested.
 - `link-<platform>-chat.md`: the two built link prompts.
 
+The check phase, a one-off audit of what the three phases put online, as
+an agent finds it: from the shop's homepage, the entry point, the
+organization sheet, every collection and product sheet the tree leads to,
+the links between them both ways, the Check on each page. It needs no
+file and changes nothing; its report names what to fix and the phase that
+fixes it:
+
+- `check-core.md`: the shared body of the check-phase prompts, with the
+  same marker.
+- `check-platform-shopify.md`, `check-platform-woocommerce.md`: one
+  section per platform. WooCommerce was walked end to end on an open
+  store on 2026-11-16; Shopify on a password-protected development store
+  the same day, read through the merchant's browser session, so the Check
+  on Shopify pages and its warning on the entry point's `301` are
+  untested on an open store.
+- `check-<platform>-chat.md`: the two built check prompts.
+
 `build.py` assembles every built prompt from the cores and the platform
 sections.
 
@@ -65,7 +82,7 @@ After editing a core or a platform section:
 python3 commerce/prompts/build.py
 ```
 
-Commit the sources and the seven outputs together. A pull request that
+Commit the sources and the nine outputs together. A pull request that
 edits a source without rebuilding leaves the served prompt behind the
 source.
 
@@ -76,7 +93,7 @@ independent of the commerce release, stating which release they target.
 The version is the second line of every prompt's header block:
 
 ```
-- Prompt set 1.19.0, for commerce release 0.5.0.
+- Prompt set 1.20.0, for commerce release 0.5.0.
 ```
 
 The whole set shares one version. The rule:
@@ -109,5 +126,8 @@ prompts from `main`.
   `shopify` and `woocommerce`, each with a markdown twin at the same path
   plus `.md`.
 - The built link prompts: `/pagefront/publish/link/<platform>`, for
+  `shopify` and `woocommerce`, each with a markdown twin at the same path
+  plus `.md`.
+- The built check prompts: `/pagefront/publish/check/<platform>`, for
   `shopify` and `woocommerce`, each with a markdown twin at the same path
   plus `.md`.

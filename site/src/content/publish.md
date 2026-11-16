@@ -196,6 +196,15 @@ A pass means three things: the page declares the sheet, the sheet is where
 the page says, and the sheet conforms. That is everything a machine needs
 in order to use it.
 
+Check judges one page. The prompt for your platform does the whole walk an
+agent does: from your homepage, the entry point, your shop's main sheet,
+each collection and product sheet and the links between them, with the
+Check run on each page. Give it your homepage address and it hands you a
+report, in plain words, of what an agent cannot reach, what it reaches the
+long way, and the phase that fixes each.
+
+<p><a class="pf-cta" href="/pagefront/publish/check/shopify">Shopify <span aria-hidden="true">→</span></a> <a class="pf-cta" href="/pagefront/publish/check/woocommerce">WooCommerce <span aria-hidden="true">→</span></a></p>
+
 ## Keeping it true
 
 A sheet that is wrong is worse than no sheet.

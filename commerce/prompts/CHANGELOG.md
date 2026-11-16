@@ -4,6 +4,43 @@ The prompt set's own semver; see "Versioning" in [`README.md`](README.md).
 
 ## Unreleased
 
+## 1.20.0 — 2026-11-16
+
+For commerce release 0.5.0.
+
+- A fourth phase, check: a one-off audit, from the shop's homepage, of
+  how an agent finds the sheets the write, serve and link phases put
+  online. It follows the entry point to the organization sheet, walks
+  down `hasOfferCatalog` and `hasPart` and up `isPartOf` and `seller`,
+  runs the hosted Check on the origin and on each sheet's page, checks
+  every product is reached from the root, that a page without a sheet
+  declares none, and that the sheets lead from the organization to each
+  product and back on their own. It checks how the sheets are found;
+  what they say is the write phase's question, and the Check's content
+  warnings are counted for it. Three outcomes, as the Check grades its own: a failure, a
+  warning, a pass, each failure and warning naming the phase that fixes
+  it. It changes nothing and needs no file; its report is
+  `check-report.md`. Shopify and WooCommerce sections. Against the draft
+  the runs used: a check the assistant cannot run goes to the merchant as
+  an address to open and what to see, never a command, as in serve and
+  link; the closed-shop procedure is in the core, each platform section
+  giving its sign, WooCommerce's included; the Check's calls are spaced 2
+  seconds apart, and a rate-limit answer is run again after a minute; a
+  `conformance` that is `null` or not a `report` is a failure; the Check
+  runs on the bare origin; the Shopify section no longer exempts the
+  Check's header lines, which the Check now gives as information on a page
+  that declares its sheet with the `<link>` element alone.
+- Link: after the last check, a few lines on what comes next point at the
+  check prompt at the platform's address, as serve points at link. The
+  link sections carry that address.
+- Write: on an addition the report names, by path, the sheets online that
+  this run's sheets name or that name a sheet this run writes and that the
+  run did not rewrite, so the merchant can have them written again. Seen
+  on two stores: a child set's `isPartOf` without its new parent's
+  address, a product with no `isPartOf` while its sets list it, and a
+  product sheet from an earlier set that new sets cannot name.
+- The other phases' report lines say four phases.
+
 ## 1.19.0 — 2026-11-16
 
 For commerce release 0.5.0.

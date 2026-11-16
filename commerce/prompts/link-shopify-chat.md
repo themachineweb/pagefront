@@ -1,6 +1,6 @@
 # Pagefront — link your shop's sheets
 
-- Prompt set 1.19.0, for commerce release 0.5.0.
+- Prompt set 1.20.0, for commerce release 0.5.0.
 - Links the sheets the serve phase put online (commerce release 0.5.0) from the shop's own pages.
 - Pagefront Discovery: https://themachineweb.org/pagefront/spec/core/discovery.md (page: https://themachineweb.org/pagefront/spec/core/discovery)
 
@@ -154,6 +154,7 @@ After the last step: CHECKS, in full.
 ### Shopify
 
 - Documentation: https://help.shopify.com/en/manual/custom-data/metafields/metafield-definitions/creating-custom-metafield-definitions , https://help.shopify.com/en/manual/custom-data/metafields/adding-values-to-metafields , https://shopify.dev/docs/api/liquid/objects/metafield and https://help.shopify.com/en/manual/online-store/themes/customizing-themes/edit-code/edit-theme-code
+- Check prompt, the next phase: https://themachineweb.org/pagefront/publish/check/shopify
 - **Signs**: `<origin>/products/<handle>.js` answers with the product as
   JSON (Shopify's Ajax API). Every address redirecting to `/password`: the
   store is closed, as "A closed shop" says; its signs are read in the
@@ -268,12 +269,15 @@ The first message: what Step 1 found, in a few lines, and Step 3's first
 step: the kit on a first linking, on an addition the first step with
 something to do. Then one step per message (Step 3). After the last step's
 check: only what they must act on (every page declares its sheet, or each
-failed check with what to do) and a new `link-report.md`.
+failed check with what to do), a new `link-report.md`, and a few lines on
+what comes next: the check phase, with its own prompt, at the address the
+platform's section gives, which walks the shop as an agent does, from its
+homepage to each sheet and back.
 
 The report is a file, in the kit on a first linking and on its own on an
 addition, never shown in the message, named exactly
 `link-report.md` in any language, for its phase, so the reports of the
-three phases stay apart. In plain words:
+four phases stay apart. In plain words:
 
 - the pages linked, each with its sheet address, the pages found linked
   already, and every sheet left out, with why;
