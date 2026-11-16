@@ -476,15 +476,15 @@ test("page check: discovery with both carriers, header only, element only, neith
 
     const headerOnly = await check("header-only");
     assert.equal(line(headerOnly.discovery, "Link response header declares the sheet").status, "pass");
-    assert.equal(line(headerOnly.discovery, "<link> element in the page head declares the sheet").status, "fail");
-    assert.equal(line(headerOnly.discovery, "Both carriers present (recommended)").status, "warning");
+    assert.equal(line(headerOnly.discovery, "<link> element in the page head declares the sheet").status, "info");
+    assert.equal(line(headerOnly.discovery, "Both carriers present (recommended)").status, "info");
     assert.equal(line(headerOnly.discovery, "Header and element point at the same URL").status, "info");
     assert.equal(headerOnly.conformance.kind, "report");
 
     const elementOnly = await check("element-only");
-    assert.equal(line(elementOnly.discovery, "Link response header declares the sheet").status, "fail");
+    assert.equal(line(elementOnly.discovery, "Link response header declares the sheet").status, "info");
     assert.equal(line(elementOnly.discovery, "<link> element in the page head declares the sheet").status, "pass");
-    assert.equal(line(elementOnly.discovery, "Both carriers present (recommended)").status, "warning");
+    assert.equal(line(elementOnly.discovery, "Both carriers present (recommended)").status, "info");
     assert.equal(elementOnly.conformance.kind, "report");
 
     const neither = await check("neither");

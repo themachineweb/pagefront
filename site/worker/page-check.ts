@@ -546,21 +546,31 @@ export async function checkPage(input: PageCheckInput): Promise<PageCheck> {
   let headerUrl: string | undefined;
   let headUrl: string | undefined;
   if (!entry) {
+  // Either carrier conforms on its own ("Carriers" in core/spec/discovery.md:
+  // the header is primary, the element the fallback, both recommended). A
+  // page that declares the sheet through one of them gets information on
+  // the other, never a finding; a page that declares it through neither
+  // fails both lines.
+  const oneCarrier = (headerSheet.length > 0) !== (headSheet.length > 0);
   discovery.push(headerSheet.length > 0
     ? pass('Link response header declares the sheet', `rel="alternate"; type="${SHEET_MEDIA_TYPE}": ${describe(headerSheet)}`)
-    : fail('Link response header declares the sheet', headerJson.length > 0
-      ? `an alternate link is present with type "${mediaType(headerJson[0].params.type)}"; the sheet's type is "${SHEET_MEDIA_TYPE}"`
-      : headerRefs.length > 0 ? 'the header carries no alternate link of the sheet media type' : 'no Link header'));
+    : oneCarrier
+      ? info('Link response header declares the sheet', 'not set; the <link> element declares the sheet, which conforms on its own; the spec recommends both carriers')
+      : fail('Link response header declares the sheet', headerJson.length > 0
+        ? `an alternate link is present with type "${mediaType(headerJson[0].params.type)}"; the sheet's type is "${SHEET_MEDIA_TYPE}"`
+        : headerRefs.length > 0 ? 'the header carries no alternate link of the sheet media type' : 'no Link header'));
   discovery.push(headSheet.length > 0
     ? pass('<link> element in the page head declares the sheet', describe(headSheet))
-    : fail('<link> element in the page head declares the sheet', headJson.length > 0
-      ? `an alternate link is present with type "${mediaType(headJson[0].params.type)}"; the sheet's type is "${SHEET_MEDIA_TYPE}"`
-      : 'no <link rel="alternate" type="application/pagefront+json"> in the head'));
+    : oneCarrier
+      ? info('<link> element in the page head declares the sheet', 'not set; the Link header declares the sheet, which conforms on its own; the spec recommends both carriers')
+      : fail('<link> element in the page head declares the sheet', headJson.length > 0
+        ? `an alternate link is present with type "${mediaType(headJson[0].params.type)}"; the sheet's type is "${SHEET_MEDIA_TYPE}"`
+        : 'no <link rel="alternate" type="application/pagefront+json"> in the head'));
   discovery.push(headerSheet.length > 0 && headSheet.length > 0
     ? pass('Both carriers present (recommended)')
     : headerSheet.length + headSheet.length === 0
       ? fail('Both carriers present (recommended)', 'neither carrier declares the sheet')
-      : warning('Both carriers present (recommended)', 'one carrier declares the sheet; the spec recommends both'));
+      : info('Both carriers present (recommended)', 'one carrier declares the sheet; the spec recommends both'));
 
   const anySheet = headerSheet.length > 0 || headSheet.length > 0;
   const nearMiss = headerJson.length > 0 || headJson.length > 0;
