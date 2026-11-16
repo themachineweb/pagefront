@@ -4,6 +4,18 @@ The prompt set's own semver; see "Versioning" in [`README.md`](README.md).
 
 ## Unreleased
 
+## 1.19.0 — 2026-11-16
+
+For commerce release 0.5.0.
+
+- Serve and link phases: no kit on an addition. The kit held the report
+  alone, and a draft of it, so the merchant downloaded and unzipped a
+  file for nothing. On an addition the steps begin with the work, the
+  upload or the fields, and the report comes at the end as a file on its
+  own. In the link phase, where the code step is given after all because
+  its check failed, the code file is offered in that step. A first setup
+  keeps the kit.
+
 ## 1.18.0 — 2026-11-14
 
 For commerce release 0.5.0.
