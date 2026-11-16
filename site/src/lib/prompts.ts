@@ -43,6 +43,18 @@ export const LINK_PLATFORMS = {
 
 export type LinkPlatform = keyof typeof LINK_PLATFORMS;
 
+/**
+ * The platforms with a check page: those with a check section in the
+ * prompt set (commerce/prompts/README.md). The pages are
+ * /pagefront/publish/check/<platform>, chat route only.
+ */
+export const CHECK_PLATFORMS = {
+  shopify: { label: 'Shopify', titleSuffix: 'Shopify' },
+  woocommerce: { label: 'WooCommerce', titleSuffix: 'WooCommerce' },
+} as const;
+
+export type CheckPlatform = keyof typeof CHECK_PLATFORMS;
+
 /** The prompt whose file is commerce/prompts/<stem>.md; throws when absent. */
 export async function promptBody(stem: string): Promise<string> {
   const entries: CollectionEntry<'prompts'>[] = await getCollection('prompts');

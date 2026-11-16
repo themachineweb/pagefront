@@ -1,6 +1,6 @@
 # Pagefront — write your shop's sheets
 
-- Prompt set 1.19.0, for commerce release 0.5.0.
+- Prompt set 1.20.0, for commerce release 0.5.0.
 - Writes Product sheets (spec 0.11.0), Collection sheets (spec 0.1.0) and the Organization sheet (spec 0.5.0), commerce release 0.5.0.
 - Product spec: https://themachineweb.org/pagefront/spec/commerce/product.md (page: https://themachineweb.org/pagefront/spec/commerce/product)
 - Product schema: https://themachineweb.org/pagefront/spec/commerce/product/v0.11.0.json
@@ -205,7 +205,7 @@ step), over what is already there; every address then resolves.
 Beside the archive, two more files, and nothing else:
 
 - `write-report.md`: the report (OUTPUT), named for its phase so the
-  reports of the three phases stay apart;
+  reports of the four phases stay apart;
 - `checks.json`: the Check's final report for every sheet in the archive,
   as one JSON object keyed by the sheet's path in the archive
   (`commerce/product/<id>.<lang>.json`), each value the Check's response
@@ -419,5 +419,8 @@ the report in plain words:
   read in full, outside what the platform's data lets you list);
 - which sheets are new and which rewrite a sheet that exists (Step 1), by
   path;
+- on an addition, the sheets online that this run's sheets name, or that
+  name a sheet this run writes, and that this run did not rewrite, by
+  path, so the merchant can have them written again in a later run;
 - what the Check said, or why it could not be run;
 - every address your fetch tool refused.

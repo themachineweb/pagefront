@@ -2,7 +2,8 @@
 
 A phase has a core and one section per platform: the write phase `write-core.md` and
 `write-platform-<name>.md`, the serve phase `serve-core.md` and `serve-platform-<name>.md`, the
-link phase `link-core.md` and `link-platform-<name>.md`.
+link phase `link-core.md` and `link-platform-<name>.md`, the check phase `check-core.md` and
+`check-platform-<name>.md`.
 `<!-- platform -->` in the core is replaced by the platform's section.
 Output: <phase>-<platform>-chat.md in this folder, committed with the sources, so the
 site build never runs Python. See README.md.
@@ -17,6 +18,7 @@ PHASES = {
     "write": ("write-core.md", "write-platform-"),
     "serve": ("serve-core.md", "serve-platform-"),
     "link": ("link-core.md", "link-platform-"),
+    "check": ("check-core.md", "check-platform-"),
 }
 
 def build(phase, platform):

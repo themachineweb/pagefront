@@ -13,8 +13,9 @@ const spec = defineCollection({
 });
 
 // The prompts in commerce/prompts/: the built chat prompts are rendered at
-// /pagefront/publish/write/<platform>, /pagefront/publish/serve/<platform>
-// and /pagefront/publish/link/<platform>, the one-product prompt at
+// /pagefront/publish/write/<platform>, /pagefront/publish/serve/<platform>,
+// /pagefront/publish/link/<platform> and /pagefront/publish/check/<platform>,
+// the one-product prompt at
 // /pagefront/publish/assistant, each with a markdown twin. The folder's
 // README, changelog and sources are in the collection too and have no page.
 const prompts = defineCollection({
