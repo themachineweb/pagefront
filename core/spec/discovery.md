@@ -18,7 +18,7 @@ This document governs two things. First, how a consumer locates the Sheet for a 
 
 Discovery uses HTTP `Link` response headers per RFC 8288 as the primary mechanism, with HTML `<link>` element fallback. Per-page sheet links use `rel="alternate"`. The sheet is the publisher's representation of the same resource in a machine-readable format; `alternate` is the relation for that.
 
-The examples are a product sheet's; every sheet type is declared the same way, and the `profile` names the sheet spec the declared Sheet follows.
+The examples are a product sheet's; every sheet type is declared the same way, and the `profile` names the sheet spec the declared Sheet follows. A page MAY declare more than one Sheet, each of a different sheet type, when several Sheets describe the same page: a product page that carries a Product Sheet and a Review Sheet declares both (see "Several Sheets for one page").
 
 ```
 Link: <https://merchant.example/api/sheets/anorak.en.json>;
@@ -37,7 +37,20 @@ Link: <https://merchant.example/api/sheets/anorak.en.json>;
 
 **Media type.** The sheet's media type is `application/pagefront+json`. A page carries other `alternate` links, such as feeds and embeds, and where a page has no `Link` header the `type` attribute is the one selector a consumer has; `application/json` would leave the sheet indistinguishable from any other JSON alternate.
 
-**Selection (normative).** A consumer selects the sheet link by `rel="alternate"` and `type="application/pagefront+json"` together. It MUST NOT select by `title`, by the shape of `href`, or because a link is the only JSON alternate on the page. A page declares at most one such link. A consumer reads the `Link` header first. A HEAD request on the canonical page is enough when the header is present: the sheet is discovered without downloading the page body. A consumer fetches the page and parses its head only when no header declares the sheet, on the HEAD response or on the GET response that follows it. Where both carriers are present, the header is authoritative. A publisher that emits the header SHOULD return it on HEAD responses as well as GET responses, so that discovery never needs the page body.
+**Selection (normative).** A consumer selects the sheet links by `rel="alternate"` and `type="application/pagefront+json"` together. It MUST NOT select by `title`, by the shape of `href`, or because a link is the only JSON alternate on the page. A page declares at most one such link **per sheet type**; where it declares several, a consumer picks among them by sheet type under "Several Sheets for one page". A consumer reads the `Link` header first. A HEAD request on the canonical page is enough when the header is present: the sheet is discovered without downloading the page body. A consumer fetches the page and parses its head only when no header declares the sheet, on the HEAD response or on the GET response that follows it. Where both carriers are present, the header is authoritative. A publisher that emits the header SHOULD return it on HEAD responses as well as GET responses, so that discovery never needs the page body.
+
+**Several Sheets for one page (normative).** Two Sheets of different types can describe one page: the Product Sheet states what the product is and the Review Sheet carries what customers wrote about it, and both are the page's. Each is declared with its own `alternate` link. The sheet type is read from the link's `profile` parameter in the `Link` header, which names the sheet spec's schema URL; a consumer wanting one type selects the link whose `profile` names a schema of that type. The HTML `<link>` element has no `profile` attribute. A consumer selecting from elements, or from header links that omit `profile`, fetches each candidate and reads its `$schema`, which is the confirmation it performs on every Sheet in any case; a publisher MAY add a `data-profile` attribute carrying the same URL as a hint, and a consumer MAY use it to skip fetches it does not need, but MUST NOT reject an element for lacking it. A page's links are emitted in a stable order with the sheet type that is the page's primary subject first: the Product Sheet before the Review Sheet on a product page, the Organization Sheet before its Review Sheet on the page the Organization Sheet describes. A consumer that knows one sheet type and takes the first matching link therefore keeps finding what it found before. Two links of the same type on one page is a declaration error; a consumer takes the first and a validator reports it.
+
+```
+Link: <https://merchant.example/pagefront/commerce/product/anorak.en.json>;
+      rel="alternate"; type="application/pagefront+json";
+      profile="https://themachineweb.org/pagefront/spec/commerce/product/v0.11.0.json",
+      <https://merchant.example/pagefront/commerce/review/anorak.en.json>;
+      rel="alternate"; type="application/pagefront+json";
+      profile="https://themachineweb.org/pagefront/spec/commerce/review/v0.1.0.json"
+```
+
+Which sheet types may share a page is bound by each vertical's sheet specs; this document only says how the page declares them.
 
 **Serving.** Publishers SHOULD serve sheets with `Content-Type: application/pagefront+json` where they control response headers. The link's `type` attribute is advisory: a consumer MUST NOT reject a sheet because it is served as `application/json`. Nor does a consumer accept a response as a sheet on its Content-Type alone: a sheet is a body that parses as JSON and carries `$schema`. The sheet's `$schema` confirms what the link type claimed.
 
@@ -63,7 +76,7 @@ The suffix `pagefront` is intended for registration in the IANA Well-Known URIs 
 
 **Traversal hints (normative).** A field whose value is another Sheet's URL is a traversal hint. Each sheet spec names the fields that carry one. The identity of the target is its `@id`, and its location is whatever its page currently declares. A hint MAY be stale: the target Sheet's address can change between updates, and the Sheet carrying the hint is re-emitted on its own schedule. A consumer MUST be able to reach the target through its page, the entry's `url` and then the Sheet that page declares, and SHOULD treat the hint as an optimisation over that path; the path stays the one a consumer relies on. A consumer MUST NOT cache a Sheet URL across the target's page changes. A consumer MUST NOT construct a Sheet URL from any pattern. The per-field notes in the sheet specs and in the vocabulary refer to this paragraph.
 
-**Confirmation.** A consumer following a hint reads the Sheet URL it carries, fetches the Sheet, and confirms the fetched Sheet's data-block `@id` matches the reference's `@id` by exact string. On a mismatch, or when the hint is absent or fails, it fetches the reference's `url` and follows the `alternate` link that page declares.
+**Confirmation.** A consumer following a hint reads the Sheet URL it carries, fetches the Sheet, and confirms the fetched Sheet's data-block `@id` matches the reference's `@id` by exact string. On a mismatch, or when the hint is absent or fails, it fetches the reference's `url` and follows the `alternate` link that page declares, selecting by sheet type where the page declares several ("Several Sheets for one page"). The sheet spec that defines the hint field says which type the target is.
 
 **Sheets reached by reference.** Page-based discovery (`alternate`) finds the Sheet for the page being read. A Sheet reached by reference from another Sheet is located by the URL the referencing Sheet declares, under the rule above. The prohibition on constructing Sheet URLs is unchanged: a reference that declares no URL leaves its Sheet undiscovered. Whether the Sheet a consumer starts from is its publisher's statement at all is settled under "Provenance" below.
 
