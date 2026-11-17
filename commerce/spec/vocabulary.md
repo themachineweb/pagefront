@@ -276,6 +276,23 @@ A promotional code or discount applicable to an offer.
 - `occasion` *(optional)*: free-text occasion (e.g., `"Mother's Day"`, `"Black Friday"`).
 - `validUntil` *(optional)*: expiration timestamp (ISO 8601).
 
+### pagefront:ReviewAspect
+
+One thing a consumer review addresses, and optionally the author's rating of it alone, used in `pagefront:aspect` on a `Review` entry of a Commerce Review Sheet (see [`review.md`](review.md)).
+
+**Properties:**
+- `aspect` *(required)*: closed enum, see "Review aspects" under "Enumerated values".
+- `ratingValue` *(optional)*: the author's rating of that aspect alone, on the scale of the review's `reviewRating`.
+
+### pagefront:ReviewPolicy
+
+The publisher's statement about a review set: how reviews reach the published set and how they are invited. Used in `pagefront:reviewPolicy` on the `ItemList` data block of a Commerce Review Sheet (see [`review.md`](review.md)).
+
+**Properties:**
+- `collection` *(required)*: closed enum, see "Review policy: collection" under "Enumerated values".
+- `url` *(recommended)*: the human-readable policy page. Recommended for `moderated`, required for `curated`.
+- `solicitation` *(optional)*: closed enum, see "Review policy: solicitation" under "Enumerated values".
+
 ### pagefront:SafetyNotice
 
 A structured recall or safety notice for a product subject to a corrective measure (GPSR Arts. 35–37 and equivalent regimes). Schema.org has no recall vocabulary, and `availability: Discontinued` means "no longer sold" and does not mean "dangerous — return it." A `recall` notice overrides commercial signals: consumers SHOULD NOT recommend purchase while one is present and SHOULD surface the remedy.
@@ -358,6 +375,14 @@ In addition to the types above, the vocabulary defines a small number of propert
 
 Used on `OfferShippingDetails` to express conditions under which the shipping rate applies. Value is a `pagefront:PricingCondition`.
 
+### pagefront:aspect
+
+Used on a `Review` entry of a Commerce Review Sheet (see [`review.md`](review.md)) to list the things the review addresses, each with the author's rating of it where the author gave one. Value is an array of `pagefront:ReviewAspect`. Optional; where present, `pagefront:aspectSource` is required beside it. Not used elsewhere. Added with the Commerce Review Sheet.
+
+### pagefront:aspectSource
+
+Used on a `Review` entry of a Commerce Review Sheet beside `pagefront:aspect` to say who assigned the aspects. Value is a single string from the closed Aspect sources enum (see "Enumerated values"). Required when `pagefront:aspect` is present; not used elsewhere. Added with the Commerce Review Sheet.
+
 ### pagefront:authorizedResellers
 
 Used on the `Organization` data block of a Commerce Organization Sheet whose `commerceRole` includes `brand_owner`, and only there, to state which sellers the brand authorizes to sell its products. Value is a single `pagefront:AuthorizedResellers` object; the rules are on that type. Added in v0.9. Linter rule ORG-W-006 warns when the property appears on a sheet not declaring `brand_owner`; no rule warns on its absence.
@@ -437,6 +462,10 @@ Composition over inheritance, per house pattern: Schema.org scopes `OfferShippin
 
 Used on `Product` to express typed gemstone grading. Value is a `pagefront:Gemstone`.
 
+### pagefront:incentive
+
+Used on a `Review` entry of a Commerce Review Sheet (see [`review.md`](review.md)) to declare what the author received for the review. Value is a single string from the closed Review incentives enum (see "Enumerated values"), `undisclosed` among them. Required on every entry; not used elsewhere. Added with the Commerce Review Sheet.
+
 ### pagefront:legalEntity
 
 Used on `Product` (or `ProductGroup`) to declare the role-typed legal entities behind the product. Value is an array of `pagefront:LegalEntity` objects.
@@ -480,6 +509,10 @@ Value is a `pagefront:PriceOnRequest` object:
 
 Used on `Product` (or `ProductGroup`) to carry the merchant's ranked selling points. Value is an ordered array of short, publisher-authored strings in the sheet's `inLanguage`; 3–10 entries recommended. Publisher-authored only; auto-generated bullets are excluded. The term is marked `@container: @list` in the JSON-LD context so ordering survives JSON-LD processing.
 
+### pagefront:purchaseVerification
+
+Used on a `Review` entry of a Commerce Review Sheet (see [`review.md`](review.md)) to declare how the review was tied to a transaction. Value is a single string from the closed Purchase verification enum (see "Enumerated values"), `undisclosed` among them. Required on every entry; not used elsewhere. Added with the Commerce Review Sheet.
+
 ### pagefront:relatedProduct
 
 Used on `Product` (or `ProductGroup`) to express typed relationships to other products. Value is an array of `pagefront:RelatedProduct` objects.
@@ -487,6 +520,18 @@ Used on `Product` (or `ProductGroup`) to express typed relationships to other pr
 ### pagefront:promotions
 
 Used on `Offer` to express promotional codes and discounts. Value is an array of `pagefront:Promotion` objects.
+
+### pagefront:reviewPolicy
+
+Used on the `ItemList` data block of a Commerce Review Sheet (see [`review.md`](review.md)) as the publisher's statement about the set. Value is one `pagefront:ReviewPolicy`. Required on that sheet type; not used elsewhere. Added with the Commerce Review Sheet.
+
+### pagefront:reviewSource
+
+Used on a `Review` entry of a Commerce Review Sheet (see [`review.md`](review.md)) to declare where the review entered the publisher's possession. Value is an object: `kind` *(required)*, a single string from the closed Review sources enum (see "Enumerated values"), `undisclosed` among them; `name`, the platform's name, required for `third_party` and `marketplace`; `url`, the review on the source platform, recommended for those two kinds. Required on every entry; not used elsewhere. Added with the Commerce Review Sheet.
+
+### pagefront:reviewSubject
+
+Used on a `Review` entry of a Commerce Review Sheet (see [`review.md`](review.md)) to declare what the author is writing about. Value is a single string from the closed Review subjects enum (see "Enumerated values"). Required on every entry; not used elsewhere. Added with the Commerce Review Sheet.
 
 ### pagefront:safetyNotice
 
@@ -585,6 +630,65 @@ The closed enum for `pagefront:collectionKind` on a Commerce Collection Sheet an
 
 What separates a category from a collection is the tree. Additional values require a spec amendment.
 
+### Review policy: collection
+
+The closed enum for `collection` on `pagefront:ReviewPolicy` (added with [`review.md`](review.md)): how reviews reach the published set.
+
+- `all`: every review received is published, subject only to legal removal.
+- `moderated`: reviews are screened against stated criteria (abuse, off-topic, personal data) and otherwise published regardless of rating.
+- `curated`: the publisher selects which reviews to show. Rating-based selection is curation.
+- `undisclosed`: the publisher does not state its practice.
+
+### Review policy: solicitation
+
+The closed enum for `solicitation` on `pagefront:ReviewPolicy`: how reviews are invited. `post_purchase`, `on_page`, `third_party_program`, `none`, `undisclosed`.
+
+### Review subjects
+
+The closed enum for `pagefront:reviewSubject` on a `Review` entry: what the author is writing about.
+
+- `product`: the product's intrinsic qualities.
+- `seller`: the transaction: delivery, service, returns, packaging, payment.
+- `mixed`: both, in one text.
+
+### Review sources
+
+The closed enum for `kind` in `pagefront:reviewSource`: where the review entered the publisher's possession.
+
+- `first_party`: collected by the publisher on its own surface.
+- `third_party`: a review platform the publisher uses: collection and hosting by another party.
+- `marketplace`: collected on a marketplace listing of the same product.
+- `imported`: origin not retained.
+- `undisclosed`.
+
+### Purchase verification
+
+The closed enum for `pagefront:purchaseVerification`: how the review was tied to a transaction.
+
+- `none`: no link to a purchase was established.
+- `order_matched`: the publisher matched the author to an order for the subject in its own records.
+- `post_purchase_invitation`: the review was written in response to an invitation sent after a purchase.
+- `platform_verified`: a third-party platform asserts the purchase under its own scheme.
+- `undisclosed`.
+
+### Review incentives
+
+The closed enum for `pagefront:incentive`: what the author received for the review.
+
+- `none`.
+- `discount`: a voucher, coupon or future credit.
+- `free_product`: the subject, or another product, at no charge.
+- `sample_program`: membership of a scheme that supplies products for review.
+- `undisclosed`.
+
+### Review aspects
+
+The closed enum for `aspect` on `pagefront:ReviewAspect`, split along the subject line. Product-side: `quality`, `fit`, `durability`, `value`, `ease_of_use`, `appearance`, `as_described`, `performance`, `comfort`, `taste`. Seller-side: `delivery`, `customer_service`, `returns`, `packaging`, `payment`, `communication`. Finer, vertical-specific aspects go in Schema.org's free-text `reviewAspect`. Additional values require a spec amendment.
+
+### Aspect sources
+
+The closed enum for `pagefront:aspectSource`: who assigned the aspects. `author` (the author chose or rated them on a form), `publisher` (the publisher tagged them by hand), `inferred` (a classifier).
+
 ## Schema.org-native patterns
 
 Some affordances Pagefront Sheets need are already well-covered by Schema.org's native vocabulary. For these, Pagefront does not mint a `pagefront:` term; the recommendation is to use Schema.org's existing types and properties. This section catalogues such patterns so implementers know where to look when something appears absent from the `pagefront:` namespace. None of the patterns below mints a term. (The section began as the v0.7 pattern catalogue; entries added in later versions are marked.)
@@ -603,7 +707,7 @@ Some affordances Pagefront Sheets need are already well-covered by Schema.org's 
 
 `ratingCount` and `reviewCount` are distinct and SHOULD NOT be conflated: many consumers leave a star rating without writing a review, so the two counts commonly differ. `ratingCount` conveys how many ratings the average is based on (the average's reliability); `reviewCount` conveys how much written review content exists. When a source exposes only one count, emit the one it provides and leave the other field absent.
 
-An aggregate rating may blend product-quality signals with seller/fulfilment experience (some review platforms mix product and merchant reviews). Where a producer can distinguish them it SHOULD scope the product's `aggregateRating` to product reviews; where it cannot, the blend is a known limitation consumers should be aware of.
+An aggregate rating may blend product-quality signals with seller/fulfilment experience (some review platforms mix product and merchant reviews). Where a producer can distinguish them it SHOULD scope the product's `aggregateRating` to product reviews; where it cannot, the blend is a known limitation consumers should be aware of. Where the publisher emits a Commerce Review Sheet ([`review.md`](review.md)) for the subject, the product's `aggregateRating` is scoped to the reviews whose `pagefront:reviewSubject` is `product`, and the seller's reputation is the `aggregateRating` on the Organization Sheet, computed over its own review sheet; see "Scoping the aggregate" there.
 
 **Product lifecycle.** Market availability is expressed with Schema.org's `releaseDate` on the `Product`; end-of-life with Offer `availability: "https://schema.org/Discontinued"`, paired with a `pagefront:relatedProduct` entry of `relationship: "replaced_by"` pointing at the successor (whose own Sheet carries the inverse `replaces`). Schema.org carries the lifecycle facts and the existing relationship enum carries the succession link. See "Product lifecycle" in the Pagefront Spec.
 
@@ -658,6 +762,13 @@ The following is the machine-readable JSON-LD context for the pagefront vocabula
 
     "appliesWhen": {
       "@id": "pagefront:appliesWhen"
+    },
+    "aspect": {
+      "@id": "pagefront:aspect",
+      "@container": "@set"
+    },
+    "aspectSource": {
+      "@id": "pagefront:aspectSource"
     },
     "authorizedResellers": {
       "@id": "pagefront:authorizedResellers"
@@ -720,6 +831,9 @@ The following is the machine-readable JSON-LD context for the pagefront vocabula
     "gemstone": {
       "@id": "pagefront:gemstone"
     },
+    "incentive": {
+      "@id": "pagefront:incentive"
+    },
     "legalEntity": {
       "@id": "pagefront:legalEntity",
       "@container": "@list"
@@ -752,6 +866,9 @@ The following is the machine-readable JSON-LD context for the pagefront vocabula
       "@id": "pagefront:promotions",
       "@container": "@list"
     },
+    "purchaseVerification": {
+      "@id": "pagefront:purchaseVerification"
+    },
     "relatedProduct": {
       "@id": "pagefront:relatedProduct",
       "@container": "@list"
@@ -759,6 +876,15 @@ The following is the machine-readable JSON-LD context for the pagefront vocabula
     "reseller": {
       "@id": "pagefront:reseller",
       "@container": "@list"
+    },
+    "reviewPolicy": {
+      "@id": "pagefront:reviewPolicy"
+    },
+    "reviewSource": {
+      "@id": "pagefront:reviewSource"
+    },
+    "reviewSubject": {
+      "@id": "pagefront:reviewSubject"
     },
     "safetyNotice": {
       "@id": "pagefront:safetyNotice",
