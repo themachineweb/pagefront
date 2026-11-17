@@ -1,13 +1,13 @@
 # Pagefront — write your shop's sheets
 
-- Prompt set 1.20.0, for commerce release 0.5.0.
-- Writes Product sheets (spec 0.11.0), Collection sheets (spec 0.1.0) and the Organization sheet (spec 0.5.0), commerce release 0.5.0.
+- Prompt set 1.21.0, for commerce release 0.6.0.
+- Writes Product sheets (spec 0.12.0), Collection sheets (spec 0.2.0) and the Organization sheet (spec 0.6.0), commerce release 0.6.0.
 - Product spec: https://themachineweb.org/pagefront/spec/commerce/product.md (page: https://themachineweb.org/pagefront/spec/commerce/product)
-- Product schema: https://themachineweb.org/pagefront/spec/commerce/product/v0.11.0.json
+- Product schema: https://themachineweb.org/pagefront/spec/commerce/product/v0.12.0.json
 - Organization spec: https://themachineweb.org/pagefront/spec/commerce/organization.md (page: https://themachineweb.org/pagefront/spec/commerce/organization)
-- Organization schema: https://themachineweb.org/pagefront/spec/commerce/organization/v0.5.0.json
+- Organization schema: https://themachineweb.org/pagefront/spec/commerce/organization/v0.6.0.json
 - Collection spec: https://themachineweb.org/pagefront/spec/commerce/collection.md (page: https://themachineweb.org/pagefront/spec/commerce/collection)
-- Collection schema: https://themachineweb.org/pagefront/spec/commerce/collection/v0.1.0.json
+- Collection schema: https://themachineweb.org/pagefront/spec/commerce/collection/v0.2.0.json
 - Check: https://themachineweb.org/pagefront/commerce/validate
 - The spec links are plain text, the form a reader opens. The product spec is a field reference: for each field, what it means, its shape, where its value comes from and what checks it; read the entries for the fields your sheet uses. Its design notes are not needed to write a sheet. The schema links are JSON files, to download.
 
@@ -290,7 +290,7 @@ Which sets:
   none, since the spec requires the complete list; say so, and say which.
 
 What to write: the envelope the spec defines, with the collection schema URL
-as `$schema`, `release` `0.5.0`, `canonical_url` the listing page (read as
+as `$schema`, `release` `0.6.0`, `canonical_url` the listing page (read as
 for a product page), `sheet_url` its address, `generated_at` now, and
 `expires_at` within a day of `generated_at` for a category the platform's
 section says is filled by a rule, none otherwise. The data block:
@@ -335,7 +335,7 @@ prompt that hides the page is not answered: say so and leave out what it
 hides.
 
 What to write: the envelope the spec defines, with the product schema URL as
-`$schema`, `release` `0.5.0`, `sheet_url` its address, `generated_at` now,
+`$schema`, `release` `0.6.0`, `sheet_url` its address, `generated_at` now,
 no `expires_at`. The data block follows the spec and the schema in full.
 The spec is a field reference: for each field it states what the field
 means, its shape, where its value comes from and what checks it. Follow it
@@ -388,8 +388,8 @@ the spec leaves the choice to the producer or the platform settles it:
 ## ORGANIZATION SHEET
 
 Written to the Organization spec, from the organization page, the homepage
-and the shop's public data, under rule 3: release `0.5.0`, `$schema`
-`https://themachineweb.org/pagefront/spec/commerce/organization/v0.5.0.json`,
+and the shop's public data, under rule 3: release `0.6.0`, `$schema`
+`https://themachineweb.org/pagefront/spec/commerce/organization/v0.6.0.json`,
 `canonical_url` and `url` the organization page, read as
 for a product page, `sheet_url` its address. Its `@id` is the one each product
 sheet's `seller` names (IDENTITIES). Its `hasOfferCatalog` lists the
