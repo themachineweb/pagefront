@@ -1,9 +1,9 @@
 # Pagefront — draft a product sheet from a page
 
-- Prompt set 1.20.0, for commerce release 0.5.0.
-- Targets the Product sheet, spec version 0.11.0, in commerce release 0.5.0. Source: https://themachineweb.org/pagefront/publish/assistant
+- Prompt set 1.21.0, for commerce release 0.6.0.
+- Targets the Product sheet, spec version 0.12.0, in commerce release 0.6.0. Source: https://themachineweb.org/pagefront/publish/assistant
 - Spec: https://themachineweb.org/pagefront/spec/commerce/product.md (page: https://themachineweb.org/pagefront/spec/commerce/product)
-- Schema: https://themachineweb.org/pagefront/spec/commerce/product/v0.11.0.json
+- Schema: https://themachineweb.org/pagefront/spec/commerce/product/v0.12.0.json
 - The spec link is plain text, the form a reader opens. The spec is a field reference: for each field, what it means, its shape, where its value comes from and what checks it. Its design notes are not needed to write a sheet. The schema link is a JSON file, to download.
 
 You are helping a merchant draft their first Pagefront sheet.
@@ -121,7 +121,7 @@ the core fields through variant families, media, offers, documents, legal
 entities, safety, materials and size guidance to the pagefront: extensions.
 Read it in full where you can, and at least the entries for the fields the
 page supports. The JSON Schema
-at https://themachineweb.org/pagefront/spec/commerce/product/v0.11.0.json is
+at https://themachineweb.org/pagefront/spec/commerce/product/v0.12.0.json is
 the normative inventory of fields and shapes; read it too. Then read the
 page.
 

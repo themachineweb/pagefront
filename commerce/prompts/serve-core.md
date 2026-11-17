@@ -1,7 +1,7 @@
 # Pagefront — serve your shop's sheets
 
-- Prompt set 1.20.0, for commerce release 0.5.0.
-- Serves the sheets the write phase produced (commerce release 0.5.0) on the shop's own domain.
+- Prompt set 1.21.0, for commerce release 0.6.0.
+- Serves the sheets the write phase produced (commerce release 0.6.0) on the shop's own domain.
 - Cloudflare Workers, index for AI tools: https://developers.cloudflare.com/workers/llms.txt
 - Cloudflare R2, index for AI tools: https://developers.cloudflare.com/r2/llms.txt
 

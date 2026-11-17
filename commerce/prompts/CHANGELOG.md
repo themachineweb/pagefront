@@ -4,6 +4,16 @@ The prompt set's own semver; see "Versioning" in [`README.md`](README.md).
 
 ## Unreleased
 
+## 1.21.0 — 2026-11-17
+
+For commerce release 0.6.0.
+
+- Rebuilt for commerce release 0.6.0: the release line in every header,
+  the schema URLs (product 0.12.0, organization 0.6.0, collection 0.2.0)
+  and the `release` value the write phase puts in every sheet. The
+  prompts write no Review Sheet yet; that is a later set. No step
+  changes.
+
 ## 1.20.0 — 2026-11-16
 
 For commerce release 0.5.0.
