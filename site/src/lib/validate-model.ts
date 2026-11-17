@@ -40,11 +40,12 @@ const LEGACY_FORMATS: readonly string[] = RELEASE_MANIFEST.legacy.format_version
 const PAGE_TYPE_IN_SCHEMA = /\/pagefront\/(?:spec\/commerce|commerce\/schemas)\/([a-z]+)\//;
 
 /** The commerce sheet types the specs define; the pinned linter may bundle fewer. */
-export type DeclaredType = "product" | "organization" | "collection";
+export type DeclaredType = "product" | "organization" | "collection" | "review";
 export const SHEET_LABEL: Record<DeclaredType, string> = {
   product: "Product sheet",
   organization: "Organization sheet",
   collection: "Collection sheet",
+  review: "Review sheet",
 };
 
 /**
@@ -59,7 +60,7 @@ export function detectDeclaredType(sheet: unknown): DeclaredType | undefined {
   const declared = envelope["$schema"];
   if (typeof declared === "string") {
     const named = PAGE_TYPE_IN_SCHEMA.exec(declared)?.[1];
-    if (named === "product" || named === "organization" || named === "collection") return named;
+    if (named === "product" || named === "organization" || named === "collection" || named === "review") return named;
   }
   const data = envelope["data"];
   if (typeof data !== "object" || data === null) return undefined;
@@ -71,6 +72,7 @@ export function detectDeclaredType(sheet: unknown): DeclaredType | undefined {
     return "organization";
   }
   if (types.includes("Collection") && block["pagefront:collectionKind"] !== undefined) return "collection";
+  if (types.includes("ItemList") && block["pagefront:reviewPolicy"] !== undefined) return "review";
   return undefined;
 }
 
