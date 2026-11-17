@@ -2,18 +2,19 @@ import type { CheckHit, Rule } from "@pagefront/lint-core";
 import { memberEntries, reviewId } from "./rev-shared.js";
 
 /**
- * REV-W-009 — Aspects without their source.
+ * REV-E-014 — Aspects without their source.
  * Transcribed from commerce/spec/rules.md (normative).
  *
  * `pagefront:aspectSource` is required when `pagefront:aspect` is
  * present: a consumer weights the author's choice, the publisher's
- * tagging and a classifier's inference differently. One finding per
- * entry, at its path.
+ * tagging and a classifier's inference differently. The schema requires
+ * it; this rule reports the condition for callers that lint without
+ * validating. One finding per entry, at its path.
  */
-export const revW009: Rule = {
-  id: "REV-W-009",
+export const revE014: Rule = {
+  id: "REV-E-014",
   title: "Aspects without their source",
-  severity: "warning",
+  severity: "error",
   target: "$.data.itemListElement",
   check: (match) => {
     const hits: CheckHit[] = [];

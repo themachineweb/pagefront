@@ -35,8 +35,9 @@ legacy draft line (format 0.9): 64 product rules (`PDP-E-001` to `PDP-E-022`, `P
 `PDP-W-041`, `PDP-I-001`), 12 organization rules (`ORG-E-001` to
 `ORG-E-004`, `ORG-W-001` to `ORG-W-008`), 11 collection rules
 (`COL-E-001` to `COL-E-005`, `COL-W-001`, `COL-W-002`, `COL-W-004` to
-`COL-W-007`; `COL-W-003` is reserved) and 27 review rules (`REV-E-001` to
-`REV-E-013`, `REV-W-001` to `REV-W-014`), each defined in
+`COL-W-007`; `COL-W-003` is reserved) and 29 review rules (`REV-E-001` to
+`REV-E-017`, `REV-W-001` to `REV-W-014`; `REV-W-004` and `REV-W-009` are
+retired), each defined in
 [`rules.md`](https://github.com/themachineweb/pagefront/blob/main/commerce/spec/rules.md)
 with its target, check, message and remediation. Every report carries the
 `catalogue_version` it was produced with.
@@ -221,9 +222,11 @@ Requires `@pagefront/lint-core` 0.4.0, unchanged.
   to `REV-E-013` (the subject, the policy, each entry's `@id` and rating,
   the four declarations, the subject's sheet URL host, an organization
   author, a translation, a product review on an Organization review
-  sheet, a policy or source without its `@type`) and `REV-W-001` to `REV-W-013` (the empty list, a curated set
-  without its policy page, a duplicate, a rating above 5 without its
-  scale, personal data on the author, the declarations' consistency with
+  sheet, a policy or source without its `@type`, aspects without their
+  source, a rating above 5 without its bounds, the envelope's version
+  fields) and `REV-W-001` to `REV-W-013` (the empty list, a curated set
+  without its policy page, a duplicate,
+  personal data on the author, the declarations' consistency with
   one another, the aspects and their source, text without its language,
   `itemReviewed` and `numberOfItems`, an unclassified review with aspects).
   The rules apply from release 0.6.0,

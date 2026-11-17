@@ -11,10 +11,10 @@
       "severity": "warning",
       "path": "$['data']['itemListElement'][1]['pagefront:reviewSource']",
       "values": {
-        "id": "https://reviews.example/aurora-jumper/7731902",
+        "id": "https://reviews.example/r/aurora-jumper/7731902",
         "kind": "third_party"
       },
-      "message": "Review `https://reviews.example/aurora-jumper/7731902` at `$['data']['itemListElement'][1]['pagefront:reviewSource']` names a `third_party` source without `name`.",
+      "message": "Review `https://reviews.example/r/aurora-jumper/7731902` at `$['data']['itemListElement'][1]['pagefront:reviewSource']` names a `third_party` source without `name`.",
       "remediation": "Add `name`, the review platform's or marketplace's name, and `url`, the review on that platform, to `pagefront:reviewSource`."
     }
   ],

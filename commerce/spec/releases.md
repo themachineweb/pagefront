@@ -12,7 +12,7 @@ This document states how the commerce vertical is versioned, lists every commerc
 
 **A commerce release is a named, versioned bundle of member versions.** Its members are each sheet spec and the vocabulary. The release's bump follows its members: major if any member bumps major, else minor if any member bumps minor, else patch. A new sheet type joining the release is a minor bump. 1.0.0 is a release like any other: it is reached by the same rule and carries no completeness requirement on the set of sheet types.
 
-**A sheet spec may depend on a Discovery version.** Pagefront Discovery ([`../../core/spec/discovery.md`](../../core/spec/discovery.md)) is format-level and versions on its own ("Format documents" below). A sheet spec that needs a Discovery feature states the version it requires in its own text, in one sentence ("This spec requires Pagefront Discovery 0.2.0 or later"), and the release notes of the release that bundles the spec name the Discovery version in force. The Review Sheet spec is the first to state such a dependency.
+**A sheet spec may depend on a Discovery version.** Pagefront Discovery ([`../../core/spec/discovery.md`](../../core/spec/discovery.md)) is format-level and versions on its own ("Format documents" below). A sheet spec that needs a Discovery feature names that feature in its own text, in one sentence, and the release notes of the release that bundles the spec name the Discovery version in force. The Review Sheet spec is the first to state such a dependency.
 
 **The vocabulary has no version of its own.** It carries the release version: the vocabulary of release 0.5.0 is vocabulary 0.5.0.
 

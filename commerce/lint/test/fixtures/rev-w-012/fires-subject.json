@@ -14,13 +14,13 @@
       }
     ],
     "@type": "ItemList",
-    "@id": "https://merchant.example/products/aurora-jumper",
+    "@id": "https://merchant.example/products/aurora-jumper#reviews",
     "name": "Customer reviews",
     "inLanguage": "en",
     "numberOfItems": 3,
     "about": {
       "@type": "Product",
-      "@id": "https://merchant.example/pagefront/commerce/product/aurora-jumper.en.json",
+      "@id": "https://merchant.example/products/aurora-jumper#product",
       "url": "https://merchant.example/products/aurora-jumper",
       "pagefront:sheetUrl": "https://merchant.example/pagefront/commerce/product/aurora-jumper.en.json"
     },
@@ -87,7 +87,7 @@
       },
       {
         "@type": "Review",
-        "@id": "https://reviews.example/aurora-jumper/7731902",
+        "@id": "https://reviews.example/r/aurora-jumper/7731902",
         "datePublished": "2026-11-09",
         "inLanguage": "fr",
         "reviewBody": "Très belle maille, conforme à la photo.",
@@ -103,8 +103,8 @@
         "pagefront:reviewSource": {
           "@type": "pagefront:ReviewSource",
           "kind": "third_party",
-          "name": "Reviews Platform",
-          "url": "https://reviews.example/aurora-jumper/7731902"
+          "name": "Verified Opinions",
+          "url": "https://reviews.example/r/aurora-jumper/7731902"
         },
         "pagefront:purchaseVerification": "platform_verified",
         "pagefront:reviewIncentive": "undisclosed",

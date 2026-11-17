@@ -14,13 +14,13 @@
       }
     ],
     "@type": "ItemList",
-    "@id": "https://merchant.example/products/aurora-jumper",
+    "@id": "https://merchant.example/products/aurora-jumper#reviews",
     "name": "Customer reviews",
     "inLanguage": "en",
     "numberOfItems": 0,
     "about": {
       "@type": "ProductGroup",
-      "@id": "https://merchant.example/pagefront/commerce/product/aurora-jumper.en.json",
+      "@id": "https://merchant.example/products/aurora-jumper#product",
       "url": "https://merchant.example/products/aurora-jumper",
       "pagefront:sheetUrl": "https://merchant.example/pagefront/commerce/product/aurora-jumper.en.json"
     },

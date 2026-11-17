@@ -11,10 +11,10 @@
       "severity": "error",
       "path": "$['data']['itemListElement'][1]['workTranslation']",
       "values": {
-        "id": "https://reviews.example/aurora-jumper/7731902",
+        "id": "https://reviews.example/r/aurora-jumper/7731902",
         "field": "workTranslation"
       },
-      "message": "Review `https://reviews.example/aurora-jumper/7731902` at `$['data']['itemListElement'][1]['workTranslation']` carries `workTranslation`; the sheet carries originals only.",
+      "message": "Review `https://reviews.example/r/aurora-jumper/7731902` at `$['data']['itemListElement'][1]['workTranslation']` carries `workTranslation`; the sheet carries originals only.",
       "remediation": "Remove the translation. Carry the author's text in `reviewBody` and `name` with its language in `inLanguage`; translation is the consumer's operation."
     }
   ],

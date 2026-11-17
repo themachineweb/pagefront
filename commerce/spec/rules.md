@@ -25,14 +25,14 @@ Rules that do not follow the default:
 | Rule | Applies from | Legacy line |
 |---|---|---|
 | PDP-E-017 | release 0.4.0 | no |
-| PDP-E-018, ORG-E-004, COL-E-004 | every declared release (they judge the declared release itself) | no (a legacy Sheet declares no release) |
+| PDP-E-018, ORG-E-004, COL-E-004, REV-E-017 | every declared release (they judge the declared release itself) | no (a legacy Sheet declares no release) |
 | PDP-E-019, PDP-E-020, PDP-E-021, PDP-W-040 | release 0.5.0, whose Product Sheet spec 0.11.0 adds "Where to buy" | no |
 | PDP-E-022 | release 0.6.0, whose Product Sheet spec 0.12.0 adds "Unavailable offers without a price" | no |
 | PDP-W-041 | release 0.6.0, whose Product Sheet spec 0.12.0 adds "Purchase host" under "Where to buy" | no |
 | COL-E-001, COL-E-002, COL-E-003, COL-E-005, COL-W-001 to COL-W-007 | release 0.5.0, the release that bundles Collection Sheet spec 0.1.0 | no (the Collection Sheet spec has no legacy draft line) |
 | ORG-W-007 | release 0.5.0, which admits `hasOfferCatalog` | no |
 | ORG-W-008 | release 0.6.0, which admits `pagefront:checkoutHosts` | no |
-| REV-E-001 to REV-E-013, REV-W-001 to REV-W-014 | release 0.6.0 | no (the Review Sheet spec has no legacy draft line) |
+| REV-E-001 to REV-E-016, REV-W-001 to REV-W-003, REV-W-005 to REV-W-008, REV-W-010 to REV-W-014 | release 0.6.0 | no (the Review Sheet spec has no legacy draft line) |
 
 ### Definitions
 
@@ -830,20 +830,18 @@ The `{host}` placeholder renders `(none)` when `canonical_url` has no host, whic
 **Fixtures:** none.
 **Spec reference:** `review.md#discovery`
 
-#### PDP-W-044 — Aggregate count and review sheet disagree (reserved)
+#### PDP-W-044 — Aggregate count exceeds the review sheet's (reserved)
 
 **Severity:** warning
 **Target:** `$.data.aggregateRating`
-**Description:** Reserved and awaiting implementation. A Product Sheet's `aggregateRating.ratingCount` is computed over the review sheet's `product`-subject reviews ("Scoping the aggregate" in `review.md`), so a count that differs from the review sheet's `numberOfItems` for the same subject needs explaining. Checking it needs both sheets, and this catalogue judges one sheet at a time; the number is reserved so that a two-sheet check, when one exists, keeps the ID the spec names.
-**Check:** None. The rule has no implementation yet.
+**Description:** Reserved and awaiting implementation. A Product Sheet's `aggregateRating.ratingCount` is computed over the review sheet's `product`-subject reviews ("Scoping the aggregate" in `review.md`), while the review sheet's `numberOfItems` counts every review it carries, so a `ratingCount` at or below `numberOfItems` is legitimate and one above it counts ratings the review sheet does not show. Checking it needs both sheets, and this catalogue judges one sheet at a time; the number is reserved so that a two-sheet check, when one exists, keeps the ID the spec names.
+**Check:** None. The rule has no implementation yet; when implemented, it fires when `ratingCount` exceeds the review sheet's `numberOfItems` for the same subject.
 **Message:** None.
 **Remediation:** None.
-**Introduced:** reserved with the Review Sheet spec draft 0.1.0
+**Introduced:** reserved with the Review Sheet spec 0.1.0
 **Applies from:** not applicable.
 **Fixtures:** none.
 **Spec reference:** `review.md#the-organization-review-sheet`
-
-### Information
 
 #### PDP-I-001 — Property outside Pagefront's modeled set
 
@@ -1183,7 +1181,7 @@ The `{name}` placeholder renders the entry's `name`; when absent, the fixed fall
 
 ## Commerce Review Sheet rules
 
-The review-sheet catalogue, applying to Commerce Review Sheets ([`review.md`](review.md), spec 0.1.0) only, per the sheet-type dispatch described at the top of this document. Layer 1 for this sheet type is the review JSON Schema the release bundles (`../schemas/review/`, once a release publishes one; [`review.json`](review.json) is its editable head); these rules assume a schema-valid sheet. The schema enforces the array form of `@context` with the `pagefront` prefix, so this catalogue has no counterpart of PDP-E-003 and ORG-E-001; it has no counterpart of COL-E-003 and COL-E-004 either, since the spec reserves no code for the envelope's version fields. The error rules check the subject (REV-E-001, REV-E-009), the policy (REV-E-002), each entry's identity and rating (REV-E-003, REV-E-004), the four declarations (REV-E-005 to REV-E-008), the author's class (REV-E-010), translations (REV-E-011), the subject of an Organization review sheet's entries (REV-E-012) and the `@type` of the two typed values (REV-E-013). The warning rules cover the set (REV-W-001, REV-W-002, REV-W-003, REV-W-013), the rating scale and the author (REV-W-004, REV-W-005), the consistency of the declarations with one another (REV-W-006, REV-W-007, REV-W-011, REV-W-012), the aspects (REV-W-008, REV-W-009, REV-W-014) and the language of the text (REV-W-010). Four conditions the spec marks required (`url` on a curated policy, `name` on a platform source, `pagefront:aspectSource` beside aspects, `inLanguage` beside text) are warnings here, as the spec's own list grades them, and the schema leaves them to the rules. The product-side and organization-side checks the spec reserves are PDP-W-042, PDP-W-043, PDP-W-044 and ORG-W-009, in their own sections. The rules apply from release 0.6.0, the release that bundles Review Sheet spec 0.1.0, and never to the legacy draft line, which has no Review Sheet. Until that release lands, the review fixtures declare it and run against the test manifest, [`../lint/test/manifest/releases.json`](../lint/test/manifest/releases.json), whose 0.6.0 row resolves Review Sheet spec 0.1.0 to the editable head [`review.json`](review.json) at Layer 1. The release pull request adds the review column to that row in `commerce/spec/releases.json` and to the release table in `releases.md`, and freezes the head as `commerce/schemas/review/v0.1.0.json`; the fixtures and their expected reports do not change.
+The review-sheet catalogue, applying to Commerce Review Sheets ([`review.md`](review.md), spec 0.1.0) only, per the sheet-type dispatch described at the top of this document. Layer 1 for this sheet type is the review JSON Schema the release bundles (`../schemas/review/`, once a release publishes one; [`review.json`](review.json) is its editable head); these rules assume a schema-valid sheet. The schema enforces the array form of `@context` with the `pagefront` prefix, so this catalogue has no counterpart of PDP-E-003 and ORG-E-001; the envelope's version fields are REV-E-016 and REV-E-017, the counterparts of COL-E-003 and COL-E-004. The error rules check the subject (REV-E-001, REV-E-009), the policy (REV-E-002), each entry's identity and rating (REV-E-003, REV-E-004, REV-E-015), the four declarations (REV-E-005 to REV-E-008), the author's class (REV-E-010), translations (REV-E-011), the subject of an Organization review sheet's entries (REV-E-012), the `@type` of the two typed values (REV-E-013) and the aspects' source (REV-E-014). The warning rules cover the set (REV-W-001, REV-W-002, REV-W-003, REV-W-013), the author (REV-W-005), the consistency of the declarations with one another (REV-W-006, REV-W-007, REV-W-011, REV-W-012), the aspects (REV-W-008, REV-W-014) and the language of the text (REV-W-010). REV-W-004 and REV-W-009 were retired before any release, their checks becoming REV-E-015 and REV-E-014; the numbers are not reused. Three conditions the spec grades SHOULD (`url` on a curated policy, `name` on a platform source, `inLanguage` beside text) are warnings here, and the schema leaves them to the rules. The product-side and organization-side checks the spec reserves are PDP-W-042, PDP-W-043, PDP-W-044 and ORG-W-009, in their own sections. The rules apply from release 0.6.0, the release that bundles Review Sheet spec 0.1.0, and never to the legacy draft line, which has no Review Sheet. Until that release lands, the review fixtures declare it and run against the test manifest, [`../lint/test/manifest/releases.json`](../lint/test/manifest/releases.json), whose 0.6.0 row resolves Review Sheet spec 0.1.0 to the editable head [`review.json`](review.json) at Layer 1. The release pull request adds the review column to that row in `commerce/spec/releases.json` and to the release table in `releases.md`, and freezes the head as `commerce/schemas/review/v0.1.0.json`; the fixtures and their expected reports do not change.
 
 #### REV-E-001 — Subject absent, without `@id`, or of another type
 
@@ -1366,6 +1364,61 @@ The `{field}` placeholder is `pagefront:reviewPolicy` or `pagefront:reviewSource
 **Fixtures:** `fires-missing` (a policy and a source without `@type`), `fires-wrong` (a policy and a source with another `@type`), `clean`.
 **Spec reference:** `review.md#pagefront-declarations`
 
+#### REV-E-014 — Aspects without their source
+
+**Severity:** error
+**Target:** `$.data.itemListElement` (the Check walks the entries)
+**Description:** `pagefront:aspectSource` is required when `pagefront:aspect` is present ("Aspects" in `review.md`): a consumer weights the author's choice, the publisher's tagging and a classifier's inference differently, and aspects whose assigner is unknown cannot be weighted. The schema requires it beside `pagefront:aspect` and this rule reports the condition for callers that lint without validating.
+**Check:** An entry carries `pagefront:aspect` and no `pagefront:aspectSource`. One finding per entry, at its path.
+**Message:** Review `{id}` at `{path}` carries `pagefront:aspect` without `pagefront:aspectSource`.
+The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallback `(no @id)`.
+**Remediation:** Add `pagefront:aspectSource`: `author`, `publisher` or `inferred`, saying who assigned the aspects.
+**Introduced:** release 0.6.0
+**Applies from:** release 0.6.0; not the legacy line.
+**Fixtures:** `fires`, `clean`.
+**Spec reference:** `review.md#aspects-pagefrontaspect`
+
+#### REV-E-015 — Rating above 5 without its scale
+
+**Severity:** error
+**Target:** `$.data.itemListElement` (the Check walks the entries; the finding sits at the entry's `reviewRating`)
+**Description:** `bestRating` and `worstRating` are required when the scale is not 1 to 5 ("The review entry" in `review.md`). A `ratingValue` above 5 shows another scale is in use, and without its bounds a consumer cannot normalise it; a scale whose values happen to stay at or below 5 is not detected. The schema requires both bounds on a value above 5 and this rule reports the condition for callers that lint without validating.
+**Check:** An entry's `reviewRating.ratingValue`, read as a JSON number or a decimal string, exceeds 5, and `bestRating` or `worstRating` is absent or null. One finding per entry.
+**Message:** Review `{id}` at `{path}` rates `{value}` with no `{missing}`; a scale other than 1 to 5 declares its bounds.
+The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallback `(no @id)`. `{missing}` is `bestRating`, `worstRating` or `` bestRating` or `worstRating ``.
+**Remediation:** Add `bestRating` and `worstRating` to `reviewRating` wherever the scale is not 1 to 5.
+**Introduced:** release 0.6.0
+**Applies from:** release 0.6.0; not the legacy line.
+**Fixtures:** `fires` (a rating of 8 with no bounds), `fires-one-bound` (a rating of 8 with `bestRating` alone), `clean` (8 on a declared 0 to 10 scale).
+**Spec reference:** `review.md#schemaorg-native`
+
+#### REV-E-016 — Release / schema mismatch
+
+**Severity:** error
+**Target:** `$` (the Sheet; the finding sits at the envelope field it reads)
+**Description:** The review-sheet counterpart of PDP-E-002, ORG-E-003 and COL-E-003, with the same rationale: the release manifest maps the declared `release` to exactly one Review Sheet spec version, and `$schema` must name it. A Review Sheet declaring the release that bundles Review Sheet spec 0.1.0 points `$schema` at `review/v0.1.0.json`.
+**Check:** As PDP-E-002, with the Review Sheet schema the release manifest gives. Silent whenever `$schema` is absent. On the release line, fires when `$schema` is not that schema's URL, at `$['release']`. Silent when the declared `release` is not in the release manifest (REV-E-017 reports that), when the release is listed but bundles no Review Sheet spec (Layer 1 reports that), and when the Sheet carries both `release` and `format_version`. The rule does not run on the legacy line, which has no Review Sheet.
+**Message:** {declared} but {found}.
+The placeholders carry the same texts as in PDP-E-002, with `Review Sheet spec` in place of `Product Sheet spec`.
+**Remediation:** Point `$schema` at the sheet-spec version the declared release bundles (see releases.md), or declare the release that bundles the schema the sheet was written against.
+**Introduced:** release 0.6.0
+**Applies from:** release 0.6.0; not the legacy line.
+**Fixtures:** `fires` (a release 0.6.0 sheet whose `$schema` names `review/v0.2.0.json`), `clean`, `clean-no-schema`; under the test manifest, which bundles Review Sheet spec 0.1.0 in release 0.6.0.
+**Spec reference:** `review.md#the-envelope`
+
+#### REV-E-017 — Unknown release
+
+**Severity:** error
+**Target:** `$` (the finding sits at `$['release']`)
+**Description:** The review-sheet counterpart of PDP-E-018, ORG-E-004 and COL-E-004, with the same rationale: a `release` the release manifest does not list selects no schema and no rules.
+**Check:** The envelope's `release` is a string and equals no release in the release manifest.
+**Message:** `release` at `{path}` is `{release}`, which is not a release this catalogue knows ({known}).
+**Remediation:** Declare a published commerce release (see releases.md). If the release is newer than this linter, update the linter.
+**Introduced:** release 0.6.0
+**Applies from:** every declared release, as PDP-E-018; not the legacy line.
+**Fixtures:** `fires` (release `9.9.9`), `clean`.
+**Spec reference:** `review.md#the-envelope`
+
 #### REV-W-001 — Empty `itemListElement`
 
 **Severity:** warning
@@ -1383,7 +1436,7 @@ The `{field}` placeholder is `pagefront:reviewPolicy` or `pagefront:reviewSource
 
 **Severity:** warning
 **Target:** `$.data['pagefront:reviewPolicy']`
-**Description:** `pagefront:reviewPolicy.url` is REQUIRED when `collection` is `curated` ("The set" in `review.md`): a publisher that selects which reviews to show states its criteria somewhere a reader can go. The schema leaves the conditional to this rule.
+**Description:** A `curated` policy SHOULD carry `pagefront:reviewPolicy.url` ("The set" in `review.md`): a publisher that selects which reviews to show states its criteria somewhere a reader can go. The schema leaves the conditional to this rule.
 **Check:** The policy's `collection` is `curated` and its `url` is absent, empty or whitespace-only. One finding, at the policy.
 **Message:** `pagefront:reviewPolicy` at `{path}` declares `collection` `curated` and no `url`.
 **Remediation:** Add `url`, the human-readable page that states how reviews are selected for display.
@@ -1405,19 +1458,18 @@ The `{field}` placeholder is `pagefront:reviewPolicy` or `pagefront:reviewSource
 **Fixtures:** `fires`, `clean`.
 **Spec reference:** `review.md#schemaorg-native`
 
-#### REV-W-004 — Rating above 5 without its scale
+#### REV-W-004 — Rating above 5 without its scale (retired)
 
 **Severity:** warning
-**Target:** `$.data.itemListElement` (the Check walks the entries; the finding sits at the entry's `reviewRating`)
-**Description:** `bestRating` and `worstRating` are REQUIRED when the scale is not 1 to 5 ("The review entry" in `review.md`). A `ratingValue` above 5 shows another scale is in use, and without `bestRating` a consumer cannot normalise it; a scale whose values happen to stay at or below 5 is not detected.
-**Check:** An entry's `reviewRating.ratingValue`, read as a JSON number or a decimal string, exceeds 5, and `bestRating` is absent or null. One finding per entry.
-**Message:** Review `{id}` at `{path}` rates `{value}` with no `bestRating`; a scale other than 1 to 5 declares its bounds.
-The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallback `(no @id)`.
-**Remediation:** Add `bestRating` and `worstRating` to `reviewRating` wherever the scale is not 1 to 5.
-**Introduced:** release 0.6.0
-**Applies from:** release 0.6.0; not the legacy line.
-**Fixtures:** `fires` (a rating of 8 with no bounds), `clean` (8 on a declared 0 to 10 scale).
-**Spec reference:** `review.md#schemaorg-native`
+**Target:** none
+**Description:** Retired before any release: the condition is an error, REV-E-015, since the Review Sheet spec marks it required. The number is not reused.
+**Check:** None.
+**Message:** None.
+**Remediation:** None.
+**Introduced:** release 0.6.0; retired the same day
+**Applies from:** not applicable.
+**Fixtures:** none.
+**Spec reference:** `review.md#linter-rules`
 
 #### REV-W-005 — Personal data on the author
 
@@ -1437,7 +1489,7 @@ The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallbac
 
 **Severity:** warning
 **Target:** `$.data.itemListElement` (the Check walks the entries; the finding sits at the entry's `pagefront:reviewSource`)
-**Description:** `pagefront:reviewSource.name` is required for a `third_party` or `marketplace` source ("Pagefront declarations" in `review.md`): the platform's name is what a consumer checks the review against. The schema leaves the conditional to this rule.
+**Description:** A `third_party` or `marketplace` source SHOULD carry `pagefront:reviewSource.name` ("Pagefront declarations" in `review.md`): the platform's name is what a consumer checks the review against. The schema leaves the conditional to this rule.
 **Check:** An entry's `pagefront:reviewSource` is an object whose `kind` is `third_party` or `marketplace` and whose `name` is absent, empty or whitespace-only. One finding per entry.
 **Message:** Review `{id}` at `{path}` names a `{kind}` source without `name`.
 The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallback `(no @id)`.
@@ -1475,25 +1527,24 @@ The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallbac
 **Fixtures:** `fires-product` (a product review with delivery and returns aspects), `fires-seller` (a seller review with product aspects), `clean`.
 **Spec reference:** `review.md#aspects-pagefrontaspect`
 
-#### REV-W-009 — Aspects without their source
+#### REV-W-009 — Aspects without their source (retired)
 
 **Severity:** warning
-**Target:** `$.data.itemListElement` (the Check walks the entries)
-**Description:** `pagefront:aspectSource` is required when `pagefront:aspect` is present ("Aspects" in `review.md`): a consumer weights the author's choice, the publisher's tagging and a classifier's inference differently. The schema leaves the conditional to this rule.
-**Check:** An entry carries `pagefront:aspect` and no `pagefront:aspectSource`. One finding per entry, at its path.
-**Message:** Review `{id}` at `{path}` carries `pagefront:aspect` without `pagefront:aspectSource`.
-The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallback `(no @id)`.
-**Remediation:** Add `pagefront:aspectSource`: `author`, `publisher` or `inferred`, saying who assigned the aspects.
-**Introduced:** release 0.6.0
-**Applies from:** release 0.6.0; not the legacy line.
-**Fixtures:** `fires`, `clean`.
-**Spec reference:** `review.md#aspects-pagefrontaspect`
+**Target:** none
+**Description:** Retired before any release: the condition is an error, REV-E-014, since the Review Sheet spec marks it required. The number is not reused.
+**Check:** None.
+**Message:** None.
+**Remediation:** None.
+**Introduced:** release 0.6.0; retired the same day
+**Applies from:** not applicable.
+**Fixtures:** none.
+**Spec reference:** `review.md#linter-rules`
 
 #### REV-W-010 — Review text without its language
 
 **Severity:** warning
 **Target:** `$.data.itemListElement` (the Check walks the entries)
-**Description:** `inLanguage` is required on an entry carrying `reviewBody` or `name` ("The review entry" in `review.md`): a review is in its author's language, which the sheet's own `inLanguage` does not state ("Language"). The schema leaves the conditional to this rule.
+**Description:** An entry carrying `reviewBody` or `name` SHOULD carry `inLanguage` ("The review entry" in `review.md`): a review is in its author's language, which the sheet's own `inLanguage` does not state ("Language"). The schema leaves the conditional to this rule.
 **Check:** An entry carries a non-blank `reviewBody` or `name` and no non-blank `inLanguage`. One finding per entry, at its path.
 **Message:** Review `{id}` at `{path}` carries text without `inLanguage`.
 The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallback `(no @id)`.

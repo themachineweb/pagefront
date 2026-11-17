@@ -7,22 +7,22 @@
   "catalogue_version": "0.21.0",
   "findings": [
     {
-      "rule": "REV-W-009",
-      "severity": "warning",
+      "rule": "REV-E-014",
+      "severity": "error",
       "path": "$['data']['itemListElement'][1]",
       "values": {
-        "id": "https://reviews.example/aurora-jumper/7731902"
+        "id": "https://reviews.example/r/aurora-jumper/7731902"
       },
-      "message": "Review `https://reviews.example/aurora-jumper/7731902` at `$['data']['itemListElement'][1]` carries `pagefront:aspect` without `pagefront:aspectSource`.",
+      "message": "Review `https://reviews.example/r/aurora-jumper/7731902` at `$['data']['itemListElement'][1]` carries `pagefront:aspect` without `pagefront:aspectSource`.",
       "remediation": "Add `pagefront:aspectSource`: `author`, `publisher` or `inferred`, saying who assigned the aspects."
     }
   ],
   "summary": {
-    "errors": 0,
-    "warnings": 1,
+    "errors": 1,
+    "warnings": 0,
     "info": 0,
     "rules_fired": [
-      "REV-W-009"
+      "REV-E-014"
     ]
   }
 }
