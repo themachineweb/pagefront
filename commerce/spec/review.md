@@ -1,6 +1,6 @@
 # Commerce Review Sheet
 
-Status: DRAFT, not ratified. Target: Review Sheet spec 0.1.0, joining a future commerce release as a minor bump.
+Status: DRAFT, not ratified. Target: Review Sheet spec 0.1.0, a member of commerce release 0.6.0.
 Schema.org version targeted: 30.0 (2026-03-19)
 
 The Commerce Review Sheet is the Pagefront Sheet that carries the consumer reviews a publisher shows for one subject: a product, a variant family, or the seller itself. The Product Sheet carries the summary (`aggregateRating`); this sheet carries the reviews behind it, each with a declaration of where it came from, how it is tied to a purchase, what the author was given, and what the author is writing about.
@@ -56,14 +56,19 @@ The `data` block roots on Schema.org **`ItemList`** whose `itemListElement` entr
 
 A single review can be transcribed faithfully while the set lies by omission. The policy is the publisher's statement about the set and is sheet-level, required, single-valued:
 
-- `@type: pagefront:ReviewPolicy` *(required)*
+- `@type: pagefront:ReviewPolicy` *(required)*. Check: REV-E-013.
 - `collection` *(required)*: how reviews reach the published set.
   - `all`: every review received is published, subject only to legal removal.
   - `moderated`: reviews are screened against stated criteria (abuse, off-topic, personal data) and otherwise published regardless of rating.
   - `curated`: the publisher selects which reviews to show. Rating-based selection is curation.
   - `undisclosed`: the publisher does not state its practice.
 - `url` *(recommended)*: the human-readable policy page. RECOMMENDED for `moderated`, REQUIRED for `curated`. Check: REV-W-002.
-- `solicitation` *(optional)*: how reviews are invited. `post_purchase`, `on_page`, `third_party_program`, `none`, `undisclosed`.
+- `solicitation` *(optional)*: how reviews are invited.
+  - `post_purchase`: invited after a completed order.
+  - `on_page`: a form on the product page, open to anyone.
+  - `third_party_program`: a platform's own invitation scheme.
+  - `none`: reviews are not invited.
+  - `undisclosed`: the publisher does not state its practice.
 
 Checks: REV-E-002 (absent, or `collection` outside the enum).
 
@@ -80,7 +85,7 @@ Each entry is a Schema.org `Review` carrying:
 - `reviewBody` *(optional)*: the review text as written. Not edited, not translated (see "Language"), not truncated. A publisher that shortens text for display carries the full text here.
 - `name` *(optional)*: the review's title, as written.
 - `inLanguage` *(required when `reviewBody` or `name` is present)*: the language of the text as written.
-- `author` *(recommended)*: a `Person` with `name` as displayed. No other personal data. A publisher that shows reviews anonymously omits `author` and says so through `pagefront:reviewSource`. Check: REV-W-005 (`author` carrying `email`, `telephone`, `address`).
+- `author` *(recommended)*: a `Person` with `name` as displayed. No other personal data. A publisher that shows reviews anonymously omits `author`. Check: REV-W-005 (`author` carrying `email`, `telephone`, `address`).
 - `itemReviewed` *(optional)*: on a sheet whose `about` is a `ProductGroup`, the variant the author **bought**, as a `Product` reference with `@id`. It is purchase data, not the author's claim: it MAY be present only when `pagefront:purchaseVerification` is `order_matched` or `post_purchase_invitation`, where the publisher knows the order line. It does not narrow the review's subject, which stays the group; it gives `fit`, `size`-shaped and `appearance` aspects the context they need ("runs small" means nothing without the size bought). Otherwise omitted. Check: REV-W-012.
 - `associatedMedia` *(optional)*: author-submitted photos and videos, as `ImageObject`/`VideoObject`. This closes open question #18 of the Product Sheet spec: user-generated media rides on the review that carries its trust declarations, and never in the Product Sheet's `image` or `video`.
 - `comment` *(optional)*: the publisher's reply, as a `Comment` with `text`, `dateCreated`, and `author` an `Organization`. One reply per review in this version.
@@ -99,8 +104,13 @@ Four declarations, each REQUIRED on every entry. The rationale is in "Undisclose
 Check: REV-E-005 (absent or outside the enum).
 
 **`pagefront:reviewSource`** — where the review entered the publisher's possession. One `pagefront:ReviewSource`:
-- `@type: pagefront:ReviewSource` *(required)*
-- `kind` *(required)*: `first_party` (collected by the publisher on its own surface), `third_party` (a review platform the publisher uses: collection and hosting by another party), `marketplace` (collected on a marketplace listing of the same product), `imported` (origin not retained), `undisclosed`.
+- `@type: pagefront:ReviewSource` *(required)*. Check: REV-E-013.
+- `kind` *(required)*: one of:
+  - `first_party`: collected by the publisher on its own surface.
+  - `third_party`: a review platform the publisher uses: collection and hosting by another party.
+  - `marketplace`: collected on a marketplace listing of the same product.
+  - `imported`: origin not retained.
+  - `undisclosed`.
 - `name` *(required for `third_party` and `marketplace`)*: the platform's name.
 - `url` *(recommended for `third_party` and `marketplace`)*: the review on the source platform. This is the one field a consumer can follow to check the review exists outside the publisher's control.
 
@@ -217,7 +227,7 @@ A review is in its author's language, declared in its own `inLanguage`. A review
 
 The review sheet is never a root. It is not in `hasOfferCatalog` and no entry-point carrier names it. A consumer reaches it one of two ways:
 
-**By reference.** From the subject's sheet: `subjectOf[].pagefront:sheetUrl` on the Product Group Sheet (or standalone Product Sheet) and on the Organization Sheet, under "Traversal hints" in Pagefront Discovery ([`../../core/spec/discovery.md`](../../core/spec/discovery.md#traversal-hints-normative)). The hint is confirmed by exact `@id` match at the fetched sheet. Attribution chains from the subject's sheet, which the consumer reached by declaration; the review sheet's `@id` host and `pagefront:sheetUrl` host MUST equal the subject sheet's canonical host. Check, on the product and organization side: PDP-W-0xx / ORG-W-0xx (reserved), a `subjectOf` hint off-host.
+**By reference.** From the subject's sheet: `subjectOf[].pagefront:sheetUrl` on the Product Group Sheet (or standalone Product Sheet) and on the Organization Sheet, under "Traversal hints" in Pagefront Discovery ([`../../core/spec/discovery.md`](../../core/spec/discovery.md#traversal-hints-normative)). The hint is confirmed by exact `@id` match at the fetched sheet. Attribution chains from the subject's sheet, which the consumer reached by declaration. The `pagefront:sheetUrl` on the `subjectOf` entry MUST be on the canonical host of the referencing sheet, as on every other edge; the fetched sheet's data-block `@id` is confirmed against the entry's `@id` by exact string. Check, on the product and organization side: PDP-W-0xx / ORG-W-0xx (reserved), a `subjectOf` hint off-host.
 
 **By page.** The page named in `canonical_url` declares the review sheet with its own `Link: rel="alternate"; type="application/pagefront+json"` and HTML `<link>` fallback, with `profile` naming this spec's schema. On a product page that is the second Pagefront link after the Product Sheet's, in that order, under "Several Sheets for one page" in Pagefront Discovery; a consumer picks the review link by `profile` from the header, or by fetching and reading `$schema` from the elements. This is also the fallback path when the hint is stale. A publisher that renders reviews on a dedicated page declares the review sheet there instead, and the product page keeps only the Product Sheet link.
 
@@ -245,7 +255,7 @@ This spec requires Pagefront Discovery 0.2.0 or later.
 
 Review `@id` is the exact-string identity key, as everywhere in the format. A producer MUST emit the identical `@id` for a review across fetches and across language sheets. Where `pagefront:reviewSource.kind` is `third_party` or `marketplace`, the `@id` SHOULD be derived from the platform's own review identifier so that two publishers syndicating the same review emit the same `@id`.
 
-**Host.** The `about` reference and the `pagefront:sheetUrl` on it share the canonical host, as members and parents do in the Collection Sheet. Check: REV-E-009.
+**Host.** The `pagefront:sheetUrl` on the `about` reference MUST be on the canonical host, as a member's or a parent's is in the Collection Sheet; the fetched sheet's data-block `@id` is confirmed against the reference's `@id` by exact string. Check: REV-E-009.
 
 ## What this spec does not do
 
@@ -284,6 +294,7 @@ Codes reserved here; definitions and fixtures in [`rules.md`](rules.md) when the
 - **REV-E-010** a review entry whose `author` is an `Organization`.
 - **REV-E-011** `workTranslation` or `translationOfWork` on a review entry.
 - **REV-E-012** `pagefront:reviewSubject` other than `seller` on a sheet whose `about` is an `Organization`.
+- **REV-E-013** a `pagefront:reviewPolicy` or `pagefront:reviewSource` value without `@type`, or with an `@type` other than `pagefront:ReviewPolicy` or `pagefront:ReviewSource` respectively.
 - **REV-W-001** `itemListElement` is empty (review; no failure).
 - **REV-W-002** `collection: curated` without `url`.
 - **REV-W-003** the same review `@id` twice.
@@ -390,7 +401,7 @@ Three reviews, three trust profiles. The first is a matched order (so the varian
 
 ## Vocabulary additions
 
-To be added to [`vocabulary.md`](vocabulary.md) on ratification. Types: `pagefront:ReviewPolicy`, `pagefront:ReviewSource`, `pagefront:ReviewAspect`. Properties: `pagefront:reviewPolicy`, `pagefront:reviewSubject`, `pagefront:reviewSource`, `pagefront:purchaseVerification`, `pagefront:reviewIncentive`, `pagefront:aspect`, `pagefront:aspectSource`. The "Aggregate rating" entry under "Schema.org-native patterns" gains a sentence scoping `aggregateRating` to `product`-subject reviews and pointing here.
+The types `pagefront:ReviewPolicy`, `pagefront:ReviewSource` and `pagefront:ReviewAspect`, the properties `pagefront:reviewPolicy`, `pagefront:reviewSubject`, `pagefront:reviewSource`, `pagefront:purchaseVerification`, `pagefront:reviewIncentive`, `pagefront:aspect` and `pagefront:aspectSource`, the extension of `pagefront:sheetUrl` to the `subjectOf` edge, the "Consumer reviews" entry under "Schema.org-native patterns" and the sentence added to "Aggregate rating" are in [`vocabulary.md`](vocabulary.md), release 0.6.0. The enum meanings are normative here and mirrored verbatim there; the two are kept identical.
 
 ## References
 

@@ -1,0 +1,40 @@
+{
+  "sheet": "https://merchant.example/products/aurora-jumper",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.6.0",
+  "sheet_spec_version": "0.1.0",
+  "catalogue_version": "0.21.0",
+  "findings": [
+    {
+      "rule": "REV-E-013",
+      "severity": "error",
+      "path": "$['data']['itemListElement'][1]['pagefront:reviewSource']",
+      "values": {
+        "field": "pagefront:reviewSource",
+        "problem": "declares `@type` `pagefront:Source`, which is not `pagefront:ReviewSource`"
+      },
+      "message": "`pagefront:reviewSource` at `$['data']['itemListElement'][1]['pagefront:reviewSource']` declares `@type` `pagefront:Source`, which is not `pagefront:ReviewSource`.",
+      "remediation": "Give the policy `@type` `pagefront:ReviewPolicy` and every source `@type` `pagefront:ReviewSource`."
+    },
+    {
+      "rule": "REV-E-013",
+      "severity": "error",
+      "path": "$['data']['pagefront:reviewPolicy']",
+      "values": {
+        "field": "pagefront:reviewPolicy",
+        "problem": "declares `@type` `ReviewPolicy`, which is not `pagefront:ReviewPolicy`"
+      },
+      "message": "`pagefront:reviewPolicy` at `$['data']['pagefront:reviewPolicy']` declares `@type` `ReviewPolicy`, which is not `pagefront:ReviewPolicy`.",
+      "remediation": "Give the policy `@type` `pagefront:ReviewPolicy` and every source `@type` `pagefront:ReviewSource`."
+    }
+  ],
+  "summary": {
+    "errors": 2,
+    "warnings": 0,
+    "info": 0,
+    "rules_fired": [
+      "REV-E-013"
+    ]
+  }
+}

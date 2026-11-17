@@ -665,7 +665,7 @@ The closed enum for `pagefront:reviewSubject` on a `Review` entry: what the auth
 - `product`: the product's intrinsic qualities.
 - `seller`: the transaction: delivery, service, returns, packaging, payment.
 - `mixed`: both, in one text.
-- `unclassified`: the publisher has not determined the subject. Distinct from `undisclosed`: the text is knowable, no one has read it for this purpose. A consumer treats it as `mixed` for every aggregate; never emitted beside `pagefront:aspect` entries.
+- `unclassified`: the publisher has not determined the subject. Distinct from `undisclosed`: the text is in the publisher's hands and the fact is knowable; `unclassified` says no one, human or classifier, has read it for this purpose. A consumer treats it as `mixed` for every aggregate. A producer MUST NOT emit it on a review it has classified, and MUST NOT emit it alongside `pagefront:aspect` entries (aspects are a classification).
 
 ### Review sources
 
@@ -683,15 +683,15 @@ The closed enum for `pagefront:purchaseVerification`: how the review was tied to
 
 - `none`: no link to a purchase was established.
 - `order_matched`: the publisher matched the author to an order for the subject in its own records.
-- `post_purchase_invitation`: the review was written in response to an invitation sent after a purchase.
-- `platform_verified`: a third-party platform asserts the purchase under its own scheme.
+- `post_purchase_invitation`: the review was written in response to an invitation sent after a purchase; the invitation establishes the purchase.
+- `platform_verified`: a third-party platform asserts the purchase under its own scheme; `pagefront:reviewSource.kind` is then `third_party` or `marketplace`.
 - `undisclosed`.
 
 ### Review incentives
 
 The closed enum for `pagefront:reviewIncentive`: what the author received for the review.
 
-- `none`.
+- `none`
 - `discount`: a voucher, coupon or future credit.
 - `free_product`: the subject, or another product, at no charge.
 - `sample_program`: membership of a scheme that supplies products for review.
@@ -699,7 +699,12 @@ The closed enum for `pagefront:reviewIncentive`: what the author received for th
 
 ### Review aspects
 
-The closed enum for `aspect` on `pagefront:ReviewAspect`, split along the subject line. Product-side: `quality`, `fit`, `durability`, `value`, `ease_of_use`, `appearance`, `as_described`, `performance`, `comfort`, `taste`. Seller-side: `delivery`, `customer_service`, `returns`, `packaging`, `payment`, `communication`. Finer, vertical-specific aspects go in Schema.org's free-text `reviewAspect`. Additional values require a spec amendment.
+The closed enum for `aspect` on `pagefront:ReviewAspect`, split along the subject line:
+
+- product: `quality`, `fit`, `durability`, `value`, `ease_of_use`, `appearance`, `as_described`, `performance`, `comfort`, `taste`
+- seller: `delivery`, `customer_service`, `returns`, `packaging`, `payment`, `communication`
+
+The list is closed and final for this version. A publisher with finer aspects (`scent`, `battery_life`, `noise`) carries them in Schema.org's free-text `reviewAspect` beside the closed list, and a consumer treats those as opaque strings. Additional values require a spec amendment.
 
 ### Aspect sources
 
@@ -707,7 +712,7 @@ The closed enum for `pagefront:aspectSource`: who assigned the aspects.
 
 - `author`: the author chose or rated them on a form.
 - `publisher`: the publisher tagged them by hand.
-- `inferred`: a classifier assigned them.
+- `inferred`: a classifier.
 
 ## Schema.org-native patterns
 

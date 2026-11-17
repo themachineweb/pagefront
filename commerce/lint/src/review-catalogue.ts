@@ -12,6 +12,7 @@ import { revE009 } from "./rules/rev-e-009.js";
 import { revE010 } from "./rules/rev-e-010.js";
 import { revE011 } from "./rules/rev-e-011.js";
 import { revE012 } from "./rules/rev-e-012.js";
+import { revE013 } from "./rules/rev-e-013.js";
 import { revW001 } from "./rules/rev-w-001.js";
 import { revW002 } from "./rules/rev-w-002.js";
 import { revW003 } from "./rules/rev-w-003.js";
@@ -46,5 +47,5 @@ export const reviewCatalogue: Catalogue = {
   vertical: "commerce",
   releases: KNOWN_RELEASES,
   catalogueVersion: "0.21.0",
-  rules: [revE001, revE002, revE003, revE004, revE005, revE006, revE007, revE008, revE009, revE010, revE011, revE012, revW001, revW002, revW003, revW004, revW005, revW006, revW007, revW008, revW009, revW010, revW011, revW012, revW013, revW014],
+  rules: [revE001, revE002, revE003, revE004, revE005, revE006, revE007, revE008, revE009, revE010, revE011, revE012, revE013, revW001, revW002, revW003, revW004, revW005, revW006, revW007, revW008, revW009, revW010, revW011, revW012, revW013, revW014],
 };
