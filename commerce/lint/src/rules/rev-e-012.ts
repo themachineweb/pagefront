@@ -6,8 +6,9 @@ import { asRecord, isOrganizationSubject, reviewEntries, reviewId } from "./rev-
  * Transcribed from commerce/spec/rules.md (normative).
  *
  * An Organization review sheet carries the reviews collected about the
- * seller as a seller; every entry's subject is `seller` ("The
- * Organization review sheet" in review.md). Entries whose subject is
+ * seller as a seller, classified by where it was collected; every
+ * entry's subject is `seller`, and a `product`, `mixed` or `unclassified`
+ * one is an error ("The Organization review sheet" in review.md). Entries whose subject is
  * absent or not a string are REV-E-005's. One finding per entry, at its
  * `pagefront:reviewSubject`.
  */
@@ -29,7 +30,7 @@ export const revE012: Rule = {
   },
   messageTemplate: "Review `{id}` at `{path}` declares `pagefront:reviewSubject` `{subject}` on an Organization review sheet.",
   remediation:
-    "An Organization review sheet carries `seller`-subject reviews only. A review about a product, or a mixed one, stays in the review sheet of the product it was published on.",
+    "An Organization review sheet carries `seller`-subject reviews only, classified by where they were collected. A review about a product, or a mixed one, stays in the review sheet of the product it was published on.",
   introduced: "release 0.6.0",
   appliesFrom: "0.6.0",
   specReference: "review.md#the-organization-review-sheet",

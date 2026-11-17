@@ -531,7 +531,7 @@ Used on a `Review` entry of a Commerce Review Sheet (see [`review.md`](review.md
 
 ### pagefront:reviewSubject
 
-Used on a `Review` entry of a Commerce Review Sheet (see [`review.md`](review.md)) to declare what the author is writing about. Value is a single string from the closed Review subjects enum (see "Enumerated values"). Required on every entry; not used elsewhere. Added with the Commerce Review Sheet.
+Used on a `Review` entry of a Commerce Review Sheet (see [`review.md`](review.md)) to declare what the author is writing about. Value is a single string from the closed Review subjects enum (see "Enumerated values"), `unclassified` where the publisher has not determined it. Required on every entry; not used elsewhere. Added with the Commerce Review Sheet.
 
 ### pagefront:safetyNotice
 
@@ -650,6 +650,7 @@ The closed enum for `pagefront:reviewSubject` on a `Review` entry: what the auth
 - `product`: the product's intrinsic qualities.
 - `seller`: the transaction: delivery, service, returns, packaging, payment.
 - `mixed`: both, in one text.
+- `unclassified`: the publisher has not determined the subject. Distinct from `undisclosed`: the text is knowable, no one has read it for this purpose. A consumer treats it as `mixed` for every aggregate; never emitted beside `pagefront:aspect` entries.
 
 ### Review sources
 

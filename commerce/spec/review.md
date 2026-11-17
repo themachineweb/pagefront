@@ -94,6 +94,7 @@ Four declarations, each REQUIRED on every entry. The rationale is in "Undisclose
 - `product`: the product's intrinsic qualities.
 - `seller`: the transaction: delivery, service, returns, packaging, payment.
 - `mixed`: both, in one text.
+- `unclassified`: the publisher has not determined the subject. Distinct from `undisclosed`: the text is in the publisher's hands and the fact is knowable; `unclassified` says no one, human or classifier, has read it for this purpose. A consumer treats it as `mixed` for every aggregate. A producer MUST NOT emit it on a review it has classified, and MUST NOT emit it alongside `pagefront:aspect` entries (aspects are a classification). Check: REV-W-014. [why](review-notes.md#why-the-word-is-unclassified)
 
 Check: REV-E-005 (absent or outside the enum).
 
@@ -140,7 +141,7 @@ Consistency: a review whose `pagefront:reviewSubject` is `product` and whose asp
 
 ## Undisclosed is a statement
 
-Each of the four declarations, and `pagefront:reviewPolicy.collection`, has three states: [why](review-notes.md#why-undisclosed-is-a-statement)
+Each of the three provenance declarations (`pagefront:reviewSource.kind`, `pagefront:purchaseVerification`, `pagefront:incentive`), and `pagefront:reviewPolicy`'s `collection` and `solicitation`, has three states: [why](review-notes.md#why-undisclosed-is-a-statement)
 
 | State | Meaning | Linter |
 |---|---|---|
@@ -150,15 +151,19 @@ Each of the four declarations, and `pagefront:reviewPolicy.collection`, has thre
 
 `undisclosed` is not a default and a producer MUST NOT emit it where it holds the fact. A publisher that imports a review set without its metadata emits `undisclosed`, and is conformant; a consumer reads `undisclosed` as a reason to discount, and reads absence as a broken sheet.
 
+`pagefront:reviewSubject` has the same three states, with `unclassified` as the middle word. The word differs because the unknown differs: provenance is lost if it was not recorded when the review arrived, and `undisclosed` says so; the subject is recoverable from the text at any time, so a publisher is never unable to classify a review, it has only not done so yet, and `unclassified` says that.
+
+**The minimum entry** is `@id`, `datePublished`, `reviewRating`, and the four declarations as `undisclosed`, `undisclosed`, `undisclosed`, `unclassified`. It is conformant, it contributes to no product aggregate, and it tells a consumer exactly what it is. Messy sets are the common case, and the format carries them without pretending otherwise.
+
 ## Scoping the aggregate
 
-A Product Sheet's `aggregateRating` SHOULD be computed over reviews whose `pagefront:reviewSubject` is `product` only. `mixed` reviews are excluded from the product aggregate unless the publisher has a product-side `pagefront:aspect` rating for them, in which case that rating MAY be used. Seller-subject reviews contribute to `aggregateRating` on the Organization Sheet and nowhere else.
+A Product Sheet's `aggregateRating` SHOULD be computed over reviews whose `pagefront:reviewSubject` is `product` only. `mixed` reviews are excluded from the product aggregate unless the publisher has a product-side `pagefront:aspect` rating for them, in which case that rating MAY be used. `unclassified` reviews are excluded from the product aggregate. Seller-subject reviews contribute to `aggregateRating` on the Organization Sheet and nowhere else.
 
-A publisher that cannot separate the two carries its blended aggregate on the Product Sheet and sets `pagefront:reviewPolicy.collection` honestly; the blend is the known limitation vocabulary.md already names, and a consumer with this sheet can recompute.
+A publisher that cannot separate the two carries its blended aggregate on the Product Sheet and sets `pagefront:reviewPolicy.collection` honestly; the blend is the known limitation vocabulary.md already names, and a consumer with this sheet can recompute. A publisher that classifies nothing has a product aggregate over nothing, which is the honest result; it MAY still carry a blended `aggregateRating` under the paragraph above, and a consumer holding the review sheet sees that every entry is `unclassified` and discounts accordingly.
 
 ## The Organization review sheet
 
-The Organization Sheet has a review sheet of its own, `about` the `Organization`, reached through `subjectOf` on the Organization Sheet. It carries the reviews collected about the seller as a seller: a merchant-reviews platform's set, a store's own post-purchase service survey, a marketplace's seller feedback. Every entry has `pagefront:reviewSubject: seller`; a `product` or `mixed` entry on an Organization review sheet is an error. Check: REV-E-012. Aspects on it are seller-side.
+The Organization Sheet has a review sheet of its own, `about` the `Organization`, reached through `subjectOf` on the Organization Sheet. It carries the reviews collected about the seller as a seller: a merchant-reviews platform's set, a store's own post-purchase service survey, a marketplace's seller feedback. Every entry has `pagefront:reviewSubject: seller`; a `product`, `mixed` or `unclassified` entry on an Organization review sheet is an error: a review collected about the seller as a seller is classified by where it was collected. Check: REV-E-012. Aspects on it are seller-side.
 
 The Organization Sheet's `aggregateRating` is computed over its own review sheet. Seller-subject reviews that were posted on a product page stay in the product group's review sheet, where they were published, with `reviewSubject: seller` or `mixed`; they are excluded from the product aggregate (above) and a publisher MAY additionally carry them in the Organization review sheet under the same `@id`. A consumer merging the two deduplicates on `@id`.
 
@@ -291,6 +296,7 @@ Codes reserved here; definitions and fixtures in [`rules.md`](rules.md) when the
 - **REV-W-011** `associatedMedia` on a review whose `pagefront:reviewSource.kind` is `imported` (media provenance is weaker than text provenance).
 - **REV-W-012** `itemReviewed` present with `pagefront:purchaseVerification` other than `order_matched` or `post_purchase_invitation`, or present on a sheet whose `about` is not a `ProductGroup`.
 - **REV-W-013** `numberOfItems` differs from the length of `itemListElement`.
+- **REV-W-014** `pagefront:reviewSubject: unclassified` alongside `pagefront:aspect` entries.
 
 ## Worked example
 
@@ -369,16 +375,16 @@ Codes reserved here; definitions and fixtures in [`rules.md`](rules.md) when the
       "@id": "https://merchant.com/reviews/r-88102",
       "datePublished": "2026-11-02",
       "reviewRating": { "@type": "Rating", "ratingValue": 4 },
-      "pagefront:reviewSubject": "product",
-      "pagefront:reviewSource": { "kind": "first_party" },
-      "pagefront:purchaseVerification": "post_purchase_invitation",
-      "pagefront:incentive": "discount"
+      "pagefront:reviewSubject": "unclassified",
+      "pagefront:reviewSource": { "kind": "imported" },
+      "pagefront:purchaseVerification": "undisclosed",
+      "pagefront:incentive": "undisclosed"
     }
   ]
 }
 ```
 
-Three reviews, three trust profiles. The first is a matched order (so the variant bought is known and carried) with a mixed subject and a per-aspect split that lets a consumer keep the 5 for quality and drop the delivery complaint from the product score. The second is syndicated, platform-verified, checkable at its source URL, and the publisher does not know whether the platform paid for it. The third is a rating with no text, invited after purchase, for a discount: everything an agent needs to weight it accordingly.
+Three reviews, three trust profiles. The first is a matched order (so the variant bought is known and carried) with a mixed subject and a per-aspect split that lets a consumer keep the 5 for quality and drop the delivery complaint from the product score. The second is syndicated, platform-verified, checkable at its source URL, and the publisher does not know whether the platform paid for it. The third is the minimum entry: an imported star rating, nothing known about its provenance, nothing classified; conformant, it counts toward `ratingCount` and enters no aggregate. Everything an agent needs to weight each accordingly.
 
 ## Vocabulary additions
 

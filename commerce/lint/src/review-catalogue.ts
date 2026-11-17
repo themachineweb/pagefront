@@ -25,6 +25,7 @@ import { revW010 } from "./rules/rev-w-010.js";
 import { revW011 } from "./rules/rev-w-011.js";
 import { revW012 } from "./rules/rev-w-012.js";
 import { revW013 } from "./rules/rev-w-013.js";
+import { revW014 } from "./rules/rev-w-014.js";
 
 /**
  * The Commerce Review Sheet rule catalogue — the executable form of the
@@ -45,5 +46,5 @@ export const reviewCatalogue: Catalogue = {
   vertical: "commerce",
   releases: KNOWN_RELEASES,
   catalogueVersion: "0.21.0",
-  rules: [revE001, revE002, revE003, revE004, revE005, revE006, revE007, revE008, revE009, revE010, revE011, revE012, revW001, revW002, revW003, revW004, revW005, revW006, revW007, revW008, revW009, revW010, revW011, revW012, revW013],
+  rules: [revE001, revE002, revE003, revE004, revE005, revE006, revE007, revE008, revE009, revE010, revE011, revE012, revW001, revW002, revW003, revW004, revW005, revW006, revW007, revW008, revW009, revW010, revW011, revW012, revW013, revW014],
 };

@@ -1,0 +1,85 @@
+{
+  "$schema": "https://themachineweb.org/pagefront/spec/commerce/review/v0.1.0.json",
+  "release": "0.6.0",
+  "schema_org_version": "30.0",
+  "canonical_url": "https://merchant.example/about",
+  "sheet_url": "https://merchant.example/pagefront/commerce/review/merchant.en.json",
+  "generated_at": "2026-11-17T00:00:00Z",
+  "expires_at": "2026-11-18T00:00:00Z",
+  "data": {
+    "@context": [
+      "https://schema.org",
+      {
+        "pagefront": "https://themachineweb.org/pagefront/vocabulary/"
+      }
+    ],
+    "@type": "ItemList",
+    "@id": "https://merchant.example/about#reviews",
+    "name": "Customer reviews of the shop",
+    "inLanguage": "en",
+    "numberOfItems": 2,
+    "about": {
+      "@type": "Organization",
+      "@id": "https://merchant.example/#organization",
+      "url": "https://merchant.example/about",
+      "pagefront:sheetUrl": "https://merchant.example/pagefront/commerce/organization/merchant.en.json"
+    },
+    "pagefront:reviewPolicy": {
+      "@type": "pagefront:ReviewPolicy",
+      "collection": "moderated",
+      "url": "https://merchant.example/help/review-policy",
+      "solicitation": "post_purchase"
+    },
+    "itemListElement": [
+      {
+        "@type": "Review",
+        "@id": "https://merchant.example/reviews/s-1001",
+        "datePublished": "2026-11-10",
+        "inLanguage": "en",
+        "reviewBody": "Shipped the next day, well packed.",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": 5
+        },
+        "author": {
+          "@type": "Person",
+          "name": "Ines B."
+        },
+        "pagefront:reviewSubject": "seller",
+        "pagefront:reviewSource": {
+          "kind": "first_party"
+        },
+        "pagefront:purchaseVerification": "post_purchase_invitation",
+        "pagefront:incentive": "none",
+        "pagefront:aspectSource": "author",
+        "pagefront:aspect": [
+          {
+            "@type": "pagefront:ReviewAspect",
+            "aspect": "delivery",
+            "ratingValue": 5
+          },
+          {
+            "@type": "pagefront:ReviewAspect",
+            "aspect": "packaging",
+            "ratingValue": 5
+          }
+        ]
+      },
+      {
+        "@type": "Review",
+        "@id": "https://merchant.example/reviews/s-1002",
+        "datePublished": "2026-11-04",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": 4
+        },
+        "pagefront:reviewSubject": "unclassified",
+        "pagefront:reviewSource": {
+          "kind": "first_party"
+        },
+        "pagefront:purchaseVerification": "post_purchase_invitation",
+        "pagefront:incentive": "none"
+      }
+    ]
+  }
+}

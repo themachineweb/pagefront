@@ -12,10 +12,10 @@
       "path": "$['data']['itemListElement'][2]['pagefront:reviewSubject']",
       "values": {
         "id": "https://merchant.example/reviews/r-88102",
-        "problem": "`service`, which is not one of `product`, `seller`, `mixed`"
+        "problem": "`service`, which is not one of `product`, `seller`, `mixed`, `unclassified`"
       },
-      "message": "`pagefront:reviewSubject` on review `https://merchant.example/reviews/r-88102` at `$['data']['itemListElement'][2]['pagefront:reviewSubject']` is `service`, which is not one of `product`, `seller`, `mixed`.",
-      "remediation": "Declare `pagefront:reviewSubject` on every review as `product` (the product's intrinsic qualities), `seller` (the transaction) or `mixed` (both in one text). Additional values require a spec amendment."
+      "message": "`pagefront:reviewSubject` on review `https://merchant.example/reviews/r-88102` at `$['data']['itemListElement'][2]['pagefront:reviewSubject']` is `service`, which is not one of `product`, `seller`, `mixed`, `unclassified`.",
+      "remediation": "Declare `pagefront:reviewSubject` on every review as `product` (the product's intrinsic qualities), `seller` (the transaction), `mixed` (both in one text) or `unclassified` (no one has read it for its subject). Additional values require a spec amendment."
     }
   ],
   "summary": {

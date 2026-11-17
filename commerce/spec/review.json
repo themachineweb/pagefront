@@ -358,7 +358,8 @@
       "enum": [
         "product",
         "seller",
-        "mixed"
+        "mixed",
+        "unclassified"
       ]
     },
     "reviewSource": {
