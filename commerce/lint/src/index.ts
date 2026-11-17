@@ -5,7 +5,7 @@
  * else: `lintSheet` (Layer 2 only, for already-validated Sheets),
  * `validateAndLint` (Layer 1 → Layer 2, the CLI's own pipeline),
  * `validateOrganizationSheet` (Layer 1 for the Commerce Organization
- * Sheet alone), the three page-type catalogue objects, and the types
+ * Sheet alone), the four page-type catalogue objects, and the types
  * those signatures mention.
  * The bundled schemas (`generated/`), the compiled validators and the
  * individual rule modules are internal. The release manifest
@@ -22,6 +22,7 @@ export type { ValidateOrganizationResult } from "./validate-organization.js";
 export { commerceCatalogue } from "./catalogue.js";
 export { organizationCatalogue } from "./organization-catalogue.js";
 export { collectionCatalogue } from "./collection-catalogue.js";
+export { reviewCatalogue } from "./review-catalogue.js";
 export { detectSheetType, detectSheetLine } from "./sheet-type.js";
 export type { SheetType, SheetLine } from "./sheet-type.js";
 export {

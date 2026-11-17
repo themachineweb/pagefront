@@ -1,0 +1,29 @@
+{
+  "sheet": "https://merchant.example/products/aurora-jumper",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.6.0",
+  "sheet_spec_version": "0.1.0",
+  "catalogue_version": "0.21.0",
+  "findings": [
+    {
+      "rule": "REV-E-008",
+      "severity": "error",
+      "path": "$['data']['itemListElement'][2]",
+      "values": {
+        "id": "https://merchant.example/reviews/r-88102",
+        "problem": "absent"
+      },
+      "message": "`pagefront:incentive` on review `https://merchant.example/reviews/r-88102` at `$['data']['itemListElement'][2]` is absent.",
+      "remediation": "Declare `pagefront:incentive` on every review as `none`, `discount`, `free_product`, `sample_program` or `undisclosed`; a publisher that does not know writes `undisclosed`, never nothing."
+    }
+  ],
+  "summary": {
+    "errors": 1,
+    "warnings": 0,
+    "info": 0,
+    "rules_fired": [
+      "REV-E-008"
+    ]
+  }
+}

@@ -48,6 +48,13 @@ conformance by producing structurally identical reports for these inputs.
   `commerce/spec/collection.json`, which equals the frozen
   `commerce/schemas/collection/v0.1.0.json`. Production never reads the
   hook: it keeps the bundled manifest and the compiled validators.
+- The review fixtures (`fixtures/rev-*/`) declare release 0.6.0 and run
+  against the test manifest, whose 0.6.0 row resolves Review Sheet spec
+  0.1.0 to the editable head `commerce/spec/review.json`;
+  `review.test.mjs` validates the worked example of `review.md` at Layer 1
+  against that head. The sheet-type dispatch routes them to the review
+  catalogue. Their sheets are the worked example on `merchant.example`,
+  with a fictional review platform at `reviews.example`.
 - The purchase-host fixtures (PDP-W-041 and ORG-W-008) declare release
   0.6.0 too; the test manifest's 0.6.0 row also resolves Organization
   Sheet spec 0.6.0 to the editable head `commerce/spec/organization.json`,

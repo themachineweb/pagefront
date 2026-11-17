@@ -1,0 +1,29 @@
+{
+  "sheet": "https://merchant.example/products/aurora-jumper",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.6.0",
+  "sheet_spec_version": "0.1.0",
+  "catalogue_version": "0.21.0",
+  "findings": [
+    {
+      "rule": "REV-W-012",
+      "severity": "warning",
+      "path": "$['data']['itemListElement'][0]['itemReviewed']",
+      "values": {
+        "id": "https://merchant.example/reviews/r-88213",
+        "problem": "with `pagefront:purchaseVerification` `none`"
+      },
+      "message": "Review `https://merchant.example/reviews/r-88213` at `$['data']['itemListElement'][0]['itemReviewed']` carries `itemReviewed` with `pagefront:purchaseVerification` `none`.",
+      "remediation": "Carry `itemReviewed` only where the publisher knows the order line (`order_matched` or `post_purchase_invitation`) and the subject is a `ProductGroup`; otherwise leave it out. It is purchase data, never the author's claim."
+    }
+  ],
+  "summary": {
+    "errors": 0,
+    "warnings": 1,
+    "info": 0,
+    "rules_fired": [
+      "REV-W-012"
+    ]
+  }
+}

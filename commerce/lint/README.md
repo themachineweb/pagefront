@@ -20,21 +20,23 @@ pagefront-lint-commerce <sheet-url-or-path> [options]
 The CLI validates Layer 1 (JSON Schema) first; a failing Sheet gets its
 schema errors on stderr and no report. Exit codes: `0` nothing
 blocking, `1` Layer 1 failure or blocking findings, `2` operational
-failure. The three commerce page types are handled: product sheets,
-Commerce Organization Sheets and Commerce Collection Sheets each validate
+failure. The four commerce page types are handled: product sheets,
+Commerce Organization Sheets, Commerce Collection Sheets and Commerce
+Review Sheets each validate
 against their own schema and lint with their own catalogue, dispatched by
 sheet type.
 
 ## Catalogue
 
-Catalogue 0.20.1, supporting commerce releases 0.5.0 (Product Sheet spec
+Catalogue 0.21.0, supporting commerce releases 0.5.0 (Product Sheet spec
 0.11.0, Organization Sheet spec 0.5.0, Collection Sheet spec 0.1.0), 0.4.0
 (Product Sheet spec 0.10.0, Organization Sheet spec 0.4.0) and 0.3.0, and the
 legacy draft line (format 0.9): 64 product rules (`PDP-E-001` to `PDP-E-022`, `PDP-W-001` to
 `PDP-W-041`, `PDP-I-001`), 12 organization rules (`ORG-E-001` to
-`ORG-E-004`, `ORG-W-001` to `ORG-W-008`) and 11 collection rules
+`ORG-E-004`, `ORG-W-001` to `ORG-W-008`), 11 collection rules
 (`COL-E-001` to `COL-E-005`, `COL-W-001`, `COL-W-002`, `COL-W-004` to
-`COL-W-007`; `COL-W-003` is reserved), each defined in
+`COL-W-007`; `COL-W-003` is reserved) and 25 review rules (`REV-E-001` to
+`REV-E-012`, `REV-W-001` to `REV-W-013`), each defined in
 [`rules.md`](https://github.com/themachineweb/pagefront/blob/main/commerce/spec/rules.md)
 with its target, check, message and remediation. Every report carries the
 `catalogue_version` it was produced with.
@@ -209,6 +211,29 @@ with the Commerce Collection Sheet spec
   no such schema (at `/format_version`).
 - New export: `collectionCatalogue`. `SheetType` gains `"collection"`.
 
+Added in 0.15.0 (catalogue 0.21.0), with the Commerce Review Sheet spec
+draft ([`review.md`](https://github.com/themachineweb/pagefront/blob/main/commerce/spec/review.md)).
+Requires `@pagefront/lint-core` 0.4.0, unchanged.
+
+- A fourth page type. A sheet whose `$schema` path contains
+  `/spec/commerce/review/`, or whose data block is an `ItemList` carrying
+  `pagefront:reviewPolicy`, lints with the review catalogue: `REV-E-001`
+  to `REV-E-012` (the subject, the policy, each entry's `@id` and rating,
+  the four declarations, the subject's sheet URL host, an organization
+  author, a translation, a product review on an Organization review
+  sheet) and `REV-W-001` to `REV-W-013` (the empty list, a curated set
+  without its policy page, a duplicate, a rating above 5 without its
+  scale, personal data on the author, the declarations' consistency with
+  one another, the aspects and their source, text without its language,
+  `itemReviewed` and `numberOfItems`). The rules apply from release 0.6.0,
+  the next release, and never to the legacy line.
+- Until a release bundles the Review Sheet spec, Layer 1 reports that the
+  declared release bundles no Review Sheet schema (one error at
+  `/release`), and a legacy-line sheet of that type that the legacy line
+  has no such schema (at `/format_version`).
+- New export: `reviewCatalogue`. `SheetType` gains `"review"`.
+- Every report carries `catalogue_version` 0.21.0; no other rule changes.
+
 Changed in 0.14.1 (catalogue 0.20.1). Requires `@pagefront/lint-core` 0.4.0,
 unchanged.
 
@@ -285,8 +310,11 @@ internal):
   `Organization`/`OnlineStore`/`OnlineBusiness` with
   `pagefront:commerceRole` present, or `"collection"` for a
   `/spec/commerce/collection/` path or a `Collection` data block with
-  `pagefront:collectionKind` present; `"product"` otherwise.
-- `commerceCatalogue`, `organizationCatalogue`, `collectionCatalogue` —
+  `pagefront:collectionKind` present, or `"review"` for a
+  `/spec/commerce/review/` path or an `ItemList` data block with
+  `pagefront:reviewPolicy` present; `"product"` otherwise.
+- `commerceCatalogue`, `organizationCatalogue`, `collectionCatalogue`,
+  `reviewCatalogue` —
   the per-page-type catalogue objects (read-only), for direct engine use
   or introspection. No page type's rules run on another page type's
   sheets.

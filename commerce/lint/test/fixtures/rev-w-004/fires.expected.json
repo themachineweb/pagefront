@@ -1,0 +1,29 @@
+{
+  "sheet": "https://merchant.example/products/aurora-jumper",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.6.0",
+  "sheet_spec_version": "0.1.0",
+  "catalogue_version": "0.21.0",
+  "findings": [
+    {
+      "rule": "REV-W-004",
+      "severity": "warning",
+      "path": "$['data']['itemListElement'][2]['reviewRating']",
+      "values": {
+        "id": "https://merchant.example/reviews/r-88102",
+        "value": "8"
+      },
+      "message": "Review `https://merchant.example/reviews/r-88102` at `$['data']['itemListElement'][2]['reviewRating']` rates `8` with no `bestRating`; a scale other than 1 to 5 declares its bounds.",
+      "remediation": "Add `bestRating` and `worstRating` to `reviewRating` wherever the scale is not 1 to 5."
+    }
+  ],
+  "summary": {
+    "errors": 0,
+    "warnings": 1,
+    "info": 0,
+    "rules_fired": [
+      "REV-W-004"
+    ]
+  }
+}

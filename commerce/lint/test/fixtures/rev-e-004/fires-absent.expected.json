@@ -1,0 +1,29 @@
+{
+  "sheet": "https://merchant.example/products/aurora-jumper",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.6.0",
+  "sheet_spec_version": "0.1.0",
+  "catalogue_version": "0.21.0",
+  "findings": [
+    {
+      "rule": "REV-E-004",
+      "severity": "error",
+      "path": "$['data']['itemListElement'][2]",
+      "values": {
+        "id": "https://merchant.example/reviews/r-88102",
+        "problem": "carries no `reviewRating`"
+      },
+      "message": "Review `https://merchant.example/reviews/r-88102` at `$['data']['itemListElement'][2]` carries no `reviewRating`.",
+      "remediation": "Carry `reviewRating` as a `Rating` with `ratingValue` on every review, with `bestRating` and `worstRating` where the scale is not 1 to 5. A review with no rating is left out of the sheet."
+    }
+  ],
+  "summary": {
+    "errors": 1,
+    "warnings": 0,
+    "info": 0,
+    "rules_fired": [
+      "REV-E-004"
+    ]
+  }
+}

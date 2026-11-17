@@ -40,8 +40,10 @@ const UNAVAILABLE_OFFERS = new Set(["pdp-e-022", "pdp-w-016", "pdp-w-028", "pdp-
 // in organization.md): their fixtures declare release 0.6.0, whose row in
 // the test manifest resolves both sheet specs to the editable heads.
 const PURCHASE_HOST = new Set(["pdp-w-041", "org-w-008"]);
+// The review rules (review.md): their fixtures declare release 0.6.0, whose
+// row in the test manifest bundles Review Sheet spec 0.1.0 ahead of its release.
 const runsAgainstTestManifest = (ruleDir) =>
-  ruleDir.startsWith("col-") || ruleDir === "org-w-007" || WHERE_TO_BUY.has(ruleDir) || UNAVAILABLE_OFFERS.has(ruleDir) || PURCHASE_HOST.has(ruleDir);
+  ruleDir.startsWith("col-") || ruleDir.startsWith("rev-") || ruleDir === "org-w-007" || WHERE_TO_BUY.has(ruleDir) || UNAVAILABLE_OFFERS.has(ruleDir) || PURCHASE_HOST.has(ruleDir);
 
 const ruleDirs = readdirSync(fixturesDir, { withFileTypes: true })
   .filter((entry) => entry.isDirectory())

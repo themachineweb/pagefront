@@ -3,6 +3,7 @@ import type { LintOptions, Report, Sheet } from "@pagefront/lint-core";
 import { commerceCatalogue } from "./catalogue.js";
 import { collectionCatalogue } from "./collection-catalogue.js";
 import { organizationCatalogue } from "./organization-catalogue.js";
+import { reviewCatalogue } from "./review-catalogue.js";
 import { detectSheetType } from "./sheet-type.js";
 import { PACKAGE_VERSION } from "./version.js";
 
@@ -10,7 +11,8 @@ import { PACKAGE_VERSION } from "./version.js";
  * Lint a Sheet against the commerce rule catalogue for its page type:
  * the product catalogue for product sheets, the organization catalogue
  * for Commerce Organization Sheets, the collection catalogue for
- * Commerce Collection Sheets, dispatched by sheet-type detection (see
+ * Commerce Collection Sheets, the review catalogue for Commerce Review
+ * Sheets, dispatched by sheet-type detection (see
  * sheet-type.ts). No page type's rules run on another page type's
  * sheets.
  *
@@ -25,6 +27,7 @@ export function lintSheet(sheet: Sheet, options?: LintOptions): Report {
   const catalogue =
     type === "organization" ? organizationCatalogue
     : type === "collection" ? collectionCatalogue
+    : type === "review" ? reviewCatalogue
     : commerceCatalogue;
   return lint(sheet, catalogue, opts);
 }

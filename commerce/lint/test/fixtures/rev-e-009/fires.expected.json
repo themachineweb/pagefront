@@ -1,0 +1,29 @@
+{
+  "sheet": "https://merchant.example/products/aurora-jumper",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.6.0",
+  "sheet_spec_version": "0.1.0",
+  "catalogue_version": "0.21.0",
+  "findings": [
+    {
+      "rule": "REV-E-009",
+      "severity": "error",
+      "path": "$['data']['about']['pagefront:sheetUrl']",
+      "values": {
+        "sheetUrlHost": "other.example",
+        "host": "merchant.example"
+      },
+      "message": "Sheet URL at `$['data']['about']['pagefront:sheetUrl']` is on host `other.example`; the canonical page is on `merchant.example`.",
+      "remediation": "Point the subject's `pagefront:sheetUrl` at its sheet on the storefront host, the host of `canonical_url`. A consumer rejects a hint off that host and falls back to the subject's `url`."
+    }
+  ],
+  "summary": {
+    "errors": 1,
+    "warnings": 0,
+    "info": 0,
+    "rules_fired": [
+      "REV-E-009"
+    ]
+  }
+}

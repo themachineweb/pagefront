@@ -16,8 +16,8 @@ import { colW007 } from "./rules/col-w-007.js";
  * The Commerce Collection Sheet rule catalogue — the executable form
  * of the "Commerce Collection Sheet rules" section of
  * commerce/spec/rules.md (normative). It shares rules.md's catalogue
- * version with the product and organization catalogues: one normative
- * document, one version, three page-type rule sets dispatched by sheet
+ * version with the product, organization and review catalogues: one
+ * normative document, one version, four page-type rule sets dispatched by sheet
  * type (see sheet-type.ts). No page type's rules run on another page
  * type's sheets.
  *
@@ -28,6 +28,6 @@ import { colW007 } from "./rules/col-w-007.js";
 export const collectionCatalogue: Catalogue = {
   vertical: "commerce",
   releases: KNOWN_RELEASES,
-  catalogueVersion: "0.20.1",
+  catalogueVersion: "0.21.0",
   rules: [colE001, colE002, colE003, colE004, colE005, colW001, colW002, colW004, colW005, colW006, colW007],
 };
