@@ -128,12 +128,12 @@
           "@type": "Rating",
           "ratingValue": 4
         },
-        "pagefront:reviewSubject": "product",
+        "pagefront:reviewSubject": "unclassified",
         "pagefront:reviewSource": {
           "@type": "pagefront:ReviewSource",
-          "kind": "first_party"
+          "kind": "imported"
         },
-        "pagefront:purchaseVerification": "post_purchase_invitation",
+        "pagefront:purchaseVerification": "undisclosed",
         "pagefront:reviewIncentive": "gift"
       }
     ]

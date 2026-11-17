@@ -133,8 +133,7 @@
           "@type": "pagefront:ReviewSource",
           "kind": "imported"
         },
-        "pagefront:reviewIncentive": "undisclosed",
-        "pagefront:purchaseVerification": "undisclosed"
+        "pagefront:reviewIncentive": "undisclosed"
       }
     ]
   }

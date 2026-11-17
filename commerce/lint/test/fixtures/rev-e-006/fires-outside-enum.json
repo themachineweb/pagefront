@@ -131,7 +131,7 @@
         "pagefront:reviewSubject": "unclassified",
         "pagefront:reviewSource": {
           "@type": "pagefront:ReviewSource",
-          "kind": "imported"
+          "kind": "syndicated"
         },
         "pagefront:purchaseVerification": "undisclosed",
         "pagefront:reviewIncentive": "undisclosed"

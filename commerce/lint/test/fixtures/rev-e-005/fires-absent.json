@@ -130,10 +130,10 @@
         },
         "pagefront:reviewSource": {
           "@type": "pagefront:ReviewSource",
-          "kind": "first_party"
+          "kind": "imported"
         },
-        "pagefront:purchaseVerification": "post_purchase_invitation",
-        "pagefront:reviewIncentive": "discount"
+        "pagefront:purchaseVerification": "undisclosed",
+        "pagefront:reviewIncentive": "undisclosed"
       }
     ]
   }

@@ -130,11 +130,7 @@
         },
         "pagefront:reviewSubject": "unclassified",
         "pagefront:purchaseVerification": "undisclosed",
-        "pagefront:reviewIncentive": "undisclosed",
-        "pagefront:reviewSource": {
-          "@type": "pagefront:ReviewSource",
-          "kind": "imported"
-        }
+        "pagefront:reviewIncentive": "undisclosed"
       }
     ]
   }

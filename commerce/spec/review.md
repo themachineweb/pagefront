@@ -79,8 +79,8 @@ Each entry is a Schema.org `Review` carrying:
 ### Schema.org-native
 
 - `@type` *(required)*: `Review`.
-- `@id` *(required)*: a stable identifier for the review. A consumer deduplicates on it across fetches, across language sheets, and against the source platform when `pagefront:reviewSource.url` is present. Check: REV-E-003 (absent), REV-W-003 (duplicate in one sheet).
-- `datePublished` *(required)*: ISO 8601. The date the review was published on the publisher's surface, not the date of purchase.
+- `@id` *(required)*: a stable URL-shaped identifier for the review. A consumer deduplicates on it across fetches, across language sheets, and against the source platform when `pagefront:reviewSource.url` is present. Check: REV-E-003 (absent), REV-W-003 (duplicate in one sheet).
+- `datePublished` *(required)*: an ISO 8601 calendar date (`YYYY-MM-DD`), optionally extended with a time and offset; the date the review was published on the publisher's surface, not the date of purchase.
 - `reviewRating` *(required)*: a `Rating` with `ratingValue`; `bestRating`/`worstRating` REQUIRED when the scale is not 1–5. Check: REV-E-004, REV-W-004. A review with no rating is not carried; a rating with no text is.
 - `reviewBody` *(optional)*: the review text as written. Not edited, not translated (see "Language"), not truncated. A publisher that shortens text for display carries the full text here.
 - `name` *(optional)*: the review's title, as written.
@@ -253,7 +253,7 @@ This spec requires Pagefront Discovery 0.2.0 or later.
 
 ## Identity
 
-Review `@id` is the exact-string identity key, as everywhere in the format. A producer MUST emit the identical `@id` for a review across fetches and across language sheets. Where `pagefront:reviewSource.kind` is `third_party` or `marketplace`, the `@id` SHOULD be derived from the platform's own review identifier so that two publishers syndicating the same review emit the same `@id`.
+Review `@id` is the exact-string identity key, as everywhere in the format. A producer MUST emit the identical `@id` for a review across fetches and across language sheets. Where `pagefront:reviewSource.kind` is `third_party` or `marketplace`, the `@id` SHOULD be derived from the platform's own review URL where it has one, so that two publishers syndicating the same review emit the same `@id`.
 
 **Host.** The `pagefront:sheetUrl` on the `about` reference MUST be on the canonical host, as a member's or a parent's is in the Collection Sheet; the fetched sheet's data-block `@id` is confirmed against the reference's `@id` by exact string. Check: REV-E-009.
 
@@ -280,7 +280,7 @@ No open questions remain at draft 0.1.0. New ones are added here as they surface
 
 ## Linter rules
 
-Codes reserved here; definitions and fixtures in [`rules.md`](rules.md) when the spec is ratified.
+Codes are reserved here and defined under "Commerce Review Sheet rules" in [`rules.md`](rules.md), with their fixtures; the two lists are kept identical.
 
 - **REV-E-001** `about` absent, without `@id`, or with a `@type` outside `Product`, its subtypes, `ProductGroup`, `Organization`.
 - **REV-E-002** `pagefront:reviewPolicy` absent, or `collection` outside the enum.
