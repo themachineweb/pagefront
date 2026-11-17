@@ -1,8 +1,8 @@
 # Commerce Collection Sheet
 
 Status: normative spec.
-Collection Sheet spec version: 0.1.0
-Commerce release: 0.5.0
+Collection Sheet spec version: 0.2.0
+Commerce release: 0.6.0
 Schema.org version targeted: 30.0 (2026-03-19)
 
 The Commerce Collection Sheet is the Pagefront Sheet that describes a listing page: a page whose content is a set of products. A category page, a curated collection page, a brand page on a multi-brand store and a filtered listing with a URL of its own are all listing pages. The Product Sheet describes one product; the Organization Sheet describes the entity behind the products; this sheet describes the sets the storefront arranges them in.

@@ -1,5 +1,5 @@
 {
-  "$comment": "Test manifest: commerce/spec/releases.json plus any unreleased row the fixtures need ahead of its release. It adds the 0.6.0 row (Product Sheet spec 0.12.0, Organization Sheet spec 0.6.0 and Review Sheet spec 0.1.0, the editable heads commerce/spec/product.json, commerce/spec/organization.json and commerce/spec/review.json) for the fixtures of the unavailable-offer rules, of the purchase-host rules and of the review rules; the release pull request adds that row to the bundled manifest and freezes the head. Installed by test-hooks.ts; never read in production.",
+  "$comment": "Test manifest: commerce/spec/releases.json plus any unreleased row the fixtures need ahead of its release. Since release 0.6.0 landed on 2026-11-17 it equals the bundled manifest. Installed by test-hooks.ts; never read in production.",
   "vertical": "commerce",
   "schema_url_template": "https://themachineweb.org/pagefront/spec/commerce/{sheet}/v{version}.json",
   "releases": [
@@ -33,12 +33,12 @@
     },
     {
       "release": "0.6.0",
-      "date": "unreleased",
-      "vocabulary": "0.5.0",
+      "date": "2026-11-17",
+      "vocabulary": "0.6.0",
       "sheets": {
         "product": "0.12.0",
         "organization": "0.6.0",
-        "collection": "0.1.0",
+        "collection": "0.2.0",
         "review": "0.1.0"
       }
     }

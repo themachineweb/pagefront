@@ -1,8 +1,8 @@
 # Pagefront Product Sheet
 
 Status: normative spec.
-Product Sheet spec version: 0.11.0
-Commerce release: 0.5.0
+Product Sheet spec version: 0.12.0
+Commerce release: 0.6.0
 Schema.org version targeted: 30.0 (2026-03-19)
 
 **Versioning.** This sheet spec has its own semver, 0.11.0, and is a member of commerce release 0.5.0. A sheet declares the release in its envelope (`release`) and names this spec version in `$schema`. Before 1.0 a breaking or an additive change bumps the minor and a fix or clarification bumps the patch; the release bumps with its members. The scheme, the release table and the legacy draft line (sheets carrying `format_version`) are in [`releases.md`](releases.md). The "v0.7", "v0.9" and similar version names throughout this document are legacy format versions, kept as history.
@@ -845,7 +845,7 @@ Breaking changes follow semver: each of the changes below would make a conformin
 
 ## Status
 
-Normative spec: Product Sheet spec 0.11.0, a member of commerce release 0.5.0. The versioning scheme is in [`releases.md`](releases.md): the spec has its own semver, breaking changes follow it, and the envelope carries `release` in place of `format_version`. The legacy format versions this spec grew through, and the pending work carried from them, are in the design notes. [notes](product-notes.md#the-legacy-format-versions-this-spec-grew-through)
+Normative spec: Product Sheet spec 0.12.0, a member of commerce release 0.6.0. The versioning scheme is in [`releases.md`](releases.md): the spec has its own semver, breaking changes follow it, and the envelope carries `release` in place of `format_version`. The legacy format versions this spec grew through, and the pending work carried from them, are in the design notes. [notes](product-notes.md#the-legacy-format-versions-this-spec-grew-through)
 
 The open design questions are in the design notes too: those carried forward [notes](product-notes.md#open-design-questions-carried-forward) and those surfaced in v0.4 [notes](product-notes.md#open-design-questions-surfaced-in-v04), v0.5 [notes](product-notes.md#open-design-questions-surfaced-in-v05), v0.6 [notes](product-notes.md#new-design-questions-surfaced-in-v06), v0.7 [notes](product-notes.md#new-design-questions-surfaced-in-v07) and v0.8 [notes](product-notes.md#new-design-questions-surfaced-in-v08), with what v0.8 deliberately does not address [notes](product-notes.md#what-v08-deliberately-does-not-address), and those the merchant-statement sources raise [notes](product-notes.md#why-a-platform-served-value-is-a-merchant-statement).
 

@@ -37,7 +37,8 @@ conformance by producing structurally identical reports for these inputs.
   against the test manifest, `manifest/releases.json`, installed through
   `dist/test-hooks.js` (`installTestManifest` / `clearTestManifest`) for
   those directories only. Since release 0.5.0 landed on 2026-10-18 the test
-  manifest equalled the bundled `commerce/spec/releases.json`. It now adds
+  manifest equalled the bundled `commerce/spec/releases.json`. Before
+  release 0.6.0 landed on 2026-11-17 it added
   the 0.6.0 row (Product Sheet spec 0.12.0, the editable head
   `commerce/spec/product.json`) for the fixtures of PDP-E-022 and the
   sold-out fixtures of PDP-W-016, PDP-W-028 and PDP-W-029, which
