@@ -52,10 +52,11 @@
         },
         "pagefront:reviewSubject": "mixed",
         "pagefront:reviewSource": {
+          "@type": "pagefront:ReviewSource",
           "kind": "first_party"
         },
         "pagefront:purchaseVerification": "order_matched",
-        "pagefront:incentive": "none",
+        "pagefront:reviewIncentive": "none",
         "pagefront:aspectSource": "author",
         "pagefront:aspect": [
           {
@@ -100,12 +101,13 @@
         },
         "pagefront:reviewSubject": "product",
         "pagefront:reviewSource": {
+          "@type": "pagefront:ReviewSource",
           "kind": "third_party",
           "name": "Reviews Platform",
           "url": "https://reviews.example/aurora-jumper/7731902"
         },
         "pagefront:purchaseVerification": "platform_verified",
-        "pagefront:incentive": "undisclosed",
+        "pagefront:reviewIncentive": "undisclosed",
         "pagefront:aspectSource": "inferred",
         "pagefront:aspect": [
           {
@@ -133,10 +135,11 @@
         },
         "pagefront:reviewSubject": "unclassified",
         "pagefront:reviewSource": {
+          "@type": "pagefront:ReviewSource",
           "kind": "imported"
         },
         "pagefront:purchaseVerification": "undisclosed",
-        "pagefront:incentive": "undisclosed"
+        "pagefront:reviewIncentive": "undisclosed"
       }
     ]
   }

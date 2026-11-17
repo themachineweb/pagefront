@@ -5,7 +5,7 @@ Prefix: `pagefront:`
 Vocabulary version: 0.5.0 (the vocabulary carries the commerce release version; see [`releases.md`](releases.md))
 Schema.org version targeted: 30.0
 
-This document defines the **pagefront vocabulary**, a small set of typed extensions to Schema.org used in pagefront product sheets. The vocabulary fills gaps in Schema.org's coverage for commerce-specific concerns: structured size charts, multi-stage manufacturing provenance, configurable products, made-to-order economics, gemstone grading, videos with structured role classification, typed product documents, typed product relationships, and a few others.
+This document defines the **pagefront vocabulary**, a small set of typed extensions to Schema.org used in pagefront product sheets. The vocabulary fills gaps in Schema.org's coverage for commerce-specific concerns: structured size charts, multi-stage manufacturing provenance, configurable products, made-to-order economics, gemstone grading, videos with structured role classification, typed product documents, typed product relationships, consumer review provenance and subject declarations, and a few others.
 
 The vocabulary follows Schema.org's conventions wherever possible. Where Schema.org has no native vocabulary for something a pagefront sheet needs to express, this document defines the term.
 
@@ -32,7 +32,7 @@ The JSON-LD context for the vocabulary is the block under "JSON-LD Context" belo
 ## Design principles
 
 - **Schema.org first.** Every concept that has a Schema.org type or property is expressed using Schema.org. The pagefront vocabulary covers only what Schema.org doesn't.
-- **Closed enums where the set is bounded.** Image roles, material provenance categories, gemstone origins, and promotion scopes are closed enums. Stages and aftermarket services are open vocabularies because they vary by category.
+- **Closed enums where the set is bounded.** Image roles, material provenance categories, gemstone origins, promotion scopes, and review provenance declarations are closed enums. Stages and aftermarket services are open vocabularies because they vary by category.
 - **Composition over inheritance.** Pagefront types are flat objects with properties; they do not subclass Schema.org types. This keeps the vocabulary easy to read and easy to validate.
 - **Stable IRIs.** Once a term is published in this vocabulary, its IRI does not change. Deprecation is preferred over renaming.
 
@@ -293,6 +293,15 @@ The publisher's statement about a review set: how reviews reach the published se
 - `url` *(recommended)*: the human-readable policy page. Recommended for `moderated`, required for `curated`.
 - `solicitation` *(optional)*: closed enum, see "Review policy: solicitation" under "Enumerated values".
 
+### pagefront:ReviewSource
+
+Where a consumer review entered the publisher's possession, used in `pagefront:reviewSource` on a `Review` entry of a Commerce Review Sheet (see [`review.md`](review.md)).
+
+**Properties:**
+- `kind` *(required)*: closed enum, see "Review sources" under "Enumerated values"; `undisclosed` among its values.
+- `name` *(required for `third_party` and `marketplace`)*: the platform's name.
+- `url` *(recommended for `third_party` and `marketplace`)*: the review on the source platform, the one address a consumer can follow to check the review exists outside the publisher's control.
+
 ### pagefront:SafetyNotice
 
 A structured recall or safety notice for a product subject to a corrective measure (GPSR Arts. 35–37 and equivalent regimes). Schema.org has no recall vocabulary, and `availability: Discontinued` means "no longer sold" and does not mean "dangerous — return it." A `recall` notice overrides commercial signals: consumers SHOULD NOT recommend purchase while one is present and SHOULD surface the remedy.
@@ -377,11 +386,11 @@ Used on `OfferShippingDetails` to express conditions under which the shipping ra
 
 ### pagefront:aspect
 
-Used on a `Review` entry of a Commerce Review Sheet (see [`review.md`](review.md)) to list the things the review addresses, each with the author's rating of it where the author gave one. Value is an array of `pagefront:ReviewAspect`. Optional; where present, `pagefront:aspectSource` is required beside it. Not used elsewhere. Added with the Commerce Review Sheet.
+Used on a `Review` entry of a Commerce Review Sheet (see [`review.md`](review.md)) to list the things the review addresses, each with the author's rating of it where the author gave one. Value is an array of `pagefront:ReviewAspect`. Optional; where present, `pagefront:aspectSource` is required beside it. Not used elsewhere. Added in release 0.6.0, with the Commerce Review Sheet ([`review.md`](review.md)).
 
 ### pagefront:aspectSource
 
-Used on a `Review` entry of a Commerce Review Sheet beside `pagefront:aspect` to say who assigned the aspects. Value is a single string from the closed Aspect sources enum (see "Enumerated values"). Required when `pagefront:aspect` is present; not used elsewhere. Added with the Commerce Review Sheet.
+Used on a `Review` entry of a Commerce Review Sheet beside `pagefront:aspect` to say who assigned the aspects. Value is a single string from the closed Aspect sources enum (see "Enumerated values"). Required when `pagefront:aspect` is present; not used elsewhere. Added in release 0.6.0, with the Commerce Review Sheet ([`review.md`](review.md)).
 
 ### pagefront:authorizedResellers
 
@@ -462,10 +471,6 @@ Composition over inheritance, per house pattern: Schema.org scopes `OfferShippin
 
 Used on `Product` to express typed gemstone grading. Value is a `pagefront:Gemstone`.
 
-### pagefront:incentive
-
-Used on a `Review` entry of a Commerce Review Sheet (see [`review.md`](review.md)) to declare what the author received for the review. Value is a single string from the closed Review incentives enum (see "Enumerated values"), `undisclosed` among them. Required on every entry; not used elsewhere. Added with the Commerce Review Sheet.
-
 ### pagefront:legalEntity
 
 Used on `Product` (or `ProductGroup`) to declare the role-typed legal entities behind the product. Value is an array of `pagefront:LegalEntity` objects.
@@ -511,7 +516,7 @@ Used on `Product` (or `ProductGroup`) to carry the merchant's ranked selling poi
 
 ### pagefront:purchaseVerification
 
-Used on a `Review` entry of a Commerce Review Sheet (see [`review.md`](review.md)) to declare how the review was tied to a transaction. Value is a single string from the closed Purchase verification enum (see "Enumerated values"), `undisclosed` among them. Required on every entry; not used elsewhere. Added with the Commerce Review Sheet.
+Used on a `Review` entry of a Commerce Review Sheet (see [`review.md`](review.md)) to declare how the review was tied to a transaction. Value is a single string from the closed Purchase verification enum (see "Enumerated values"), `undisclosed` among them. Required on every entry; not used elsewhere. Added in release 0.6.0, with the Commerce Review Sheet ([`review.md`](review.md)).
 
 ### pagefront:relatedProduct
 
@@ -521,17 +526,21 @@ Used on `Product` (or `ProductGroup`) to express typed relationships to other pr
 
 Used on `Offer` to express promotional codes and discounts. Value is an array of `pagefront:Promotion` objects.
 
+### pagefront:reviewIncentive
+
+Used on a `Review` entry of a Commerce Review Sheet (see [`review.md`](review.md)) to declare what the author received for the review. Value is a single string from the closed Review incentives enum (see "Enumerated values"), `undisclosed` among them. Required on every entry; not used elsewhere. Added in release 0.6.0, with the Commerce Review Sheet ([`review.md`](review.md)).
+
 ### pagefront:reviewPolicy
 
-Used on the `ItemList` data block of a Commerce Review Sheet (see [`review.md`](review.md)) as the publisher's statement about the set. Value is one `pagefront:ReviewPolicy`. Required on that sheet type; not used elsewhere. Added with the Commerce Review Sheet.
+Used on the `ItemList` data block of a Commerce Review Sheet (see [`review.md`](review.md)) as the publisher's statement about the set. Value is one `pagefront:ReviewPolicy`. Required on that sheet type; not used elsewhere. Added in release 0.6.0, with the Commerce Review Sheet ([`review.md`](review.md)).
 
 ### pagefront:reviewSource
 
-Used on a `Review` entry of a Commerce Review Sheet (see [`review.md`](review.md)) to declare where the review entered the publisher's possession. Value is an object: `kind` *(required)*, a single string from the closed Review sources enum (see "Enumerated values"), `undisclosed` among them; `name`, the platform's name, required for `third_party` and `marketplace`; `url`, the review on the source platform, recommended for those two kinds. Required on every entry; not used elsewhere. Added with the Commerce Review Sheet.
+Used on a `Review` entry of a Commerce Review Sheet (see [`review.md`](review.md)) to declare where the review entered the publisher's possession. Value is one `pagefront:ReviewSource`. Required on every entry; not used elsewhere. Added in release 0.6.0, with the Commerce Review Sheet ([`review.md`](review.md)).
 
 ### pagefront:reviewSubject
 
-Used on a `Review` entry of a Commerce Review Sheet (see [`review.md`](review.md)) to declare what the author is writing about. Value is a single string from the closed Review subjects enum (see "Enumerated values"), `unclassified` where the publisher has not determined it. Required on every entry; not used elsewhere. Added with the Commerce Review Sheet.
+Used on a `Review` entry of a Commerce Review Sheet (see [`review.md`](review.md)) to declare what the author is writing about. Value is a single string from the closed Review subjects enum (see "Enumerated values"), `unclassified` where the publisher has not determined it. Required on every entry; not used elsewhere. Added in release 0.6.0, with the Commerce Review Sheet ([`review.md`](review.md)).
 
 ### pagefront:safetyNotice
 
@@ -543,9 +552,9 @@ Used on `Product` (or `ProductGroup`) to carry the product's safety warnings, la
 
 ### pagefront:sheetUrl
 
-Used on a reference to an entity to declare the URL of the Pagefront sheet describing that entity. Value is an absolute URL (string). In v0.9 it applies to organization references: `Offer.seller`, `Product.brand`, and the `organization` of a reference-form `pagefront:legalEntity` entry. Added in v0.9. With the Commerce Collection Sheet ([`collection.md`](collection.md)) it also applies to collection references: the member entries of a collection sheet's `hasPart` and `isPartOf`, of a product sheet's `isPartOf` and of an organization sheet's `hasOfferCatalog`, which reference a product, product-group or collection sheet, and the `brand` reference of a brand collection.
+Used on a reference to an entity to declare the URL of the Pagefront sheet describing that entity. Value is an absolute URL (string). In v0.9 it applies to organization references: `Offer.seller`, `Product.brand`, and the `organization` of a reference-form `pagefront:legalEntity` entry. Added in v0.9. With the Commerce Collection Sheet ([`collection.md`](collection.md)) it also applies to collection references: the member entries of a collection sheet's `hasPart` and `isPartOf`, of a product sheet's `isPartOf` and of an organization sheet's `hasOfferCatalog`, which reference a product, product-group or collection sheet, and the `brand` reference of a brand collection. With the Commerce Review Sheet ([`review.md`](review.md)) it also applies to the `subjectOf` entries of a Product, ProductGroup or Organization sheet, which reference a Review Sheet.
 
-`@id` identifies an entity and does not locate its sheet, and the discovery rule forbids constructing sheet URLs, so a sheet reached by reference is located by the publisher's declaration. The URL's host is checked per edge: the product sheet's host for seller references, the `@id`'s host for brand references, either for legal-entity references; the canonical host of the referencing sheet for the members and parents of a collection sheet and the entries of `hasOfferCatalog`. The fetched sheet must declare the referenced `@id` at the node the edge points at: the data block for organization and collection references, `data.brand` for brand references. The rules are the linking contract in [`organization.md`](organization.md#linking-contract-identity-only) and "Identity" in [`collection.md`](collection.md#identity).
+`@id` identifies an entity and does not locate its sheet, and the discovery rule forbids constructing sheet URLs, so a sheet reached by reference is located by the publisher's declaration. The URL's host is checked per edge: the product sheet's host for seller references, the `@id`'s host for brand references, either for legal-entity references; the canonical host of the referencing sheet for the members and parents of a collection sheet, the entries of `hasOfferCatalog` and the entries of `subjectOf`. The fetched sheet must declare the referenced `@id` at the node the edge points at: the data block for organization, collection and review references, `data.brand` for brand references. The rules are the linking contract in [`organization.md`](organization.md#linking-contract-identity-only), "Identity" in [`collection.md`](collection.md#identity) and "Discovery" in [`review.md`](review.md#discovery).
 
 It plays the role `sheet_url` plays on variant entries (`hasVariant[]`, `isVariantOf`) in the Pagefront Spec, in a different position: `sheet_url` is a Pagefront structural field on product-family entries, and `pagefront:sheetUrl` is a vocabulary term that can sit inside any Schema.org-typed reference.
 
@@ -641,7 +650,13 @@ The closed enum for `collection` on `pagefront:ReviewPolicy` (added with [`revie
 
 ### Review policy: solicitation
 
-The closed enum for `solicitation` on `pagefront:ReviewPolicy`: how reviews are invited. `post_purchase`, `on_page`, `third_party_program`, `none`, `undisclosed`.
+The closed enum for `solicitation` on `pagefront:ReviewPolicy`: how reviews are invited.
+
+- `post_purchase`: invited after a completed order.
+- `on_page`: a form on the product page, open to anyone.
+- `third_party_program`: a platform's own invitation scheme.
+- `none`: reviews are not invited.
+- `undisclosed`: the publisher does not state its practice.
 
 ### Review subjects
 
@@ -674,7 +689,7 @@ The closed enum for `pagefront:purchaseVerification`: how the review was tied to
 
 ### Review incentives
 
-The closed enum for `pagefront:incentive`: what the author received for the review.
+The closed enum for `pagefront:reviewIncentive`: what the author received for the review.
 
 - `none`.
 - `discount`: a voucher, coupon or future credit.
@@ -688,7 +703,11 @@ The closed enum for `aspect` on `pagefront:ReviewAspect`, split along the subjec
 
 ### Aspect sources
 
-The closed enum for `pagefront:aspectSource`: who assigned the aspects. `author` (the author chose or rated them on a form), `publisher` (the publisher tagged them by hand), `inferred` (a classifier).
+The closed enum for `pagefront:aspectSource`: who assigned the aspects.
+
+- `author`: the author chose or rated them on a form.
+- `publisher`: the publisher tagged them by hand.
+- `inferred`: a classifier assigned them.
 
 ## Schema.org-native patterns
 
@@ -726,6 +745,8 @@ An aggregate rating may blend product-quality signals with seller/fulfilment exp
 
 The corpus illustrates each rung. Nitto (MBTJM SAS) carries `iso6523Code` on ICD 0002 plus the RCS display form (`../case-studies/nitto/nitto-knitwear.fr.json`). Zalando SE illustrates the LEI rung, `leiCode` `529900YRFFGH5AXU4S86` plus the Handelsregister display form, that register having no ICD. Reformation (LYMI Inc.) illustrates the floor: `legalName` and address only, with nothing else published.
 
+**Consumer reviews** *(added in release 0.6.0)*. The Commerce Review Sheet ([`review.md`](review.md)) adopts Schema.org's own shapes for everything but the provenance and subject declarations: the sheet roots on `ItemList`, each entry is a `Review` with a `Rating` in `reviewRating`, and the subject's sheet, a Product, ProductGroup or Organization Sheet, points at its review sheet through `subjectOf`, in the member entry shape. Author-submitted photos and video ride on the `Review` as `associatedMedia`, which closes open question #18 of the Product Sheet spec: user-generated media travels with the review that carries its trust declarations and never in the product's `image` or `video`. The publisher's reply is a `comment` whose `author` is an `Organization`; helpfulness counts are an `interactionStatistic` with `interactionType` `LikeAction`. The rules for each are in `review.md`.
+
 ## JSON-LD Context
 
 The following is the machine-readable JSON-LD context for the pagefront vocabulary. It is published in this document; a sheet declares the `pagefront` prefix inline, as shown at the top of this document, and a JSON-LD processor needs nothing more to expand the terms.
@@ -754,6 +775,9 @@ The following is the machine-readable JSON-LD context for the pagefront vocabula
     "PricingCondition": "pagefront:PricingCondition",
     "Promotion": "pagefront:Promotion",
     "RelatedProduct": "pagefront:RelatedProduct",
+    "ReviewAspect": "pagefront:ReviewAspect",
+    "ReviewPolicy": "pagefront:ReviewPolicy",
+    "ReviewSource": "pagefront:ReviewSource",
     "SafetyNotice": "pagefront:SafetyNotice",
     "SafetyWarning": "pagefront:SafetyWarning",
     "SizeAdjustment": "pagefront:SizeAdjustment",
@@ -832,9 +856,6 @@ The following is the machine-readable JSON-LD context for the pagefront vocabula
     "gemstone": {
       "@id": "pagefront:gemstone"
     },
-    "incentive": {
-      "@id": "pagefront:incentive"
-    },
     "legalEntity": {
       "@id": "pagefront:legalEntity",
       "@container": "@list"
@@ -877,6 +898,9 @@ The following is the machine-readable JSON-LD context for the pagefront vocabula
     "reseller": {
       "@id": "pagefront:reseller",
       "@container": "@list"
+    },
+    "reviewIncentive": {
+      "@id": "pagefront:reviewIncentive"
     },
     "reviewPolicy": {
       "@id": "pagefront:reviewPolicy"
@@ -939,7 +963,7 @@ Before release 1.0.0, terms may still change. Every change is recorded in the ch
 
 ### Term history
 
-This is vocabulary 0.5.0. The versions named in this section are legacy format versions. `pagefront:Document` and `pagefront:RelatedProduct` were added in v0.7. `pagefront:FeatureGroup`, `pagefront:LegalEntity`, `pagefront:SafetyWarning`, `pagefront:SafetyNotice`, `pagefront:featureGroup`, `pagefront:feature`, `pagefront:presentationValue`, `pagefront:productHighlights`, `pagefront:legalEntity`, `pagefront:safetyWarning`, and `pagefront:safetyNotice` were added in v0.8. `pagefront:commerceRole`, `pagefront:fulfillmentTerms`, `pagefront:SocialAccount`, `pagefront:socialAccount`, `pagefront:AuthorizedResellers`, `pagefront:authorizedResellers`, (2026-09-24) `pagefront:manufacturerWarranty`, (2026-09-30) `pagefront:sheetUrl`, and (2026-10-01) `pagefront:ConfiguratorPricing` and `pagefront:configuratorPricing` were added in v0.9. No term is added in release 0.3.0 or in release 0.4.0. From release 1.0.0 the stability policy above applies to every term.
+This is vocabulary 0.5.0. The versions named in this section are legacy format versions. `pagefront:Document` and `pagefront:RelatedProduct` were added in v0.7. `pagefront:FeatureGroup`, `pagefront:LegalEntity`, `pagefront:SafetyWarning`, `pagefront:SafetyNotice`, `pagefront:featureGroup`, `pagefront:feature`, `pagefront:presentationValue`, `pagefront:productHighlights`, `pagefront:legalEntity`, `pagefront:safetyWarning`, and `pagefront:safetyNotice` were added in v0.8. `pagefront:commerceRole`, `pagefront:fulfillmentTerms`, `pagefront:SocialAccount`, `pagefront:socialAccount`, `pagefront:AuthorizedResellers`, `pagefront:authorizedResellers`, (2026-09-24) `pagefront:manufacturerWarranty`, (2026-09-30) `pagefront:sheetUrl`, and (2026-10-01) `pagefront:ConfiguratorPricing` and `pagefront:configuratorPricing` were added in v0.9. No term is added in release 0.3.0 or in release 0.4.0. `pagefront:collectionKind` was added in release 0.5.0. `pagefront:checkoutHosts`, and with the Commerce Review Sheet `pagefront:ReviewPolicy`, `pagefront:ReviewSource`, `pagefront:ReviewAspect`, `pagefront:reviewPolicy`, `pagefront:reviewSubject`, `pagefront:reviewSource`, `pagefront:purchaseVerification`, `pagefront:reviewIncentive`, `pagefront:aspect` and `pagefront:aspectSource`, are added in release 0.6.0. From release 1.0.0 the stability policy above applies to every term.
 
 Note: v0.5 made envelope/structural changes (the `sheet_url` rename, internationalization model, and URL convention) without adding new vocabulary terms, which is why the vocabulary jumped from 0.4 to 0.6. v0.7 adds two new types (`pagefront:Document`, `pagefront:RelatedProduct`) and adopts Schema.org-native vocabulary for product Q&A without minting a parallel `pagefront:` term. v0.8 adds four new types (`pagefront:FeatureGroup`, `pagefront:LegalEntity`, `pagefront:SafetyWarning`, `pagefront:SafetyNotice`) and five new data-block properties (`pagefront:featureGroup`, `pagefront:productHighlights`, `pagefront:legalEntity`, `pagefront:safetyWarning`, `pagefront:safetyNotice`), and adopts Schema.org-native vocabulary for machine-readable categories (`CategoryCode`) and multiple GTINs without minting parallel terms. v0.9 adds four new properties: `pagefront:commerceRole`, the role discriminator on the Commerce Organization Sheet, with its closed Commerce roles enum; `pagefront:fulfillmentTerms`, the org-level attachment point for store-wide shipping defaults carried as Schema.org-native `OfferShippingDetails`; `pagefront:socialAccount`, the typed home for official social accounts, with the `pagefront:SocialAccount` type, landed together with the tightening of `sameAs` on that sheet to identity authority records only; and `pagefront:authorizedResellers`, the brand's authorization claim over its distribution, with the `pagefront:AuthorizedResellers` type, added 2026-08-31 within the 0.9 draft. v0.9 also adds one certification scope value (`organization`), adopts Schema.org-native vocabulary for company registration identity (a ladder of machine keys, `leiCode` when the entity has an LEI, else `iso6523Code` where the register has an ICD, plus an `identifier` `PropertyValue` for the display form) without minting a term, and relaxes the `pagefront:LegalEntity` `organization.name` requirement in the JSON Schema so reference stubs (`@type` + `@id`) validate. All of this is additive: no term is renamed or removed, and existing v0.8 sheets stay valid. The 2026-10-01 revision is the exception: it removes the price properties of `pagefront:Configurator` and of its options, and a sheet that carried them needs re-emission.
 

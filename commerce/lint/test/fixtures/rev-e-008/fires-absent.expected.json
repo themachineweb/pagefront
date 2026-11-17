@@ -14,8 +14,8 @@
         "id": "https://merchant.example/reviews/r-88102",
         "problem": "absent"
       },
-      "message": "`pagefront:incentive` on review `https://merchant.example/reviews/r-88102` at `$['data']['itemListElement'][2]` is absent.",
-      "remediation": "Declare `pagefront:incentive` on every review as `none`, `discount`, `free_product`, `sample_program` or `undisclosed`; a publisher that does not know writes `undisclosed`, never nothing."
+      "message": "`pagefront:reviewIncentive` on review `https://merchant.example/reviews/r-88102` at `$['data']['itemListElement'][2]` is absent.",
+      "remediation": "Declare `pagefront:reviewIncentive` on every review as `none`, `discount`, `free_product`, `sample_program` or `undisclosed`; a publisher that does not know writes `undisclosed`, never nothing."
     }
   ],
   "summary": {

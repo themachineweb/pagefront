@@ -16,7 +16,7 @@ export const REVIEW_SUBJECTS = ["product", "seller", "mixed", "unclassified"] as
 export const SOURCE_KINDS = ["first_party", "third_party", "marketplace", "imported", "undisclosed"] as const;
 /** The closed enum of `pagefront:purchaseVerification`. */
 export const VERIFICATIONS = ["none", "order_matched", "post_purchase_invitation", "platform_verified", "undisclosed"] as const;
-/** The closed enum of `pagefront:incentive`. */
+/** The closed enum of `pagefront:reviewIncentive`. */
 export const INCENTIVES = ["none", "discount", "free_product", "sample_program", "undisclosed"] as const;
 /** The closed enum of `pagefront:reviewPolicy.collection`. */
 export const POLICY_COLLECTIONS = ["all", "moderated", "curated", "undisclosed"] as const;

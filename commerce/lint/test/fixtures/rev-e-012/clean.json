@@ -47,10 +47,11 @@
         },
         "pagefront:reviewSubject": "seller",
         "pagefront:reviewSource": {
+          "@type": "pagefront:ReviewSource",
           "kind": "first_party"
         },
         "pagefront:purchaseVerification": "post_purchase_invitation",
-        "pagefront:incentive": "none",
+        "pagefront:reviewIncentive": "none",
         "pagefront:aspectSource": "author",
         "pagefront:aspect": [
           {
@@ -75,10 +76,11 @@
         },
         "pagefront:reviewSubject": "seller",
         "pagefront:reviewSource": {
+          "@type": "pagefront:ReviewSource",
           "kind": "first_party"
         },
         "pagefront:purchaseVerification": "post_purchase_invitation",
-        "pagefront:incentive": "none"
+        "pagefront:reviewIncentive": "none"
       }
     ]
   }

@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://themachineweb.org/pagefront/spec/commerce/review/v0.1.0.json",
   "title": "Pagefront Commerce Review Sheet 0.1.0",
-  "description": "Sheet spec version 0.1.0, a draft that joins a future commerce release as a minor bump; it has no legacy draft line. Formal schema for the Pagefront Commerce Review Sheet, the sheet carrying the consumer reviews a publisher shows for one subject: a product, a variant family or the seller itself. The envelope is the one every Pagefront Sheet carries: $schema, release, schema_org_version, canonical_url, generated_at and data are required, sheet_url and expires_at are optional, and format_version is not accepted beside release. The data block roots on Schema.org ItemList and declares the pagefront prefix in the array form of @context, since every review sheet uses pagefront: terms. about names the subject as a thin entry (@type, @id and url required; pagefront:sheetUrl and name optional); pagefront:reviewPolicy is the required statement about the set (collection from a closed enum, url and solicitation optional); itemListElement lists the reviews as Schema.org Review objects, each carrying @id, datePublished, reviewRating and the four pagefront declarations (reviewSubject, reviewSource, purchaseVerification, incentive), with pagefront:aspect and pagefront:aspectSource optional; the array may be empty. Validates the envelope and pagefront-namespaced extensions strictly; Schema.org-typed blocks permit additional unspecified properties.",
+  "description": "Sheet spec version 0.1.0, a draft that joins a future commerce release as a minor bump; it has no legacy draft line. Formal schema for the Pagefront Commerce Review Sheet, the sheet carrying the consumer reviews a publisher shows for one subject: a product, a variant family or the seller itself. The envelope is the one every Pagefront Sheet carries: $schema, release, schema_org_version, canonical_url, generated_at and data are required, sheet_url and expires_at are optional, and format_version is not accepted beside release. The data block roots on Schema.org ItemList and declares the pagefront prefix in the array form of @context, since every review sheet uses pagefront: terms. about names the subject as a thin entry (@type, @id and url required; pagefront:sheetUrl and name optional); pagefront:reviewPolicy is the required statement about the set (collection from a closed enum, url and solicitation optional); itemListElement lists the reviews as Schema.org Review objects, each carrying @id, datePublished, reviewRating and the four pagefront declarations (reviewSubject, reviewSource, purchaseVerification, reviewIncentive), with pagefront:aspect and pagefront:aspectSource optional; the array may be empty. Validates the envelope and pagefront-namespaced extensions strictly; Schema.org-typed blocks permit additional unspecified properties.",
   "type": "object",
   "required": [
     "$schema",
@@ -223,7 +223,7 @@
         "pagefront:reviewSubject",
         "pagefront:reviewSource",
         "pagefront:purchaseVerification",
-        "pagefront:incentive"
+        "pagefront:reviewIncentive"
       ],
       "properties": {
         "@type": {
@@ -306,7 +306,7 @@
         "pagefront:purchaseVerification": {
           "$ref": "#/$defs/purchaseVerification"
         },
-        "pagefront:incentive": {
+        "pagefront:reviewIncentive": {
           "$ref": "#/$defs/incentive"
         },
         "pagefront:aspect": {
@@ -365,9 +365,13 @@
     "reviewSource": {
       "type": "object",
       "required": [
+        "@type",
         "kind"
       ],
       "properties": {
+        "@type": {
+          "const": "pagefront:ReviewSource"
+        },
         "kind": {
           "type": "string",
           "enum": [

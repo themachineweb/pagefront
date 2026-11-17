@@ -90,7 +90,7 @@ The same table, for machines, is [`releases.json`](releases.json), where a sheet
 
 | Version | Date | What it is |
 |---|---|---|
-| 0.1.0 | unreleased | Draft: an `ItemList`-rooted sheet carrying the consumer reviews shown for one subject, each review with four declarations (`pagefront:reviewSubject`, `pagefront:reviewSource`, `pagefront:purchaseVerification`, `pagefront:incentive`), a sheet-level `pagefront:reviewPolicy`, and optional aspects; reached from the subject's sheet through `subjectOf`. Requires Pagefront Discovery 0.2.0. The editable head is [`review.json`](review.json); no schema is published until the release. |
+| 0.1.0 | unreleased | Draft: an `ItemList`-rooted sheet carrying the consumer reviews shown for one subject, each review with four declarations (`pagefront:reviewSubject`, `pagefront:reviewSource`, `pagefront:purchaseVerification`, `pagefront:reviewIncentive`), a sheet-level `pagefront:reviewPolicy`, and optional aspects; reached from the subject's sheet through `subjectOf`. Requires Pagefront Discovery 0.2.0. The editable head is [`review.json`](review.json); no schema is published until the release. |
 
 ## Format documents
 

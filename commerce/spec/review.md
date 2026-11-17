@@ -98,7 +98,8 @@ Four declarations, each REQUIRED on every entry. The rationale is in "Undisclose
 
 Check: REV-E-005 (absent or outside the enum).
 
-**`pagefront:reviewSource`** — where the review entered the publisher's possession. An object:
+**`pagefront:reviewSource`** — where the review entered the publisher's possession. One `pagefront:ReviewSource`:
+- `@type: pagefront:ReviewSource` *(required)*
 - `kind` *(required)*: `first_party` (collected by the publisher on its own surface), `third_party` (a review platform the publisher uses: collection and hosting by another party), `marketplace` (collected on a marketplace listing of the same product), `imported` (origin not retained), `undisclosed`.
 - `name` *(required for `third_party` and `marketplace`)*: the platform's name.
 - `url` *(recommended for `third_party` and `marketplace`)*: the review on the source platform. This is the one field a consumer can follow to check the review exists outside the publisher's control.
@@ -114,7 +115,7 @@ Checks: REV-E-006 (absent, or `kind` outside the enum), REV-W-006 (`third_party`
 
 Checks: REV-E-007 (absent or outside the enum), REV-W-007 (`platform_verified` with a `first_party` or `imported` source).
 
-**`pagefront:incentive`** — what the author received for the review. One of:
+**`pagefront:reviewIncentive`** — what the author received for the review. One of:
 - `none`
 - `discount`: a voucher, coupon or future credit.
 - `free_product`: the subject, or another product, at no charge.
@@ -141,7 +142,7 @@ Consistency: a review whose `pagefront:reviewSubject` is `product` and whose asp
 
 ## Undisclosed is a statement
 
-Each of the three provenance declarations (`pagefront:reviewSource.kind`, `pagefront:purchaseVerification`, `pagefront:incentive`), and `pagefront:reviewPolicy`'s `collection` and `solicitation`, has three states: [why](review-notes.md#why-undisclosed-is-a-statement)
+Each of the three provenance declarations (`pagefront:reviewSource.kind`, `pagefront:purchaseVerification`, `pagefront:reviewIncentive`), and `pagefront:reviewPolicy`'s `collection` and `solicitation`, has three states: [why](review-notes.md#why-undisclosed-is-a-statement)
 
 | State | Meaning | Linter |
 |---|---|---|
@@ -278,7 +279,7 @@ Codes reserved here; definitions and fixtures in [`rules.md`](rules.md) when the
 - **REV-E-005** `pagefront:reviewSubject` absent or outside the enum.
 - **REV-E-006** `pagefront:reviewSource` absent, or `kind` outside the enum.
 - **REV-E-007** `pagefront:purchaseVerification` absent or outside the enum.
-- **REV-E-008** `pagefront:incentive` absent or outside the enum.
+- **REV-E-008** `pagefront:reviewIncentive` absent or outside the enum.
 - **REV-E-009** `about.pagefront:sheetUrl` on a host other than the canonical host.
 - **REV-E-010** a review entry whose `author` is an `Organization`.
 - **REV-E-011** `workTranslation` or `translationOfWork` on a review entry.
@@ -332,9 +333,9 @@ Codes reserved here; definitions and fixtures in [`rules.md`](rules.md) when the
       "author": { "@type": "Person", "name": "Mara K." },
       "itemReviewed": { "@type": "Product", "@id": "https://merchant.com/products/aurora-jumper#aurora-jumper-m-oat" },
       "pagefront:reviewSubject": "mixed",
-      "pagefront:reviewSource": { "kind": "first_party" },
+      "pagefront:reviewSource": { "@type": "pagefront:ReviewSource", "kind": "first_party" },
       "pagefront:purchaseVerification": "order_matched",
-      "pagefront:incentive": "none",
+      "pagefront:reviewIncentive": "none",
       "pagefront:aspectSource": "author",
       "pagefront:aspect": [
         { "@type": "pagefront:ReviewAspect", "aspect": "quality", "ratingValue": 5 },
@@ -358,12 +359,13 @@ Codes reserved here; definitions and fixtures in [`rules.md`](rules.md) when the
       "author": { "@type": "Person", "name": "Julien" },
       "pagefront:reviewSubject": "product",
       "pagefront:reviewSource": {
+        "@type": "pagefront:ReviewSource",
         "kind": "third_party",
         "name": "Avis Vérifiés",
         "url": "https://www.avis-verifies.com/avis/aurora-jumper/7731902"
       },
       "pagefront:purchaseVerification": "platform_verified",
-      "pagefront:incentive": "undisclosed",
+      "pagefront:reviewIncentive": "undisclosed",
       "pagefront:aspectSource": "inferred",
       "pagefront:aspect": [
         { "@type": "pagefront:ReviewAspect", "aspect": "quality" },
@@ -376,9 +378,9 @@ Codes reserved here; definitions and fixtures in [`rules.md`](rules.md) when the
       "datePublished": "2026-11-02",
       "reviewRating": { "@type": "Rating", "ratingValue": 4 },
       "pagefront:reviewSubject": "unclassified",
-      "pagefront:reviewSource": { "kind": "imported" },
+      "pagefront:reviewSource": { "@type": "pagefront:ReviewSource", "kind": "imported" },
       "pagefront:purchaseVerification": "undisclosed",
-      "pagefront:incentive": "undisclosed"
+      "pagefront:reviewIncentive": "undisclosed"
     }
   ]
 }
@@ -388,7 +390,7 @@ Three reviews, three trust profiles. The first is a matched order (so the varian
 
 ## Vocabulary additions
 
-To be added to [`vocabulary.md`](vocabulary.md) on ratification. Types: `pagefront:ReviewPolicy`, `pagefront:ReviewAspect`. Properties: `pagefront:reviewPolicy`, `pagefront:reviewSubject`, `pagefront:reviewSource`, `pagefront:purchaseVerification`, `pagefront:incentive`, `pagefront:aspect`, `pagefront:aspectSource`. The "Aggregate rating" entry under "Schema.org-native patterns" gains a sentence scoping `aggregateRating` to `product`-subject reviews and pointing here.
+To be added to [`vocabulary.md`](vocabulary.md) on ratification. Types: `pagefront:ReviewPolicy`, `pagefront:ReviewSource`, `pagefront:ReviewAspect`. Properties: `pagefront:reviewPolicy`, `pagefront:reviewSubject`, `pagefront:reviewSource`, `pagefront:purchaseVerification`, `pagefront:reviewIncentive`, `pagefront:aspect`, `pagefront:aspectSource`. The "Aggregate rating" entry under "Schema.org-native patterns" gains a sentence scoping `aggregateRating` to `product`-subject reviews and pointing here.
 
 ## References
 
