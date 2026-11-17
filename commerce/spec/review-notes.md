@@ -1,7 +1,7 @@
 # Design notes: Review Sheet spec
 
 Status: non-normative. These notes explain the Review Sheet spec, [`review.md`](review.md), which governs; a note adds no requirement.
-Design notes for the Review Sheet spec 0.1.0, a draft not yet in a commerce release.
+Design notes for the Review Sheet spec 0.1.0, a member of commerce release 0.6.0.
 
 Each note opens with a link to the field or section it explains. The reference links a note from the field it explains; on the published page the notes render as footnotes under the spec.
 

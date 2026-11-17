@@ -32,7 +32,7 @@ Rules that do not follow the default:
 | COL-E-001, COL-E-002, COL-E-003, COL-E-005, COL-W-001 to COL-W-007 | release 0.5.0, the release that bundles Collection Sheet spec 0.1.0 | no (the Collection Sheet spec has no legacy draft line) |
 | ORG-W-007 | release 0.5.0, which admits `hasOfferCatalog` | no |
 | ORG-W-008 | release 0.6.0, which admits `pagefront:checkoutHosts` | no |
-| REV-E-001 to REV-E-013, REV-W-001 to REV-W-014 | release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets | no (the Review Sheet spec has no legacy draft line) |
+| REV-E-001 to REV-E-013, REV-W-001 to REV-W-014 | release 0.6.0 | no (the Review Sheet spec has no legacy draft line) |
 
 ### Definitions
 
@@ -1183,7 +1183,7 @@ The `{name}` placeholder renders the entry's `name`; when absent, the fixed fall
 
 ## Commerce Review Sheet rules
 
-The review-sheet catalogue, applying to Commerce Review Sheets ([`review.md`](review.md), a draft at spec 0.1.0) only, per the sheet-type dispatch described at the top of this document. Layer 1 for this sheet type is the review JSON Schema the release bundles (`../schemas/review/`, once a release publishes one; [`review.json`](review.json) is its editable head); these rules assume a schema-valid sheet. The schema enforces the array form of `@context` with the `pagefront` prefix, so this catalogue has no counterpart of PDP-E-003 and ORG-E-001; it has no counterpart of COL-E-003 and COL-E-004 either, since the spec reserves no code for the envelope's version fields. The error rules check the subject (REV-E-001, REV-E-009), the policy (REV-E-002), each entry's identity and rating (REV-E-003, REV-E-004), the four declarations (REV-E-005 to REV-E-008), the author's class (REV-E-010), translations (REV-E-011), the subject of an Organization review sheet's entries (REV-E-012) and the `@type` of the two typed values (REV-E-013). The warning rules cover the set (REV-W-001, REV-W-002, REV-W-003, REV-W-013), the rating scale and the author (REV-W-004, REV-W-005), the consistency of the declarations with one another (REV-W-006, REV-W-007, REV-W-011, REV-W-012), the aspects (REV-W-008, REV-W-009, REV-W-014) and the language of the text (REV-W-010). Four conditions the spec marks required (`url` on a curated policy, `name` on a platform source, `pagefront:aspectSource` beside aspects, `inLanguage` beside text) are warnings here, as the spec's own list grades them, and the schema leaves them to the rules. The product-side and organization-side checks the spec reserves are PDP-W-042, PDP-W-043, PDP-W-044 and ORG-W-009, in their own sections. The rules apply from release 0.6.0, the next release, which the draft targets, and never to the legacy draft line, which has no Review Sheet. Until that release lands, the review fixtures declare it and run against the test manifest, [`../lint/test/manifest/releases.json`](../lint/test/manifest/releases.json), whose 0.6.0 row resolves Review Sheet spec 0.1.0 to the editable head [`review.json`](review.json) at Layer 1. The release pull request adds the review column to that row in `commerce/spec/releases.json` and to the release table in `releases.md`, and freezes the head as `commerce/schemas/review/v0.1.0.json`; the fixtures and their expected reports do not change.
+The review-sheet catalogue, applying to Commerce Review Sheets ([`review.md`](review.md), spec 0.1.0) only, per the sheet-type dispatch described at the top of this document. Layer 1 for this sheet type is the review JSON Schema the release bundles (`../schemas/review/`, once a release publishes one; [`review.json`](review.json) is its editable head); these rules assume a schema-valid sheet. The schema enforces the array form of `@context` with the `pagefront` prefix, so this catalogue has no counterpart of PDP-E-003 and ORG-E-001; it has no counterpart of COL-E-003 and COL-E-004 either, since the spec reserves no code for the envelope's version fields. The error rules check the subject (REV-E-001, REV-E-009), the policy (REV-E-002), each entry's identity and rating (REV-E-003, REV-E-004), the four declarations (REV-E-005 to REV-E-008), the author's class (REV-E-010), translations (REV-E-011), the subject of an Organization review sheet's entries (REV-E-012) and the `@type` of the two typed values (REV-E-013). The warning rules cover the set (REV-W-001, REV-W-002, REV-W-003, REV-W-013), the rating scale and the author (REV-W-004, REV-W-005), the consistency of the declarations with one another (REV-W-006, REV-W-007, REV-W-011, REV-W-012), the aspects (REV-W-008, REV-W-009, REV-W-014) and the language of the text (REV-W-010). Four conditions the spec marks required (`url` on a curated policy, `name` on a platform source, `pagefront:aspectSource` beside aspects, `inLanguage` beside text) are warnings here, as the spec's own list grades them, and the schema leaves them to the rules. The product-side and organization-side checks the spec reserves are PDP-W-042, PDP-W-043, PDP-W-044 and ORG-W-009, in their own sections. The rules apply from release 0.6.0, the release that bundles Review Sheet spec 0.1.0, and never to the legacy draft line, which has no Review Sheet. Until that release lands, the review fixtures declare it and run against the test manifest, [`../lint/test/manifest/releases.json`](../lint/test/manifest/releases.json), whose 0.6.0 row resolves Review Sheet spec 0.1.0 to the editable head [`review.json`](review.json) at Layer 1. The release pull request adds the review column to that row in `commerce/spec/releases.json` and to the release table in `releases.md`, and freezes the head as `commerce/schemas/review/v0.1.0.json`; the fixtures and their expected reports do not change.
 
 #### REV-E-001 — Subject absent, without `@id`, or of another type
 
@@ -1194,7 +1194,7 @@ The review-sheet catalogue, applying to Commerce Review Sheets ([`review.md`](re
 **Message:** `about` at `{path}` {problem}.
 The `{problem}` placeholder carries `is absent`, `is not an object`, `` carries no `@id` ``, `` carries no `@type` `` or `` declares `@type` `{type}`, which is not one of … ``.
 **Remediation:** Name the subject in `about`, in the member entry shape: `@type`, the exact `@id` its own sheet declares, `url` and `pagefront:sheetUrl`. One sheet, one subject.
-**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Introduced:** release 0.6.0
 **Applies from:** release 0.6.0; not the legacy line.
 **Fixtures:** `fires-absent`, `fires-no-id`, `fires-other-type` (a `Collection` subject), `clean`.
 **Spec reference:** `review.md#required-core-fields`
@@ -1208,7 +1208,7 @@ The `{problem}` placeholder carries `is absent`, `is not an object`, `` carries 
 **Message:** `pagefront:reviewPolicy` at `{path}` {problem}.
 The `{problem}` placeholder carries `is absent`, `is not an object`, `` carries no `collection` `` or `` declares `collection` `{value}`, which is not one of `all`, `moderated`, `curated`, `undisclosed` ``; a non-string value renders as its JSON serialization.
 **Remediation:** Declare `pagefront:reviewPolicy` with `@type` `pagefront:ReviewPolicy` and `collection` as `all`, `moderated`, `curated` or `undisclosed`; a publisher that does not state its practice writes `undisclosed`. Additional values require a spec amendment.
-**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Introduced:** release 0.6.0
 **Applies from:** release 0.6.0; not the legacy line.
 **Fixtures:** `fires-absent`, `fires-outside-enum`, `clean`.
 **Spec reference:** `review.md#the-set-pagefrontreviewpolicy`
@@ -1221,7 +1221,7 @@ The `{problem}` placeholder carries `is absent`, `is not an object`, `` carries 
 **Check:** An entry of `itemListElement` is an object whose `@id` is absent, or a string that is empty or whitespace-only. A non-object entry is skipped, since the schema types entries as objects. One finding per entry, at the entry's path.
 **Message:** Review at `{path}` carries no `@id`.
 **Remediation:** Give every review a stable `@id`, the same across fetches and language sheets; a syndicated review derives it from the platform's own identifier.
-**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Introduced:** release 0.6.0
 **Applies from:** release 0.6.0; not the legacy line.
 **Fixtures:** `fires`, `clean`.
 **Spec reference:** `review.md#schemaorg-native`
@@ -1235,7 +1235,7 @@ The `{problem}` placeholder carries `is absent`, `is not an object`, `` carries 
 **Message:** Review `{id}` at `{path}` {problem}.
 The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallback `(no @id)`. `{problem}` carries `` carries no `reviewRating` `` or `` carries a `reviewRating` without `ratingValue` ``.
 **Remediation:** Carry `reviewRating` as a `Rating` with `ratingValue` on every review, with `bestRating` and `worstRating` where the scale is not 1 to 5. A review with no rating is left out of the sheet.
-**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Introduced:** release 0.6.0
 **Applies from:** release 0.6.0; not the legacy line.
 **Fixtures:** `fires-absent`, `fires-no-value`, `clean`.
 **Spec reference:** `review.md#schemaorg-native`
@@ -1249,7 +1249,7 @@ The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallbac
 **Message:** `pagefront:reviewSubject` on review `{id}` at `{path}` is {problem}.
 The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallback `(no @id)`. `{problem}` carries `absent` or `` `{value}`, which is not one of … ``; a non-string value renders as its JSON serialization.
 **Remediation:** Declare `pagefront:reviewSubject` on every review as `product` (the product's intrinsic qualities), `seller` (the transaction), `mixed` (both in one text) or `unclassified` (no one has read it for its subject). Additional values require a spec amendment.
-**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Introduced:** release 0.6.0
 **Applies from:** release 0.6.0; not the legacy line.
 **Fixtures:** `fires-absent`, `fires-outside-enum`, `clean`.
 **Spec reference:** `review.md#pagefront-declarations`
@@ -1263,7 +1263,7 @@ The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallbac
 **Message:** `pagefront:reviewSource` on review `{id}` at `{path}` {problem}.
 The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallback `(no @id)`. `{problem}` carries `is absent`, `is not an object`, `` carries no `kind` `` or `` declares `kind` `{value}`, which is not one of … ``.
 **Remediation:** Declare `pagefront:reviewSource` on every review as an object whose `kind` is `first_party`, `third_party`, `marketplace`, `imported` or `undisclosed`, with the platform's `name` and the review's `url` for a third-party or marketplace source.
-**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Introduced:** release 0.6.0
 **Applies from:** release 0.6.0; not the legacy line.
 **Fixtures:** `fires-absent`, `fires-outside-enum`, `clean`.
 **Spec reference:** `review.md#pagefront-declarations`
@@ -1277,7 +1277,7 @@ The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallbac
 **Message:** `pagefront:purchaseVerification` on review `{id}` at `{path}` is {problem}.
 The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallback `(no @id)`. `{problem}` carries `absent` or `` `{value}`, which is not one of … ``; a non-string value renders as its JSON serialization.
 **Remediation:** Declare `pagefront:purchaseVerification` on every review as `none`, `order_matched`, `post_purchase_invitation`, `platform_verified` or `undisclosed`; a publisher that does not know writes `undisclosed`, never nothing.
-**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Introduced:** release 0.6.0
 **Applies from:** release 0.6.0; not the legacy line.
 **Fixtures:** `fires-absent`, `fires-outside-enum`, `clean`.
 **Spec reference:** `review.md#pagefront-declarations`
@@ -1291,7 +1291,7 @@ The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallbac
 **Message:** `pagefront:reviewIncentive` on review `{id}` at `{path}` is {problem}.
 The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallback `(no @id)`. `{problem}` carries `absent` or `` `{value}`, which is not one of … ``; a non-string value renders as its JSON serialization.
 **Remediation:** Declare `pagefront:reviewIncentive` on every review as `none`, `discount`, `free_product`, `sample_program` or `undisclosed`; a publisher that does not know writes `undisclosed`, never nothing.
-**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Introduced:** release 0.6.0
 **Applies from:** release 0.6.0; not the legacy line.
 **Fixtures:** `fires-absent`, `fires-outside-enum`, `clean`.
 **Spec reference:** `review.md#pagefront-declarations`
@@ -1305,7 +1305,7 @@ The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallbac
 **Message:** Sheet URL at `{path}` is on host `{sheetUrlHost}`; the canonical page is on `{host}`.
 `{host}` renders `(none)` when `canonical_url` has no host, which is unreachable on Layer-1-valid input.
 **Remediation:** Point the subject's `pagefront:sheetUrl` at its sheet on the storefront host, the host of `canonical_url`. A consumer rejects a hint off that host and falls back to the subject's `url`.
-**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Introduced:** release 0.6.0
 **Applies from:** release 0.6.0; not the legacy line.
 **Fixtures:** `fires`, `clean`.
 **Spec reference:** `review.md#identity`
@@ -1319,7 +1319,7 @@ The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallbac
 **Message:** Review `{id}` at `{path}` has an `author` of `@type` `{type}`; this sheet carries consumer reviews.
 The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallback `(no @id)`.
 **Remediation:** Carry consumer reviews only, each `author` a `Person` with `name` as displayed. An expert, editorial or merchant review is left out of this sheet.
-**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Introduced:** release 0.6.0
 **Applies from:** release 0.6.0; not the legacy line.
 **Fixtures:** `fires`, `clean`.
 **Spec reference:** `review.md#what-this-spec-does-not-do`
@@ -1333,7 +1333,7 @@ The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallbac
 **Message:** Review `{id}` at `{path}` carries `{field}`; the sheet carries originals only.
 The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallback `(no @id)`.
 **Remediation:** Remove the translation. Carry the author's text in `reviewBody` and `name` with its language in `inLanguage`; translation is the consumer's operation.
-**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Introduced:** release 0.6.0
 **Applies from:** release 0.6.0; not the legacy line.
 **Fixtures:** `fires` (a `workTranslation` on one entry), `clean`.
 **Spec reference:** `review.md#language`
@@ -1346,8 +1346,8 @@ The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallbac
 **Check:** `about` declares a `@type` of `Organization`, `OnlineStore` or `OnlineBusiness`, and an entry of `itemListElement` declares a string `pagefront:reviewSubject` other than `seller`. One finding per entry.
 **Message:** Review `{id}` at `{path}` declares `pagefront:reviewSubject` `{subject}` on an Organization review sheet.
 The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallback `(no @id)`.
-**Remediation:** An Organization review sheet carries `seller`-subject reviews only, classified by where they were collected. A review about a product, or a mixed one, stays in the review sheet of the product it was published on.
-**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Remediation:** A review on an Organization review sheet is about the seller by where it was collected: set `pagefront:reviewSubject` to `seller`. A review that is in fact about a product belongs in that product's review sheet. `unclassified` is never valid here, since the collection context is the classification.
+**Introduced:** release 0.6.0
 **Applies from:** release 0.6.0; not the legacy line.
 **Fixtures:** `fires` (an Organization review sheet with one `product` entry), `fires-unclassified` (one `unclassified` entry), `clean` (the same sheet with `seller` entries only).
 **Spec reference:** `review.md#the-organization-review-sheet`
@@ -1361,7 +1361,7 @@ The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallbac
 **Message:** `{field}` at `{path}` {problem}.
 The `{field}` placeholder is `pagefront:reviewPolicy` or `pagefront:reviewSource`; `{problem}` carries `` carries no `@type` `` or `` declares `@type` `{value}`, which is not `{expected}` ``; a non-string value renders as its JSON serialization.
 **Remediation:** Give the policy `@type` `pagefront:ReviewPolicy` and every source `@type` `pagefront:ReviewSource`.
-**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Introduced:** release 0.6.0
 **Applies from:** release 0.6.0; not the legacy line.
 **Fixtures:** `fires-missing` (a policy and a source without `@type`), `fires-wrong` (a policy and a source with another `@type`), `clean`.
 **Spec reference:** `review.md#pagefront-declarations`
@@ -1374,7 +1374,7 @@ The `{field}` placeholder is `pagefront:reviewPolicy` or `pagefront:reviewSource
 **Check:** `itemListElement` is an array with no entries.
 **Message:** `itemListElement` at `{path}` is empty: the sheet carries no review.
 **Remediation:** Confirm the subject has no review under the declared policy. If the publisher shows reviews for it, list them.
-**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Introduced:** release 0.6.0
 **Applies from:** release 0.6.0; not the legacy line.
 **Fixtures:** `fires`, `clean`.
 **Spec reference:** `review.md#required-core-fields`
@@ -1387,7 +1387,7 @@ The `{field}` placeholder is `pagefront:reviewPolicy` or `pagefront:reviewSource
 **Check:** The policy's `collection` is `curated` and its `url` is absent, empty or whitespace-only. One finding, at the policy.
 **Message:** `pagefront:reviewPolicy` at `{path}` declares `collection` `curated` and no `url`.
 **Remediation:** Add `url`, the human-readable page that states how reviews are selected for display.
-**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Introduced:** release 0.6.0
 **Applies from:** release 0.6.0; not the legacy line.
 **Fixtures:** `fires`, `clean` (a curated set with its policy page).
 **Spec reference:** `review.md#the-set-pagefrontreviewpolicy`
@@ -1400,7 +1400,7 @@ The `{field}` placeholder is `pagefront:reviewPolicy` or `pagefront:reviewSource
 **Check:** An entry of `itemListElement` carries an `@id` (a non-blank string) equal, by exact string, to the `@id` of an earlier entry in the array. One finding per repeated entry, at its path, naming the path of the first occurrence.
 **Message:** Review `{id}` at `{path}` repeats the entry at `{first}`.
 **Remediation:** Keep one entry per review. A review carried in two language sheets appears once in each, under the same `@id`.
-**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Introduced:** release 0.6.0
 **Applies from:** release 0.6.0; not the legacy line.
 **Fixtures:** `fires`, `clean`.
 **Spec reference:** `review.md#schemaorg-native`
@@ -1414,7 +1414,7 @@ The `{field}` placeholder is `pagefront:reviewPolicy` or `pagefront:reviewSource
 **Message:** Review `{id}` at `{path}` rates `{value}` with no `bestRating`; a scale other than 1 to 5 declares its bounds.
 The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallback `(no @id)`.
 **Remediation:** Add `bestRating` and `worstRating` to `reviewRating` wherever the scale is not 1 to 5.
-**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Introduced:** release 0.6.0
 **Applies from:** release 0.6.0; not the legacy line.
 **Fixtures:** `fires` (a rating of 8 with no bounds), `clean` (8 on a declared 0 to 10 scale).
 **Spec reference:** `review.md#schemaorg-native`
@@ -1428,7 +1428,7 @@ The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallbac
 **Message:** Review `{id}` at `{path}` carries `{field}` on its `author`; a review carries the name as displayed and no other personal data.
 The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallback `(no @id)`.
 **Remediation:** Remove `email`, `telephone` and `address` from `author`; keep `name` as the page displays it.
-**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Introduced:** release 0.6.0
 **Applies from:** release 0.6.0; not the legacy line.
 **Fixtures:** `fires` (an `email` on the author), `clean`.
 **Spec reference:** `review.md#schemaorg-native`
@@ -1442,7 +1442,7 @@ The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallbac
 **Message:** Review `{id}` at `{path}` names a `{kind}` source without `name`.
 The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallback `(no @id)`.
 **Remediation:** Add `name`, the review platform's or marketplace's name, and `url`, the review on that platform, to `pagefront:reviewSource`.
-**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Introduced:** release 0.6.0
 **Applies from:** release 0.6.0; not the legacy line.
 **Fixtures:** `fires`, `clean`.
 **Spec reference:** `review.md#pagefront-declarations`
@@ -1456,7 +1456,7 @@ The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallbac
 **Message:** Review `{id}` at `{path}` is `platform_verified` with a `{kind}` source.
 The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallback `(no @id)`.
 **Remediation:** Name the platform that asserts the purchase in `pagefront:reviewSource` (`third_party` or `marketplace`), or declare the verification the publisher established itself: `order_matched`, `post_purchase_invitation`, `none` or `undisclosed`.
-**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Introduced:** release 0.6.0
 **Applies from:** release 0.6.0; not the legacy line.
 **Fixtures:** `fires`, `clean`.
 **Spec reference:** `review.md#pagefront-declarations`
@@ -1470,7 +1470,7 @@ The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallbac
 **Message:** Review `{id}` at `{path}` declares `pagefront:reviewSubject` `{subject}` and every aspect it carries is {side}-side.
 The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallback `(no @id)`. `{side}` is `seller` or `product`.
 **Remediation:** Declare the subject the aspects describe: `seller` for delivery, service, returns, packaging, payment and communication, `product` for the product's qualities, `mixed` where the text covers both.
-**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Introduced:** release 0.6.0
 **Applies from:** release 0.6.0; not the legacy line.
 **Fixtures:** `fires-product` (a product review with delivery and returns aspects), `fires-seller` (a seller review with product aspects), `clean`.
 **Spec reference:** `review.md#aspects-pagefrontaspect`
@@ -1484,7 +1484,7 @@ The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallbac
 **Message:** Review `{id}` at `{path}` carries `pagefront:aspect` without `pagefront:aspectSource`.
 The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallback `(no @id)`.
 **Remediation:** Add `pagefront:aspectSource`: `author`, `publisher` or `inferred`, saying who assigned the aspects.
-**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Introduced:** release 0.6.0
 **Applies from:** release 0.6.0; not the legacy line.
 **Fixtures:** `fires`, `clean`.
 **Spec reference:** `review.md#aspects-pagefrontaspect`
@@ -1498,7 +1498,7 @@ The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallbac
 **Message:** Review `{id}` at `{path}` carries text without `inLanguage`.
 The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallback `(no @id)`.
 **Remediation:** Add `inLanguage` to the entry, the BCP 47 tag of the language the author wrote in.
-**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Introduced:** release 0.6.0
 **Applies from:** release 0.6.0; not the legacy line.
 **Fixtures:** `fires`, `clean`.
 **Spec reference:** `review.md#language`
@@ -1512,7 +1512,7 @@ The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallbac
 **Message:** Review `{id}` at `{path}` carries `associatedMedia` from an `imported` source.
 The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallback `(no @id)`.
 **Remediation:** Confirm the media came with the review. Where its origin is not retained, leave `associatedMedia` out.
-**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Introduced:** release 0.6.0
 **Applies from:** release 0.6.0; not the legacy line.
 **Fixtures:** `fires`, `clean`.
 **Spec reference:** `review.md#schemaorg-native`
@@ -1526,7 +1526,7 @@ The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallbac
 **Message:** Review `{id}` at `{path}` carries `itemReviewed` {problem}.
 The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallback `(no @id)`. `{problem}` carries `` with `pagefront:purchaseVerification` `{value}` `` or `` on a sheet whose subject is a `{type}` ``.
 **Remediation:** Carry `itemReviewed` only where the publisher knows the order line (`order_matched` or `post_purchase_invitation`) and the subject is a `ProductGroup`; otherwise leave it out. It is purchase data, never the author's claim.
-**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Introduced:** release 0.6.0
 **Applies from:** release 0.6.0; not the legacy line.
 **Fixtures:** `fires-verification` (`itemReviewed` on a review verified `none`), `fires-subject` (`itemReviewed` on a standalone `Product` subject), `clean`.
 **Spec reference:** `review.md#schemaorg-native`
@@ -1540,7 +1540,7 @@ The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallbac
 **Message:** `numberOfItems` at `{path}` is {declared}; `itemListElement` carries {actual} entries.
 A non-number `{declared}` renders as its JSON serialization.
 **Remediation:** Set `numberOfItems` to the length of `itemListElement`, or leave it out.
-**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Introduced:** release 0.6.0
 **Applies from:** release 0.6.0; not the legacy line.
 **Fixtures:** `fires`, `clean`.
 **Spec reference:** `review.md#size-and-ordering`
@@ -1554,7 +1554,7 @@ A non-number `{declared}` renders as its JSON serialization.
 **Message:** Review `{id}` at `{path}` is `unclassified` and carries `pagefront:aspect` entries; aspects are a classification.
 The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallback `(no @id)`.
 **Remediation:** Declare the subject the aspects show (`product`, `seller` or `mixed`), or remove the aspects from a review no one has classified.
-**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Introduced:** release 0.6.0
 **Applies from:** release 0.6.0; not the legacy line.
 **Fixtures:** `fires` (an `unclassified` review with aspects), `clean` (the minimum entry: the four declarations as `undisclosed` and `unclassified`, no aspects).
 **Spec reference:** `review.md#pagefront-declarations`

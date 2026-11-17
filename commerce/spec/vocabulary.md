@@ -641,7 +641,7 @@ What separates a category from a collection is the tree. Additional values requi
 
 ### Review policy: collection
 
-The closed enum for `collection` on `pagefront:ReviewPolicy` (added with [`review.md`](review.md)): how reviews reach the published set.
+The closed enum for `collection` on `pagefront:ReviewPolicy` (added in release 0.6.0, with the Commerce Review Sheet, [`review.md`](review.md)): how reviews reach the published set.
 
 - `all`: every review received is published, subject only to legal removal.
 - `moderated`: reviews are screened against stated criteria (abuse, off-topic, personal data) and otherwise published regardless of rating.

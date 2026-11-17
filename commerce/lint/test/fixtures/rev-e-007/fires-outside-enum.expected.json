@@ -5,11 +5,25 @@
   "release": "0.6.0",
   "sheet_spec_version": "0.1.0",
   "catalogue_version": "0.21.0",
-  "findings": [],
+  "findings": [
+    {
+      "rule": "REV-E-007",
+      "severity": "error",
+      "path": "$['data']['itemListElement'][2]['pagefront:purchaseVerification']",
+      "values": {
+        "id": "https://merchant.example/reviews/r-88102",
+        "problem": "`verified`, which is not one of `none`, `order_matched`, `post_purchase_invitation`, `platform_verified`, `undisclosed`"
+      },
+      "message": "`pagefront:purchaseVerification` on review `https://merchant.example/reviews/r-88102` at `$['data']['itemListElement'][2]['pagefront:purchaseVerification']` is `verified`, which is not one of `none`, `order_matched`, `post_purchase_invitation`, `platform_verified`, `undisclosed`.",
+      "remediation": "Declare `pagefront:purchaseVerification` on every review as `none`, `order_matched`, `post_purchase_invitation`, `platform_verified` or `undisclosed`; a publisher that does not know writes `undisclosed`, never nothing."
+    }
+  ],
   "summary": {
-    "errors": 0,
+    "errors": 1,
     "warnings": 0,
     "info": 0,
-    "rules_fired": []
+    "rules_fired": [
+      "REV-E-007"
+    ]
   }
 }
