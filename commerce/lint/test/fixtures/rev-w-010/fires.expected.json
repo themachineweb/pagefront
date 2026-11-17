@@ -11,9 +11,9 @@
       "severity": "warning",
       "path": "$['data']['itemListElement'][1]",
       "values": {
-        "id": "https://reviews.example/aurora-jumper/7731902"
+        "id": "https://reviews.example/r/aurora-jumper/7731902"
       },
-      "message": "Review `https://reviews.example/aurora-jumper/7731902` at `$['data']['itemListElement'][1]` carries text without `inLanguage`.",
+      "message": "Review `https://reviews.example/r/aurora-jumper/7731902` at `$['data']['itemListElement'][1]` carries text without `inLanguage`.",
       "remediation": "Add `inLanguage` to the entry, the BCP 47 tag of the language the author wrote in."
     }
   ],

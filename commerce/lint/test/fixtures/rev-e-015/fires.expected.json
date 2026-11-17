@@ -7,23 +7,24 @@
   "catalogue_version": "0.21.0",
   "findings": [
     {
-      "rule": "REV-W-004",
-      "severity": "warning",
+      "rule": "REV-E-015",
+      "severity": "error",
       "path": "$['data']['itemListElement'][2]['reviewRating']",
       "values": {
         "id": "https://merchant.example/reviews/r-88102",
-        "value": "8"
+        "value": "8",
+        "missing": "bestRating` or `worstRating"
       },
-      "message": "Review `https://merchant.example/reviews/r-88102` at `$['data']['itemListElement'][2]['reviewRating']` rates `8` with no `bestRating`; a scale other than 1 to 5 declares its bounds.",
+      "message": "Review `https://merchant.example/reviews/r-88102` at `$['data']['itemListElement'][2]['reviewRating']` rates `8` with no `bestRating` or `worstRating`; a scale other than 1 to 5 declares its bounds.",
       "remediation": "Add `bestRating` and `worstRating` to `reviewRating` wherever the scale is not 1 to 5."
     }
   ],
   "summary": {
-    "errors": 0,
-    "warnings": 1,
+    "errors": 1,
+    "warnings": 0,
     "info": 0,
     "rules_fired": [
-      "REV-W-004"
+      "REV-E-015"
     ]
   }
 }

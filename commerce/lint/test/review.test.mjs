@@ -183,7 +183,7 @@ test("sheet-type dispatch: $schema wins, the data block is the fallback, and no 
   assert.deepEqual([...prefixes(collectionCatalogue)], ["COL-"]);
   assert.deepEqual([...prefixes(organizationCatalogue)], ["ORG-"]);
   assert.deepEqual([...prefixes(commerceCatalogue)], ["PDP-"]);
-  assert.equal(reviewCatalogue.rules.length, 27);
+  assert.equal(reviewCatalogue.rules.length, 29);
   assert.ok(underTestManifest(() => lintSheet(example, OPTS)).findings.every((f) => f.rule.startsWith("REV-")));
 });
 

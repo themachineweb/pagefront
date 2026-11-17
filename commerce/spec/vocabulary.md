@@ -290,7 +290,7 @@ The publisher's statement about a review set: how reviews reach the published se
 
 **Properties:**
 - `collection` *(required)*: closed enum, see "Review policy: collection" under "Enumerated values".
-- `url` *(recommended)*: the human-readable policy page. Recommended for `moderated`, required for `curated`.
+- `url` *(recommended)*: the human-readable policy page. A `curated` policy SHOULD carry it.
 - `solicitation` *(optional)*: closed enum, see "Review policy: solicitation" under "Enumerated values".
 
 ### pagefront:ReviewSource
@@ -299,7 +299,7 @@ Where a consumer review entered the publisher's possession, used in `pagefront:r
 
 **Properties:**
 - `kind` *(required)*: closed enum, see "Review sources" under "Enumerated values"; `undisclosed` among its values.
-- `name` *(required for `third_party` and `marketplace`)*: the platform's name.
+- `name` *(recommended for `third_party` and `marketplace`)*: the platform's name; a source of those two kinds SHOULD carry it.
 - `url` *(recommended for `third_party` and `marketplace`)*: the review on the source platform, the one address a consumer can follow to check the review exists outside the publisher's control.
 
 ### pagefront:SafetyNotice

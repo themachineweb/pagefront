@@ -7,7 +7,7 @@ The Commerce Review Sheet is the Pagefront Sheet that carries the consumer revie
 
 ## The two problems this sheet exists to solve
 
-Consumer reviews fail agents in two ways, and the format answers each with a declaration, not a judgment: did a real customer write it, which the four declarations and their `undisclosed` member answer [why](review-notes.md#why-undisclosed-is-a-statement); and what are they writing about, which `pagefront:reviewSubject` and the aspects answer [why](review-notes.md#why-every-review-declares-its-subject).
+Consumer reviews fail agents in two ways, and the format answers each with a declaration the publisher makes: did a real customer write it, which the four declarations and their `undisclosed` member answer [why](review-notes.md#why-undisclosed-is-a-statement); and what are they writing about, which `pagefront:reviewSubject` and the aspects answer [why](review-notes.md#why-every-review-declares-its-subject).
 
 ## The envelope
 
@@ -39,9 +39,9 @@ The `data` block roots on Schema.org **`ItemList`** whose `itemListElement` entr
 
 - `@context`: the array form `["https://schema.org", {"pagefront": "https://themachineweb.org/pagefront/vocabulary/"}]`. Every review sheet uses `pagefront:` terms.
 - `@type`: `"ItemList"`
-- `@id`: stable URL-shaped identifier for the review set.
+- `@id`: stable URL-shaped identifier for the review set. By convention the page URL with `#reviews`, as the other sheet types use `#product`, `#collection` and `#organization`.
 - `inLanguage`: BCP 47 tag for the sheet's own prose (the list's `name`, policy text). Individual reviews carry their own `inLanguage`; see "Language".
-- `about`: the subject, one reference in the member entry shape of the Collection Sheet: `@type` (`Product`, a subtype, `ProductGroup`, or `Organization`), `@id`, `url`, `pagefront:sheetUrl` *(recommended)*. One sheet, one subject. Where the product belongs to a variant family, the subject is the **`ProductGroup`**, never a variant (see "Subject granularity"). Check: REV-E-001.
+- `about`: the subject, one reference in the member entry shape of the Collection Sheet: `@type` (`Product`, or one of the Product subtypes the linter recognises (listed under REV-E-001 in [`rules.md`](rules.md)), `ProductGroup`, or `Organization`), `@id`, `url`, `pagefront:sheetUrl` *(recommended)*. One sheet, one subject. Where the product belongs to a variant family, the subject is the **`ProductGroup`**, and a variant is no subject (see "Subject granularity"). Check: REV-E-001.
 - `pagefront:reviewPolicy`: the publisher's statement about the set (see "The set: policy").
 - `itemListElement`: the reviews, as an array. MAY be empty. Check: REV-W-001.
 
@@ -62,7 +62,7 @@ A single review can be transcribed faithfully while the set lies by omission. Th
   - `moderated`: reviews are screened against stated criteria (abuse, off-topic, personal data) and otherwise published regardless of rating.
   - `curated`: the publisher selects which reviews to show. Rating-based selection is curation.
   - `undisclosed`: the publisher does not state its practice.
-- `url` *(recommended)*: the human-readable policy page. RECOMMENDED for `moderated`, REQUIRED for `curated`. Check: REV-W-002.
+- `url` *(recommended)*: the human-readable policy page. A `curated` policy SHOULD carry it. Check: REV-W-002.
 - `solicitation` *(optional)*: how reviews are invited.
   - `post_purchase`: invited after a completed order.
   - `on_page`: a form on the product page, open to anyone.
@@ -80,22 +80,22 @@ Each entry is a Schema.org `Review` carrying:
 
 - `@type` *(required)*: `Review`.
 - `@id` *(required)*: a stable URL-shaped identifier for the review. A consumer deduplicates on it across fetches, across language sheets, and against the source platform when `pagefront:reviewSource.url` is present. Check: REV-E-003 (absent), REV-W-003 (duplicate in one sheet).
-- `datePublished` *(required)*: an ISO 8601 calendar date (`YYYY-MM-DD`), optionally extended with a time and offset; the date the review was published on the publisher's surface, not the date of purchase.
-- `reviewRating` *(required)*: a `Rating` with `ratingValue`; `bestRating`/`worstRating` REQUIRED when the scale is not 1–5. Check: REV-E-004, REV-W-004. A review with no rating is not carried; a rating with no text is.
-- `reviewBody` *(optional)*: the review text as written. Not edited, not translated (see "Language"), not truncated. A publisher that shortens text for display carries the full text here.
+- `datePublished` *(required)*: an ISO 8601 calendar date (`YYYY-MM-DD`), optionally extended with a time and offset; the date the review was published on the publisher's surface; the date of purchase is a different fact and does not go here.
+- `reviewRating` *(required)*: a `Rating` with `ratingValue`; `bestRating`/`worstRating` REQUIRED when the scale is not 1–5. Check: REV-E-004, REV-E-015. A review with no rating is not carried; a rating with no text is.
+- `reviewBody` *(optional)*: the review text as written: unedited, untranslated (see "Language"), untruncated. A publisher that shortens text for display carries the full text here.
 - `name` *(optional)*: the review's title, as written.
-- `inLanguage` *(required when `reviewBody` or `name` is present)*: the language of the text as written.
+- `inLanguage` *(recommended)*: the language of the text as written. An entry carrying `reviewBody` or `name` SHOULD carry it. Check: REV-W-010.
 - `author` *(recommended)*: a `Person` with `name` as displayed. No other personal data. A publisher that shows reviews anonymously omits `author`. Check: REV-W-005 (`author` carrying `email`, `telephone`, `address`).
-- `itemReviewed` *(optional)*: on a sheet whose `about` is a `ProductGroup`, the variant the author **bought**, as a `Product` reference with `@id`. It is purchase data, not the author's claim: it MAY be present only when `pagefront:purchaseVerification` is `order_matched` or `post_purchase_invitation`, where the publisher knows the order line. It does not narrow the review's subject, which stays the group; it gives `fit`, `size`-shaped and `appearance` aspects the context they need ("runs small" means nothing without the size bought). Otherwise omitted. Check: REV-W-012.
-- `associatedMedia` *(optional)*: author-submitted photos and videos, as `ImageObject`/`VideoObject`. This closes open question #18 of the Product Sheet spec: user-generated media rides on the review that carries its trust declarations, and never in the Product Sheet's `image` or `video`.
+- `itemReviewed` *(optional)*: on a sheet whose `about` is a `ProductGroup`, the variant the author **bought**, as a `Product` reference with `@id`. It is purchase data the publisher holds: it MAY be present only when `pagefront:purchaseVerification` is `order_matched` or `post_purchase_invitation`, where the publisher knows the order line. It does not narrow the review's subject, which stays the group; it gives `fit`, `size`-shaped and `appearance` aspects the context they need ("runs small" means nothing without the size bought). Otherwise omitted. Check: REV-W-012.
+- `associatedMedia` *(optional)*: author-submitted photos and videos, as `ImageObject`/`VideoObject`. This closes open question #18 of the Product Sheet spec: user-generated media rides on the review that carries its trust declarations; the Product Sheet's `image` and `video` carry the publisher's media alone.
 - `comment` *(optional)*: the publisher's reply, as a `Comment` with `text`, `dateCreated`, and `author` an `Organization`. One reply per review in this version.
-- `interactionStatistic` *(optional)*: helpfulness counts as `InteractionCounter` (`interactionType: LikeAction`, `userInteractionCount`). A count, declared, not a ranking signal.
+- `interactionStatistic` *(optional)*: helpfulness counts as `InteractionCounter` (`interactionType: LikeAction`, `userInteractionCount`). A declared count; a consumer ranks nothing on it.
 
 ### Pagefront declarations
 
 Four declarations, each REQUIRED on every entry. The rationale is in "Undisclosed is a statement".
 
-**`pagefront:reviewSubject`** — what the author is writing about. One of:
+**`pagefront:reviewSubject`**: what the author is writing about. One of:
 - `product`: the product's intrinsic qualities.
 - `seller`: the transaction: delivery, service, returns, packaging, payment.
 - `mixed`: both, in one text.
@@ -103,7 +103,7 @@ Four declarations, each REQUIRED on every entry. The rationale is in "Undisclose
 
 Check: REV-E-005 (absent or outside the enum).
 
-**`pagefront:reviewSource`** — where the review entered the publisher's possession. One `pagefront:ReviewSource`:
+**`pagefront:reviewSource`**: where the review entered the publisher's possession. One `pagefront:ReviewSource`:
 - `@type: pagefront:ReviewSource` *(required)*. Check: REV-E-013.
 - `kind` *(required)*: one of:
   - `first_party`: collected by the publisher on its own surface.
@@ -111,12 +111,12 @@ Check: REV-E-005 (absent or outside the enum).
   - `marketplace`: collected on a marketplace listing of the same product.
   - `imported`: origin not retained.
   - `undisclosed`.
-- `name` *(required for `third_party` and `marketplace`)*: the platform's name.
+- `name` *(recommended for `third_party` and `marketplace`)*: the platform's name; a source of those two kinds SHOULD carry it. Check: REV-W-006.
 - `url` *(recommended for `third_party` and `marketplace`)*: the review on the source platform. This is the one field a consumer can follow to check the review exists outside the publisher's control.
 
 Checks: REV-E-006 (absent, or `kind` outside the enum), REV-W-006 (`third_party`/`marketplace` without `name`).
 
-**`pagefront:purchaseVerification`** — how the review was tied to a transaction. One of:
+**`pagefront:purchaseVerification`**: how the review was tied to a transaction. One of:
 - `none`: no link to a purchase was established.
 - `order_matched`: the publisher matched the author to an order for the subject in its own records.
 - `post_purchase_invitation`: the review was written in response to an invitation sent after a purchase; the invitation establishes the purchase.
@@ -125,7 +125,7 @@ Checks: REV-E-006 (absent, or `kind` outside the enum), REV-W-006 (`third_party`
 
 Checks: REV-E-007 (absent or outside the enum), REV-W-007 (`platform_verified` with a `first_party` or `imported` source).
 
-**`pagefront:reviewIncentive`** — what the author received for the review. One of:
+**`pagefront:reviewIncentive`**: what the author received for the review. One of:
 - `none`
 - `discount`: a voucher, coupon or future credit.
 - `free_product`: the subject, or another product, at no charge.
@@ -146,7 +146,7 @@ OPTIONAL, repeatable. Each entry says one thing the review addresses, and option
 
 The list is closed and final for this version. A publisher with finer aspects (`scent`, `battery_life`, `noise`) carries them in Schema.org's free-text `reviewAspect` beside the closed list, and a consumer treats those as opaque strings. Additional values require a spec amendment. [why](review-notes.md#why-the-aspect-list-is-closed)
 
-Alongside the array, **`pagefront:aspectSource`** *(required when `pagefront:aspect` is present)* says who assigned the aspects: `author` (the author chose or rated them on a form), `publisher` (the publisher tagged them by hand), `inferred` (a classifier).
+Alongside the array, **`pagefront:aspectSource`** *(required when `pagefront:aspect` is present)* says who assigned the aspects: `author` (the author chose or rated them on a form), `publisher` (the publisher tagged them by hand), `inferred` (a classifier). Check: REV-E-014.
 
 Consistency: a review whose `pagefront:reviewSubject` is `product` and whose aspects are all seller-side, or the reverse, is flagged. Check: REV-W-008.
 
@@ -180,7 +180,7 @@ The Organization Sheet's `aggregateRating` is computed over its own review sheet
 
 `pagefront:reviewPolicy` applies to the Organization review sheet as to any other. Where the set is a third-party platform's, `collection` states the platform's practice as the publisher understands it, or `undisclosed`.
 
-Check, on the Product Sheet: PDP-W-0xx (reserved) when `aggregateRating.ratingCount` differs from the review sheet's `numberOfItems` for the same subject. Cross-sheet; awaits a multi-sheet linter.
+Check, on the Product Sheet: PDP-W-044 (reserved) when `aggregateRating.ratingCount` exceeds the review sheet's `numberOfItems` for the same subject; `ratingCount` counts the `product`-subject reviews and `numberOfItems` every review, so a smaller count is legitimate. Cross-sheet; awaits a multi-sheet linter.
 
 ## The product side
 
@@ -190,7 +190,7 @@ A Product Sheet (or ProductGroup, or Organization Sheet) points at its review sh
 "subjectOf": [
   {
     "@type": "ItemList",
-    "@id": "https://merchant.com/products/aurora-jumper",
+    "@id": "https://merchant.com/products/aurora-jumper#reviews",
     "url": "https://merchant.com/products/aurora-jumper",
     "pagefront:sheetUrl": "https://merchant.com/pagefront/commerce/review/aurora-jumper.en.json",
     "name": "Customer reviews"
@@ -198,11 +198,11 @@ A Product Sheet (or ProductGroup, or Organization Sheet) points at its review sh
 ]
 ```
 
-Inline `review[]` on the Product Sheet stays schema-valid and is DISCOURAGED: the entries would lack the policy statement, the four declarations double per-review size, and a product sheet is the publisher's statement about the product, which a review is not. Check, on the Product Sheet: PDP-W-0xx (reserved), inline `review` present.
+A Product Sheet SHOULD NOT carry inline `review[]`: the entries would lack the policy statement, the four declarations double per-review size, and a product sheet is the publisher's statement about the product, where a review is a customer's. Check, on the Product Sheet: PDP-W-042 (reserved), inline `review` present.
 
 ## Subject granularity
 
-Reviews attach to the **variant family**, not to a variant: [why](review-notes.md#why-reviews-attach-to-the-variant-family)
+Reviews attach to the **variant family**: [why](review-notes.md#why-reviews-attach-to-the-variant-family)
 
 - Where a `ProductGroup` sheet exists, the review sheet's `about` is the group. A producer MUST NOT emit a review sheet whose `about` is a variant `Product` (one carrying `isVariantOf`).
 - Every variant `Product` sheet's `subjectOf` points at the group's review sheet, with the group's review-set `@id`. A consumer landing on a variant reaches the same reviews as one landing on the group.
@@ -215,11 +215,11 @@ Producer obligation; a single-sheet linter cannot see whether the `about` produc
 
 `itemListElement` is **exhaustive**: it carries every review the publisher's set contains for the subject under its declared `pagefront:reviewPolicy`, ordered by `datePublished` descending, as `hasPart` is exhaustive on a Collection Sheet. There is no pagination and no continuation hint; a consumer reads the array as the whole set. A publisher that cannot enumerate its reviews does not emit a sheet. `numberOfItems` equals the array length and exists so a consumer can check it did not receive a truncated document. [why](review-notes.md#why-the-list-is-exhaustive)
 
-**Rating-only entries** (a `reviewRating` and no `reviewBody`) are carried like any other review. They count toward the product's `aggregateRating.ratingCount` and not toward `reviewCount`; a consumer computing either count from this sheet splits on the presence of `reviewBody`.
+**Rating-only entries** (a `reviewRating` and no `reviewBody`) are carried like any other review. They count toward the product's `aggregateRating.ratingCount` and are left out of `reviewCount`; a consumer computing either count from this sheet splits on the presence of `reviewBody`.
 
 ## Language
 
-A review is in its author's language, declared in its own `inLanguage`. A review sheet in `en` MAY carry reviews in `fr`: the sheet's `inLanguage` scopes the sheet's prose, not the reviews. Sibling sheets across `pagefront:availableLanguages` carry the same review set with the same `@id` per review; what differs between them is the sheet's own prose.
+A review is in its author's language, declared in its own `inLanguage`. A review sheet in `en` MAY carry reviews in `fr`: the sheet's `inLanguage` scopes the sheet's own prose alone. Sibling sheets across `pagefront:availableLanguages` carry the same review set with the same `@id` per review; what differs between them is the sheet's own prose.
 
 **Originals only.** `reviewBody` and `name` are the text as the author wrote it. A publisher that shows a translation on its page does not carry it: no `workTranslation`, no translated body, no `translator`. [why](review-notes.md#why-originals-only) Check: REV-E-011 (a `workTranslation` or `translationOfWork` on a review entry).
 
@@ -227,7 +227,7 @@ A review is in its author's language, declared in its own `inLanguage`. A review
 
 The review sheet is never a root. It is not in `hasOfferCatalog` and no entry-point carrier names it. A consumer reaches it one of two ways:
 
-**By reference.** From the subject's sheet: `subjectOf[].pagefront:sheetUrl` on the Product Group Sheet (or standalone Product Sheet) and on the Organization Sheet, under "Traversal hints" in Pagefront Discovery ([`../../core/spec/discovery.md`](../../core/spec/discovery.md#traversal-hints-normative)). The hint is confirmed by exact `@id` match at the fetched sheet. Attribution chains from the subject's sheet, which the consumer reached by declaration. The `pagefront:sheetUrl` on the `subjectOf` entry MUST be on the canonical host of the referencing sheet, as on every other edge; the fetched sheet's data-block `@id` is confirmed against the entry's `@id` by exact string. Check, on the product and organization side: PDP-W-0xx / ORG-W-0xx (reserved), a `subjectOf` hint off-host.
+**By reference.** From the subject's sheet: `subjectOf[].pagefront:sheetUrl` on the Product Group Sheet (or standalone Product Sheet) and on the Organization Sheet, under "Traversal hints" in Pagefront Discovery ([`../../core/spec/discovery.md`](../../core/spec/discovery.md#traversal-hints-normative)). The hint is confirmed by exact `@id` match at the fetched sheet. Attribution chains from the subject's sheet, which the consumer reached by declaration. The `pagefront:sheetUrl` on the `subjectOf` entry MUST be on the canonical host of the referencing sheet, as on every other edge; the fetched sheet's data-block `@id` is confirmed against the entry's `@id` by exact string. Check, on the product and organization side: PDP-W-043 / ORG-W-009 (reserved), a `subjectOf` hint off-host.
 
 **By page.** The page named in `canonical_url` declares the review sheet with its own `Link: rel="alternate"; type="application/pagefront+json"` and HTML `<link>` fallback, with `profile` naming this spec's schema. On a product page that is the second Pagefront link after the Product Sheet's, in that order, under "Several Sheets for one page" in Pagefront Discovery; a consumer picks the review link by `profile` from the header, or by fetching and reading `$schema` from the elements. This is also the fallback path when the hint is stale. A publisher that renders reviews on a dedicated page declares the review sheet there instead, and the product page keeps only the Product Sheet link.
 
@@ -249,7 +249,7 @@ Link: <https://merchant.com/pagefront/commerce/product/aurora-jumper.en.json>;
       data-profile="https://themachineweb.org/pagefront/spec/commerce/review/v0.1.0.json">
 ```
 
-This spec requires Pagefront Discovery 0.2.0 or later.
+This spec requires the Pagefront Discovery version that introduces "Several Sheets for one page" (Unreleased in [`discovery-changelog.md`](../../core/spec/discovery-changelog.md) at the time of writing).
 
 ## Identity
 
@@ -272,7 +272,7 @@ Review `@id` is the exact-string identity key, as everywhere in the format. A pr
 1. ~~**Pagination.**~~ Resolved 2026-11-17: none. The sheet is exhaustive. See "Size and ordering".
 2. ~~**Translation.**~~ Resolved 2026-11-17: originals only; translations are not carried. See "Language".
 3. ~~**Aspect vocabulary.**~~ Resolved 2026-11-17: the closed list stays at the cross-vertical aspects; vertical-specific aspects go in free-text `reviewAspect`. See "Aspects".
-4. ~~**Rating-only reviews.**~~ Resolved 2026-11-17: carried; they count toward `ratingCount`, not `reviewCount`. See "Size and ordering".
+4. ~~**Rating-only reviews.**~~ Resolved 2026-11-17: carried; they count toward `ratingCount` and are left out of `reviewCount`. See "Size and ordering".
 5. ~~**Variant attribution on a ProductGroup.**~~ Resolved 2026-11-17: reviews attach to the `ProductGroup`; variant sheets defer to the group's review sheet; `itemReviewed` is the variant bought, from order data only. See "Subject granularity".
 6. ~~**Seller reviews across products.**~~ Resolved 2026-11-17: the Organization Sheet has its own review sheet; its `aggregateRating` is computed over that sheet; seller-subject reviews on product pages stay where published and MAY be duplicated under the same `@id`. See "The Organization review sheet".
 
@@ -282,7 +282,7 @@ No open questions remain at draft 0.1.0. New ones are added here as they surface
 
 Codes are reserved here and defined under "Commerce Review Sheet rules" in [`rules.md`](rules.md), with their fixtures; the two lists are kept identical.
 
-- **REV-E-001** `about` absent, without `@id`, or with a `@type` outside `Product`, its subtypes, `ProductGroup`, `Organization`.
+- **REV-E-001** `about` absent, without `@id`, or with a `@type` outside `Product`, the Product subtypes the linter recognises (listed under REV-E-001 in `rules.md`), `ProductGroup`, `Organization`.
 - **REV-E-002** `pagefront:reviewPolicy` absent, or `collection` outside the enum.
 - **REV-E-003** a review entry without `@id`.
 - **REV-E-004** a review entry without `reviewRating`, or `reviewRating` without `ratingValue`.
@@ -295,15 +295,19 @@ Codes are reserved here and defined under "Commerce Review Sheet rules" in [`rul
 - **REV-E-011** `workTranslation` or `translationOfWork` on a review entry.
 - **REV-E-012** `pagefront:reviewSubject` other than `seller` on a sheet whose `about` is an `Organization`.
 - **REV-E-013** a `pagefront:reviewPolicy` or `pagefront:reviewSource` value without `@type`, or with an `@type` other than `pagefront:ReviewPolicy` or `pagefront:ReviewSource` respectively.
+- **REV-E-014** `pagefront:aspect` present without `pagefront:aspectSource`.
+- **REV-E-015** `reviewRating` without `bestRating` or `worstRating` where `ratingValue` exceeds 5.
+- **REV-E-016** `$schema` does not name the sheet-spec version the declared release bundles (same logic as COL-E-003).
+- **REV-E-017** a release the release manifest does not list (same logic as COL-E-004).
 - **REV-W-001** `itemListElement` is empty (review; no failure).
 - **REV-W-002** `collection: curated` without `url`.
 - **REV-W-003** the same review `@id` twice.
-- **REV-W-004** `reviewRating` without `bestRating`/`worstRating` where `ratingValue` exceeds 5.
+- **REV-W-004** retired before release; the check is REV-E-015.
 - **REV-W-005** `author` carrying `email`, `telephone` or `address`.
 - **REV-W-006** source `kind` `third_party` or `marketplace` without `name`.
 - **REV-W-007** `purchaseVerification: platform_verified` with source `kind` `first_party` or `imported`.
 - **REV-W-008** `pagefront:reviewSubject` disagrees with every aspect carried (all aspects on the other side of the split).
-- **REV-W-009** `pagefront:aspect` present without `pagefront:aspectSource`.
+- **REV-W-009** retired before release; the check is REV-E-014.
 - **REV-W-010** `reviewBody` or `name` present without `inLanguage` on the entry.
 - **REV-W-011** `associatedMedia` on a review whose `pagefront:reviewSource.kind` is `imported` (media provenance is weaker than text provenance).
 - **REV-W-012** `itemReviewed` present with `pagefront:purchaseVerification` other than `order_matched` or `post_purchase_invitation`, or present on a sheet whose `about` is not a `ProductGroup`.
@@ -316,13 +320,13 @@ Codes are reserved here and defined under "Commerce Review Sheet rules" in [`rul
 {
   "@context": ["https://schema.org", {"pagefront": "https://themachineweb.org/pagefront/vocabulary/"}],
   "@type": "ItemList",
-  "@id": "https://merchant.com/products/aurora-jumper",
+  "@id": "https://merchant.com/products/aurora-jumper#reviews",
   "name": "Customer reviews",
   "inLanguage": "en",
   "numberOfItems": 3,
   "about": {
     "@type": "ProductGroup",
-    "@id": "https://merchant.com/pagefront/commerce/product/aurora-jumper.en.json",
+    "@id": "https://merchant.com/products/aurora-jumper#product",
     "url": "https://merchant.com/products/aurora-jumper",
     "pagefront:sheetUrl": "https://merchant.com/pagefront/commerce/product/aurora-jumper.en.json"
   },
@@ -362,7 +366,7 @@ Codes are reserved here and defined under "Commerce Review Sheet rules" in [`rul
     },
     {
       "@type": "Review",
-      "@id": "https://www.avis-verifies.com/avis/aurora-jumper/7731902",
+      "@id": "https://reviews.example/r/aurora-jumper/7731902",
       "datePublished": "2026-11-09",
       "inLanguage": "fr",
       "reviewBody": "Très belle maille, conforme à la photo.",
@@ -372,8 +376,8 @@ Codes are reserved here and defined under "Commerce Review Sheet rules" in [`rul
       "pagefront:reviewSource": {
         "@type": "pagefront:ReviewSource",
         "kind": "third_party",
-        "name": "Avis Vérifiés",
-        "url": "https://www.avis-verifies.com/avis/aurora-jumper/7731902"
+        "name": "Verified Opinions",
+        "url": "https://reviews.example/r/aurora-jumper/7731902"
       },
       "pagefront:purchaseVerification": "platform_verified",
       "pagefront:reviewIncentive": "undisclosed",
@@ -405,7 +409,7 @@ The types `pagefront:ReviewPolicy`, `pagefront:ReviewSource` and `pagefront:Revi
 
 ## References
 
-- Pagefront Discovery 0.2.0: [`../../core/spec/discovery.md`](../../core/spec/discovery.md), "Several Sheets for one page"
+- Pagefront Discovery: [`../../core/spec/discovery.md`](../../core/spec/discovery.md), "Several Sheets for one page"
 - Pagefront Spec (Product Sheet): [`product.md`](product.md), open question #18
 - Commerce Organization Sheet: [`organization.md`](organization.md), `aggregateRating` as seller reputation
 - Commerce Collection Sheet: [`collection.md`](collection.md), the member entry shape

@@ -11,9 +11,9 @@
       "severity": "warning",
       "path": "$['data']['itemListElement'][1]['associatedMedia']",
       "values": {
-        "id": "https://reviews.example/aurora-jumper/7731902"
+        "id": "https://reviews.example/r/aurora-jumper/7731902"
       },
-      "message": "Review `https://reviews.example/aurora-jumper/7731902` at `$['data']['itemListElement'][1]['associatedMedia']` carries `associatedMedia` from an `imported` source.",
+      "message": "Review `https://reviews.example/r/aurora-jumper/7731902` at `$['data']['itemListElement'][1]['associatedMedia']` carries `associatedMedia` from an `imported` source.",
       "remediation": "Confirm the media came with the review. Where its origin is not retained, leave `associatedMedia` out."
     }
   ],

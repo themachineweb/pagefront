@@ -11,11 +11,11 @@
       "severity": "warning",
       "path": "$['data']['itemListElement'][1]['pagefront:aspect']",
       "values": {
-        "id": "https://reviews.example/aurora-jumper/7731902",
+        "id": "https://reviews.example/r/aurora-jumper/7731902",
         "subject": "seller",
         "side": "product"
       },
-      "message": "Review `https://reviews.example/aurora-jumper/7731902` at `$['data']['itemListElement'][1]['pagefront:aspect']` declares `pagefront:reviewSubject` `seller` and every aspect it carries is product-side.",
+      "message": "Review `https://reviews.example/r/aurora-jumper/7731902` at `$['data']['itemListElement'][1]['pagefront:aspect']` declares `pagefront:reviewSubject` `seller` and every aspect it carries is product-side.",
       "remediation": "Declare the subject the aspects describe: `seller` for delivery, service, returns, packaging, payment and communication, `product` for the product's qualities, `mixed` where the text covers both."
     }
   ],

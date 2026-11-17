@@ -1,0 +1,29 @@
+{
+  "sheet": "https://merchant.example/products/aurora-jumper",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "9.9.9",
+  "sheet_spec_version": "0.1.0",
+  "catalogue_version": "0.21.0",
+  "findings": [
+    {
+      "rule": "REV-E-017",
+      "severity": "error",
+      "path": "$['release']",
+      "values": {
+        "release": "9.9.9",
+        "known": "0.3.0, 0.4.0, 0.5.0, 0.6.0"
+      },
+      "message": "`release` at `$['release']` is `9.9.9`, which is not a release this catalogue knows (0.3.0, 0.4.0, 0.5.0, 0.6.0).",
+      "remediation": "Declare a published commerce release (see releases.md). If the release is newer than this linter, update the linter."
+    }
+  ],
+  "summary": {
+    "errors": 1,
+    "warnings": 0,
+    "info": 0,
+    "rules_fired": [
+      "REV-E-017"
+    ]
+  }
+}
