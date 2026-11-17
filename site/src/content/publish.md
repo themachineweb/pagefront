@@ -39,8 +39,8 @@ Schema.org description.
 
 ```json
 {
-  "$schema": "https://themachineweb.org/pagefront/spec/commerce/product/v0.11.0.json",
-  "release": "0.5.0",
+  "$schema": "https://themachineweb.org/pagefront/spec/commerce/product/v0.12.0.json",
+  "release": "0.6.0",
   "schema_org_version": "30.0",
   "canonical_url": "https://your-shop.example/product/anorak",
   "generated_at": "2026-09-04T09:12:00Z",  "data": { ... }
@@ -234,4 +234,4 @@ sheets you emitted once.
   your sheet calls at request time. Sheets published today keep working whether
   or not this site does.
 
-Commerce release 0.5.0 · the current release. A breaking change always comes with a new release number; from release 1.0.0, nothing that is published changes meaning.
+Commerce release 0.6.0 · the current release. A breaking change always comes with a new release number; from release 1.0.0, nothing that is published changes meaning.

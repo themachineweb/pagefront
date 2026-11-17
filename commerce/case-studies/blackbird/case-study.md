@@ -1,6 +1,6 @@
 # AFS Blackbird V3 — Case Study
 
-Commerce release 0.5.0. Sheets derived from the live site and verified against
+Commerce release 0.6.0. Sheets derived from the live site and verified against
 it on 2026-09-04; the product sheet re-verified on 2026-09-30, and its
 prices read again from the rendered page on 2026-10-02 and on 2026-10-26;
 both sheets re-verified on 2026-10-27.
@@ -216,3 +216,6 @@ customer receives it.
   unchanged; the offers' return statement follows the drawer's strip,
   "Returns within 14 days", where the page used to say fifteen days free.
   The envelope carries the day's `generated_at` and a new `expires_at`.
+
+- **2026-11-17** — sheets moved to commerce release 0.6.0 (`release` and
+  `$schema` only); no other value changed.
