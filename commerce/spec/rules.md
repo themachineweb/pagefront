@@ -1282,15 +1282,15 @@ The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallbac
 **Fixtures:** `fires-absent`, `fires-outside-enum`, `clean`.
 **Spec reference:** `review.md#pagefront-declarations`
 
-#### REV-E-008 — `pagefront:incentive` absent or outside the enum
+#### REV-E-008 — `pagefront:reviewIncentive` absent or outside the enum
 
 **Severity:** error
 **Target:** `$.data.itemListElement` (the Check walks the entries; the finding sits at the entry when the field is absent, at the field otherwise)
 **Description:** One of the four declarations required on every review entry ("Pagefront declarations" in `review.md`), a closed enum with `undisclosed`: absence is a broken sheet, where `undisclosed` is a statement ("Undisclosed is a statement"). The schema requires the field and closes the enum; this rule reports the condition for callers that lint without validating.
-**Check:** An entry of `itemListElement` carries no `pagefront:incentive`, or one whose value is not one of `none`, `discount`, `free_product`, `sample_program`, `undisclosed`. One finding per entry.
-**Message:** `pagefront:incentive` on review `{id}` at `{path}` is {problem}.
+**Check:** An entry of `itemListElement` carries no `pagefront:reviewIncentive`, or one whose value is not one of `none`, `discount`, `free_product`, `sample_program`, `undisclosed`. One finding per entry.
+**Message:** `pagefront:reviewIncentive` on review `{id}` at `{path}` is {problem}.
 The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallback `(no @id)`. `{problem}` carries `absent` or `` `{value}`, which is not one of … ``; a non-string value renders as its JSON serialization.
-**Remediation:** Declare `pagefront:incentive` on every review as `none`, `discount`, `free_product`, `sample_program` or `undisclosed`; a publisher that does not know writes `undisclosed`, never nothing.
+**Remediation:** Declare `pagefront:reviewIncentive` on every review as `none`, `discount`, `free_product`, `sample_program` or `undisclosed`; a publisher that does not know writes `undisclosed`, never nothing.
 **Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
 **Applies from:** release 0.6.0; not the legacy line.
 **Fixtures:** `fires-absent`, `fires-outside-enum`, `clean`.

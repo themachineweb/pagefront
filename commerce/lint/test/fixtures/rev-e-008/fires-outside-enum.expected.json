@@ -9,13 +9,13 @@
     {
       "rule": "REV-E-008",
       "severity": "error",
-      "path": "$['data']['itemListElement'][2]['pagefront:incentive']",
+      "path": "$['data']['itemListElement'][2]['pagefront:reviewIncentive']",
       "values": {
         "id": "https://merchant.example/reviews/r-88102",
         "problem": "`gift`, which is not one of `none`, `discount`, `free_product`, `sample_program`, `undisclosed`"
       },
-      "message": "`pagefront:incentive` on review `https://merchant.example/reviews/r-88102` at `$['data']['itemListElement'][2]['pagefront:incentive']` is `gift`, which is not one of `none`, `discount`, `free_product`, `sample_program`, `undisclosed`.",
-      "remediation": "Declare `pagefront:incentive` on every review as `none`, `discount`, `free_product`, `sample_program` or `undisclosed`; a publisher that does not know writes `undisclosed`, never nothing."
+      "message": "`pagefront:reviewIncentive` on review `https://merchant.example/reviews/r-88102` at `$['data']['itemListElement'][2]['pagefront:reviewIncentive']` is `gift`, which is not one of `none`, `discount`, `free_product`, `sample_program`, `undisclosed`.",
+      "remediation": "Declare `pagefront:reviewIncentive` on every review as `none`, `discount`, `free_product`, `sample_program` or `undisclosed`; a publisher that does not know writes `undisclosed`, never nothing."
     }
   ],
   "summary": {

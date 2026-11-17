@@ -112,7 +112,7 @@ test("schema head: the policy and every declaration are closed enums with undisc
   for (const [field, bad] of [
     ["pagefront:reviewSubject", "service"],
     ["pagefront:purchaseVerification", "verified"],
-    ["pagefront:incentive", "gift"],
+    ["pagefront:reviewIncentive", "gift"],
   ]) {
     const outside = loadExample();
     outside.data.itemListElement[2][field] = bad;
