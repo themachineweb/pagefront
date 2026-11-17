@@ -1201,7 +1201,7 @@ The `{problem}` placeholder carries `is absent`, `is not an object`, `` carries 
 
 **Severity:** error
 **Target:** `$.data` (the finding sits at the data block when the policy is absent, at the policy otherwise)
-**Description:** `pagefront:reviewPolicy` is the publisher's statement about the set, required and single-valued ("The set" in `review.md`); its `collection` says how reviews reach the published set, from a closed enum whose `undisclosed` member is a statement where absence is a broken sheet ("Undisclosed is a statement"). The schema requires the policy and closes the enum; this rule reports the condition for callers that lint without validating.
+**Description:** `pagefront:reviewPolicy` is the publisher's statement about the set, required and single-valued ("The set" in `review.md`); its `collection` says how reviews reach the published set, from a closed enum whose `undisclosed` member is a statement where absence is a broken sheet ("Undisclosed and unclassified are statements"). The schema requires the policy and closes the enum; this rule reports the condition for callers that lint without validating.
 **Check:** The data block carries no `pagefront:reviewPolicy`; or it is not an object; or it carries no `collection`; or `collection` is not one of `all`, `moderated`, `curated`, `undisclosed`. One finding.
 **Message:** `pagefront:reviewPolicy` at `{path}` {problem}.
 The `{problem}` placeholder carries `is absent`, `is not an object`, `` carries no `collection` `` or `` declares `collection` `{value}`, which is not one of `all`, `moderated`, `curated`, `undisclosed` ``; a non-string value renders as its JSON serialization.
@@ -1242,7 +1242,7 @@ The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallbac
 
 **Severity:** error
 **Target:** `$.data.itemListElement` (the Check walks the entries; the finding sits at the entry when the field is absent, at the field otherwise)
-**Description:** One of the four declarations required on every review entry ("Pagefront declarations" in `review.md`), a closed enum with `undisclosed`: absence is a broken sheet, where `undisclosed` is a statement ("Undisclosed is a statement"). The schema requires the field and closes the enum; this rule reports the condition for callers that lint without validating.
+**Description:** One of the four declarations required on every review entry ("Pagefront declarations" in `review.md`), a closed enum with `undisclosed`: absence is a broken sheet, where `undisclosed` is a statement ("Undisclosed and unclassified are statements"). The schema requires the field and closes the enum; this rule reports the condition for callers that lint without validating.
 **Check:** An entry of `itemListElement` carries no `pagefront:reviewSubject`, or one whose value is not one of `product`, `seller`, `mixed`, `unclassified`. One finding per entry.
 **Message:** `pagefront:reviewSubject` on review `{id}` at `{path}` is {problem}.
 The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallback `(no @id)`. `{problem}` carries `absent` or `` `{value}`, which is not one of … ``; a non-string value renders as its JSON serialization.
@@ -1270,7 +1270,7 @@ The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallbac
 
 **Severity:** error
 **Target:** `$.data.itemListElement` (the Check walks the entries; the finding sits at the entry when the field is absent, at the field otherwise)
-**Description:** One of the four declarations required on every review entry ("Pagefront declarations" in `review.md`), a closed enum with `undisclosed`: absence is a broken sheet, where `undisclosed` is a statement ("Undisclosed is a statement"). The schema requires the field and closes the enum; this rule reports the condition for callers that lint without validating.
+**Description:** One of the four declarations required on every review entry ("Pagefront declarations" in `review.md`), a closed enum with `undisclosed`: absence is a broken sheet, where `undisclosed` is a statement ("Undisclosed and unclassified are statements"). The schema requires the field and closes the enum; this rule reports the condition for callers that lint without validating.
 **Check:** An entry of `itemListElement` carries no `pagefront:purchaseVerification`, or one whose value is not one of `none`, `order_matched`, `post_purchase_invitation`, `platform_verified`, `undisclosed`. One finding per entry.
 **Message:** `pagefront:purchaseVerification` on review `{id}` at `{path}` is {problem}.
 The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallback `(no @id)`. `{problem}` carries `absent` or `` `{value}`, which is not one of … ``; a non-string value renders as its JSON serialization.
@@ -1284,7 +1284,7 @@ The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallbac
 
 **Severity:** error
 **Target:** `$.data.itemListElement` (the Check walks the entries; the finding sits at the entry when the field is absent, at the field otherwise)
-**Description:** One of the four declarations required on every review entry ("Pagefront declarations" in `review.md`), a closed enum with `undisclosed`: absence is a broken sheet, where `undisclosed` is a statement ("Undisclosed is a statement"). The schema requires the field and closes the enum; this rule reports the condition for callers that lint without validating.
+**Description:** One of the four declarations required on every review entry ("Pagefront declarations" in `review.md`), a closed enum with `undisclosed`: absence is a broken sheet, where `undisclosed` is a statement ("Undisclosed and unclassified are statements"). The schema requires the field and closes the enum; this rule reports the condition for callers that lint without validating.
 **Check:** An entry of `itemListElement` carries no `pagefront:reviewIncentive`, or one whose value is not one of `none`, `discount`, `free_product`, `sample_program`, `undisclosed`. One finding per entry.
 **Message:** `pagefront:reviewIncentive` on review `{id}` at `{path}` is {problem}.
 The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallback `(no @id)`. `{problem}` carries `absent` or `` `{value}`, which is not one of … ``; a non-string value renders as its JSON serialization.
@@ -1344,7 +1344,7 @@ The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallbac
 **Check:** `about` declares a `@type` of `Organization`, `OnlineStore` or `OnlineBusiness`, and an entry of `itemListElement` declares a string `pagefront:reviewSubject` other than `seller`. One finding per entry.
 **Message:** Review `{id}` at `{path}` declares `pagefront:reviewSubject` `{subject}` on an Organization review sheet.
 The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallback `(no @id)`.
-**Remediation:** A review on an Organization review sheet is about the seller by where it was collected: set `pagefront:reviewSubject` to `seller`. A review that is in fact about a product belongs in that product's review sheet. `unclassified` is never valid here, since the collection context is the classification.
+**Remediation:** A review on an Organization review sheet is about the seller by where it was collected: set `pagefront:reviewSubject` to `seller`. A review that is in fact about a product belongs in that product's review sheet. An `unclassified` entry has no place on this sheet: classify it as `seller` if it was collected about the seller, or move it to the product's review sheet if it is about a product.
 **Introduced:** release 0.6.0
 **Applies from:** release 0.6.0; not the legacy line.
 **Fixtures:** `fires` (an Organization review sheet with one `product` entry), `fires-unclassified` (one `unclassified` entry), `clean` (the same sheet with `seller` entries only).
@@ -1504,7 +1504,7 @@ The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallbac
 
 **Severity:** warning
 **Target:** `$.data.itemListElement` (the Check walks the entries; the finding sits at the entry's `pagefront:aspect`)
-**Description:** The aspect list is split along the subject line ("Aspects" in `review.md`). A `product` review whose every aspect is seller-side, or a `seller` review whose every aspect is product-side, declares one thing and details another. A `mixed` review never fires, and aspects outside the closed list are not judged.
+**Description:** The aspect list is split along the subject line ("Aspects" in `review.md`). A `product` review whose every aspect is seller-side, or a `seller` review whose every aspect is product-side, declares one thing and details another. A `mixed` review never fires, an entry whose `pagefront:reviewSubject` is `unclassified` is not judged (REV-W-012 covers it), and aspects outside the closed list are not judged.
 **Check:** An entry's `pagefront:reviewSubject` is `product` and every value of the closed list its `pagefront:aspect` entries carry is seller-side (`delivery`, `customer_service`, `returns`, `packaging`, `payment`, `communication`); or the subject is `seller` and every such value is product-side (`quality`, `fit`, `durability`, `value`, `ease_of_use`, `appearance`, `as_described`, `performance`, `comfort`, `taste`). Silent when no aspect of the closed list is carried. One finding per entry.
 **Message:** Review `{id}` at `{path}` declares `pagefront:reviewSubject` `{subject}` and every aspect it carries is {side}-side.
 The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallback `(no @id)`. `{side}` is `seller` or `product`.

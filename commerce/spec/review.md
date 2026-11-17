@@ -7,7 +7,7 @@ The Commerce Review Sheet is the Pagefront Sheet that carries the consumer revie
 
 ## The two problems this sheet exists to solve
 
-Consumer reviews fail agents in two ways, and the format answers each with a declaration the publisher makes: did a real customer write it, which the four declarations and their `undisclosed` member answer [why](review-notes.md#why-undisclosed-is-a-statement); and what are they writing about, which `pagefront:reviewSubject` and the aspects answer [why](review-notes.md#why-every-review-declares-its-subject).
+Consumer reviews fail agents in two ways, and the format answers each with a declaration the publisher makes: did a real customer write it, which the three provenance declarations answer, each with `undisclosed` for what the publisher cannot say, as the subject declaration has `unclassified` for what no one has read [why](review-notes.md#why-undisclosed-is-a-statement); and what are they writing about, which `pagefront:reviewSubject` and the aspects answer [why](review-notes.md#why-every-review-declares-its-subject).
 
 ## The envelope
 
@@ -93,7 +93,7 @@ Each entry is a Schema.org `Review` carrying:
 
 ### Pagefront declarations
 
-Four declarations, each REQUIRED on every entry. The rationale is in "Undisclosed is a statement".
+Four declarations, each REQUIRED on every entry. The rationale is in "Undisclosed and unclassified are statements".
 
 **`pagefront:reviewSubject`**: what the author is writing about. One of:
 - `product`: the product's intrinsic qualities.
@@ -150,25 +150,27 @@ Alongside the array, **`pagefront:aspectSource`** *(required when `pagefront:asp
 
 Consistency: a review whose `pagefront:reviewSubject` is `product` and whose aspects are all seller-side, or the reverse, is flagged. Check: REV-W-007.
 
-## Undisclosed is a statement
+## Undisclosed and unclassified are statements
 
 Each of the three provenance declarations (`pagefront:reviewSource.kind`, `pagefront:purchaseVerification`, `pagefront:reviewIncentive`), and `pagefront:reviewPolicy`'s `collection` and `solicitation`, has three states: [why](review-notes.md#why-undisclosed-is-a-statement)
 
 | State | Meaning | Linter |
 |---|---|---|
-| A value other than `undisclosed` | The publisher asserts this. | — |
-| `undisclosed` | The publisher states it does not know, or will not say. | — |
+| A value other than `undisclosed` / `unclassified` | The publisher asserts this. | — |
+| `undisclosed` (provenance) or `unclassified` (subject) | The publisher states it does not know, will not say, or has not looked. | — |
 | Absent | The publisher said nothing. | Error |
 
-`undisclosed` is not a default and a producer MUST NOT emit it where it holds the fact. A publisher that imports a review set without its metadata emits `undisclosed`, and is conformant; a consumer reads `undisclosed` as a reason to discount, and reads absence as a broken sheet.
+Neither word is a default: a producer MUST NOT emit `undisclosed` where it holds the fact, nor `unclassified` on a review it has classified. A publisher that imports a review set without its metadata emits `undisclosed` on the provenance declarations and, until it has read the reviews, `unclassified` on the subject, and is conformant; a consumer reads either as a reason to discount, and reads absence as a broken sheet.
 
-`pagefront:reviewSubject` has the same three states, with `unclassified` as the middle word. The word differs because the unknown differs: provenance is lost if it was not recorded when the review arrived, and `undisclosed` says so; the subject is recoverable from the text at any time, so a publisher is never unable to classify a review, it has only not done so yet, and `unclassified` says that.
+The subject declaration takes `unclassified` where the provenance declarations take `undisclosed`, because the unknown differs: provenance is lost if it was not recorded when the review arrived, and `undisclosed` says so; the subject is recoverable from the text at any time, so a publisher is never unable to classify a review, it has only not done so yet, and `unclassified` says that.
 
 **The minimum entry** is `@id`, `datePublished`, `reviewRating`, and the four declarations as `undisclosed`, `undisclosed`, `undisclosed`, `unclassified`. It is conformant, it contributes to no product aggregate, and it tells a consumer exactly what it is. Messy sets are the common case, and the format carries them without pretending otherwise.
 
 ## Scoping the aggregate
 
 A Product Sheet's `aggregateRating` SHOULD be computed over reviews whose `pagefront:reviewSubject` is `product` only. `mixed` reviews are excluded from the product aggregate unless the publisher has a product-side `pagefront:aspect` rating for them, in which case that rating MAY be used. `unclassified` reviews are excluded from the product aggregate. Seller-subject reviews contribute to `aggregateRating` on the Organization Sheet and nowhere else.
+
+The counts follow the same rule. An entry contributes to the product aggregate's `ratingCount` when its `pagefront:reviewSubject` is `product`, or `mixed` with a product-side aspect rating; it contributes to `reviewCount` when, in addition, it carries `reviewBody`. `seller` and `unclassified` entries contribute to neither on the product side.
 
 A publisher that cannot separate the two carries its blended aggregate on the Product Sheet and sets `pagefront:reviewPolicy.collection` honestly; the blend is the known limitation vocabulary.md already names, and a consumer with this sheet can recompute. A publisher that classifies nothing has a product aggregate over nothing, which is the honest result; it MAY still carry a blended `aggregateRating` under the paragraph above, and a consumer holding the review sheet sees that every entry is `unclassified` and discounts accordingly.
 
@@ -215,7 +217,7 @@ Producer obligation; a single-sheet linter cannot see whether the `about` produc
 
 `itemListElement` is **exhaustive**: it carries every review the publisher's set contains for the subject under its declared `pagefront:reviewPolicy`, ordered by `datePublished` descending, as `hasPart` is exhaustive on a Collection Sheet. There is no pagination and no continuation hint; a consumer reads the array as the whole set. A publisher that cannot enumerate its reviews does not emit a sheet. `numberOfItems` equals the array length and exists so a consumer can check it did not receive a truncated document. [why](review-notes.md#why-the-list-is-exhaustive)
 
-**Rating-only entries** (a `reviewRating` and no `reviewBody`) are carried like any other review. They count toward the product's `aggregateRating.ratingCount` and are left out of `reviewCount`; a consumer computing either count from this sheet splits on the presence of `reviewBody`.
+**Rating-only entries** (a `reviewRating` and no `reviewBody`) are carried like any other review. They count toward `ratingCount` and are left out of `reviewCount` of whichever aggregate their subject places them in (see "Scoping the aggregate"); a consumer computing either count from this sheet splits on the presence of `reviewBody`.
 
 ## Language
 
@@ -399,7 +401,7 @@ Codes are reserved here and defined under "Commerce Review Sheet rules" in [`rul
 }
 ```
 
-Three reviews, three trust profiles. The first is a matched order (so the variant bought is known and carried) with a mixed subject and a per-aspect split that lets a consumer keep the 5 for quality and drop the delivery complaint from the product score. The second is syndicated, platform-verified, checkable at its source URL, and the publisher does not know whether the platform paid for it. The third is the minimum entry: an imported star rating, nothing known about its provenance, nothing classified; conformant, it counts toward `ratingCount` and enters no aggregate. Everything an agent needs to weight each accordingly.
+Three reviews, three trust profiles. The first is a matched order (so the variant bought is known and carried) with a mixed subject and a per-aspect split that lets a consumer keep the 5 for quality and drop the delivery complaint from the product score. The second is syndicated, platform-verified, checkable at its source URL, and the publisher does not know whether the platform paid for it. The third is the minimum entry: an imported star rating, nothing known about its provenance, nothing classified; it is conformant, it enters no aggregate and no count until classified, and an agent knows precisely how little it is worth.
 
 ## Vocabulary additions
 

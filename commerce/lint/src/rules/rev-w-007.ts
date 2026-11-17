@@ -8,7 +8,8 @@ import { asRecord, memberEntries, PRODUCT_ASPECTS, reviewId, SELLER_ASPECTS } fr
  * The aspect list is split along the subject line. A `product` review
  * whose every aspect is seller-side, or a `seller` review whose every
  * aspect is product-side, declares one thing and details another. Aspects
- * outside the closed list are not judged; a `mixed` review never fires.
+ * outside the closed list are not judged; a `mixed` review never fires, and
+ * an `unclassified` entry is not judged (REV-W-012 covers it).
  * One finding per entry, at its `pagefront:aspect`.
  */
 export const revW007: Rule = {

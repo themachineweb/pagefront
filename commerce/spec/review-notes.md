@@ -7,7 +7,7 @@ Each note opens with a link to the field or section it explains. The reference l
 
 ## Why undisclosed is a statement
 
-For "Undisclosed is a statement" in [`review.md`](review.md#undisclosed-is-a-statement).
+For "Undisclosed and unclassified are statements" in [`review.md`](review.md#undisclosed-and-unclassified-are-statements).
 
 Consumer reviews fail agents in two ways, and the format answers each with a declaration, not a judgment. The first: did a real customer write it? The sheet cannot know. The publisher can state what it knows: the review's source, how (or whether) it was matched to a purchase, and whether the author was compensated. Each of these is a closed enum with an `undisclosed` member, so that "the publisher does not know" is a statement distinct from both "no" and silence. Pagefront certifies nothing; it makes the absence of a declaration the worst state a review can be in.
 

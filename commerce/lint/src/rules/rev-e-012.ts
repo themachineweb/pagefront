@@ -30,7 +30,7 @@ export const revE012: Rule = {
   },
   messageTemplate: "Review `{id}` at `{path}` declares `pagefront:reviewSubject` `{subject}` on an Organization review sheet.",
   remediation:
-    "A review on an Organization review sheet is about the seller by where it was collected: set `pagefront:reviewSubject` to `seller`. A review that is in fact about a product belongs in that product's review sheet. `unclassified` is never valid here, since the collection context is the classification.",
+    "A review on an Organization review sheet is about the seller by where it was collected: set `pagefront:reviewSubject` to `seller`. A review that is in fact about a product belongs in that product's review sheet. An `unclassified` entry has no place on this sheet: classify it as `seller` if it was collected about the seller, or move it to the product's review sheet if it is about a product.",
   introduced: "release 0.6.0",
   appliesFrom: "0.6.0",
   specReference: "review.md#the-organization-review-sheet",
