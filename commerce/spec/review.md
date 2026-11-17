@@ -48,7 +48,7 @@ The `data` block roots on Schema.org **`ItemList`** whose `itemListElement` entr
 ### Recommended core fields
 
 - `name`: the list's display title, in `inLanguage`.
-- `numberOfItems`: the number of reviews carried, equal to the array length (see "Size and ordering"). Check: REV-W-013.
+- `numberOfItems`: the number of reviews carried, equal to the array length (see "Size and ordering"). Check: REV-W-011.
 - `url`: the human page, when distinct from `canonical_url`.
 - `pagefront:availableLanguages`: sibling sheets in other languages, as in the Pagefront Spec.
 
@@ -84,9 +84,9 @@ Each entry is a Schema.org `Review` carrying:
 - `reviewRating` *(required)*: a `Rating` with `ratingValue`; `bestRating`/`worstRating` REQUIRED when the scale is not 1–5. Check: REV-E-004, REV-E-015. A review with no rating is not carried; a rating with no text is.
 - `reviewBody` *(optional)*: the review text as written: unedited, untranslated (see "Language"), untruncated. A publisher that shortens text for display carries the full text here.
 - `name` *(optional)*: the review's title, as written.
-- `inLanguage` *(recommended)*: the language of the text as written. An entry carrying `reviewBody` or `name` SHOULD carry it. Check: REV-W-010.
-- `author` *(recommended)*: a `Person` with `name` as displayed. No other personal data. A publisher that shows reviews anonymously omits `author`. Check: REV-W-005 (`author` carrying `email`, `telephone`, `address`).
-- `itemReviewed` *(optional)*: on a sheet whose `about` is a `ProductGroup`, the variant the author **bought**, as a `Product` reference with `@id`. It is purchase data the publisher holds: it MAY be present only when `pagefront:purchaseVerification` is `order_matched` or `post_purchase_invitation`, where the publisher knows the order line. It does not narrow the review's subject, which stays the group; it gives `fit`, `size`-shaped and `appearance` aspects the context they need ("runs small" means nothing without the size bought). Otherwise omitted. Check: REV-W-012.
+- `inLanguage` *(recommended)*: the language of the text as written. An entry carrying `reviewBody` or `name` SHOULD carry it. Check: REV-W-008.
+- `author` *(recommended)*: a `Person` with `name` as displayed. No other personal data. A publisher that shows reviews anonymously omits `author`. Check: REV-W-004 (`author` carrying `email`, `telephone`, `address`).
+- `itemReviewed` *(optional)*: on a sheet whose `about` is a `ProductGroup`, the variant the author **bought**, as a `Product` reference with `@id`. It is purchase data the publisher holds: it MAY be present only when `pagefront:purchaseVerification` is `order_matched` or `post_purchase_invitation`, where the publisher knows the order line. It does not narrow the review's subject, which stays the group; it gives `fit`, `size`-shaped and `appearance` aspects the context they need ("runs small" means nothing without the size bought). Otherwise omitted. Check: REV-W-010.
 - `associatedMedia` *(optional)*: author-submitted photos and videos, as `ImageObject`/`VideoObject`. This closes open question #18 of the Product Sheet spec: user-generated media rides on the review that carries its trust declarations; the Product Sheet's `image` and `video` carry the publisher's media alone.
 - `comment` *(optional)*: the publisher's reply, as a `Comment` with `text`, `dateCreated`, and `author` an `Organization`. One reply per review in this version.
 - `interactionStatistic` *(optional)*: helpfulness counts as `InteractionCounter` (`interactionType: LikeAction`, `userInteractionCount`). A declared count; a consumer ranks nothing on it.
@@ -99,7 +99,7 @@ Four declarations, each REQUIRED on every entry. The rationale is in "Undisclose
 - `product`: the product's intrinsic qualities.
 - `seller`: the transaction: delivery, service, returns, packaging, payment.
 - `mixed`: both, in one text.
-- `unclassified`: the publisher has not determined the subject. Distinct from `undisclosed`: the text is in the publisher's hands and the fact is knowable; `unclassified` says no one, human or classifier, has read it for this purpose. A consumer treats it as `mixed` for every aggregate. A producer MUST NOT emit it on a review it has classified, and MUST NOT emit it alongside `pagefront:aspect` entries (aspects are a classification). Check: REV-W-014. [why](review-notes.md#why-the-word-is-unclassified)
+- `unclassified`: the publisher has not determined the subject. Distinct from `undisclosed`: the text is in the publisher's hands and the fact is knowable; `unclassified` says no one, human or classifier, has read it for this purpose. A consumer treats it as `mixed` for every aggregate. A producer MUST NOT emit it on a review it has classified, and MUST NOT emit it alongside `pagefront:aspect` entries (aspects are a classification). Check: REV-W-012. [why](review-notes.md#why-the-word-is-unclassified)
 
 Check: REV-E-005 (absent or outside the enum).
 
@@ -111,10 +111,10 @@ Check: REV-E-005 (absent or outside the enum).
   - `marketplace`: collected on a marketplace listing of the same product.
   - `imported`: origin not retained.
   - `undisclosed`.
-- `name` *(recommended for `third_party` and `marketplace`)*: the platform's name; a source of those two kinds SHOULD carry it. Check: REV-W-006.
+- `name` *(recommended for `third_party` and `marketplace`)*: the platform's name; a source of those two kinds SHOULD carry it. Check: REV-W-005.
 - `url` *(recommended for `third_party` and `marketplace`)*: the review on the source platform. This is the one field a consumer can follow to check the review exists outside the publisher's control.
 
-Checks: REV-E-006 (absent, or `kind` outside the enum), REV-W-006 (`third_party`/`marketplace` without `name`).
+Checks: REV-E-006 (absent, or `kind` outside the enum), REV-W-005 (`third_party`/`marketplace` without `name`).
 
 **`pagefront:purchaseVerification`**: how the review was tied to a transaction. One of:
 - `none`: no link to a purchase was established.
@@ -123,7 +123,7 @@ Checks: REV-E-006 (absent, or `kind` outside the enum), REV-W-006 (`third_party`
 - `platform_verified`: a third-party platform asserts the purchase under its own scheme; `pagefront:reviewSource.kind` is then `third_party` or `marketplace`.
 - `undisclosed`.
 
-Checks: REV-E-007 (absent or outside the enum), REV-W-007 (`platform_verified` with a `first_party` or `imported` source).
+Checks: REV-E-007 (absent or outside the enum), REV-W-006 (`platform_verified` with a `first_party` or `imported` source).
 
 **`pagefront:reviewIncentive`**: what the author received for the review. One of:
 - `none`
@@ -148,7 +148,7 @@ The list is closed and final for this version. A publisher with finer aspects (`
 
 Alongside the array, **`pagefront:aspectSource`** *(required when `pagefront:aspect` is present)* says who assigned the aspects: `author` (the author chose or rated them on a form), `publisher` (the publisher tagged them by hand), `inferred` (a classifier). Check: REV-E-014.
 
-Consistency: a review whose `pagefront:reviewSubject` is `product` and whose aspects are all seller-side, or the reverse, is flagged. Check: REV-W-008.
+Consistency: a review whose `pagefront:reviewSubject` is `product` and whose aspects are all seller-side, or the reverse, is flagged. Check: REV-W-007.
 
 ## Undisclosed is a statement
 
@@ -302,17 +302,15 @@ Codes are reserved here and defined under "Commerce Review Sheet rules" in [`rul
 - **REV-W-001** `itemListElement` is empty (review; no failure).
 - **REV-W-002** `collection: curated` without `url`.
 - **REV-W-003** the same review `@id` twice.
-- **REV-W-004** retired before release; the check is REV-E-015.
-- **REV-W-005** `author` carrying `email`, `telephone` or `address`.
-- **REV-W-006** source `kind` `third_party` or `marketplace` without `name`.
-- **REV-W-007** `purchaseVerification: platform_verified` with source `kind` `first_party` or `imported`.
-- **REV-W-008** `pagefront:reviewSubject` disagrees with every aspect carried (all aspects on the other side of the split).
-- **REV-W-009** retired before release; the check is REV-E-014.
-- **REV-W-010** `reviewBody` or `name` present without `inLanguage` on the entry.
-- **REV-W-011** `associatedMedia` on a review whose `pagefront:reviewSource.kind` is `imported` (media provenance is weaker than text provenance).
-- **REV-W-012** `itemReviewed` present with `pagefront:purchaseVerification` other than `order_matched` or `post_purchase_invitation`, or present on a sheet whose `about` is not a `ProductGroup`.
-- **REV-W-013** `numberOfItems` differs from the length of `itemListElement`.
-- **REV-W-014** `pagefront:reviewSubject: unclassified` alongside `pagefront:aspect` entries.
+- **REV-W-004** `author` carrying `email`, `telephone` or `address`.
+- **REV-W-005** source `kind` `third_party` or `marketplace` without `name`.
+- **REV-W-006** `purchaseVerification: platform_verified` with source `kind` `first_party` or `imported`.
+- **REV-W-007** `pagefront:reviewSubject` disagrees with every aspect carried (all aspects on the other side of the split).
+- **REV-W-008** `reviewBody` or `name` present without `inLanguage` on the entry.
+- **REV-W-009** `associatedMedia` on a review whose `pagefront:reviewSource.kind` is `imported` (media provenance is weaker than text provenance).
+- **REV-W-010** `itemReviewed` present with `pagefront:purchaseVerification` other than `order_matched` or `post_purchase_invitation`, or present on a sheet whose `about` is not a `ProductGroup`.
+- **REV-W-011** `numberOfItems` differs from the length of `itemListElement`.
+- **REV-W-012** `pagefront:reviewSubject: unclassified` alongside `pagefront:aspect` entries.
 
 ## Worked example
 

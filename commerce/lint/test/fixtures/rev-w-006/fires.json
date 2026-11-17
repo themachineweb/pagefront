@@ -102,8 +102,7 @@
         "pagefront:reviewSubject": "product",
         "pagefront:reviewSource": {
           "@type": "pagefront:ReviewSource",
-          "kind": "third_party",
-          "url": "https://reviews.example/r/aurora-jumper/7731902"
+          "kind": "first_party"
         },
         "pagefront:purchaseVerification": "platform_verified",
         "pagefront:reviewIncentive": "undisclosed",

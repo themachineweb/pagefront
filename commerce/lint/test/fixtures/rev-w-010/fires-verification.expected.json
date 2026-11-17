@@ -7,7 +7,7 @@
   "catalogue_version": "0.21.0",
   "findings": [
     {
-      "rule": "REV-W-012",
+      "rule": "REV-W-010",
       "severity": "warning",
       "path": "$['data']['itemListElement'][0]['itemReviewed']",
       "values": {
@@ -23,7 +23,7 @@
     "warnings": 1,
     "info": 0,
     "rules_fired": [
-      "REV-W-012"
+      "REV-W-010"
     ]
   }
 }

@@ -9,13 +9,13 @@
     {
       "rule": "REV-W-006",
       "severity": "warning",
-      "path": "$['data']['itemListElement'][1]['pagefront:reviewSource']",
+      "path": "$['data']['itemListElement'][1]",
       "values": {
         "id": "https://reviews.example/r/aurora-jumper/7731902",
-        "kind": "third_party"
+        "kind": "first_party"
       },
-      "message": "Review `https://reviews.example/r/aurora-jumper/7731902` at `$['data']['itemListElement'][1]['pagefront:reviewSource']` names a `third_party` source without `name`.",
-      "remediation": "Add `name`, the review platform's or marketplace's name, and `url`, the review on that platform, to `pagefront:reviewSource`."
+      "message": "Review `https://reviews.example/r/aurora-jumper/7731902` at `$['data']['itemListElement'][1]` is `platform_verified` with a `first_party` source.",
+      "remediation": "Name the platform that asserts the purchase in `pagefront:reviewSource` (`third_party` or `marketplace`), or declare the verification the publisher established itself: `order_matched`, `post_purchase_invitation`, `none` or `undisclosed`."
     }
   ],
   "summary": {

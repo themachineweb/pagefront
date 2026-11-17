@@ -7,15 +7,14 @@
   "catalogue_version": "0.21.0",
   "findings": [
     {
-      "rule": "REV-W-013",
+      "rule": "REV-W-008",
       "severity": "warning",
-      "path": "$['data']['numberOfItems']",
+      "path": "$['data']['itemListElement'][1]",
       "values": {
-        "declared": "2",
-        "actual": "3"
+        "id": "https://reviews.example/r/aurora-jumper/7731902"
       },
-      "message": "`numberOfItems` at `$['data']['numberOfItems']` is 2; `itemListElement` carries 3 entries.",
-      "remediation": "Set `numberOfItems` to the length of `itemListElement`, or leave it out."
+      "message": "Review `https://reviews.example/r/aurora-jumper/7731902` at `$['data']['itemListElement'][1]` carries text without `inLanguage`.",
+      "remediation": "Add `inLanguage` to the entry, the BCP 47 tag of the language the author wrote in."
     }
   ],
   "summary": {
@@ -23,7 +22,7 @@
     "warnings": 1,
     "info": 0,
     "rules_fired": [
-      "REV-W-013"
+      "REV-W-008"
     ]
   }
 }

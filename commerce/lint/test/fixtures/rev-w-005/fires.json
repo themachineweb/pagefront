@@ -44,8 +44,7 @@
         },
         "author": {
           "@type": "Person",
-          "name": "Mara K.",
-          "email": "mara@example.net"
+          "name": "Mara K."
         },
         "itemReviewed": {
           "@type": "Product",
@@ -104,7 +103,6 @@
         "pagefront:reviewSource": {
           "@type": "pagefront:ReviewSource",
           "kind": "third_party",
-          "name": "Verified Opinions",
           "url": "https://reviews.example/r/aurora-jumper/7731902"
         },
         "pagefront:purchaseVerification": "platform_verified",

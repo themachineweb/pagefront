@@ -20,15 +20,15 @@ import { revE017 } from "./rules/rev-e-017.js";
 import { revW001 } from "./rules/rev-w-001.js";
 import { revW002 } from "./rules/rev-w-002.js";
 import { revW003 } from "./rules/rev-w-003.js";
+import { revW004 } from "./rules/rev-w-004.js";
 import { revW005 } from "./rules/rev-w-005.js";
 import { revW006 } from "./rules/rev-w-006.js";
 import { revW007 } from "./rules/rev-w-007.js";
 import { revW008 } from "./rules/rev-w-008.js";
+import { revW009 } from "./rules/rev-w-009.js";
 import { revW010 } from "./rules/rev-w-010.js";
 import { revW011 } from "./rules/rev-w-011.js";
 import { revW012 } from "./rules/rev-w-012.js";
-import { revW013 } from "./rules/rev-w-013.js";
-import { revW014 } from "./rules/rev-w-014.js";
 
 /**
  * The Commerce Review Sheet rule catalogue — the executable form of the
@@ -44,13 +44,11 @@ import { revW014 } from "./rules/rev-w-014.js";
  * off-host, the aggregate's count against the review sheet's) are
  * reserved in rules.md and await implementation: the cross-sheet ones
  * need both sheets, which a single-sheet linter does not have.
- *
- * REV-W-004 and REV-W-009 were retired before any release: their checks
- * are REV-E-015 and REV-E-014, and the numbers are not reused.
+
  */
 export const reviewCatalogue: Catalogue = {
   vertical: "commerce",
   releases: KNOWN_RELEASES,
   catalogueVersion: "0.21.0",
-  rules: [revE001, revE002, revE003, revE004, revE005, revE006, revE007, revE008, revE009, revE010, revE011, revE012, revE013, revE014, revE015, revE016, revE017, revW001, revW002, revW003, revW005, revW006, revW007, revW008, revW010, revW011, revW012, revW013, revW014],
+  rules: [revE001, revE002, revE003, revE004, revE005, revE006, revE007, revE008, revE009, revE010, revE011, revE012, revE013, revE014, revE015, revE016, revE017, revW001, revW002, revW003, revW004, revW005, revW006, revW007, revW008, revW009, revW010, revW011, revW012],
 };
