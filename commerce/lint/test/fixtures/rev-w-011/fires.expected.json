@@ -9,12 +9,13 @@
     {
       "rule": "REV-W-011",
       "severity": "warning",
-      "path": "$['data']['itemListElement'][1]['associatedMedia']",
+      "path": "$['data']['numberOfItems']",
       "values": {
-        "id": "https://reviews.example/r/aurora-jumper/7731902"
+        "declared": "2",
+        "actual": "3"
       },
-      "message": "Review `https://reviews.example/r/aurora-jumper/7731902` at `$['data']['itemListElement'][1]['associatedMedia']` carries `associatedMedia` from an `imported` source.",
-      "remediation": "Confirm the media came with the review. Where its origin is not retained, leave `associatedMedia` out."
+      "message": "`numberOfItems` at `$['data']['numberOfItems']` is 2; `itemListElement` carries 3 entries.",
+      "remediation": "Set `numberOfItems` to the length of `itemListElement`, or leave it out."
     }
   ],
   "summary": {

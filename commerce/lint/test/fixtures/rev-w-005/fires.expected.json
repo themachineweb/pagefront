@@ -9,13 +9,13 @@
     {
       "rule": "REV-W-005",
       "severity": "warning",
-      "path": "$['data']['itemListElement'][0]['author']",
+      "path": "$['data']['itemListElement'][1]['pagefront:reviewSource']",
       "values": {
-        "id": "https://merchant.example/reviews/r-88213",
-        "field": "email"
+        "id": "https://reviews.example/r/aurora-jumper/7731902",
+        "kind": "third_party"
       },
-      "message": "Review `https://merchant.example/reviews/r-88213` at `$['data']['itemListElement'][0]['author']` carries `email` on its `author`; a review carries the name as displayed and no other personal data.",
-      "remediation": "Remove `email`, `telephone` and `address` from `author`; keep `name` as the page displays it."
+      "message": "Review `https://reviews.example/r/aurora-jumper/7731902` at `$['data']['itemListElement'][1]['pagefront:reviewSource']` names a `third_party` source without `name`.",
+      "remediation": "Add `name`, the review platform's or marketplace's name, and `url`, the review on that platform, to `pagefront:reviewSource`."
     }
   ],
   "summary": {

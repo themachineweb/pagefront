@@ -1,34 +1,32 @@
 import type { CheckHit, Rule } from "@pagefront/lint-core";
-import { asRecord, memberEntries, reviewId } from "./rev-shared.js";
+import { asRecord, memberEntries, nonBlank, reviewId } from "./rev-shared.js";
 
 /**
- * REV-W-005 — Personal data on the author.
+ * REV-W-005 — Platform source without a name.
  * Transcribed from commerce/spec/rules.md (normative).
  *
- * `author` is a `Person` with `name` as displayed and no other personal
- * data ("Schema.org-native" in review.md). One finding per field present,
- * at the entry's `author`.
+ * `pagefront:reviewSource.name` is required for a `third_party` or
+ * `marketplace` source: the platform's name is what a consumer checks
+ * the review against. One finding per entry, at its source.
  */
 export const revW005: Rule = {
   id: "REV-W-005",
-  title: "Personal data on the author",
+  title: "Platform source without a name",
   severity: "warning",
   target: "$.data.itemListElement",
   check: (match) => {
     const hits: CheckHit[] = [];
     for (const { entry, path } of memberEntries(match.value, match.path)) {
-      const author = asRecord(entry["author"]);
-      if (author === null) continue;
-      for (const field of ["email", "telephone", "address"]) {
-        if (author[field] === undefined) continue;
-        hits.push({ path: `${path}['author']`, values: { id: reviewId(entry), field } });
-      }
+      const source = asRecord(entry["pagefront:reviewSource"]);
+      const kind = source?.["kind"];
+      if (source === null || (kind !== "third_party" && kind !== "marketplace") || nonBlank(source["name"])) continue;
+      hits.push({ path: `${path}['pagefront:reviewSource']`, values: { id: reviewId(entry), kind: kind as string } });
     }
     return hits;
   },
-  messageTemplate: "Review `{id}` at `{path}` carries `{field}` on its `author`; a review carries the name as displayed and no other personal data.",
-  remediation: "Remove `email`, `telephone` and `address` from `author`; keep `name` as the page displays it.",
+  messageTemplate: "Review `{id}` at `{path}` names a `{kind}` source without `name`.",
+  remediation: "Add `name`, the review platform's or marketplace's name, and `url`, the review on that platform, to `pagefront:reviewSource`.",
   introduced: "release 0.6.0",
   appliesFrom: "0.6.0",
-  specReference: "review.md#schemaorg-native",
+  specReference: "review.md#pagefront-declarations",
 };

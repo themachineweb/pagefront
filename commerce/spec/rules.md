@@ -32,7 +32,7 @@ Rules that do not follow the default:
 | COL-E-001, COL-E-002, COL-E-003, COL-E-005, COL-W-001 to COL-W-007 | release 0.5.0, the release that bundles Collection Sheet spec 0.1.0 | no (the Collection Sheet spec has no legacy draft line) |
 | ORG-W-007 | release 0.5.0, which admits `hasOfferCatalog` | no |
 | ORG-W-008 | release 0.6.0, which admits `pagefront:checkoutHosts` | no |
-| REV-E-001 to REV-E-016, REV-W-001 to REV-W-003, REV-W-005 to REV-W-008, REV-W-010 to REV-W-014 | release 0.6.0 | no (the Review Sheet spec has no legacy draft line) |
+| REV-E-001 to REV-E-016, REV-W-001 to REV-W-010 | release 0.6.0 | no (the Review Sheet spec has no legacy draft line) |
 
 ### Definitions
 
@@ -1181,7 +1181,7 @@ The `{name}` placeholder renders the entry's `name`; when absent, the fixed fall
 
 ## Commerce Review Sheet rules
 
-The review-sheet catalogue, applying to Commerce Review Sheets ([`review.md`](review.md), spec 0.1.0) only, per the sheet-type dispatch described at the top of this document. Layer 1 for this sheet type is the review JSON Schema the release bundles (`../schemas/review/`, once a release publishes one; [`review.json`](review.json) is its editable head); these rules assume a schema-valid sheet. The schema enforces the array form of `@context` with the `pagefront` prefix, so this catalogue has no counterpart of PDP-E-003 and ORG-E-001; the envelope's version fields are REV-E-016 and REV-E-017, the counterparts of COL-E-003 and COL-E-004. The error rules check the subject (REV-E-001, REV-E-009), the policy (REV-E-002), each entry's identity and rating (REV-E-003, REV-E-004, REV-E-015), the four declarations (REV-E-005 to REV-E-008), the author's class (REV-E-010), translations (REV-E-011), the subject of an Organization review sheet's entries (REV-E-012), the `@type` of the two typed values (REV-E-013) and the aspects' source (REV-E-014). The warning rules cover the set (REV-W-001, REV-W-002, REV-W-003, REV-W-013), the author (REV-W-005), the consistency of the declarations with one another (REV-W-006, REV-W-007, REV-W-011, REV-W-012), the aspects (REV-W-008, REV-W-014) and the language of the text (REV-W-010). REV-W-004 and REV-W-009 were retired before any release, their checks becoming REV-E-015 and REV-E-014; the numbers are not reused. Three conditions the spec grades SHOULD (`url` on a curated policy, `name` on a platform source, `inLanguage` beside text) are warnings here, and the schema leaves them to the rules. The product-side and organization-side checks the spec reserves are PDP-W-042, PDP-W-043, PDP-W-044 and ORG-W-009, in their own sections. The rules apply from release 0.6.0, the release that bundles Review Sheet spec 0.1.0, and never to the legacy draft line, which has no Review Sheet. Until that release lands, the review fixtures declare it and run against the test manifest, [`../lint/test/manifest/releases.json`](../lint/test/manifest/releases.json), whose 0.6.0 row resolves Review Sheet spec 0.1.0 to the editable head [`review.json`](review.json) at Layer 1. The release pull request adds the review column to that row in `commerce/spec/releases.json` and to the release table in `releases.md`, and freezes the head as `commerce/schemas/review/v0.1.0.json`; the fixtures and their expected reports do not change.
+The review-sheet catalogue, applying to Commerce Review Sheets ([`review.md`](review.md), spec 0.1.0) only, per the sheet-type dispatch described at the top of this document. Layer 1 for this sheet type is the review JSON Schema the release bundles (`../schemas/review/`, once a release publishes one; [`review.json`](review.json) is its editable head); these rules assume a schema-valid sheet. The schema enforces the array form of `@context` with the `pagefront` prefix, so this catalogue has no counterpart of PDP-E-003 and ORG-E-001; the envelope's version fields are REV-E-016 and REV-E-017, the counterparts of COL-E-003 and COL-E-004. The error rules check the subject (REV-E-001, REV-E-009), the policy (REV-E-002), each entry's identity and rating (REV-E-003, REV-E-004, REV-E-015), the four declarations (REV-E-005 to REV-E-008), the author's class (REV-E-010), translations (REV-E-011), the subject of an Organization review sheet's entries (REV-E-012), the `@type` of the two typed values (REV-E-013) and the aspects' source (REV-E-014). The warning rules cover the set (REV-W-001, REV-W-002, REV-W-003, REV-W-011), the author (REV-W-004), the consistency of the declarations with one another (REV-W-005, REV-W-006, REV-W-009, REV-W-010), the aspects (REV-W-007, REV-W-012) and the language of the text (REV-W-008). Three conditions the spec grades SHOULD (`url` on a curated policy, `name` on a platform source, `inLanguage` beside text) are warnings here, and the schema leaves them to the rules. The product-side and organization-side checks the spec reserves are PDP-W-042, PDP-W-043, PDP-W-044 and ORG-W-009, in their own sections. The rules apply from release 0.6.0, the release that bundles Review Sheet spec 0.1.0, and never to the legacy draft line, which has no Review Sheet. Until that release lands, the review fixtures declare it and run against the test manifest, [`../lint/test/manifest/releases.json`](../lint/test/manifest/releases.json), whose 0.6.0 row resolves Review Sheet spec 0.1.0 to the editable head [`review.json`](review.json) at Layer 1. The release pull request adds the review column to that row in `commerce/spec/releases.json` and to the release table in `releases.md`, and freezes the head as `commerce/schemas/review/v0.1.0.json`; the fixtures and their expected reports do not change.
 
 #### REV-E-001 — Subject absent, without `@id`, or of another type
 
@@ -1256,7 +1256,7 @@ The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallbac
 
 **Severity:** error
 **Target:** `$.data.itemListElement` (the Check walks the entries; the finding sits at the entry when the field is absent, at the field otherwise)
-**Description:** `pagefront:reviewSource` says where the review entered the publisher's possession ("Pagefront declarations" in `review.md`): an object whose `kind` is a closed enum with `undisclosed`, with the platform's `name` and the review's `url` for a third-party or marketplace source (REV-W-006). The schema requires the field and closes the enum; this rule reports the condition for callers that lint without validating.
+**Description:** `pagefront:reviewSource` says where the review entered the publisher's possession ("Pagefront declarations" in `review.md`): an object whose `kind` is a closed enum with `undisclosed`, with the platform's `name` and the review's `url` for a third-party or marketplace source (REV-W-005). The schema requires the field and closes the enum; this rule reports the condition for callers that lint without validating.
 **Check:** An entry of `itemListElement` carries no `pagefront:reviewSource`; or one that is not an object; or one carrying no `kind`; or one whose `kind` is not one of `first_party`, `third_party`, `marketplace`, `imported`, `undisclosed`. One finding per entry.
 **Message:** `pagefront:reviewSource` on review `{id}` at `{path}` {problem}.
 The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallback `(no @id)`. `{problem}` carries `is absent`, `is not an object`, `` carries no `kind` `` or `` declares `kind` `{value}`, which is not one of … ``.
@@ -1458,20 +1458,7 @@ The placeholders carry the same texts as in PDP-E-002, with `Review Sheet spec` 
 **Fixtures:** `fires`, `clean`.
 **Spec reference:** `review.md#schemaorg-native`
 
-#### REV-W-004 — Rating above 5 without its scale (retired)
-
-**Severity:** warning
-**Target:** none
-**Description:** Retired before any release: the condition is an error, REV-E-015, since the Review Sheet spec marks it required. The number is not reused.
-**Check:** None.
-**Message:** None.
-**Remediation:** None.
-**Introduced:** release 0.6.0; retired the same day
-**Applies from:** not applicable.
-**Fixtures:** none.
-**Spec reference:** `review.md#linter-rules`
-
-#### REV-W-005 — Personal data on the author
+#### REV-W-004 — Personal data on the author
 
 **Severity:** warning
 **Target:** `$.data.itemListElement` (the Check walks the entries; the finding sits at the entry's `author`)
@@ -1485,7 +1472,7 @@ The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallbac
 **Fixtures:** `fires` (an `email` on the author), `clean`.
 **Spec reference:** `review.md#schemaorg-native`
 
-#### REV-W-006 — Platform source without a name
+#### REV-W-005 — Platform source without a name
 
 **Severity:** warning
 **Target:** `$.data.itemListElement` (the Check walks the entries; the finding sits at the entry's `pagefront:reviewSource`)
@@ -1499,7 +1486,7 @@ The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallbac
 **Fixtures:** `fires`, `clean`.
 **Spec reference:** `review.md#pagefront-declarations`
 
-#### REV-W-007 — Platform verification without a platform
+#### REV-W-006 — Platform verification without a platform
 
 **Severity:** warning
 **Target:** `$.data.itemListElement` (the Check walks the entries)
@@ -1513,7 +1500,7 @@ The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallbac
 **Fixtures:** `fires`, `clean`.
 **Spec reference:** `review.md#pagefront-declarations`
 
-#### REV-W-008 — Subject and aspects disagree
+#### REV-W-007 — Subject and aspects disagree
 
 **Severity:** warning
 **Target:** `$.data.itemListElement` (the Check walks the entries; the finding sits at the entry's `pagefront:aspect`)
@@ -1527,20 +1514,7 @@ The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallbac
 **Fixtures:** `fires-product` (a product review with delivery and returns aspects), `fires-seller` (a seller review with product aspects), `clean`.
 **Spec reference:** `review.md#aspects-pagefrontaspect`
 
-#### REV-W-009 — Aspects without their source (retired)
-
-**Severity:** warning
-**Target:** none
-**Description:** Retired before any release: the condition is an error, REV-E-014, since the Review Sheet spec marks it required. The number is not reused.
-**Check:** None.
-**Message:** None.
-**Remediation:** None.
-**Introduced:** release 0.6.0; retired the same day
-**Applies from:** not applicable.
-**Fixtures:** none.
-**Spec reference:** `review.md#linter-rules`
-
-#### REV-W-010 — Review text without its language
+#### REV-W-008 — Review text without its language
 
 **Severity:** warning
 **Target:** `$.data.itemListElement` (the Check walks the entries)
@@ -1554,7 +1528,7 @@ The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallbac
 **Fixtures:** `fires`, `clean`.
 **Spec reference:** `review.md#language`
 
-#### REV-W-011 — Media from an imported source
+#### REV-W-009 — Media from an imported source
 
 **Severity:** warning
 **Target:** `$.data.itemListElement` (the Check walks the entries; the finding sits at the entry's `associatedMedia`)
@@ -1568,7 +1542,7 @@ The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallbac
 **Fixtures:** `fires`, `clean`.
 **Spec reference:** `review.md#schemaorg-native`
 
-#### REV-W-012 — Variant bought without the data that knows it
+#### REV-W-010 — Variant bought without the data that knows it
 
 **Severity:** warning
 **Target:** `$.data` (the Check walks `itemListElement`; the finding sits at the entry's `itemReviewed`)
@@ -1582,7 +1556,7 @@ The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallbac
 **Fixtures:** `fires-verification` (`itemReviewed` on a review verified `none`), `fires-subject` (`itemReviewed` on a standalone `Product` subject), `clean`.
 **Spec reference:** `review.md#schemaorg-native`
 
-#### REV-W-013 — `numberOfItems` and the list disagree
+#### REV-W-011 — `numberOfItems` and the list disagree
 
 **Severity:** warning
 **Target:** `$.data` (the finding sits at `numberOfItems`)
@@ -1596,7 +1570,7 @@ A non-number `{declared}` renders as its JSON serialization.
 **Fixtures:** `fires`, `clean`.
 **Spec reference:** `review.md#size-and-ordering`
 
-#### REV-W-014 — Unclassified review with aspects
+#### REV-W-012 — Unclassified review with aspects
 
 **Severity:** warning
 **Target:** `$.data.itemListElement` (the Check walks the entries; the finding sits at the entry's `pagefront:aspect`)

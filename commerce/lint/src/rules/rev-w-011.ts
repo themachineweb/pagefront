@@ -1,31 +1,35 @@
 import type { CheckHit, Rule } from "@pagefront/lint-core";
-import { asRecord, memberEntries, reviewId } from "./rev-shared.js";
+import { asRecord } from "./rev-shared.js";
 
 /**
- * REV-W-011 — Media from an imported source.
+ * REV-W-011 — `numberOfItems` and the list disagree.
  * Transcribed from commerce/spec/rules.md (normative).
  *
- * Media provenance is weaker than text provenance: `associatedMedia` on a
- * review whose origin was not retained is reported for review. One
- * finding per entry, at its `associatedMedia`.
+ * `numberOfItems` equals the array length and exists so a consumer can
+ * tell a truncated document from a whole one ("Size and ordering" in
+ * review.md). Silent when the field is absent. The finding sits at the
+ * field.
  */
 export const revW011: Rule = {
   id: "REV-W-011",
-  title: "Media from an imported source",
+  title: "numberOfItems and the list disagree",
   severity: "warning",
-  target: "$.data.itemListElement",
+  target: "$.data",
   check: (match) => {
-    const hits: CheckHit[] = [];
-    for (const { entry, path } of memberEntries(match.value, match.path)) {
-      if (entry["associatedMedia"] === undefined) continue;
-      if (asRecord(entry["pagefront:reviewSource"])?.["kind"] !== "imported") continue;
-      hits.push({ path: `${path}['associatedMedia']`, values: { id: reviewId(entry) } });
-    }
-    return hits;
+    const data = asRecord(match.value);
+    if (data === null || data["numberOfItems"] === undefined) return null;
+    const declared = data["numberOfItems"];
+    const list = data["itemListElement"];
+    const actual = Array.isArray(list) ? list.length : 0;
+    if (declared === actual) return null;
+    return {
+      path: `${match.path}['numberOfItems']`,
+      values: { declared: typeof declared === "number" ? declared : JSON.stringify(declared), actual },
+    };
   },
-  messageTemplate: "Review `{id}` at `{path}` carries `associatedMedia` from an `imported` source.",
-  remediation: "Confirm the media came with the review. Where its origin is not retained, leave `associatedMedia` out.",
+  messageTemplate: "`numberOfItems` at `{path}` is {declared}; `itemListElement` carries {actual} entries.",
+  remediation: "Set `numberOfItems` to the length of `itemListElement`, or leave it out.",
   introduced: "release 0.6.0",
   appliesFrom: "0.6.0",
-  specReference: "review.md#schemaorg-native",
+  specReference: "review.md#size-and-ordering",
 };

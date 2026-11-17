@@ -36,8 +36,7 @@ legacy draft line (format 0.9): 64 product rules (`PDP-E-001` to `PDP-E-022`, `P
 `ORG-E-004`, `ORG-W-001` to `ORG-W-008`), 11 collection rules
 (`COL-E-001` to `COL-E-005`, `COL-W-001`, `COL-W-002`, `COL-W-004` to
 `COL-W-007`; `COL-W-003` is reserved) and 29 review rules (`REV-E-001` to
-`REV-E-017`, `REV-W-001` to `REV-W-014`; `REV-W-004` and `REV-W-009` are
-retired), each defined in
+`REV-E-017`, `REV-W-001` to `REV-W-010`), each defined in
 [`rules.md`](https://github.com/themachineweb/pagefront/blob/main/commerce/spec/rules.md)
 with its target, check, message and remediation. Every report carries the
 `catalogue_version` it was produced with.
@@ -224,7 +223,7 @@ Requires `@pagefront/lint-core` 0.4.0, unchanged.
   author, a translation, a product review on an Organization review
   sheet, a policy or source without its `@type`, aspects without their
   source, a rating above 5 without its bounds, the envelope's version
-  fields) and `REV-W-001` to `REV-W-013` (the empty list, a curated set
+  fields) and `REV-W-001` to `REV-W-011` (the empty list, a curated set
   without its policy page, a duplicate,
   personal data on the author, the declarations' consistency with
   one another, the aspects and their source, text without its language,

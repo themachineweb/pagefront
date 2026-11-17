@@ -2,7 +2,7 @@ import { asRecord, memberEntries, nonBlank } from "./col-shared.js";
 
 /**
  * Shared helpers for the Commerce Review Sheet rules (REV-E-001 …
- * REV-W-013). Kept local to the review rules: the closed enums of the
+ * REV-W-011). Kept local to the review rules: the closed enums of the
  * four declarations and the policy, the subject types and the review
  * walk are review-catalogue vocabulary, not engine machinery. The
  * record, blank-string and entry-walk helpers are the collection

@@ -17,7 +17,7 @@
     "@id": "https://merchant.example/products/aurora-jumper#reviews",
     "name": "Customer reviews",
     "inLanguage": "en",
-    "numberOfItems": 3,
+    "numberOfItems": 2,
     "about": {
       "@type": "ProductGroup",
       "@id": "https://merchant.example/products/aurora-jumper#product",
@@ -102,9 +102,11 @@
         "pagefront:reviewSubject": "product",
         "pagefront:reviewSource": {
           "@type": "pagefront:ReviewSource",
-          "kind": "imported"
+          "kind": "third_party",
+          "name": "Verified Opinions",
+          "url": "https://reviews.example/r/aurora-jumper/7731902"
         },
-        "pagefront:purchaseVerification": "undisclosed",
+        "pagefront:purchaseVerification": "platform_verified",
         "pagefront:reviewIncentive": "undisclosed",
         "pagefront:aspectSource": "inferred",
         "pagefront:aspect": [
@@ -115,12 +117,6 @@
           {
             "@type": "pagefront:ReviewAspect",
             "aspect": "as_described"
-          }
-        ],
-        "associatedMedia": [
-          {
-            "@type": "ImageObject",
-            "contentUrl": "https://merchant.example/reviews/7731902/photo-1.jpg"
           }
         ]
       },
