@@ -36,7 +36,7 @@ legacy draft line (format 0.9): 64 product rules (`PDP-E-001` to `PDP-E-022`, `P
 `ORG-E-004`, `ORG-W-001` to `ORG-W-008`), 11 collection rules
 (`COL-E-001` to `COL-E-005`, `COL-W-001`, `COL-W-002`, `COL-W-004` to
 `COL-W-007`; `COL-W-003` is reserved) and 25 review rules (`REV-E-001` to
-`REV-E-012`, `REV-W-001` to `REV-W-013`), each defined in
+`REV-E-012`, `REV-W-001` to `REV-W-014`), each defined in
 [`rules.md`](https://github.com/themachineweb/pagefront/blob/main/commerce/spec/rules.md)
 with its target, check, message and remediation. Every report carries the
 `catalogue_version` it was produced with.
@@ -225,7 +225,8 @@ Requires `@pagefront/lint-core` 0.4.0, unchanged.
   without its policy page, a duplicate, a rating above 5 without its
   scale, personal data on the author, the declarations' consistency with
   one another, the aspects and their source, text without its language,
-  `itemReviewed` and `numberOfItems`). The rules apply from release 0.6.0,
+  `itemReviewed` and `numberOfItems`, an unclassified review with aspects).
+  The rules apply from release 0.6.0,
   the next release, and never to the legacy line.
 - Until a release bundles the Review Sheet spec, Layer 1 reports that the
   declared release bundles no Review Sheet schema (one error at

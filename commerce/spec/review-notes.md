@@ -17,7 +17,13 @@ The distinction is the point: silence can never be mistaken for "none".
 
 For `pagefront:reviewSubject` under "Pagefront declarations" in [`review.md`](review.md#pagefront-declarations).
 
-The second way reviews fail agents: what are they writing about? Most reviews on a product page are about the delivery, the returns desk or the support line, not the product. The sheet asks every review to declare its subject (`product`, `seller`, `mixed`) and lets it carry the aspects it addresses, from a closed list split the same way. A product's `aggregateRating` is scoped to reviews whose subject is the product; the seller's reputation lives on the Organization Sheet.
+The second way reviews fail agents: what are they writing about? Most reviews on a product page are about the delivery, the returns desk or the support line, not the product. The sheet asks every review to declare its subject (`product`, `seller`, `mixed`, or `unclassified` when no one has looked) and lets it carry the aspects it addresses, from a closed list split the same way. A product's `aggregateRating` is scoped to reviews whose subject is the product; the seller's reputation lives on the Organization Sheet.
+
+## Why the word is `unclassified`
+
+For `pagefront:reviewSubject` under "Pagefront declarations" in [`review.md`](review.md#pagefront-declarations).
+
+The three provenance declarations say `undisclosed` because provenance is lost if it was not recorded when the review arrived: the publisher cannot recover it later. The subject is a different kind of unknown. The text is in the publisher's hands and the fact is knowable at any time, by a person or a classifier, so a publisher is never unable to classify a review; it has only not done so yet. `unclassified` names that state, and keeps it apart from the provenance word so a consumer reads each for what it is: one a gap that stays, the other work not yet done. The minimum entry carries all four, and a set that classifies nothing says so entry by entry.
 
 ## Why reviews attach to the variant family
 

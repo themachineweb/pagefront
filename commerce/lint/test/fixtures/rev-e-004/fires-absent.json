@@ -122,12 +122,12 @@
         "@type": "Review",
         "@id": "https://merchant.example/reviews/r-88102",
         "datePublished": "2026-11-02",
-        "pagefront:reviewSubject": "product",
+        "pagefront:reviewSubject": "unclassified",
         "pagefront:reviewSource": {
-          "kind": "first_party"
+          "kind": "imported"
         },
-        "pagefront:purchaseVerification": "post_purchase_invitation",
-        "pagefront:incentive": "discount"
+        "pagefront:purchaseVerification": "undisclosed",
+        "pagefront:incentive": "undisclosed"
       }
     ]
   }

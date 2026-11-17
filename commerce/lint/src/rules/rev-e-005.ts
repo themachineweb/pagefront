@@ -34,7 +34,7 @@ export const revE005: Rule = {
   },
   messageTemplate: "`pagefront:reviewSubject` on review `{id}` at `{path}` is {problem}.",
   remediation:
-    "Declare `pagefront:reviewSubject` on every review as `product` (the product's intrinsic qualities), `seller` (the transaction) or `mixed` (both in one text). Additional values require a spec amendment.",
+    "Declare `pagefront:reviewSubject` on every review as `product` (the product's intrinsic qualities), `seller` (the transaction), `mixed` (both in one text) or `unclassified` (no one has read it for its subject). Additional values require a spec amendment.",
   introduced: "release 0.6.0",
   appliesFrom: "0.6.0",
   specReference: "review.md#pagefront-declarations",

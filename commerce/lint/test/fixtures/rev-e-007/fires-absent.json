@@ -126,11 +126,12 @@
           "@type": "Rating",
           "ratingValue": 4
         },
-        "pagefront:reviewSubject": "product",
+        "pagefront:reviewSubject": "unclassified",
         "pagefront:reviewSource": {
-          "kind": "first_party"
+          "kind": "imported"
         },
-        "pagefront:incentive": "discount"
+        "pagefront:incentive": "undisclosed",
+        "pagefront:purchaseVerification": "undisclosed"
       }
     ]
   }

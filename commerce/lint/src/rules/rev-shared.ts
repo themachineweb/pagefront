@@ -11,7 +11,7 @@ import { asRecord, memberEntries, nonBlank } from "./col-shared.js";
 export { asRecord, memberEntries, nonBlank };
 
 /** The closed enum of `pagefront:reviewSubject`, in vocabulary order. */
-export const REVIEW_SUBJECTS = ["product", "seller", "mixed"] as const;
+export const REVIEW_SUBJECTS = ["product", "seller", "mixed", "unclassified"] as const;
 /** The closed enum of `pagefront:reviewSource.kind`. */
 export const SOURCE_KINDS = ["first_party", "third_party", "marketplace", "imported", "undisclosed"] as const;
 /** The closed enum of `pagefront:purchaseVerification`. */

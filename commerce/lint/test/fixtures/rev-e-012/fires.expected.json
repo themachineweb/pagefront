@@ -15,7 +15,7 @@
         "subject": "product"
       },
       "message": "Review `https://merchant.example/reviews/s-1002` at `$['data']['itemListElement'][1]['pagefront:reviewSubject']` declares `pagefront:reviewSubject` `product` on an Organization review sheet.",
-      "remediation": "An Organization review sheet carries `seller`-subject reviews only. A review about a product, or a mixed one, stays in the review sheet of the product it was published on."
+      "remediation": "An Organization review sheet carries `seller`-subject reviews only, classified by where they were collected. A review about a product, or a mixed one, stays in the review sheet of the product it was published on."
     }
   ],
   "summary": {
