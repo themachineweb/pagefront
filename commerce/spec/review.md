@@ -1,6 +1,8 @@
 # Commerce Review Sheet
 
-Status: DRAFT, not ratified. Target: Review Sheet spec 0.1.0, a member of commerce release 0.6.0.
+Status: normative spec.
+Review Sheet spec version: 0.1.0
+Commerce release: 0.6.0
 Schema.org version targeted: 30.0 (2026-03-19)
 
 The Commerce Review Sheet is the Pagefront Sheet that carries the consumer reviews a publisher shows for one subject: a product, a variant family, or the seller itself. The Product Sheet carries the summary (`aggregateRating`); this sheet carries the reviews behind it, each with a declaration of where it came from, how it is tied to a purchase, what the author was given, and what the author is writing about.
@@ -251,7 +253,7 @@ Link: <https://merchant.com/pagefront/commerce/product/aurora-jumper.en.json>;
       data-profile="https://themachineweb.org/pagefront/spec/commerce/review/v0.1.0.json">
 ```
 
-This spec requires the Pagefront Discovery version that introduces "Several Sheets for one page" (Unreleased in [`discovery-changelog.md`](../../core/spec/discovery-changelog.md) at the time of writing).
+This spec requires the Pagefront Discovery version that introduces "Several Sheets for one page", Discovery 0.2.0.
 
 ## Identity
 

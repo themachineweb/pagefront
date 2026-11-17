@@ -1,8 +1,8 @@
 # Commerce Organization Sheet
 
 Status: normative spec.
-Organization Sheet spec version: 0.5.0
-Commerce release: 0.5.0
+Organization Sheet spec version: 0.6.0
+Commerce release: 0.6.0
 Schema.org version targeted: 30.0 (2026-03-19)
 
 The Commerce Organization Sheet is the Pagefront Sheet that describes the entity *behind* products: the brand that owns them, the company that makes them, the store that sells them. The Product Sheet describes an individual product. The organization sheet is the dereference target of the `brand` and `Offer.seller` links every Product Sheet already carries.

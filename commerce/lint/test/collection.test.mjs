@@ -1,7 +1,6 @@
 /**
  * Tests for the Commerce Collection Sheet: the editable schema head
- * (commerce/spec/collection.json, compiled here because no release
- * bundles it yet, so the package carries no frozen collection schema),
+ * (commerce/spec/collection.json, spec 0.2.0, frozen with release 0.6.0),
  * the sheet-type dispatch, and the collection catalogue on the worked
  * example of collection.md, which lints clean. The catalogue applies
  * from release 0.5.0, which has not landed: the Layer 2 and end-to-end
@@ -54,8 +53,8 @@ addFormats(ajv);
 const validateHead = ajv.compile(HEAD);
 const errorsFor = (sheet) => (validateHead(sheet) ? [] : validateHead.errors.map((e) => [e.instancePath, e.keyword]));
 
-test("the schema head names Collection Sheet spec 0.1.0 and validates the worked example", () => {
-  assert.equal(HEAD.$id, "https://themachineweb.org/pagefront/spec/commerce/collection/v0.1.0.json");
+test("the schema head names Collection Sheet spec 0.2.0 and validates the worked example", () => {
+  assert.equal(HEAD.$id, "https://themachineweb.org/pagefront/spec/commerce/collection/v0.2.0.json");
   assert.deepEqual(errorsFor(loadExample()), []);
 });
 

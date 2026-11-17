@@ -1,7 +1,7 @@
 # Pagefront Discovery
 
 Status: normative spec.
-Discovery spec version: 0.1.0
+Discovery spec version: 0.2.0
 Applies to: every Sheet type in every vertical.
 
 This document states how a consumer locates a Pagefront Sheet, and how a consumer holding only an origin reaches that origin's Sheets. The page-based carriers, the traversal-hint rule and the filename convention moved here from the Product Sheet spec ([`../../commerce/spec/product.md`](../../commerce/spec/product.md)) on 2026-10-15; they were format-level from the start and lived there because the product was the first sheet. The entry point is new in this document. Each sheet spec binds what this document leaves open: which fields carry traversal hints, and which Sheet type is an origin's root.

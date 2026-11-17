@@ -1,7 +1,7 @@
 # Design notes: Collection Sheet spec
 
 Status: non-normative. These notes explain the Collection Sheet spec, [`collection.md`](collection.md), which governs; a note adds no requirement.
-Design notes for the Collection Sheet spec 0.1.0, commerce release 0.5.0.
+Design notes for the Collection Sheet spec 0.2.0, commerce release 0.6.0.
 
 Each note opens with a link to the field or section it explains. The reference links a note from the field it explains; on the published page the notes render as footnotes under the spec. The decisions recorded for the ratification review are folded into the notes on the sections they concern.
 

@@ -28,8 +28,10 @@ sheet type.
 
 ## Catalogue
 
-Catalogue 0.21.0, supporting commerce releases 0.5.0 (Product Sheet spec
-0.11.0, Organization Sheet spec 0.5.0, Collection Sheet spec 0.1.0), 0.4.0
+Catalogue 0.21.0, supporting commerce releases 0.6.0 (Product Sheet spec
+0.12.0, Organization Sheet spec 0.6.0, Collection Sheet spec 0.2.0, Review
+Sheet spec 0.1.0), 0.5.0 (Product Sheet spec 0.11.0, Organization Sheet spec
+0.5.0, Collection Sheet spec 0.1.0), 0.4.0
 (Product Sheet spec 0.10.0, Organization Sheet spec 0.4.0) and 0.3.0, and the
 legacy draft line (format 0.9): 64 product rules (`PDP-E-001` to `PDP-E-022`, `PDP-W-001` to
 `PDP-W-041`, `PDP-I-001`), 12 organization rules (`ORG-E-001` to
@@ -228,12 +230,11 @@ Requires `@pagefront/lint-core` 0.4.0, unchanged.
   personal data on the author, the declarations' consistency with
   one another, the aspects and their source, text without its language,
   `itemReviewed` and `numberOfItems`, an unclassified review with aspects).
-  The rules apply from release 0.6.0,
-  the next release, and never to the legacy line.
-- Until a release bundles the Review Sheet spec, Layer 1 reports that the
-  declared release bundles no Review Sheet schema (one error at
-  `/release`), and a legacy-line sheet of that type that the legacy line
-  has no such schema (at `/format_version`).
+  The rules apply from release 0.6.0 and never to the legacy line.
+- A sheet declaring a release before 0.6.0 names one that bundles no Review
+  Sheet schema: Layer 1 reports it (one error at `/release`), and a
+  legacy-line sheet of that type that the legacy line has no such schema
+  (at `/format_version`).
 - New export: `reviewCatalogue`. `SheetType` gains `"review"`.
 - Every report carries `catalogue_version` 0.21.0; no other rule changes.
 

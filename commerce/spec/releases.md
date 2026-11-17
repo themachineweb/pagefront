@@ -1,14 +1,14 @@
 # Pagefront Commerce Releases
 
 Status: normative.
-Current commerce release: 0.5.0 (2026-10-18)
+Current commerce release: 0.6.0 (2026-11-17)
 Machine-readable manifest: [`releases.json`](releases.json)
 
 This document states how the commerce vertical is versioned, lists every commerce release with the member versions it bundles, and carries the release notes. The sheet specs, the vocabulary, the rule catalogue and the linter design each point here for the scheme and keep their own changelogs for their content.
 
 ## The scheme
 
-**Each sheet spec has its own semver.** The Product Sheet spec ([`product.md`](product.md)), the Organization Sheet spec ([`organization.md`](organization.md)), the Collection Sheet spec ([`collection.md`](collection.md)) and the Review Sheet spec ([`review.md`](review.md), a draft) carry a version of their own and evolve independently. No catalog sheet is planned: the catalogue entry point is `hasOfferCatalog` on the Organization Sheet. Standard semver applies, including before 1.0: in 0.x, a breaking change bumps the minor, an additive change bumps the minor, and a fix or clarification bumps the patch. The minor of the Product Sheet spec after 0.9.0 is 0.10.0.
+**Each sheet spec has its own semver.** The Product Sheet spec ([`product.md`](product.md)), the Organization Sheet spec ([`organization.md`](organization.md)), the Collection Sheet spec ([`collection.md`](collection.md)) and the Review Sheet spec ([`review.md`](review.md)) carry a version of their own and evolve independently. No catalog sheet is planned: the catalogue entry point is `hasOfferCatalog` on the Organization Sheet. Standard semver applies, including before 1.0: in 0.x, a breaking change bumps the minor, an additive change bumps the minor, and a fix or clarification bumps the patch. The minor of the Product Sheet spec after 0.9.0 is 0.10.0.
 
 **A commerce release is a named, versioned bundle of member versions.** Its members are each sheet spec and the vocabulary. The release's bump follows its members: major if any member bumps major, else minor if any member bumps minor, else patch. A new sheet type joining the release is a minor bump. 1.0.0 is a release like any other: it is reached by the same rule and carries no completeness requirement on the set of sheet types.
 
@@ -28,16 +28,17 @@ A sheet's envelope carries two version statements:
 
 - `release`: the commerce release the sheet is written against, a full semver (`"release": "0.5.0"`). The field name is generic because the envelope is shared across verticals; the vertical is identified by `$schema`.
 - `$schema`: the URL of the JSON Schema for the sheet's own sheet-spec version, with the full semver in its last segment. It is required on every sheet carrying `release`:
-  - `https://themachineweb.org/pagefront/spec/commerce/product/v0.11.0.json`
-  - `https://themachineweb.org/pagefront/spec/commerce/organization/v0.5.0.json`
-  - `https://themachineweb.org/pagefront/spec/commerce/collection/v0.1.0.json`
+  - `https://themachineweb.org/pagefront/spec/commerce/product/v0.12.0.json`
+  - `https://themachineweb.org/pagefront/spec/commerce/organization/v0.6.0.json`
+  - `https://themachineweb.org/pagefront/spec/commerce/collection/v0.2.0.json`
+  - `https://themachineweb.org/pagefront/spec/commerce/review/v0.1.0.json`
 
-A release and a sheet type resolve to exactly one sheet-spec version, through the release table below. `$schema` MUST name that version: a Product Sheet declaring release 0.5.0 points `$schema` at `product/v0.11.0.json`, one declaring release 0.4.0 at `product/v0.10.0.json`, and one declaring release 0.3.0 at `product/v0.9.0.json`. The linter checks it (PDP-E-002 for Product Sheets, ORG-E-003 for Organization Sheets).
+A release and a sheet type resolve to exactly one sheet-spec version, through the release table below. `$schema` MUST name that version: a Product Sheet declaring release 0.6.0 points `$schema` at `product/v0.12.0.json`, one declaring release 0.5.0 at `product/v0.11.0.json`, one declaring release 0.4.0 at `product/v0.10.0.json`, and one declaring release 0.3.0 at `product/v0.9.0.json`. The linter checks it (PDP-E-002 for Product Sheets, ORG-E-003 for Organization Sheets, COL-E-003 for Collection Sheets, REV-E-016 for Review Sheets).
 
 ```json
 {
-  "$schema": "https://themachineweb.org/pagefront/spec/commerce/product/v0.11.0.json",
-  "release": "0.5.0",
+  "$schema": "https://themachineweb.org/pagefront/spec/commerce/product/v0.12.0.json",
+  "release": "0.6.0",
   "schema_org_version": "30.0",
   "canonical_url": "https://merchant.com/product/widget-123",
   "sheet_url": "https://merchant.com/api/sheets/widget-123.json",
@@ -54,6 +55,7 @@ A sheet is judged by the release it declares. It is validated against the schema
 
 | Release | Date | Product Sheet spec | Organization Sheet spec | Collection Sheet spec | Review Sheet spec | Vocabulary |
 |---|---|---|---|---|---|---|
+| 0.6.0 | 2026-11-17 | 0.12.0 | 0.6.0 | 0.2.0 | 0.1.0 | 0.6.0 |
 | 0.5.0 | 2026-10-18 | 0.11.0 | 0.5.0 | 0.1.0 | none | 0.5.0 |
 | 0.4.0 | 2026-10-02 | 0.10.0 | 0.4.0 | none | none | 0.4.0 |
 | 0.3.0 | 2026-10-01 | 0.9.0 | 0.3.0 | none | none | 0.3.0 |
@@ -68,6 +70,7 @@ The same table, for machines, is [`releases.json`](releases.json), where a sheet
 |---|---|---|
 | 0.9.0 | 2026-10-01 | The Product Sheet spec as it stood at legacy format version 0.9 on 2026-10-01, with the envelope carrying `release` in place of `format_version`. |
 | 0.10.0 | 2026-10-02 | `$schema` required on sheets carrying `release`. Released in commerce release 0.4.0. |
+| 0.12.0 | 2026-11-17 | `subjectOf` references the product's Commerce Review Sheet; unavailable offers without a price (`OutOfStock`, `SoldOut`, `Discontinued`); the purchase-host rule under "Where to buy"; merchant statements named as the two sources; the document a field reference with design notes beside it. Released in commerce release 0.6.0. |
 | 0.11.0 | 2026-10-18 | `sheet_url` optional; `isPartOf` collection references; "Where to buy" (`Offer.url`, `checkoutPageURLTemplate`); the discovery link is `rel="alternate"` with the media type `application/pagefront+json`, and Discovery moves to the format-level document; price and VAT basis are read from the page and never inferred. Released in commerce release 0.5.0. |
 
 **Organization Sheet spec.** The spec was ratified on 2026-08-14 and revised twice before releases existed. Each of those three steps counts as a minor, which places the spec at 0.3.0. Versions 0.1.0 and 0.2.0 were never carried on the wire: sheets of that period carried `format_version: "0.9"` and belong to the legacy draft line.
@@ -78,19 +81,21 @@ The same table, for machines, is [`releases.json`](releases.json), where a sheet
 | 0.2.0 | 2026-08-31 | `pagefront:authorizedResellers` added. |
 | 0.3.0 | 2026-09-30 | `pagefront:sheetUrl` on organization references added. Released on 2026-10-01 in commerce release 0.3.0, with the envelope carrying `release` in place of `format_version`. |
 | 0.4.0 | 2026-10-02 | `$schema` required on sheets carrying `release`. Released in commerce release 0.4.0. |
+| 0.6.0 | 2026-11-17 | `subjectOf` references the Organization review sheet, the sheet's third outbound edge; `pagefront:checkoutHosts` on a seller sheet. Released in commerce release 0.6.0. |
 | 0.5.0 | 2026-10-18 | `hasOfferCatalog` admitted as the catalogue entry point; `sheet_url` optional; the sheet is the root an origin's entry point reaches, including by DNS delegation. Released in commerce release 0.5.0. |
 
 **Collection Sheet spec.** Ratified 2026-10-18, [`collection.md`](collection.md); it joined the release line with commerce release 0.5.0 and has no legacy draft line.
 
 | Version | Date | What it is |
 |---|---|---|
-| 0.1.0 | 2026-10-18 | First text: a `Collection`-rooted sheet for category, collection and brand listing pages, with direct exhaustive membership in `hasPart`, parents in `isPartOf`, the `pagefront:collectionKind` discriminator and the tree's roots on the Organization Sheet in `hasOfferCatalog`. The editable head is [`collection.json`](collection.json); no schema is published until the release. |
+| 0.2.0 | 2026-11-17 | A collection filled by a rule has no sheet; producers read the rule from the platform's model. The schema is unchanged in content and frozen again as `collection/v0.2.0.json`. Released in commerce release 0.6.0. |
+| 0.1.0 | 2026-10-18 | First text: a `Collection`-rooted sheet for category, collection and brand listing pages, with direct exhaustive membership in `hasPart`, parents in `isPartOf`, the `pagefront:collectionKind` discriminator and the tree's roots on the Organization Sheet in `hasOfferCatalog`. Released in commerce release 0.5.0. |
 
-**Review Sheet spec.** Drafted 2026-11-17, [`review.md`](review.md); not yet in a release. It joins the release line as a minor of the release that bundles it, and has no legacy draft line.
+**Review Sheet spec.** Ratified 2026-11-17, [`review.md`](review.md); it joined the release line with commerce release 0.6.0 and has no legacy draft line.
 
 | Version | Date | What it is |
 |---|---|---|
-| 0.1.0 | unreleased | Draft: an `ItemList`-rooted sheet carrying the consumer reviews shown for one subject, each review with four declarations (`pagefront:reviewSubject`, `pagefront:reviewSource`, `pagefront:purchaseVerification`, `pagefront:reviewIncentive`), a sheet-level `pagefront:reviewPolicy`, and optional aspects; reached from the subject's sheet through `subjectOf`. Requires Pagefront Discovery 0.2.0. The editable head is [`review.json`](review.json); no schema is published until the release. |
+| 0.1.0 | 2026-11-17 | First text: an `ItemList`-rooted sheet carrying the consumer reviews shown for one subject, each review with four declarations (`pagefront:reviewSubject`, `pagefront:reviewSource`, `pagefront:purchaseVerification`, `pagefront:reviewIncentive`), a sheet-level `pagefront:reviewPolicy`, and optional aspects; reached from the subject's sheet through `subjectOf`. Requires Pagefront Discovery 0.2.0. Released in commerce release 0.6.0. |
 
 ## Format documents
 
@@ -99,7 +104,7 @@ Pagefront Discovery ([`../../core/spec/discovery.md`](../../core/spec/discovery.
 | Version | Date | What it is |
 |---|---|---|
 | 0.1.0 | 2026-10-18 | First text: the discovery principle, the page-based carriers, the traversal-hint rule and the filename convention, moved from the Product Sheet spec, and the entry point (`/.well-known/pagefront`, the `Pagefront:` line in `/robots.txt`). |
-| 0.2.0 | unreleased | "Several Sheets for one page": a page declares at most one sheet link per sheet type, the type read from the `Link` header's `profile`, links in a stable order with the page's primary subject first; the traversal-hint confirmation step selects by type. Motivated by the Review Sheet spec, which requires it. |
+| 0.2.0 | 2026-11-17 | "Several Sheets for one page": a page declares at most one sheet link per sheet type, the type read from the `Link` header's `profile`, links in a stable order with the page's primary subject first; the traversal-hint confirmation step selects by type. Motivated by the Review Sheet spec, which requires it. |
 
 ## The legacy draft line
 
@@ -113,9 +118,21 @@ The "added in v0.7", "new in v0.9" and similar annotations throughout the sheet 
 
 ## Release notes
 
-### Unreleased
+### 0.6.0 — 2026-11-17
 
-The next release adds the Review Sheet spec 0.1.0 ([`review.md`](review.md)), a minor, since a new sheet type joins, beside the Unreleased changes of the Product, Organization and Collection Sheet specs. It assumes Pagefront Discovery 0.2.0, which the Review Sheet spec requires for "Several Sheets for one page"; the Discovery document is dated on its own and its version moves in its own release step. The release pull request adds the review column to the release table and to the 0.6.0 row of [`releases.json`](releases.json), and freezes [`review.json`](review.json) as `commerce/schemas/review/v0.1.0.json`.
+It bundles Product Sheet spec 0.12.0, Organization Sheet spec 0.6.0, Collection Sheet spec 0.2.0, Review Sheet spec 0.1.0 and vocabulary 0.6.0. A minor: a new sheet type joins, and every change to the existing members is additive or a relaxation. A sheet valid at 0.5.0 stays valid at 0.6.0. Pagefront Discovery 0.2.0, dated the same day, is the Discovery version in force.
+
+- **The Commerce Review Sheet joins the release line** (Review Sheet spec 0.1.0, ratified 2026-11-17): an `ItemList`-rooted sheet carrying the consumer reviews a publisher shows for one subject, a product, a variant family or the seller, each review a Schema.org `Review` with three provenance declarations (`pagefront:reviewSource`, `pagefront:purchaseVerification`, `pagefront:reviewIncentive`, each with `undisclosed`) and a subject declaration (`pagefront:reviewSubject`, with `unclassified`), optionally its aspects; a sheet-level `pagefront:reviewPolicy`; an exhaustive list, originals only, attached to the `ProductGroup` where one exists. The subject's sheet points at it through `subjectOf`. It has no legacy draft line.
+- **Schemas.** `product/v0.12.0.json`, `organization/v0.6.0.json`, `collection/v0.2.0.json` and `review/v0.1.0.json` are published. The earlier schemas stay published, unchanged: a sheet declaring an earlier release keeps validating against them.
+- **Review sheet references** (Product Sheet spec 0.12.0, Organization Sheet spec 0.6.0). `subjectOf`, in the member entry shape, points a Product, ProductGroup or Organization Sheet at its review sheet; `aggregateRating` is computed over that sheet's `product`-subject reviews on a product, over the seller reviews on an organization; a Product Sheet SHOULD NOT carry inline `review[]`.
+- **Unavailable offers without a price** (Product Sheet spec 0.12.0). An offer the page shows as `OutOfStock`, `SoldOut` or `Discontinued`, with no price shown, is published without a price and carries no checkout template.
+- **Purchase host** (Product Sheet spec 0.12.0, Organization Sheet spec 0.6.0). A purchase URL is on-host when its host is the canonical host or appears in `pagefront:checkoutHosts` on the seller sheet; a consumer shows the shopper an off-host destination and asks before handing them to it.
+- **Merchant statements** (Product Sheet spec 0.12.0). The two sources a value may come from, authored and platform-served, are named, and the entries that depend on a source refer to them.
+- **Collections filled by a rule have no sheet** (Collection Sheet spec 0.2.0). Producers read the rule from the platform's model and never infer it; categories keep their sheets however they are filled.
+- **Discovery 0.2.0.** "Several Sheets for one page": a page declares at most one sheet link per sheet type, the type read from the `Link` header's `profile`, links in a stable order with the page's primary subject first; the traversal-hint confirmation step selects by type. A sheet spec that needs a Discovery feature names it in its own text, and these notes name the version in force.
+- **Vocabulary 0.6.0.** `pagefront:checkoutHosts`, and with the Review Sheet `pagefront:ReviewPolicy`, `pagefront:ReviewSource`, `pagefront:ReviewAspect`, `pagefront:reviewPolicy`, `pagefront:reviewSubject`, `pagefront:reviewSource`, `pagefront:purchaseVerification`, `pagefront:reviewIncentive`, `pagefront:aspect` and `pagefront:aspectSource` are added; nothing is renamed or removed.
+- **Moving a sheet from 0.5.0.** Set `release` to `"0.6.0"` and point `$schema` at the new sheet-spec version. Nothing else changes.
+- **Linter.** Rule catalogue 0.21.0 supports releases 0.6.0, 0.5.0, 0.4.0 and 0.3.0 and the legacy line. Rules new with 0.6.0 apply from it only: the `REV-` catalogue for Review Sheets; PDP-E-022 (a checkout template on an unavailable offer), PDP-W-041 (a purchase URL off the canonical host), ORG-W-008 (`pagefront:checkoutHosts` without the seller role or not a bare host); COL-W-007 applies from 0.5.0. Sheets declaring 0.5.0 or earlier are judged as before. The catalogue ships in `@pagefront/lint-commerce` 0.15.0.
 
 ### 0.5.0 — 2026-10-18
 

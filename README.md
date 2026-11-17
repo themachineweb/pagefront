@@ -15,9 +15,9 @@ they offer — without any platform's permission required.
 
 ## Status
 
-Commerce release 0.5.0 is the current release. It bundles the Product Sheet
-spec 0.11.0, the Organization Sheet spec 0.5.0, the Collection Sheet spec
-0.1.0 and the vocabulary.
+Commerce release 0.6.0 is the current release. It bundles the Product Sheet
+spec 0.12.0, the Organization Sheet spec 0.6.0, the Collection Sheet spec
+0.2.0, the Review Sheet spec 0.1.0 and the vocabulary.
 The format is suitable for experimentation and feedback today; the stability
 policy applies from release 1.0.0.
 
@@ -48,8 +48,8 @@ What this repository contains today:
   (multi-brand retailer, organization sheets only) are corpus examples kept
   in the repository.
 - [`commerce/schemas/`](commerce/schemas/) — every published JSON Schema,
-  one file per version (`product/v0.11.0.json`, `organization/v0.5.0.json`,
-  `collection/v0.1.0.json`, the earlier versions, and the legacy `v0.9.json`
+  one file per version (`product/v0.12.0.json`, `organization/v0.6.0.json`,
+  `collection/v0.2.0.json`, `review/v0.1.0.json`, the earlier versions, and the legacy `v0.9.json`
   files). Frozen and append-only: the site serves
   these files verbatim, so a published schema URL never changes or
   disappears.

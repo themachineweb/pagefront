@@ -6,6 +6,10 @@ The history of [`collection.md`](collection.md). Changes land under "Unreleased"
 
 Changes land here and are versioned at the next release; see "Releasing" in [`../../CONTRIBUTING.md`](../../CONTRIBUTING.md).
 
+### 0.2.0 — 2026-11-17
+
+Released in commerce release 0.6.0. The text changes alone; the schema is frozen again as `collection/v0.2.0.json`, identical in content to 0.1.0 with the new `$id`.
+
 - **Editorial: the changelog moves to this file.** `collection.md` keeps a one-line Changelog section that points here; the entries are unchanged.
 - **Editorial: "Hierarchy" and "Kind discriminator" name COL-W-007.** The linter rule catalogue 0.20.0 adds a warning on a parent entry without `pagefront:sheetUrl`; the two sections point at it. No requirement changes.
 - **Editorial: the document becomes a field reference; its rationale moves to design notes.** Every section is restyled into one entry per field, with its meaning, shape, source and linter check, and the reasoning behind the fields moves verbatim to [`collection-notes.md`](collection-notes.md), non-normative, one note per heading, each linked from the field it explains with a `why` link; the site renders the notes as footnotes under the spec. "Decisions and their grounds" is folded into the notes on the sections it concerns; "Companion changes", the ratification clause of the status line and the "Worked examples" placeholder move to a history note; "Linter rules (proposed)" becomes "Linter rules", since the catalogue has defined them since 0.17.0. Every requirement, every rule ID and every anchor the rule catalogue, the linter and the vocabulary link are kept. No rule, field, shape or source changes; no schema change. The notes carry this document's version line and log their changes here.

@@ -1,0 +1,491 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://themachineweb.org/pagefront/spec/commerce/review/v0.1.0.json",
+  "title": "Pagefront Commerce Review Sheet 0.1.0",
+  "description": "Sheet spec version 0.1.0, a member of commerce release 0.6.0, the release with which the Review Sheet spec joins the release line; it has no legacy draft line. Formal schema for the Pagefront Commerce Review Sheet, the sheet carrying the consumer reviews a publisher shows for one subject: a product, a variant family or the seller itself. The envelope is the one every Pagefront Sheet carries: $schema, release, schema_org_version, canonical_url, generated_at and data are required, sheet_url and expires_at are optional, and format_version is not accepted beside release. The data block roots on Schema.org ItemList and declares the pagefront prefix in the array form of @context, since every review sheet uses pagefront: terms. about names the subject as a thin entry (@type, @id and url required; pagefront:sheetUrl and name optional); pagefront:reviewPolicy is the required statement about the set (collection from a closed enum, url and solicitation optional); itemListElement lists the reviews as Schema.org Review objects, each carrying @id, datePublished, reviewRating and the four pagefront declarations (reviewSubject, reviewSource, purchaseVerification, reviewIncentive), with pagefront:aspect optional and pagefront:aspectSource required beside it, and bestRating and worstRating required when ratingValue exceeds 5; the array may be empty. Validates the envelope and pagefront-namespaced extensions strictly; Schema.org-typed blocks permit additional unspecified properties.",
+  "type": "object",
+  "required": [
+    "$schema",
+    "release",
+    "schema_org_version",
+    "canonical_url",
+    "generated_at",
+    "data"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "format": "uri"
+    },
+    "release": {
+      "type": "string",
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$"
+    },
+    "schema_org_version": {
+      "type": "string",
+      "pattern": "^\\d+(\\.\\d+)?$"
+    },
+    "canonical_url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "sheet_url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "data": {
+      "$ref": "#/$defs/dataBlock"
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "dataBlock": {
+      "type": "object",
+      "required": [
+        "@context",
+        "@type",
+        "@id",
+        "inLanguage",
+        "about",
+        "pagefront:reviewPolicy",
+        "itemListElement"
+      ],
+      "properties": {
+        "@context": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "uri"
+              },
+              {
+                "type": "object"
+              }
+            ]
+          },
+          "contains": {
+            "type": "object",
+            "required": [
+              "pagefront"
+            ],
+            "properties": {
+              "pagefront": {
+                "const": "https://themachineweb.org/pagefront/vocabulary/"
+              }
+            }
+          }
+        },
+        "@type": {
+          "const": "ItemList"
+        },
+        "@id": {
+          "type": "string",
+          "format": "uri"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "inLanguage": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "numberOfItems": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "about": {
+          "$ref": "#/$defs/subjectEntry"
+        },
+        "pagefront:reviewPolicy": {
+          "$ref": "#/$defs/reviewPolicy"
+        },
+        "itemListElement": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/reviewEntry"
+          }
+        },
+        "pagefront:availableLanguages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "lang",
+              "url"
+            ],
+            "properties": {
+              "lang": {
+                "type": "string"
+              },
+              "url": {
+                "type": "string",
+                "format": "uri"
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "subjectEntry": {
+      "type": "object",
+      "required": [
+        "@type",
+        "@id",
+        "url"
+      ],
+      "properties": {
+        "@type": {
+          "type": "string"
+        },
+        "@id": {
+          "type": "string",
+          "format": "uri"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "pagefront:sheetUrl": {
+          "type": "string",
+          "format": "uri"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "reviewPolicy": {
+      "type": "object",
+      "required": [
+        "@type",
+        "collection"
+      ],
+      "properties": {
+        "@type": {
+          "const": "pagefront:ReviewPolicy"
+        },
+        "collection": {
+          "$ref": "#/$defs/policyCollection"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "solicitation": {
+          "$ref": "#/$defs/policySolicitation"
+        }
+      },
+      "additionalProperties": false
+    },
+    "policyCollection": {
+      "type": "string",
+      "enum": [
+        "all",
+        "moderated",
+        "curated",
+        "undisclosed"
+      ]
+    },
+    "policySolicitation": {
+      "type": "string",
+      "enum": [
+        "post_purchase",
+        "on_page",
+        "third_party_program",
+        "none",
+        "undisclosed"
+      ]
+    },
+    "reviewEntry": {
+      "type": "object",
+      "required": [
+        "@type",
+        "@id",
+        "datePublished",
+        "reviewRating",
+        "pagefront:reviewSubject",
+        "pagefront:reviewSource",
+        "pagefront:purchaseVerification",
+        "pagefront:reviewIncentive"
+      ],
+      "properties": {
+        "@type": {
+          "const": "Review"
+        },
+        "@id": {
+          "type": "string",
+          "format": "uri"
+        },
+        "datePublished": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}"
+        },
+        "reviewRating": {
+          "$ref": "#/$defs/rating"
+        },
+        "reviewBody": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "inLanguage": {
+          "type": "string"
+        },
+        "author": {
+          "type": "object"
+        },
+        "itemReviewed": {
+          "type": "object",
+          "required": [
+            "@id"
+          ],
+          "properties": {
+            "@type": {
+              "type": "string"
+            },
+            "@id": {
+              "type": "string",
+              "format": "uri"
+            }
+          },
+          "additionalProperties": true
+        },
+        "associatedMedia": {
+          "oneOf": [
+            {
+              "type": "object"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          ]
+        },
+        "comment": {
+          "type": "object"
+        },
+        "interactionStatistic": {
+          "oneOf": [
+            {
+              "type": "object"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          ]
+        },
+        "pagefront:reviewSubject": {
+          "$ref": "#/$defs/reviewSubject"
+        },
+        "pagefront:reviewSource": {
+          "$ref": "#/$defs/reviewSource"
+        },
+        "pagefront:purchaseVerification": {
+          "$ref": "#/$defs/purchaseVerification"
+        },
+        "pagefront:reviewIncentive": {
+          "$ref": "#/$defs/incentive"
+        },
+        "pagefront:aspect": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/reviewAspect"
+          }
+        },
+        "pagefront:aspectSource": {
+          "$ref": "#/$defs/aspectSource"
+        }
+      },
+      "additionalProperties": true,
+      "dependentRequired": {
+        "pagefront:aspect": [
+          "pagefront:aspectSource"
+        ]
+      }
+    },
+    "rating": {
+      "type": "object",
+      "required": [
+        "ratingValue"
+      ],
+      "properties": {
+        "@type": {
+          "type": "string"
+        },
+        "ratingValue": {
+          "$ref": "#/$defs/ratingNumber"
+        },
+        "bestRating": {
+          "$ref": "#/$defs/ratingNumber"
+        },
+        "worstRating": {
+          "$ref": "#/$defs/ratingNumber"
+        }
+      },
+      "additionalProperties": true,
+      "if": {
+        "required": [
+          "ratingValue"
+        ],
+        "properties": {
+          "ratingValue": {
+            "oneOf": [
+              {
+                "type": "number",
+                "exclusiveMinimum": 5
+              },
+              {
+                "type": "string",
+                "pattern": "^(5\\.\\d*[1-9]\\d*|[6-9](\\.\\d+)?|\\d{2,}(\\.\\d+)?)$"
+              }
+            ]
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "bestRating",
+          "worstRating"
+        ]
+      }
+    },
+    "ratingNumber": {
+      "oneOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string",
+          "pattern": "^-?\\d+(\\.\\d+)?$"
+        }
+      ]
+    },
+    "reviewSubject": {
+      "type": "string",
+      "enum": [
+        "product",
+        "seller",
+        "mixed",
+        "unclassified"
+      ]
+    },
+    "reviewSource": {
+      "type": "object",
+      "required": [
+        "@type",
+        "kind"
+      ],
+      "properties": {
+        "@type": {
+          "const": "pagefront:ReviewSource"
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "first_party",
+            "third_party",
+            "marketplace",
+            "imported",
+            "undisclosed"
+          ]
+        },
+        "name": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        }
+      },
+      "additionalProperties": false
+    },
+    "purchaseVerification": {
+      "type": "string",
+      "enum": [
+        "none",
+        "order_matched",
+        "post_purchase_invitation",
+        "platform_verified",
+        "undisclosed"
+      ]
+    },
+    "incentive": {
+      "type": "string",
+      "enum": [
+        "none",
+        "discount",
+        "free_product",
+        "sample_program",
+        "undisclosed"
+      ]
+    },
+    "reviewAspect": {
+      "type": "object",
+      "required": [
+        "@type",
+        "aspect"
+      ],
+      "properties": {
+        "@type": {
+          "const": "pagefront:ReviewAspect"
+        },
+        "aspect": {
+          "type": "string",
+          "enum": [
+            "quality",
+            "fit",
+            "durability",
+            "value",
+            "ease_of_use",
+            "appearance",
+            "as_described",
+            "performance",
+            "comfort",
+            "taste",
+            "delivery",
+            "customer_service",
+            "returns",
+            "packaging",
+            "payment",
+            "communication"
+          ]
+        },
+        "ratingValue": {
+          "$ref": "#/$defs/ratingNumber"
+        }
+      },
+      "additionalProperties": false
+    },
+    "aspectSource": {
+      "type": "string",
+      "enum": [
+        "author",
+        "publisher",
+        "inferred"
+      ]
+    }
+  }
+}

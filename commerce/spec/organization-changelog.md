@@ -6,6 +6,12 @@ _Entries dated before 2026-10-01 were written under the legacy scheme, in which 
 
 ### Unreleased
 
+Changes land here and are versioned at the next release; see "Releasing" in [`../../CONTRIBUTING.md`](../../CONTRIBUTING.md).
+
+### 0.6.0 — 2026-11-17
+
+Released in commerce release 0.6.0.
+
 - **Addition (minor): the Organization review sheet.** The seller block admits `subjectOf`, the Organization review sheet ([`review.md`](review.md), draft 0.1.0): an array of `ItemList` member entries in the Collection Sheet's member entry shape, on this sheet's host, the sheet's third outbound edge under the linking contract. `aggregateRating` is computed over that sheet where one exists. **(schema)** `subjectOf` typed as an array of member entries; the head already names Organization Sheet spec 0.6.0, and no valid sheet becomes invalid. **(linter)** ORG-W-009 (a `subjectOf` hint off the canonical host) is reserved.
 - **Addition (minor): `pagefront:checkoutHosts`.** The seller block admits `pagefront:checkoutHosts`, an optional array of bare host names (no scheme, path or port) outside the sheet's canonical host on which the seller's offers are bought or checked out. Admitted only where `pagefront:commerceRole` includes `seller`; it counts only on the seller sheet a consumer reaches through the linking contract, which is on the product sheet's canonical host, so a product sheet cannot extend the list. Publisher-stated only, under the wording of `pagefront:socialAccount`. A consumer reads it to tell an on-host purchase URL from an off-host one ("Purchase host" under "Where to buy" in [`product.md`](product.md)). **(schema)** `pagefront:checkoutHosts` added as an optional array of strings; the head moves to Organization Sheet spec 0.6.0, and no valid sheet becomes invalid. **(linter)** ORG-W-008 warns on the field without the `seller` role and on each entry that is not a bare host.
 - **Editorial: the changelog moves to this file.** `organization.md` keeps a one-line Changelog section that points here; the entries are unchanged.

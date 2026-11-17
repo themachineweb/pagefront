@@ -1,13 +1,12 @@
 /**
  * Tests for the Commerce Review Sheet: the editable schema head
- * (commerce/spec/review.json, compiled here because no release bundles
- * it yet, so the package carries no frozen review schema), the
- * sheet-type dispatch, and the review catalogue on the worked example of
+ * (commerce/spec/review.json, frozen as review/v0.1.0.json with release
+ * 0.6.0), the sheet-type dispatch, and the review catalogue on the worked example of
  * review.md, which lints clean. The catalogue applies from release
- * 0.6.0, which has not landed: the Layer 2 and end-to-end tests run
- * against the test manifest (test/manifest/releases.json) through the
- * test-only hook, and one test keeps the production path, whose latest
- * release bundles no review schema. See test/README.md.
+ * 0.6.0; the Layer 2 and end-to-end tests run against the test manifest
+ * (test/manifest/releases.json), which equals the bundled one, through
+ * the test-only hook, and one test keeps the production path on an
+ * earlier release, which bundles no review schema. See test/README.md.
  */
 import test from "node:test";
 import assert from "node:assert/strict";
@@ -187,7 +186,7 @@ test("sheet-type dispatch: $schema wins, the data block is the fallback, and no 
   assert.ok(underTestManifest(() => lintSheet(example, OPTS)).findings.every((f) => f.rule.startsWith("REV-")));
 });
 
-test("production path: no bundled release carries the Review Sheet spec yet", () => {
+test("production path: release 0.5.0 bundles no Review Sheet spec", () => {
   const example = loadExample();
   example.release = "0.5.0";
   assert.deepEqual(validateAndLint(example, OPTS), {
