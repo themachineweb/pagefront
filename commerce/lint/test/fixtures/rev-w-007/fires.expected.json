@@ -1,0 +1,29 @@
+{
+  "sheet": "https://merchant.example/products/aurora-jumper",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.6.0",
+  "sheet_spec_version": "0.1.0",
+  "catalogue_version": "0.21.0",
+  "findings": [
+    {
+      "rule": "REV-W-007",
+      "severity": "warning",
+      "path": "$['data']['itemListElement'][1]",
+      "values": {
+        "id": "https://reviews.example/aurora-jumper/7731902",
+        "kind": "first_party"
+      },
+      "message": "Review `https://reviews.example/aurora-jumper/7731902` at `$['data']['itemListElement'][1]` is `platform_verified` with a `first_party` source.",
+      "remediation": "Name the platform that asserts the purchase in `pagefront:reviewSource` (`third_party` or `marketplace`), or declare the verification the publisher established itself: `order_matched`, `post_purchase_invitation`, `none` or `undisclosed`."
+    }
+  ],
+  "summary": {
+    "errors": 0,
+    "warnings": 1,
+    "info": 0,
+    "rules_fired": [
+      "REV-W-007"
+    ]
+  }
+}

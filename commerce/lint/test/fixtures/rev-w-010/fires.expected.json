@@ -1,0 +1,28 @@
+{
+  "sheet": "https://merchant.example/products/aurora-jumper",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.6.0",
+  "sheet_spec_version": "0.1.0",
+  "catalogue_version": "0.21.0",
+  "findings": [
+    {
+      "rule": "REV-W-010",
+      "severity": "warning",
+      "path": "$['data']['itemListElement'][1]",
+      "values": {
+        "id": "https://reviews.example/aurora-jumper/7731902"
+      },
+      "message": "Review `https://reviews.example/aurora-jumper/7731902` at `$['data']['itemListElement'][1]` carries text without `inLanguage`.",
+      "remediation": "Add `inLanguage` to the entry, the BCP 47 tag of the language the author wrote in."
+    }
+  ],
+  "summary": {
+    "errors": 0,
+    "warnings": 1,
+    "info": 0,
+    "rules_fired": [
+      "REV-W-010"
+    ]
+  }
+}

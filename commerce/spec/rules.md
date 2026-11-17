@@ -1,12 +1,12 @@
 # Pagefront Commerce Linter — Rule Catalogue
 
 Status: draft / design document, not yet a published normative artifact.
-Catalogue version: 0.20.1
+Catalogue version: 0.21.0
 Supports: commerce releases 0.5.0 (Product Sheet spec 0.11.0, Organization Sheet spec 0.5.0, Collection Sheet spec 0.1.0), 0.4.0 (Product Sheet spec 0.10.0, Organization Sheet spec 0.4.0) and 0.3.0 (Product Sheet spec 0.9.0, Organization Sheet spec 0.3.0), and the legacy draft line (format 0.9).
 
 This document is the normative linter rule catalogue for Pagefront commerce Sheets. Its version is a semver of its own, independent of the commerce release and of the sheet specs ([`releases.md`](releases.md)); the "Supports" line above states which releases this catalogue version applies to. It implements the rule structure, severity levels, and output format defined in the vertical-agnostic linter design at [`../../core/spec/linter.md`](../../core/spec/linter.md).
 
-Within the commerce vertical, this document carries three page-type rule sets: the **product catalogue** (the `PDP-` rules below), the **Commerce Organization Sheet catalogue** (the `ORG-` rules, in their own section) and the **Commerce Collection Sheet catalogue** (the `COL-` rules, in their own section). Rule IDs follow the namespace convention `{sheet-type prefix}-{severity}-{number}`, so future page types (`catalog`, `article`, …) get their own prefixes without colliding with existing IDs. The product rules originally carried unprefixed `E-`/`W-`/`I-` IDs from the era when this was the only catalogue. They were renamed to `PDP-` in one pre-1.0, pre-publication move (catalogue 0.4.0), taken while no published consumer depended on the old IDs. That rename is the single sanctioned exception to ID permanence; the unprefixed IDs are retired and will not be reassigned. The linter dispatches by sheet type: a sheet is an organization sheet when its envelope `$schema` path contains `/spec/commerce/organization/` (or the `/schemas/organization/` path schemas were identified by before 2026-09-08), and a collection sheet when that path contains `/spec/commerce/collection/`, falling back (when `$schema` names no type) to the data block: `@type` of `Organization` / `OnlineStore` / `OnlineBusiness` with `pagefront:commerceRole` present is an organization sheet, and `@type` of `Collection` with `pagefront:collectionKind` present is a collection sheet. No page type's rules run on another page type's sheets. The linter also places each sheet on a line: a sheet carrying `release` is on the release line and a sheet carrying `format_version` and no `release` is on the legacy draft line. A sheet is judged by the release it declares. On the release line, Layer 1 validates it against the published schema of the sheet-spec version its `release` bundles for its type, from the frozen store [`../schemas/`](../schemas/), whatever `$schema` says; a `release` the release manifest does not list fails Layer 1. On the legacy line, Layer 1 validates against the schema `$schema` names (the legacy schema when `$schema` is absent). Layer 2 then runs the rules that apply to that release; see "Which rules apply to a Sheet" below.
+Within the commerce vertical, this document carries four page-type rule sets: the **product catalogue** (the `PDP-` rules below), the **Commerce Organization Sheet catalogue** (the `ORG-` rules, in their own section), the **Commerce Collection Sheet catalogue** (the `COL-` rules, in their own section) and the **Commerce Review Sheet catalogue** (the `REV-` rules, in their own section). Rule IDs follow the namespace convention `{sheet-type prefix}-{severity}-{number}`, so future page types (`catalog`, `article`, …) get their own prefixes without colliding with existing IDs. The product rules originally carried unprefixed `E-`/`W-`/`I-` IDs from the era when this was the only catalogue. They were renamed to `PDP-` in one pre-1.0, pre-publication move (catalogue 0.4.0), taken while no published consumer depended on the old IDs. That rename is the single sanctioned exception to ID permanence; the unprefixed IDs are retired and will not be reassigned. The linter dispatches by sheet type: a sheet is an organization sheet when its envelope `$schema` path contains `/spec/commerce/organization/` (or the `/schemas/organization/` path schemas were identified by before 2026-09-08), a collection sheet when that path contains `/spec/commerce/collection/`, and a review sheet when it contains `/spec/commerce/review/`, falling back (when `$schema` names no type) to the data block: `@type` of `Organization` / `OnlineStore` / `OnlineBusiness` with `pagefront:commerceRole` present is an organization sheet, `@type` of `Collection` with `pagefront:collectionKind` present is a collection sheet, and `@type` of `ItemList` with `pagefront:reviewPolicy` present is a review sheet. No page type's rules run on another page type's sheets. The linter also places each sheet on a line: a sheet carrying `release` is on the release line and a sheet carrying `format_version` and no `release` is on the legacy draft line. A sheet is judged by the release it declares. On the release line, Layer 1 validates it against the published schema of the sheet-spec version its `release` bundles for its type, from the frozen store [`../schemas/`](../schemas/), whatever `$schema` says; a `release` the release manifest does not list fails Layer 1. On the legacy line, Layer 1 validates against the schema `$schema` names (the legacy schema when `$schema` is absent). Layer 2 then runs the rules that apply to that release; see "Which rules apply to a Sheet" below.
 
 ## Rule catalogue
 
@@ -32,6 +32,7 @@ Rules that do not follow the default:
 | COL-E-001, COL-E-002, COL-E-003, COL-E-005, COL-W-001 to COL-W-007 | release 0.5.0, the release that bundles Collection Sheet spec 0.1.0 | no (the Collection Sheet spec has no legacy draft line) |
 | ORG-W-007 | release 0.5.0, which admits `hasOfferCatalog` | no |
 | ORG-W-008 | release 0.6.0, which admits `pagefront:checkoutHosts` | no |
+| REV-E-001 to REV-E-012, REV-W-001 to REV-W-013 | release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets | no (the Review Sheet spec has no legacy draft line) |
 
 ### Definitions
 
@@ -803,6 +804,45 @@ The `{host}` placeholder renders `(none)` when `canonical_url` has no host, whic
 **Fixtures:** `fires-url` (an off-host `url`), `fires-template` (an off-host template expansion), `fires-subdomain` (a `url` on a subdomain of the canonical host), `clean` (both on the canonical host), `clean-no-url` (an Offer with neither field); all declare release 0.6.0 and run against the test manifest.
 **Spec reference:** `product.md#where-to-buy`
 
+#### PDP-W-042 — Inline reviews on a product sheet (reserved)
+
+**Severity:** warning
+**Target:** `$.data.review`
+**Description:** Reserved and awaiting implementation. Inline `review[]` on a Product Sheet stays schema-valid and is discouraged ("The product side" in `review.md`): the entries lack the policy statement a Commerce Review Sheet carries, the four declarations double per-review size, and a product sheet is the publisher's statement about the product, which a review is not. The reviews belong in the review sheet the product's `subjectOf` points at. The number is reserved so that the check keeps the ID the spec names when it is implemented.
+**Check:** None. The rule has no implementation yet.
+**Message:** None.
+**Remediation:** None.
+**Introduced:** reserved with the Review Sheet spec draft 0.1.0
+**Applies from:** not applicable.
+**Fixtures:** none.
+**Spec reference:** `review.md#the-product-side`
+
+#### PDP-W-043 — Review sheet hint off the canonical host (reserved)
+
+**Severity:** warning
+**Target:** `$.data.subjectOf` (the Check would walk the entries)
+**Description:** Reserved and awaiting implementation. A `subjectOf` entry's `pagefront:sheetUrl` names the product's review sheet, whose `@id` host and sheet URL host equal the subject sheet's canonical host ("Discovery" in `review.md`), as a collection reference's hint does (COL-E-005, ORG-W-007). The number is reserved so that the check keeps the ID the spec names when it is implemented, together with ORG-W-009 on the organization side.
+**Check:** None. The rule has no implementation yet.
+**Message:** None.
+**Remediation:** None.
+**Introduced:** reserved with the Review Sheet spec draft 0.1.0
+**Applies from:** not applicable.
+**Fixtures:** none.
+**Spec reference:** `review.md#discovery`
+
+#### PDP-W-044 — Aggregate count and review sheet disagree (reserved)
+
+**Severity:** warning
+**Target:** `$.data.aggregateRating`
+**Description:** Reserved and awaiting implementation. A Product Sheet's `aggregateRating.ratingCount` is computed over the review sheet's `product`-subject reviews ("Scoping the aggregate" in `review.md`), so a count that differs from the review sheet's `numberOfItems` for the same subject needs explaining. Checking it needs both sheets, and this catalogue judges one sheet at a time; the number is reserved so that a two-sheet check, when one exists, keeps the ID the spec names.
+**Check:** None. The rule has no implementation yet.
+**Message:** None.
+**Remediation:** None.
+**Introduced:** reserved with the Review Sheet spec draft 0.1.0
+**Applies from:** not applicable.
+**Fixtures:** none.
+**Spec reference:** `review.md#the-organization-review-sheet`
+
 ### Information
 
 #### PDP-I-001 — Property outside Pagefront's modeled set
@@ -959,6 +999,19 @@ The `{problem}` placeholder renders "the sheet does not declare the `seller` rol
 **Applies from:** release 0.6.0; not the legacy line.
 **Fixtures:** `fires-no-seller` (the field on a brand-owner sheet), `fires-malformed` (one entry each with a scheme, a path, a port, and an empty one, on a seller sheet), `clean`; all declare release 0.6.0 and run against the test manifest.
 **Spec reference:** `organization.md#seller-block-seller`
+
+#### ORG-W-009 — Review sheet hint off the canonical host (reserved)
+
+**Severity:** warning
+**Target:** `$.data.subjectOf` (the Check would walk the entries)
+**Description:** Reserved and awaiting implementation. The organization-side counterpart of PDP-W-043: a `subjectOf` entry on a Commerce Organization Sheet names its Organization review sheet ("The Organization review sheet" in `review.md`), whose `pagefront:sheetUrl` is on the sheet's own host, as a `hasOfferCatalog` entry's is (ORG-W-007).
+**Check:** None. The rule has no implementation yet.
+**Message:** None.
+**Remediation:** None.
+**Introduced:** reserved with the Review Sheet spec draft 0.1.0
+**Applies from:** not applicable.
+**Fixtures:** none.
+**Spec reference:** `review.md#discovery`
 
 ## Commerce Collection Sheet rules
 
@@ -1127,6 +1180,356 @@ The `{name}` placeholder renders the entry's `name`; when absent, the fixed fall
 **Applies from:** release 0.5.0, the release that bundles Collection Sheet spec 0.1.0, whose hierarchy rule this enforces; not the legacy line.
 **Fixtures:** `fires` (two parent entries without the hint), `fires-whitespace` (one parent entry whose hint is whitespace-only, and no other finding), `clean` (two hinted parents), `clean-root` (a root category with no `isPartOf`).
 **Spec reference:** `collection.md#hierarchy`
+
+## Commerce Review Sheet rules
+
+The review-sheet catalogue, applying to Commerce Review Sheets ([`review.md`](review.md), a draft at spec 0.1.0) only, per the sheet-type dispatch described at the top of this document. Layer 1 for this sheet type is the review JSON Schema the release bundles (`../schemas/review/`, once a release publishes one; [`review.json`](review.json) is its editable head); these rules assume a schema-valid sheet. The schema enforces the array form of `@context` with the `pagefront` prefix, so this catalogue has no counterpart of PDP-E-003 and ORG-E-001; it has no counterpart of COL-E-003 and COL-E-004 either, since the spec reserves no code for the envelope's version fields. The error rules check the subject (REV-E-001, REV-E-009), the policy (REV-E-002), each entry's identity and rating (REV-E-003, REV-E-004), the four declarations (REV-E-005 to REV-E-008), the author's class (REV-E-010), translations (REV-E-011) and the subject of an Organization review sheet's entries (REV-E-012). The warning rules cover the set (REV-W-001, REV-W-002, REV-W-003, REV-W-013), the rating scale and the author (REV-W-004, REV-W-005), the consistency of the declarations with one another (REV-W-006, REV-W-007, REV-W-011, REV-W-012), the aspects (REV-W-008, REV-W-009) and the language of the text (REV-W-010). Four conditions the spec marks required (`url` on a curated policy, `name` on a platform source, `pagefront:aspectSource` beside aspects, `inLanguage` beside text) are warnings here, as the spec's own list grades them, and the schema leaves them to the rules. The product-side and organization-side checks the spec reserves are PDP-W-042, PDP-W-043, PDP-W-044 and ORG-W-009, in their own sections. The rules apply from release 0.6.0, the next release, which the draft targets, and never to the legacy draft line, which has no Review Sheet. Until that release lands, the review fixtures declare it and run against the test manifest, [`../lint/test/manifest/releases.json`](../lint/test/manifest/releases.json), whose 0.6.0 row resolves Review Sheet spec 0.1.0 to the editable head [`review.json`](review.json) at Layer 1. The release pull request adds the review column to that row in `commerce/spec/releases.json` and to the release table in `releases.md`, and freezes the head as `commerce/schemas/review/v0.1.0.json`; the fixtures and their expected reports do not change.
+
+#### REV-E-001 — Subject absent, without `@id`, or of another type
+
+**Severity:** error
+**Target:** `$.data` (the finding sits at the data block when `about` is absent, at `about` otherwise)
+**Description:** `about` names the one subject the sheet carries reviews for, in the member entry shape ("Required core fields" in `review.md`): a product, a variant family or the seller. Its `@type` is `Product`, one of its Schema.org subtypes, `ProductGroup` or `Organization`, and its `@id` is the exact identity the subject's own sheet declares. Without the field, or without an `@id`, the reviews are about nothing a consumer can recognise. The schema requires `about` with `@type`, `@id` and `url` and this rule reports the condition for callers that lint without validating, and for a present `@id` that is empty or whitespace-only.
+**Check:** The data block carries no `about`; or `about` is not an object; or its `@id` is absent, empty or whitespace-only; or its `@type` is absent, not a string, or not one of `Product`, `ProductGroup`, `DietarySupplement`, `Drug`, `IndividualProduct`, `ProductCollection`, `ProductModel`, `SomeProducts`, `Vehicle` (the Schema.org 30.0 subtypes of `Product`), `Organization`, `OnlineStore`, `OnlineBusiness` (the organization types the sheet-type dispatch recognises). One finding.
+**Message:** `about` at `{path}` {problem}.
+The `{problem}` placeholder carries `is absent`, `is not an object`, `` carries no `@id` ``, `` carries no `@type` `` or `` declares `@type` `{type}`, which is not one of … ``.
+**Remediation:** Name the subject in `about`, in the member entry shape: `@type`, the exact `@id` its own sheet declares, `url` and `pagefront:sheetUrl`. One sheet, one subject.
+**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Applies from:** release 0.6.0; not the legacy line.
+**Fixtures:** `fires-absent`, `fires-no-id`, `fires-other-type` (a `Collection` subject), `clean`.
+**Spec reference:** `review.md#required-core-fields`
+
+#### REV-E-002 — Review policy absent, or `collection` outside the enum
+
+**Severity:** error
+**Target:** `$.data` (the finding sits at the data block when the policy is absent, at the policy otherwise)
+**Description:** `pagefront:reviewPolicy` is the publisher's statement about the set, required and single-valued ("The set" in `review.md`); its `collection` says how reviews reach the published set, from a closed enum whose `undisclosed` member is a statement where absence is a broken sheet ("Undisclosed is a statement"). The schema requires the policy and closes the enum; this rule reports the condition for callers that lint without validating.
+**Check:** The data block carries no `pagefront:reviewPolicy`; or it is not an object; or it carries no `collection`; or `collection` is not one of `all`, `moderated`, `curated`, `undisclosed`. One finding.
+**Message:** `pagefront:reviewPolicy` at `{path}` {problem}.
+The `{problem}` placeholder carries `is absent`, `is not an object`, `` carries no `collection` `` or `` declares `collection` `{value}`, which is not one of `all`, `moderated`, `curated`, `undisclosed` ``; a non-string value renders as its JSON serialization.
+**Remediation:** Declare `pagefront:reviewPolicy` with `@type` `pagefront:ReviewPolicy` and `collection` as `all`, `moderated`, `curated` or `undisclosed`; a publisher that does not state its practice writes `undisclosed`. Additional values require a spec amendment.
+**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Applies from:** release 0.6.0; not the legacy line.
+**Fixtures:** `fires-absent`, `fires-outside-enum`, `clean`.
+**Spec reference:** `review.md#the-set-pagefrontreviewpolicy`
+
+#### REV-E-003 — Review entry without `@id`
+
+**Severity:** error
+**Target:** `$.data.itemListElement` (the Check walks the entries)
+**Description:** `@id` is the identity a consumer deduplicates a review on, across fetches, across language sheets and against the source platform ("The review entry" in `review.md`). An entry without one cannot be recognised twice. The schema requires `@id` on an entry and this rule reports the condition for callers that lint without validating, and for a present `@id` that is empty or whitespace-only.
+**Check:** An entry of `itemListElement` is an object whose `@id` is absent, or a string that is empty or whitespace-only. A non-object entry is skipped, since the schema types entries as objects. One finding per entry, at the entry's path.
+**Message:** Review at `{path}` carries no `@id`.
+**Remediation:** Give every review a stable `@id`, the same across fetches and language sheets; a syndicated review derives it from the platform's own identifier.
+**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Applies from:** release 0.6.0; not the legacy line.
+**Fixtures:** `fires`, `clean`.
+**Spec reference:** `review.md#schemaorg-native`
+
+#### REV-E-004 — Review entry without a rating
+
+**Severity:** error
+**Target:** `$.data.itemListElement` (the Check walks the entries)
+**Description:** `reviewRating` is a `Rating` with `ratingValue`, required on every entry: a review with no rating is not carried, a rating with no text is ("The review entry" in `review.md`). The schema requires both and this rule reports the condition for callers that lint without validating.
+**Check:** An entry of `itemListElement` carries no `reviewRating`, or one that is not an object, or one whose `ratingValue` is absent or null. One finding per entry, at the entry's path.
+**Message:** Review `{id}` at `{path}` {problem}.
+The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallback `(no @id)`. `{problem}` carries `` carries no `reviewRating` `` or `` carries a `reviewRating` without `ratingValue` ``.
+**Remediation:** Carry `reviewRating` as a `Rating` with `ratingValue` on every review, with `bestRating` and `worstRating` where the scale is not 1 to 5. A review with no rating is left out of the sheet.
+**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Applies from:** release 0.6.0; not the legacy line.
+**Fixtures:** `fires-absent`, `fires-no-value`, `clean`.
+**Spec reference:** `review.md#schemaorg-native`
+
+#### REV-E-005 — `pagefront:reviewSubject` absent or outside the enum
+
+**Severity:** error
+**Target:** `$.data.itemListElement` (the Check walks the entries; the finding sits at the entry when the field is absent, at the field otherwise)
+**Description:** One of the four declarations required on every review entry ("Pagefront declarations" in `review.md`), a closed enum with `undisclosed`: absence is a broken sheet, where `undisclosed` is a statement ("Undisclosed is a statement"). The schema requires the field and closes the enum; this rule reports the condition for callers that lint without validating.
+**Check:** An entry of `itemListElement` carries no `pagefront:reviewSubject`, or one whose value is not one of `product`, `seller`, `mixed`. One finding per entry.
+**Message:** `pagefront:reviewSubject` on review `{id}` at `{path}` is {problem}.
+The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallback `(no @id)`. `{problem}` carries `absent` or `` `{value}`, which is not one of … ``; a non-string value renders as its JSON serialization.
+**Remediation:** Declare `pagefront:reviewSubject` on every review as `product` (the product's intrinsic qualities), `seller` (the transaction) or `mixed` (both in one text). Additional values require a spec amendment.
+**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Applies from:** release 0.6.0; not the legacy line.
+**Fixtures:** `fires-absent`, `fires-outside-enum`, `clean`.
+**Spec reference:** `review.md#pagefront-declarations`
+
+#### REV-E-006 — Review source absent, or `kind` outside the enum
+
+**Severity:** error
+**Target:** `$.data.itemListElement` (the Check walks the entries; the finding sits at the entry when the field is absent, at the field otherwise)
+**Description:** `pagefront:reviewSource` says where the review entered the publisher's possession ("Pagefront declarations" in `review.md`): an object whose `kind` is a closed enum with `undisclosed`, with the platform's `name` and the review's `url` for a third-party or marketplace source (REV-W-006). The schema requires the field and closes the enum; this rule reports the condition for callers that lint without validating.
+**Check:** An entry of `itemListElement` carries no `pagefront:reviewSource`; or one that is not an object; or one carrying no `kind`; or one whose `kind` is not one of `first_party`, `third_party`, `marketplace`, `imported`, `undisclosed`. One finding per entry.
+**Message:** `pagefront:reviewSource` on review `{id}` at `{path}` {problem}.
+The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallback `(no @id)`. `{problem}` carries `is absent`, `is not an object`, `` carries no `kind` `` or `` declares `kind` `{value}`, which is not one of … ``.
+**Remediation:** Declare `pagefront:reviewSource` on every review as an object whose `kind` is `first_party`, `third_party`, `marketplace`, `imported` or `undisclosed`, with the platform's `name` and the review's `url` for a third-party or marketplace source.
+**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Applies from:** release 0.6.0; not the legacy line.
+**Fixtures:** `fires-absent`, `fires-outside-enum`, `clean`.
+**Spec reference:** `review.md#pagefront-declarations`
+
+#### REV-E-007 — `pagefront:purchaseVerification` absent or outside the enum
+
+**Severity:** error
+**Target:** `$.data.itemListElement` (the Check walks the entries; the finding sits at the entry when the field is absent, at the field otherwise)
+**Description:** One of the four declarations required on every review entry ("Pagefront declarations" in `review.md`), a closed enum with `undisclosed`: absence is a broken sheet, where `undisclosed` is a statement ("Undisclosed is a statement"). The schema requires the field and closes the enum; this rule reports the condition for callers that lint without validating.
+**Check:** An entry of `itemListElement` carries no `pagefront:purchaseVerification`, or one whose value is not one of `none`, `order_matched`, `post_purchase_invitation`, `platform_verified`, `undisclosed`. One finding per entry.
+**Message:** `pagefront:purchaseVerification` on review `{id}` at `{path}` is {problem}.
+The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallback `(no @id)`. `{problem}` carries `absent` or `` `{value}`, which is not one of … ``; a non-string value renders as its JSON serialization.
+**Remediation:** Declare `pagefront:purchaseVerification` on every review as `none`, `order_matched`, `post_purchase_invitation`, `platform_verified` or `undisclosed`; a publisher that does not know writes `undisclosed`, never nothing.
+**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Applies from:** release 0.6.0; not the legacy line.
+**Fixtures:** `fires-absent`, `fires-outside-enum`, `clean`.
+**Spec reference:** `review.md#pagefront-declarations`
+
+#### REV-E-008 — `pagefront:incentive` absent or outside the enum
+
+**Severity:** error
+**Target:** `$.data.itemListElement` (the Check walks the entries; the finding sits at the entry when the field is absent, at the field otherwise)
+**Description:** One of the four declarations required on every review entry ("Pagefront declarations" in `review.md`), a closed enum with `undisclosed`: absence is a broken sheet, where `undisclosed` is a statement ("Undisclosed is a statement"). The schema requires the field and closes the enum; this rule reports the condition for callers that lint without validating.
+**Check:** An entry of `itemListElement` carries no `pagefront:incentive`, or one whose value is not one of `none`, `discount`, `free_product`, `sample_program`, `undisclosed`. One finding per entry.
+**Message:** `pagefront:incentive` on review `{id}` at `{path}` is {problem}.
+The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallback `(no @id)`. `{problem}` carries `absent` or `` `{value}`, which is not one of … ``; a non-string value renders as its JSON serialization.
+**Remediation:** Declare `pagefront:incentive` on every review as `none`, `discount`, `free_product`, `sample_program` or `undisclosed`; a publisher that does not know writes `undisclosed`, never nothing.
+**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Applies from:** release 0.6.0; not the legacy line.
+**Fixtures:** `fires-absent`, `fires-outside-enum`, `clean`.
+**Spec reference:** `review.md#pagefront-declarations`
+
+#### REV-E-009 — Subject sheet URL off the canonical host
+
+**Severity:** error
+**Target:** `$.data.about` (the finding sits at the hint)
+**Description:** The `about` reference and the `pagefront:sheetUrl` on it share the *canonical host*, as members and parents do in the Collection Sheet ("Identity" in `review.md`; COL-E-005): the subject of a storefront's review sheet is the storefront's own product or organization, so a hint on another host locates nothing a consumer may trust. A hint with no host, an empty or whitespace-only string among them, is treated as absent and skipped.
+**Check:** `about` carries `pagefront:sheetUrl` whose *host* differs from the *canonical host* (see Definitions). One finding, at the `pagefront:sheetUrl` path.
+**Message:** Sheet URL at `{path}` is on host `{sheetUrlHost}`; the canonical page is on `{host}`.
+`{host}` renders `(none)` when `canonical_url` has no host, which is unreachable on Layer-1-valid input.
+**Remediation:** Point the subject's `pagefront:sheetUrl` at its sheet on the storefront host, the host of `canonical_url`. A consumer rejects a hint off that host and falls back to the subject's `url`.
+**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Applies from:** release 0.6.0; not the legacy line.
+**Fixtures:** `fires`, `clean`.
+**Spec reference:** `review.md#identity`
+
+#### REV-E-010 — Review by an organization
+
+**Severity:** error
+**Target:** `$.data.itemListElement` (the Check walks the entries; the finding sits at the entry's `author`)
+**Description:** This sheet carries consumer reviews. A `Review` whose author is a publication or the merchant is a different trust class and belongs elsewhere ("What this spec does not do" in `review.md`).
+**Check:** An entry of `itemListElement` carries an `author` object whose `@type` is `Organization`, `OnlineStore` or `OnlineBusiness`, the organization types the sheet-type dispatch recognises. One finding per entry.
+**Message:** Review `{id}` at `{path}` has an `author` of `@type` `{type}`; this sheet carries consumer reviews.
+The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallback `(no @id)`.
+**Remediation:** Carry consumer reviews only, each `author` a `Person` with `name` as displayed. An expert, editorial or merchant review is left out of this sheet.
+**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Applies from:** release 0.6.0; not the legacy line.
+**Fixtures:** `fires`, `clean`.
+**Spec reference:** `review.md#what-this-spec-does-not-do`
+
+#### REV-E-011 — Translation on a review entry
+
+**Severity:** error
+**Target:** `$.data.itemListElement` (the Check walks the entries; the finding sits at the field)
+**Description:** `reviewBody` and `name` are the text as the author wrote it; a publisher that shows a translation on its page does not carry it ("Language" in `review.md`).
+**Check:** An entry of `itemListElement` carries `workTranslation` or `translationOfWork`. One finding per field present, at its path.
+**Message:** Review `{id}` at `{path}` carries `{field}`; the sheet carries originals only.
+The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallback `(no @id)`.
+**Remediation:** Remove the translation. Carry the author's text in `reviewBody` and `name` with its language in `inLanguage`; translation is the consumer's operation.
+**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Applies from:** release 0.6.0; not the legacy line.
+**Fixtures:** `fires` (a `workTranslation` on one entry), `clean`.
+**Spec reference:** `review.md#language`
+
+#### REV-E-012 — Product review on an Organization review sheet
+
+**Severity:** error
+**Target:** `$.data` (the Check walks `itemListElement`; the finding sits at the entry's `pagefront:reviewSubject`)
+**Description:** An Organization review sheet carries the reviews collected about the seller as a seller, and every entry's subject is `seller`; a `product` or `mixed` entry on it is an error ("The Organization review sheet" in `review.md`). Entries whose subject is absent or not a string are REV-E-005's.
+**Check:** `about` declares a `@type` of `Organization`, `OnlineStore` or `OnlineBusiness`, and an entry of `itemListElement` declares a string `pagefront:reviewSubject` other than `seller`. One finding per entry.
+**Message:** Review `{id}` at `{path}` declares `pagefront:reviewSubject` `{subject}` on an Organization review sheet.
+The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallback `(no @id)`.
+**Remediation:** An Organization review sheet carries `seller`-subject reviews only. A review about a product, or a mixed one, stays in the review sheet of the product it was published on.
+**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Applies from:** release 0.6.0; not the legacy line.
+**Fixtures:** `fires` (an Organization review sheet with one `product` entry), `clean` (the same sheet with `seller` entries only).
+**Spec reference:** `review.md#the-organization-review-sheet`
+
+#### REV-W-001 — Empty `itemListElement`
+
+**Severity:** warning
+**Target:** `$.data.itemListElement`
+**Description:** The array MAY be empty: a subject with no review yet has one ("Required core fields" in `review.md`). An emission pipeline that lost the reviews produces the same shape, so the warning asks for review and is no failure. An absent `itemListElement` is Layer 1's concern.
+**Check:** `itemListElement` is an array with no entries.
+**Message:** `itemListElement` at `{path}` is empty: the sheet carries no review.
+**Remediation:** Confirm the subject has no review under the declared policy. If the publisher shows reviews for it, list them.
+**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Applies from:** release 0.6.0; not the legacy line.
+**Fixtures:** `fires`, `clean`.
+**Spec reference:** `review.md#required-core-fields`
+
+#### REV-W-002 — Curated set without a policy page
+
+**Severity:** warning
+**Target:** `$.data['pagefront:reviewPolicy']`
+**Description:** `pagefront:reviewPolicy.url` is REQUIRED when `collection` is `curated` ("The set" in `review.md`): a publisher that selects which reviews to show states its criteria somewhere a reader can go. The schema leaves the conditional to this rule.
+**Check:** The policy's `collection` is `curated` and its `url` is absent, empty or whitespace-only. One finding, at the policy.
+**Message:** `pagefront:reviewPolicy` at `{path}` declares `collection` `curated` and no `url`.
+**Remediation:** Add `url`, the human-readable page that states how reviews are selected for display.
+**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Applies from:** release 0.6.0; not the legacy line.
+**Fixtures:** `fires`, `clean` (a curated set with its policy page).
+**Spec reference:** `review.md#the-set-pagefrontreviewpolicy`
+
+#### REV-W-003 — Duplicate review
+
+**Severity:** warning
+**Target:** `$.data.itemListElement` (the Check walks the entries)
+**Description:** `@id` is the key a consumer deduplicates on ("The review entry" in `review.md`). The same `@id` twice in one sheet is a merge error in the producer, and a consumer deduplicating on `@id` silently drops one. The first occurrence stands; every later one is reported.
+**Check:** An entry of `itemListElement` carries an `@id` (a non-blank string) equal, by exact string, to the `@id` of an earlier entry in the array. One finding per repeated entry, at its path, naming the path of the first occurrence.
+**Message:** Review `{id}` at `{path}` repeats the entry at `{first}`.
+**Remediation:** Keep one entry per review. A review carried in two language sheets appears once in each, under the same `@id`.
+**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Applies from:** release 0.6.0; not the legacy line.
+**Fixtures:** `fires`, `clean`.
+**Spec reference:** `review.md#schemaorg-native`
+
+#### REV-W-004 — Rating above 5 without its scale
+
+**Severity:** warning
+**Target:** `$.data.itemListElement` (the Check walks the entries; the finding sits at the entry's `reviewRating`)
+**Description:** `bestRating` and `worstRating` are REQUIRED when the scale is not 1 to 5 ("The review entry" in `review.md`). A `ratingValue` above 5 shows another scale is in use, and without `bestRating` a consumer cannot normalise it; a scale whose values happen to stay at or below 5 is not detected.
+**Check:** An entry's `reviewRating.ratingValue`, read as a JSON number or a decimal string, exceeds 5, and `bestRating` is absent or null. One finding per entry.
+**Message:** Review `{id}` at `{path}` rates `{value}` with no `bestRating`; a scale other than 1 to 5 declares its bounds.
+The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallback `(no @id)`.
+**Remediation:** Add `bestRating` and `worstRating` to `reviewRating` wherever the scale is not 1 to 5.
+**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Applies from:** release 0.6.0; not the legacy line.
+**Fixtures:** `fires` (a rating of 8 with no bounds), `clean` (8 on a declared 0 to 10 scale).
+**Spec reference:** `review.md#schemaorg-native`
+
+#### REV-W-005 — Personal data on the author
+
+**Severity:** warning
+**Target:** `$.data.itemListElement` (the Check walks the entries; the finding sits at the entry's `author`)
+**Description:** `author` is a `Person` with `name` as displayed and no other personal data ("The review entry" in `review.md`).
+**Check:** An entry's `author` is an object carrying `email`, `telephone` or `address`. One finding per field present.
+**Message:** Review `{id}` at `{path}` carries `{field}` on its `author`; a review carries the name as displayed and no other personal data.
+The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallback `(no @id)`.
+**Remediation:** Remove `email`, `telephone` and `address` from `author`; keep `name` as the page displays it.
+**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Applies from:** release 0.6.0; not the legacy line.
+**Fixtures:** `fires` (an `email` on the author), `clean`.
+**Spec reference:** `review.md#schemaorg-native`
+
+#### REV-W-006 — Platform source without a name
+
+**Severity:** warning
+**Target:** `$.data.itemListElement` (the Check walks the entries; the finding sits at the entry's `pagefront:reviewSource`)
+**Description:** `pagefront:reviewSource.name` is required for a `third_party` or `marketplace` source ("Pagefront declarations" in `review.md`): the platform's name is what a consumer checks the review against. The schema leaves the conditional to this rule.
+**Check:** An entry's `pagefront:reviewSource` is an object whose `kind` is `third_party` or `marketplace` and whose `name` is absent, empty or whitespace-only. One finding per entry.
+**Message:** Review `{id}` at `{path}` names a `{kind}` source without `name`.
+The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallback `(no @id)`.
+**Remediation:** Add `name`, the review platform's or marketplace's name, and `url`, the review on that platform, to `pagefront:reviewSource`.
+**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Applies from:** release 0.6.0; not the legacy line.
+**Fixtures:** `fires`, `clean`.
+**Spec reference:** `review.md#pagefront-declarations`
+
+#### REV-W-007 — Platform verification without a platform
+
+**Severity:** warning
+**Target:** `$.data.itemListElement` (the Check walks the entries)
+**Description:** `platform_verified` means a third-party platform asserts the purchase under its own scheme, so `pagefront:reviewSource.kind` is then `third_party` or `marketplace` ("Pagefront declarations" in `review.md`); a `first_party` or `imported` source names no platform that could.
+**Check:** An entry's `pagefront:purchaseVerification` is `platform_verified` and its `pagefront:reviewSource.kind` is `first_party` or `imported`. One finding per entry, at its path.
+**Message:** Review `{id}` at `{path}` is `platform_verified` with a `{kind}` source.
+The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallback `(no @id)`.
+**Remediation:** Name the platform that asserts the purchase in `pagefront:reviewSource` (`third_party` or `marketplace`), or declare the verification the publisher established itself: `order_matched`, `post_purchase_invitation`, `none` or `undisclosed`.
+**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Applies from:** release 0.6.0; not the legacy line.
+**Fixtures:** `fires`, `clean`.
+**Spec reference:** `review.md#pagefront-declarations`
+
+#### REV-W-008 — Subject and aspects disagree
+
+**Severity:** warning
+**Target:** `$.data.itemListElement` (the Check walks the entries; the finding sits at the entry's `pagefront:aspect`)
+**Description:** The aspect list is split along the subject line ("Aspects" in `review.md`). A `product` review whose every aspect is seller-side, or a `seller` review whose every aspect is product-side, declares one thing and details another. A `mixed` review never fires, and aspects outside the closed list are not judged.
+**Check:** An entry's `pagefront:reviewSubject` is `product` and every value of the closed list its `pagefront:aspect` entries carry is seller-side (`delivery`, `customer_service`, `returns`, `packaging`, `payment`, `communication`); or the subject is `seller` and every such value is product-side (`quality`, `fit`, `durability`, `value`, `ease_of_use`, `appearance`, `as_described`, `performance`, `comfort`, `taste`). Silent when no aspect of the closed list is carried. One finding per entry.
+**Message:** Review `{id}` at `{path}` declares `pagefront:reviewSubject` `{subject}` and every aspect it carries is {side}-side.
+The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallback `(no @id)`. `{side}` is `seller` or `product`.
+**Remediation:** Declare the subject the aspects describe: `seller` for delivery, service, returns, packaging, payment and communication, `product` for the product's qualities, `mixed` where the text covers both.
+**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Applies from:** release 0.6.0; not the legacy line.
+**Fixtures:** `fires-product` (a product review with delivery and returns aspects), `fires-seller` (a seller review with product aspects), `clean`.
+**Spec reference:** `review.md#aspects-pagefrontaspect`
+
+#### REV-W-009 — Aspects without their source
+
+**Severity:** warning
+**Target:** `$.data.itemListElement` (the Check walks the entries)
+**Description:** `pagefront:aspectSource` is required when `pagefront:aspect` is present ("Aspects" in `review.md`): a consumer weights the author's choice, the publisher's tagging and a classifier's inference differently. The schema leaves the conditional to this rule.
+**Check:** An entry carries `pagefront:aspect` and no `pagefront:aspectSource`. One finding per entry, at its path.
+**Message:** Review `{id}` at `{path}` carries `pagefront:aspect` without `pagefront:aspectSource`.
+The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallback `(no @id)`.
+**Remediation:** Add `pagefront:aspectSource`: `author`, `publisher` or `inferred`, saying who assigned the aspects.
+**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Applies from:** release 0.6.0; not the legacy line.
+**Fixtures:** `fires`, `clean`.
+**Spec reference:** `review.md#aspects-pagefrontaspect`
+
+#### REV-W-010 — Review text without its language
+
+**Severity:** warning
+**Target:** `$.data.itemListElement` (the Check walks the entries)
+**Description:** `inLanguage` is required on an entry carrying `reviewBody` or `name` ("The review entry" in `review.md`): a review is in its author's language, which the sheet's own `inLanguage` does not state ("Language"). The schema leaves the conditional to this rule.
+**Check:** An entry carries a non-blank `reviewBody` or `name` and no non-blank `inLanguage`. One finding per entry, at its path.
+**Message:** Review `{id}` at `{path}` carries text without `inLanguage`.
+The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallback `(no @id)`.
+**Remediation:** Add `inLanguage` to the entry, the BCP 47 tag of the language the author wrote in.
+**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Applies from:** release 0.6.0; not the legacy line.
+**Fixtures:** `fires`, `clean`.
+**Spec reference:** `review.md#language`
+
+#### REV-W-011 — Media from an imported source
+
+**Severity:** warning
+**Target:** `$.data.itemListElement` (the Check walks the entries; the finding sits at the entry's `associatedMedia`)
+**Description:** Media provenance is weaker than text provenance ("Linter rules" in `review.md`): `associatedMedia` on a review whose origin was not retained is reported for review.
+**Check:** An entry carries `associatedMedia` and its `pagefront:reviewSource.kind` is `imported`. One finding per entry.
+**Message:** Review `{id}` at `{path}` carries `associatedMedia` from an `imported` source.
+The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallback `(no @id)`.
+**Remediation:** Confirm the media came with the review. Where its origin is not retained, leave `associatedMedia` out.
+**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Applies from:** release 0.6.0; not the legacy line.
+**Fixtures:** `fires`, `clean`.
+**Spec reference:** `review.md#schemaorg-native`
+
+#### REV-W-012 — Variant bought without the data that knows it
+
+**Severity:** warning
+**Target:** `$.data` (the Check walks `itemListElement`; the finding sits at the entry's `itemReviewed`)
+**Description:** `itemReviewed` is the variant the author bought, purchase data the publisher holds only when it matched an order or sent the invitation, and only on a sheet whose subject is a `ProductGroup` ("The review entry" in `review.md`). It is never the author's claim.
+**Check:** An entry carries `itemReviewed` and its `pagefront:purchaseVerification` is neither `order_matched` nor `post_purchase_invitation`; or an entry carries `itemReviewed` and `about` declares a `@type` other than `ProductGroup`. One finding per condition met, at the field.
+**Message:** Review `{id}` at `{path}` carries `itemReviewed` {problem}.
+The `{id}` placeholder renders the entry's `@id`; when absent, the fixed fallback `(no @id)`. `{problem}` carries `` with `pagefront:purchaseVerification` `{value}` `` or `` on a sheet whose subject is a `{type}` ``.
+**Remediation:** Carry `itemReviewed` only where the publisher knows the order line (`order_matched` or `post_purchase_invitation`) and the subject is a `ProductGroup`; otherwise leave it out. It is purchase data, never the author's claim.
+**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Applies from:** release 0.6.0; not the legacy line.
+**Fixtures:** `fires-verification` (`itemReviewed` on a review verified `none`), `fires-subject` (`itemReviewed` on a standalone `Product` subject), `clean`.
+**Spec reference:** `review.md#schemaorg-native`
+
+#### REV-W-013 — `numberOfItems` and the list disagree
+
+**Severity:** warning
+**Target:** `$.data` (the finding sits at `numberOfItems`)
+**Description:** `numberOfItems` equals the array length and exists so a consumer can tell a truncated document from a whole one ("Size and ordering" in `review.md`). Silent when the field is absent.
+**Check:** The data block carries `numberOfItems` and its value is not equal to the length of `itemListElement` (0 when the array is absent or not an array). One finding.
+**Message:** `numberOfItems` at `{path}` is {declared}; `itemListElement` carries {actual} entries.
+A non-number `{declared}` renders as its JSON serialization.
+**Remediation:** Set `numberOfItems` to the length of `itemListElement`, or leave it out.
+**Introduced:** release 0.6.0, the next release, which the Review Sheet spec 0.1.0 draft targets
+**Applies from:** release 0.6.0; not the legacy line.
+**Fixtures:** `fires`, `clean`.
+**Spec reference:** `review.md#size-and-ordering`
 
 ## Status
 

@@ -1,0 +1,138 @@
+{
+  "$schema": "https://themachineweb.org/pagefront/spec/commerce/review/v0.1.0.json",
+  "release": "0.6.0",
+  "schema_org_version": "30.0",
+  "canonical_url": "https://merchant.example/products/aurora-jumper",
+  "sheet_url": "https://merchant.example/pagefront/commerce/review/aurora-jumper.en.json",
+  "generated_at": "2026-11-17T00:00:00Z",
+  "expires_at": "2026-11-18T00:00:00Z",
+  "data": {
+    "@context": [
+      "https://schema.org",
+      {
+        "pagefront": "https://themachineweb.org/pagefront/vocabulary/"
+      }
+    ],
+    "@type": "ItemList",
+    "@id": "https://merchant.example/products/aurora-jumper",
+    "name": "Customer reviews",
+    "inLanguage": "en",
+    "numberOfItems": 3,
+    "about": {
+      "@type": "ProductGroup",
+      "@id": "https://merchant.example/pagefront/commerce/product/aurora-jumper.en.json",
+      "url": "https://merchant.example/products/aurora-jumper",
+      "pagefront:sheetUrl": "https://other.example/pagefront/commerce/product/aurora-jumper.en.json"
+    },
+    "pagefront:reviewPolicy": {
+      "@type": "pagefront:ReviewPolicy",
+      "collection": "moderated",
+      "url": "https://merchant.example/help/review-policy",
+      "solicitation": "post_purchase"
+    },
+    "itemListElement": [
+      {
+        "@type": "Review",
+        "@id": "https://merchant.example/reviews/r-88213",
+        "datePublished": "2026-11-12",
+        "inLanguage": "en",
+        "name": "Warm, runs small",
+        "reviewBody": "Lovely wool, but order a size up. Took nine days to arrive, which the site didn't warn about.",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": 3
+        },
+        "author": {
+          "@type": "Person",
+          "name": "Mara K."
+        },
+        "itemReviewed": {
+          "@type": "Product",
+          "@id": "https://merchant.example/products/aurora-jumper#aurora-jumper-m-oat"
+        },
+        "pagefront:reviewSubject": "mixed",
+        "pagefront:reviewSource": {
+          "kind": "first_party"
+        },
+        "pagefront:purchaseVerification": "order_matched",
+        "pagefront:incentive": "none",
+        "pagefront:aspectSource": "author",
+        "pagefront:aspect": [
+          {
+            "@type": "pagefront:ReviewAspect",
+            "aspect": "quality",
+            "ratingValue": 5
+          },
+          {
+            "@type": "pagefront:ReviewAspect",
+            "aspect": "fit",
+            "ratingValue": 2
+          },
+          {
+            "@type": "pagefront:ReviewAspect",
+            "aspect": "delivery",
+            "ratingValue": 2
+          }
+        ],
+        "comment": {
+          "@type": "Comment",
+          "text": "Sorry about the delay, Mara. We've added a shipping estimate to the page.",
+          "dateCreated": "2026-11-13",
+          "author": {
+            "@type": "Organization",
+            "name": "Merchant"
+          }
+        }
+      },
+      {
+        "@type": "Review",
+        "@id": "https://reviews.example/aurora-jumper/7731902",
+        "datePublished": "2026-11-09",
+        "inLanguage": "fr",
+        "reviewBody": "Très belle maille, conforme à la photo.",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": 5
+        },
+        "author": {
+          "@type": "Person",
+          "name": "Julien"
+        },
+        "pagefront:reviewSubject": "product",
+        "pagefront:reviewSource": {
+          "kind": "third_party",
+          "name": "Reviews Platform",
+          "url": "https://reviews.example/aurora-jumper/7731902"
+        },
+        "pagefront:purchaseVerification": "platform_verified",
+        "pagefront:incentive": "undisclosed",
+        "pagefront:aspectSource": "inferred",
+        "pagefront:aspect": [
+          {
+            "@type": "pagefront:ReviewAspect",
+            "aspect": "quality"
+          },
+          {
+            "@type": "pagefront:ReviewAspect",
+            "aspect": "as_described"
+          }
+        ]
+      },
+      {
+        "@type": "Review",
+        "@id": "https://merchant.example/reviews/r-88102",
+        "datePublished": "2026-11-02",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": 4
+        },
+        "pagefront:reviewSubject": "product",
+        "pagefront:reviewSource": {
+          "kind": "first_party"
+        },
+        "pagefront:purchaseVerification": "post_purchase_invitation",
+        "pagefront:incentive": "discount"
+      }
+    ]
+  }
+}

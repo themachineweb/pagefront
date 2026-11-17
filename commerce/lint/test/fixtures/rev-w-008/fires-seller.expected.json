@@ -1,0 +1,30 @@
+{
+  "sheet": "https://merchant.example/products/aurora-jumper",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.6.0",
+  "sheet_spec_version": "0.1.0",
+  "catalogue_version": "0.21.0",
+  "findings": [
+    {
+      "rule": "REV-W-008",
+      "severity": "warning",
+      "path": "$['data']['itemListElement'][1]['pagefront:aspect']",
+      "values": {
+        "id": "https://reviews.example/aurora-jumper/7731902",
+        "subject": "seller",
+        "side": "product"
+      },
+      "message": "Review `https://reviews.example/aurora-jumper/7731902` at `$['data']['itemListElement'][1]['pagefront:aspect']` declares `pagefront:reviewSubject` `seller` and every aspect it carries is product-side.",
+      "remediation": "Declare the subject the aspects describe: `seller` for delivery, service, returns, packaging, payment and communication, `product` for the product's qualities, `mixed` where the text covers both."
+    }
+  ],
+  "summary": {
+    "errors": 0,
+    "warnings": 1,
+    "info": 0,
+    "rules_fired": [
+      "REV-W-008"
+    ]
+  }
+}

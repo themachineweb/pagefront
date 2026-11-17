@@ -116,7 +116,7 @@ export function schemaErrorsFor(input: unknown, sheetType?: SheetType): SchemaEr
  * Layer 2 dispatches by page type (see sheet-type.ts): product sheets
  * lint with the product catalogue, Commerce Organization Sheets with
  * the organization catalogue, Commerce Collection Sheets with the
- * collection catalogue.
+ * collection catalogue, Commerce Review Sheets with the review catalogue.
  */
 export function validateAndLint(
   input: unknown,
