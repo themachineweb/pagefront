@@ -69,6 +69,22 @@ export const SPEC_DOCS = {
       route: 'commerce/collection-notes',
     },
   },
+  'commerce/spec/review': {
+    route: 'commerce/review',
+    source: 'commerce/spec/review.md',
+    schemaType: 'review',
+    title: 'Review sheet',
+    status: 'normative',
+    statusLine:
+      `Normative. Review Sheet spec ${currentSheetSpec('review')}, in commerce release ${CURRENT_RELEASE}: ${MATURITY}`,
+    blurb:
+      'The consumer reviews shown for a product, a variant family or the seller: each with its provenance and subject declared, the policy behind the set, and the link from the subject\'s sheet.',
+    notes: {
+      id: 'commerce/spec/review-notes',
+      source: 'commerce/spec/review-notes.md',
+      route: 'commerce/review-notes',
+    },
+  },
   'commerce/spec/vocabulary': {
     route: 'commerce/vocabulary',
     source: 'commerce/spec/vocabulary.md',
