@@ -87,6 +87,7 @@
         "isSimilarTo": {"type": "array"},
         "isPartOf": {"oneOf": [{"type": "object"}, {"type": "array"}]},
         "hasPart": {"oneOf": [{"type": "object"}, {"type": "array"}]},
+        "subjectOf": {"type": "array", "items": {"$ref": "#/$defs/memberEntry"}},
         "question": {"type": "array", "items": {"$ref": "#/$defs/questionObject"}},
         "pagefront:document": {"type": "array", "items": {"$ref": "#/$defs/documentObject"}},
         "pagefront:relatedProduct": {"type": "array", "items": {"$ref": "#/$defs/relatedProductObject"}},
@@ -800,6 +801,18 @@
         "validUntil": {"type": "string", "format": "date-time"}
       },
       "additionalProperties": false
+    },
+    "memberEntry": {
+      "type": "object",
+      "required": ["@type", "@id", "url"],
+      "properties": {
+        "@type": {"type": "string"},
+        "@id": {"type": "string", "format": "uri"},
+        "url": {"type": "string", "format": "uri"},
+        "pagefront:sheetUrl": {"type": "string", "format": "uri"},
+        "name": {"type": "string"}
+      },
+      "additionalProperties": true
     }
   }
 }
