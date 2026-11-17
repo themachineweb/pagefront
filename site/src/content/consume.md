@@ -28,7 +28,7 @@ The `Link` response header on the page is the primary carrier:
 Link: <https://merchant.example/api/sheets/anorak.en.json>;
       rel="alternate";
       type="application/pagefront+json";
-      profile="https://themachineweb.org/pagefront/spec/commerce/product/v0.11.0.json";
+      profile="https://themachineweb.org/pagefront/spec/commerce/product/v0.12.0.json";
       title="Pagefront product sheet"
 ```
 

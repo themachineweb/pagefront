@@ -1,6 +1,6 @@
 # Nitto Knitwear — Case Study
 
-Commerce release 0.5.0. Sheets derived from the live site and verified against
+Commerce release 0.6.0. Sheets derived from the live site and verified against
 it on 2026-09-30, and again on 2026-10-27.
 
 ## The merchant and the product
@@ -193,3 +193,6 @@ tariff and the return terms on the shipping page were unchanged.
   product page shows; the stockist list grew to 150. Both envelopes carry
   the day's `generated_at` and a new `expires_at`. The page weights were
   not re-measured.
+
+- **2026-11-17** — sheets moved to commerce release 0.6.0 (`release` and
+  `$schema` only); no other value changed.

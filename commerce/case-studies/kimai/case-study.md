@@ -1,6 +1,6 @@
 # Kimaï — Case Study
 
-Commerce release 0.5.0. Sheets derived from the live site and verified against
+Commerce release 0.6.0. Sheets derived from the live site and verified against
 it on 2026-09-04; the product sheet re-derived on 2026-10-01. The offer's
 starting price is the one the page displays; the options and their price
 differences come from Kimaï's store data.
@@ -285,4 +285,7 @@ that day.
   the UK product page); no other value changed. The page states no
   checkout link, so no checkout template is carried.
 - **2026-10-18** — sheets moved to commerce release 0.5.0 (`release` and
+  `$schema` only); no other value changed.
+
+- **2026-11-17** — sheets moved to commerce release 0.6.0 (`release` and
   `$schema` only); no other value changed.

@@ -33,7 +33,7 @@ channel. You can still choose the description.
 
 ## What is the current status?
 
-Early days. The specification is at commerce release 0.5.0 and still moving.
+Early days. The specification is at commerce release 0.6.0 and still moving.
 Two merchants work with us as design partners, and their shops are where the
 format is being proven. The next publishers shape what 1.0 becomes;
 [the contributing page](/pagefront/contributing) says how.
