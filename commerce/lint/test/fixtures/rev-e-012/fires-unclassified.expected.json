@@ -15,7 +15,7 @@
         "subject": "unclassified"
       },
       "message": "Review `https://merchant.example/reviews/s-1002` at `$['data']['itemListElement'][1]['pagefront:reviewSubject']` declares `pagefront:reviewSubject` `unclassified` on an Organization review sheet.",
-      "remediation": "A review on an Organization review sheet is about the seller by where it was collected: set `pagefront:reviewSubject` to `seller`. A review that is in fact about a product belongs in that product's review sheet. `unclassified` is never valid here, since the collection context is the classification."
+      "remediation": "A review on an Organization review sheet is about the seller by where it was collected: set `pagefront:reviewSubject` to `seller`. A review that is in fact about a product belongs in that product's review sheet. An `unclassified` entry has no place on this sheet: classify it as `seller` if it was collected about the seller, or move it to the product's review sheet if it is about a product."
     }
   ],
   "summary": {

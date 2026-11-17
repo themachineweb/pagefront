@@ -7,7 +7,7 @@ import { enumText, memberEntries, reviewId, REVIEW_SUBJECTS } from "./rev-shared
  *
  * One of the four declarations required on every review entry, a closed
  * enum with `undisclosed`: absence is a broken sheet, where `undisclosed`
- * is a statement ("Undisclosed is a statement" in review.md). The finding
+ * is a statement ("Undisclosed and unclassified are statements" in review.md). The finding
  * sits at the entry when the field is absent and at the field otherwise.
  */
 export const revE005: Rule = {
