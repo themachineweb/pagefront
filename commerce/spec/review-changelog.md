@@ -1,0 +1,10 @@
+# Changelog: Review Sheet spec
+
+The history of [`review.md`](review.md). Changes land under "Unreleased" and are versioned at the next release, when the heading becomes `### <version> — <date>`; see "Releasing" in [`../../CONTRIBUTING.md`](../../CONTRIBUTING.md).
+
+### Unreleased
+
+Changes land here and are versioned at the next release; see "Releasing" in [`../../CONTRIBUTING.md`](../../CONTRIBUTING.md).
+
+- **New sheet type (draft).** The Commerce Review Sheet, 0.1.0, drafted 2026-11-17: an `ItemList`-rooted sheet carrying the consumer reviews a publisher shows for one subject, a product, a variant family or the seller, named in `about`. A sheet-level `pagefront:reviewPolicy` states how reviews reach the set; every entry is a Schema.org `Review` carrying four declarations, `pagefront:reviewSubject`, `pagefront:reviewSource`, `pagefront:purchaseVerification` and `pagefront:incentive`, each a closed enum with an `undisclosed` member, and optionally the aspects it addresses in `pagefront:aspect` with `pagefront:aspectSource`. The list is exhaustive, in `datePublished` order, originals only. Reviews attach to the `ProductGroup` where one exists. The subject's sheet points at it through `subjectOf`; the page declares it beside the subject's sheet under "Several Sheets for one page" in Pagefront Discovery 0.2.0, which this spec requires. Linter codes REV-E-001 to REV-E-012 and REV-W-001 to REV-W-013 are reserved; the product-side and organization-side checks await a multi-sheet linter. The editable schema head is [`review.json`](review.json); no schema is published until the release that bundles the spec.
+- **Design notes.** The rationale for the undisclosed state, the subject split, the variant family as subject, the exhaustive list, originals only and the closed aspect list moves to [`review-notes.md`](review-notes.md), non-normative, each note linked from the section it explains with a `why` link; the reference keeps every requirement. The notes carry this document's version line and log their changes here.
