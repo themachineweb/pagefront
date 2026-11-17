@@ -8,9 +8,11 @@ This document states how the commerce vertical is versioned, lists every commerc
 
 ## The scheme
 
-**Each sheet spec has its own semver.** The Product Sheet spec ([`product.md`](product.md)), the Organization Sheet spec ([`organization.md`](organization.md)) and the Collection Sheet spec ([`collection.md`](collection.md)) carry a version of their own and evolve independently. No catalog sheet is planned: the catalogue entry point is `hasOfferCatalog` on the Organization Sheet. Standard semver applies, including before 1.0: in 0.x, a breaking change bumps the minor, an additive change bumps the minor, and a fix or clarification bumps the patch. The minor of the Product Sheet spec after 0.9.0 is 0.10.0.
+**Each sheet spec has its own semver.** The Product Sheet spec ([`product.md`](product.md)), the Organization Sheet spec ([`organization.md`](organization.md)), the Collection Sheet spec ([`collection.md`](collection.md)) and the Review Sheet spec ([`review.md`](review.md), a draft) carry a version of their own and evolve independently. No catalog sheet is planned: the catalogue entry point is `hasOfferCatalog` on the Organization Sheet. Standard semver applies, including before 1.0: in 0.x, a breaking change bumps the minor, an additive change bumps the minor, and a fix or clarification bumps the patch. The minor of the Product Sheet spec after 0.9.0 is 0.10.0.
 
 **A commerce release is a named, versioned bundle of member versions.** Its members are each sheet spec and the vocabulary. The release's bump follows its members: major if any member bumps major, else minor if any member bumps minor, else patch. A new sheet type joining the release is a minor bump. 1.0.0 is a release like any other: it is reached by the same rule and carries no completeness requirement on the set of sheet types.
+
+**A sheet spec may depend on a Discovery version.** Pagefront Discovery ([`../../core/spec/discovery.md`](../../core/spec/discovery.md)) is format-level and versions on its own ("Format documents" below). A sheet spec that needs a Discovery feature states the version it requires in its own text, in one sentence ("This spec requires Pagefront Discovery 0.2.0 or later"), and the release notes of the release that bundles the spec name the Discovery version in force. The Review Sheet spec is the first to state such a dependency.
 
 **The vocabulary has no version of its own.** It carries the release version: the vocabulary of release 0.5.0 is vocabulary 0.5.0.
 
@@ -50,13 +52,13 @@ A sheet is judged by the release it declares. It is validated against the schema
 
 ## Release table
 
-| Release | Date | Product Sheet spec | Organization Sheet spec | Collection Sheet spec | Vocabulary |
-|---|---|---|---|---|---|
-| 0.5.0 | 2026-10-18 | 0.11.0 | 0.5.0 | 0.1.0 | 0.5.0 |
-| 0.4.0 | 2026-10-02 | 0.10.0 | 0.4.0 | none | 0.4.0 |
-| 0.3.0 | 2026-10-01 | 0.9.0 | 0.3.0 | none | 0.3.0 |
+| Release | Date | Product Sheet spec | Organization Sheet spec | Collection Sheet spec | Review Sheet spec | Vocabulary |
+|---|---|---|---|---|---|---|
+| 0.5.0 | 2026-10-18 | 0.11.0 | 0.5.0 | 0.1.0 | none | 0.5.0 |
+| 0.4.0 | 2026-10-02 | 0.10.0 | 0.4.0 | none | none | 0.4.0 |
+| 0.3.0 | 2026-10-01 | 0.9.0 | 0.3.0 | none | none | 0.3.0 |
 
-The same table, for machines, is [`releases.json`](releases.json). The linter reads it to resolve a sheet's `release` and type to the sheet-spec version its `$schema` must name.
+The same table, for machines, is [`releases.json`](releases.json), where a sheet type a release does not bundle is absent from its `sheets`. The linter reads it to resolve a sheet's `release` and type to the sheet-spec version its `$schema` must name.
 
 ## Sheet spec versions
 
@@ -84,6 +86,12 @@ The same table, for machines, is [`releases.json`](releases.json). The linter re
 |---|---|---|
 | 0.1.0 | 2026-10-18 | First text: a `Collection`-rooted sheet for category, collection and brand listing pages, with direct exhaustive membership in `hasPart`, parents in `isPartOf`, the `pagefront:collectionKind` discriminator and the tree's roots on the Organization Sheet in `hasOfferCatalog`. The editable head is [`collection.json`](collection.json); no schema is published until the release. |
 
+**Review Sheet spec.** Drafted 2026-11-17, [`review.md`](review.md); not yet in a release. It joins the release line as a minor of the release that bundles it, and has no legacy draft line.
+
+| Version | Date | What it is |
+|---|---|---|
+| 0.1.0 | unreleased | Draft: an `ItemList`-rooted sheet carrying the consumer reviews shown for one subject, each review with four declarations (`pagefront:reviewSubject`, `pagefront:reviewSource`, `pagefront:purchaseVerification`, `pagefront:incentive`), a sheet-level `pagefront:reviewPolicy`, and optional aspects; reached from the subject's sheet through `subjectOf`. Requires Pagefront Discovery 0.2.0. The editable head is [`review.json`](review.json); no schema is published until the release. |
+
 ## Format documents
 
 Pagefront Discovery ([`../../core/spec/discovery.md`](../../core/spec/discovery.md)) is format-level: it governs how a consumer locates a Sheet of any type in any vertical, and how a consumer holding only an origin reaches that origin's Sheets. It is not a member of the commerce release and carries its own semver. It is listed here so that one page shows what a release relies on; a release's notes name the Discovery version in force.
@@ -91,6 +99,7 @@ Pagefront Discovery ([`../../core/spec/discovery.md`](../../core/spec/discovery.
 | Version | Date | What it is |
 |---|---|---|
 | 0.1.0 | 2026-10-18 | First text: the discovery principle, the page-based carriers, the traversal-hint rule and the filename convention, moved from the Product Sheet spec, and the entry point (`/.well-known/pagefront`, the `Pagefront:` line in `/robots.txt`). |
+| 0.2.0 | unreleased | "Several Sheets for one page": a page declares at most one sheet link per sheet type, the type read from the `Link` header's `profile`, links in a stable order with the page's primary subject first; the traversal-hint confirmation step selects by type. Motivated by the Review Sheet spec, which requires it. |
 
 ## The legacy draft line
 
@@ -103,6 +112,10 @@ Sheets carrying `format_version` belong to the legacy draft line, format version
 The "added in v0.7", "new in v0.9" and similar annotations throughout the sheet specs and the vocabulary name legacy format versions. They are kept as history. Annotations written from now on name the release ("added in release 0.3.0").
 
 ## Release notes
+
+### Unreleased
+
+The next release adds the Review Sheet spec 0.1.0 ([`review.md`](review.md)), a minor, since a new sheet type joins, beside the Unreleased changes of the Product, Organization and Collection Sheet specs. It assumes Pagefront Discovery 0.2.0, which the Review Sheet spec requires for "Several Sheets for one page"; the Discovery document is dated on its own and its version moves in its own release step. The release pull request adds the review column to the release table and to the 0.6.0 row of [`releases.json`](releases.json), and freezes [`review.json`](review.json) as `commerce/schemas/review/v0.1.0.json`.
 
 ### 0.5.0 — 2026-10-18
 
