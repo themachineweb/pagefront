@@ -148,6 +148,22 @@ export const isSheetLink = (ref: LinkRef): boolean =>
 const isJsonAlternate = (ref: LinkRef): boolean =>
   relTokens(ref).includes('alternate') && /\bjson\b/.test(mediaType(ref.params.type)) && !isSheetLink(ref);
 
+/** The sheet type a schema URL names: `/spec/commerce/<type>/`, or the `/commerce/schemas/<type>/` path of before 2026-09-08. */
+export function sheetTypeOfSchemaUrl(url: unknown): string | undefined {
+  if (typeof url !== 'string') return undefined;
+  return /\/pagefront\/(?:spec\/commerce|commerce\/schemas)\/([a-z]+)\//.exec(url)?.[1];
+}
+
+/**
+ * The sheet type a link declares, when it does: the `profile` parameter
+ * of a Link header, or the `data-profile` hint on a <link> element
+ * ("Several Sheets for one page" in core/spec/discovery.md). Undefined
+ * when the link carries neither; the type is then read from the sheet's
+ * own `$schema`.
+ */
+export const declaredSheetType = (ref: LinkRef): string | undefined =>
+  sheetTypeOfSchemaUrl(ref.params.profile ?? ref.params['data-profile']);
+
 /**
  * What a fetched body is, read from the body alone ("Serving" in
  * core/spec/discovery.md): a sheet is a body that parses as JSON and
@@ -580,12 +596,6 @@ export async function checkPage(input: PageCheckInput): Promise<PageCheck> {
       ? fail(`type="${SHEET_MEDIA_TYPE}" on the declaration`, 'the alternate link found carries another type; consumers select by rel and type together')
       : skip(`type="${SHEET_MEDIA_TYPE}" on the declaration`, 'no declaration to check'));
 
-  const counts = `header: ${headerSheet.length}, head: ${headSheet.length}`;
-  discovery.push(headerSheet.length > 1 || headSheet.length > 1
-    ? fail('Exactly one such link per carrier', `${counts}; a page declares at most one sheet link, and a consumer cannot choose between two`)
-    : anySheet
-      ? pass('Exactly one such link per carrier', counts)
-      : skip('Exactly one such link per carrier', 'no declaration to check'));
   discovery.push(info('Selection used rel and type only', `rel="alternate" together with type="${SHEET_MEDIA_TYPE}"; title and href shape were not consulted`));
 
   headerUrl = headerSheet[0] ? resolve(headerSheet[0].href, finalUrl) : undefined;
@@ -608,6 +618,85 @@ export async function checkPage(input: PageCheckInput): Promise<PageCheck> {
     discovery.push(skip('Header and element point at the same URL', anySheet ? 'only one carrier present' : 'no declaration to check'));
   }
 
+  }
+
+  // Several Sheets for one page ("Several Sheets for one page" in
+  // core/spec/discovery.md): a page declares at most one sheet link per
+  // sheet type and carrier, the type read from the header's `profile`,
+  // the element's `data-profile` hint, or the sheet's own `$schema`. The
+  // first link of the authoritative carrier is the sheet this check
+  // follows; the others are named, with their type. No sheet is fetched
+  // for its type unless a carrier declares more than one link.
+  if (!entry) {
+    const anySheet = headerSheet.length > 0 || headSheet.length > 0;
+    const pageHost = new URL(finalUrl).host;
+    const typeCache = new Map<string, Promise<string | undefined>>();
+    const typeOf = (ref: LinkRef): Promise<string | undefined> => {
+      const hinted = declaredSheetType(ref);
+      if (hinted) return Promise.resolve(hinted);
+      const url = resolve(ref.href, finalUrl);
+      if (!url) return Promise.resolve(undefined);
+      let pending = typeCache.get(url);
+      if (!pending) {
+        pending = (async () => {
+          try {
+            if (!input.allowedProtocols.includes(new URL(url).protocol)) return undefined;
+            if (input.admit && new URL(url).host !== pageHost && !(await input.admit(new URL(url).host))) return undefined;
+            const followed = await fetchFollowing(url, { headers: { accept: `${SHEET_MEDIA_TYPE}, application/json;q=0.9` } }, input.fetcher, input.allowedProtocols);
+            if (!followed.response.ok) { await followed.response.body?.cancel(); return undefined; }
+            const body = await input.readCapped(followed.response, input.maxSheetBytes);
+            if (body === undefined) return undefined;
+            return sheetTypeOfSchemaUrl((JSON.parse(body) as Record<string, unknown>).$schema);
+          } catch {
+            return undefined;
+          }
+        })();
+        typeCache.set(url, pending);
+      }
+      return pending;
+    };
+    const carriers: Array<[string, LinkRef[]]> = [['header', headerSheet], ['head', headSheet]];
+    const duplicates: string[] = [];
+    const untyped: string[] = [];
+    for (const [name, refs] of carriers) {
+      if (refs.length < 2) continue;
+      const byType = new Map<string, number>();
+      for (const ref of refs) {
+        const type = await typeOf(ref);
+        if (type === undefined) { untyped.push(`${name}: ${ref.href}`); continue; }
+        byType.set(type, (byType.get(type) ?? 0) + 1);
+      }
+      for (const [type, n] of byType) if (n > 1) duplicates.push(`${name}: ${n} ${type} sheet links`);
+    }
+    const counts = `header: ${headerSheet.length}, head: ${headSheet.length}`;
+    discovery.push(duplicates.length > 0
+      ? fail('Exactly one such link per sheet type and carrier', `${duplicates.join('; ')}; a page declares at most one sheet link per sheet type, and a consumer cannot choose between two`)
+      : untyped.length > 0
+        ? warning('Exactly one such link per sheet type and carrier', `${counts}; the sheet type of ${untyped.join(', ')} could not be read (no profile, and no $schema reached), so the links could not be told apart`)
+        : anySheet
+          ? pass('Exactly one such link per sheet type and carrier', counts)
+          : skip('Exactly one such link per sheet type and carrier', 'no declaration to check'));
+
+    const primaryUrl = headerUrl ?? headUrl;
+    const others = new Map<string, LinkRef>();
+    for (const [, refs] of carriers) {
+      for (const ref of refs) {
+        const url = resolve(ref.href, finalUrl);
+        if (url && url !== primaryUrl && !others.has(url)) others.set(url, ref);
+      }
+    }
+    if (others.size > 0) {
+      const named: string[] = [];
+      let unknown = 0;
+      for (const [url, ref] of others) {
+        const type = await typeOf(ref);
+        if (type === undefined) unknown++;
+        named.push(`${type ?? 'a sheet of unread type'}: ${url}`);
+      }
+      discovery.push(unknown > 0
+        ? warning('Other sheets the page declares', `${named.join('; ')}; this check follows the first link, ${primaryUrl}`)
+        : info('Other sheets the page declares', `${named.join('; ')}; this check follows the first link, ${primaryUrl}, and the others are checked from their own addresses`));
+    }
   }
 
   // The hop: the header is authoritative where both are present.
@@ -881,30 +970,38 @@ export async function checkBackLink(input: BackLinkInput): Promise<Provenance> {
   const pageUrl = followed.finalUrl;
 
   // Selection: the header is authoritative where both carriers declare.
+  // A page may declare one sheet per sheet type ("Several Sheets for one
+  // page"): condition (b) holds when any of its links, resolved and
+  // followed, is the URL the sheet was fetched from.
   const chosen = headerRefs.length > 0 ? headerRefs : headRefs;
   const carrier = headerRefs.length > 0 ? 'Link header' : 'page head';
   if (chosen.length === 0) return unattributed(`${pageUrl} declares no sheet`);
-  if (chosen.length > 1) {
-    return unattributed(`${pageUrl} declares ${chosen.length} sheets in its ${carrier}: ${chosen.map((r) => r.href).join(', ')}`);
+  const declaredUrls: string[] = [];
+  let lastProblem: string | undefined;
+  for (const ref of chosen) {
+    const declaredRaw = resolve(ref.href, pageUrl);
+    if (declaredRaw === undefined) { lastProblem = `${ref.href} does not resolve to a URL`; continue; }
+    if (!allowedProtocols.includes(new URL(declaredRaw).protocol)) { lastProblem = `${declaredRaw} does not use ${allowedProtocols.join(' or ')}`; continue; }
+    // The declaration's own redirects: F is where the sheet came from, so the declared URL is followed the same way.
+    let declaredFinal: string;
+    try {
+      const target = await fetchFollowing(declaredRaw, { method: 'HEAD', headers: { accept: `${SHEET_MEDIA_TYPE}, application/json;q=0.9` } }, fetcher, allowedProtocols);
+      await target.response.body?.cancel();
+      declaredFinal = target.finalUrl;
+    } catch (error) {
+      lastProblem = `${declaredRaw} could not be followed (${(error as Error).name === 'TimeoutError' ? 'no response in time' : ((error as Error).message || 'the URL could not be fetched')})`;
+      continue;
+    }
+    const declared = normaliseUrl(declaredFinal) ?? declaredFinal;
+    if (declared === checked) {
+      return { status: 'attributed', via: 'back_link', origin, checked_url: checked, declared_url: declared, reason: null };
+    }
+    declaredUrls.push(declared);
   }
-  const declaredRaw = resolve(chosen[0].href, pageUrl);
-  if (declaredRaw === undefined) return unattributed(`${pageUrl} declares ${chosen[0].href}, which does not resolve to a URL`);
-  if (!allowedProtocols.includes(new URL(declaredRaw).protocol)) {
-    return unattributed(`${pageUrl} declares ${declaredRaw}, which does not use ${allowedProtocols.join(' or ')}`, declaredRaw);
-  }
-
-  // The declaration's own redirects: F is where the sheet came from, so the declared URL is followed the same way.
-  let declaredFinal: string;
-  try {
-    const target = await fetchFollowing(declaredRaw, { method: 'HEAD', headers: { accept: `${SHEET_MEDIA_TYPE}, application/json;q=0.9` } }, fetcher, allowedProtocols);
-    await target.response.body?.cancel();
-    declaredFinal = target.finalUrl;
-  } catch (error) {
-    return unattributed(`${pageUrl} declares ${declaredRaw}, which could not be followed (${(error as Error).name === 'TimeoutError' ? 'no response in time' : ((error as Error).message || 'the URL could not be fetched')})`, declaredRaw);
-  }
-  const declared = normaliseUrl(declaredFinal) ?? declaredFinal;
-  if (declared !== checked) {
-    return unattributed(`${pageUrl} declares ${declared}, which is not the URL the sheet was fetched from`, declared);
-  }
-  return { status: 'attributed', via: 'back_link', origin, checked_url: checked, declared_url: declared, reason: null };
+  if (declaredUrls.length === 0) return unattributed(`${pageUrl} declares ${chosen.map((r) => r.href).join(', ')} in its ${carrier}; ${lastProblem ?? 'none could be followed'}`);
+  return unattributed(
+    declaredUrls.length === 1
+      ? `${pageUrl} declares ${declaredUrls[0]}, which is not the URL the sheet was fetched from`
+      : `${pageUrl} declares ${declaredUrls.length} sheets in its ${carrier} (${declaredUrls.join(', ')}), none of which is the URL the sheet was fetched from`,
+    declaredUrls[0]);
 }

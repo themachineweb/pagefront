@@ -168,6 +168,7 @@ function attributionPublisher() {
     elsewhere: (n) => ({ html: page(element(`/sheets/${n}-other.json`)) }),
     none: () => ({ html: page(`<link rel="alternate" type="application/rss+xml" href="/feed">`) }),
     two: (n) => ({ html: page(element(`/sheets/${n}.json`) + element(`/sheets/${n}-fr.json`)) }),
+    "two-other": (n) => ({ html: page(element(`/sheets/${n}-other.json`) + element(`/sheets/${n}-fr.json`)) }),
     // The header names the sheet's URL and the head names another: the header wins.
     disagree: (n) => ({ html: page(element(`/sheets/${n}-other.json`)), headers: { link: header(`${base}/sheets/${n}.json`) } }),
     // The reverse: the header names another URL, so the matching element does not count.
@@ -258,9 +259,14 @@ test("provenance of a sheet by its URL: the back link from canonical_url, matche
     assert.equal(none.provenance.reason, `${base}/page/none declares no sheet`);
     assert.equal(none.provenance.declared_url, null);
 
+    // Several Sheets for one page: any of the page's links may be the one that attributes the sheet.
     const two = await check("two");
-    assert.equal(two.provenance.status, "unattributed");
-    assert.match(two.provenance.reason, /declares 2 sheets in its page head/);
+    assert.equal(two.provenance.status, "attributed");
+    assert.equal(two.provenance.via, "back_link");
+    assert.equal(two.provenance.declared_url, `${base}/sheets/two.json`);
+    const twoOther = await check("two-other");
+    assert.equal(twoOther.provenance.status, "unattributed");
+    assert.match(twoOther.provenance.reason, /declares .* in its page head/);
 
     const gone = await check("gone");
     assert.equal(gone.provenance.status, "unattributed");
@@ -355,8 +361,10 @@ function publisher() {
     }
     return JSON.stringify(sheet);
   };
-  const element = (href, type = SHEET_TYPE) => `<link rel="alternate" type="${type}" href="${href}">`;
-  const header = (href, type = SHEET_TYPE) => `<${href}>; rel="alternate"; type="${type}"`;
+  const element = (href, type = SHEET_TYPE, extra = "") => `<link rel="alternate" type="${type}" href="${href}"${extra}>`;
+  const header = (href, type = SHEET_TYPE, extra = "") => `<${href}>; rel="alternate"; type="${type}"${extra}`;
+  const PRODUCT_PROFILE = "https://themachineweb.org/pagefront/spec/commerce/product/v0.12.0.json";
+  const REVIEW_PROFILE = "https://themachineweb.org/pagefront/spec/commerce/review/v0.1.0.json";
   const page = (links, extraHead = "") => `<!doctype html><html><head><title>Anorak</title>${links}${extraHead}</head><body><h1>Anorak</h1></body></html>`;
   const canonical = (href) => `<link rel="canonical" href="${href}">`;
 
@@ -367,6 +375,10 @@ function publisher() {
     "element-only": (p) => ({ html: page(element(`${base}/sheets${p}.json`)) }),
     neither: () => ({ html: page(`<link rel="alternate" type="application/rss+xml" href="/feed">`) }),
     "two-links": (p) => ({ html: page(element(`${base}/sheets${p}.json`) + element(`${base}/sheets${p}-fr.json`)) }),
+    // Several Sheets for one page: a product sheet and a review sheet, each typed by its hint; the review sheet need not exist for the page to be checked.
+    "two-types": (p) => ({ html: page(element(`${base}/sheets${p}.json`, SHEET_TYPE, ` data-profile="${PRODUCT_PROFILE}"`) + element(`${base}/reviews${p}.json`, SHEET_TYPE, ` data-profile="${REVIEW_PROFILE}"`)) }),
+    // Two product sheet links in one header, typed by their profile: a declaration error.
+    "two-same-header": (p) => ({ html: page(""), headers: { link: `${header(`${base}/sheets${p}.json`, SHEET_TYPE, `; profile="${PRODUCT_PROFILE}"`)}, ${header(`${base}/sheets${p}-fr.json`, SHEET_TYPE, `; profile="${PRODUCT_PROFILE}"`)}` } }),
     "json-type": (p) => ({ html: page(element(`${base}/sheets${p}.json`, "application/json")) }),
     "relative-href": (p) => ({ html: page(element(`/sheets${p}.json`)) }),
     disagree: (p) => ({ html: page(element(`${base}/sheets${p}.json`)), headers: { link: header(`${base}/sheets${p}-other.json`) } }),
@@ -418,7 +430,7 @@ function publisher() {
       res.writeHead(307, { location: `/sheets/page/${m[1]}.json` });
       return res.end();
     }
-    if ((m = /^\/(sheets|private)\/page\/([a-z0-9-]+)(-fr|-other)?\.json$/.exec(path))) {
+    if ((m = /^\/(sheets|private)\/page\/([a-z0-9-]+?)(-fr|-other)?\.json$/.exec(path))) {
       const name = m[2];
       const scenario = scenarios[name];
       if (!scenario || name.endsWith("gone")) { res.writeHead(404); return res.end(); }
@@ -461,7 +473,7 @@ test("page check: discovery with both carriers, header only, element only, neith
       "<link> element in the page head declares the sheet": "pass",
       "Both carriers present (recommended)": "pass",
       'type="application/pagefront+json" on the declaration': "pass",
-      "Exactly one such link per carrier": "pass",
+      "Exactly one such link per sheet type and carrier": "pass",
       "Selection used rel and type only": "info",
       "href is absolute, or resolves to an absolute URL": "pass",
       "Header and element point at the same URL": "pass",
@@ -495,8 +507,24 @@ test("page check: discovery with both carriers, header only, element only, neith
     assert.equal(neither.sheet_url, undefined);
     assert.ok(!JSON.stringify(neither).includes("<h1>"), "fetched content must never be echoed");
 
+    // Two links of one type, told apart by fetching their $schema: a declaration error.
     const two = await check("two-links");
-    assert.equal(line(two.discovery, "Exactly one such link per carrier").status, "fail");
+    assert.equal(line(two.discovery, "Exactly one such link per sheet type and carrier").status, "fail");
+    assert.match(line(two.discovery, "Exactly one such link per sheet type and carrier").detail, /2 product sheet links/);
+    // Two links of one type in the header, typed by profile, with no fetch needed.
+    const sameHeader = await check("two-same-header");
+    assert.equal(line(sameHeader.discovery, "Exactly one such link per sheet type and carrier").status, "fail");
+    assert.match(line(sameHeader.discovery, "Exactly one such link per sheet type and carrier").detail, /header: 2 product sheet links/);
+    // A product sheet and a review sheet on one page: one link per type passes, the second is named, the first is followed.
+    const twoTypes = await check("two-types");
+    assert.equal(line(twoTypes.discovery, "Exactly one such link per sheet type and carrier").status, "pass");
+    const others = line(twoTypes.discovery, "Other sheets the page declares");
+    assert.equal(others.status, "info");
+    assert.match(others.detail, /review: .*\/reviews\/page\/two-types\.json/);
+    assert.equal(twoTypes.sheet_url, `${base}/sheets/page/two-types.json`);
+    assert.equal(twoTypes.conformance.kind, "report");
+    assert.equal(twoTypes.provenance.status, "attributed");
+    assert.equal(both.discovery.find((l) => l.check === "Other sheets the page declares"), undefined, "a page with one sheet has no such line");
 
     const jsonType = await check("json-type");
     const typeLine = line(jsonType.discovery, 'type="application/pagefront+json" on the declaration');
