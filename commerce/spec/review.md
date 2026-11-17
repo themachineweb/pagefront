@@ -7,11 +7,7 @@ The Commerce Review Sheet is the Pagefront Sheet that carries the consumer revie
 
 ## The two problems this sheet exists to solve
 
-Consumer reviews fail agents in two ways, and the format answers each with a declaration, not a judgment.
-
-**Did a real customer write it?** The sheet cannot know. The publisher can state what it knows: the review's source, how (or whether) it was matched to a purchase, and whether the author was compensated. Each of these is a closed enum with an `undisclosed` member, so that "the publisher does not know" is a statement distinct from both "no" and silence. Pagefront certifies nothing; it makes the absence of a declaration the worst state a review can be in.
-
-**What are they writing about?** Most reviews on a product page are about the delivery, the returns desk or the support line, not the product. The sheet asks every review to declare its subject (`product`, `seller`, `mixed`) and lets it carry the aspects it addresses, from a closed list split the same way. A product's `aggregateRating` is scoped to reviews whose subject is the product; the seller's reputation lives on the Organization Sheet.
+Consumer reviews fail agents in two ways, and the format answers each with a declaration, not a judgment: did a real customer write it, which the four declarations and their `undisclosed` member answer [why](review-notes.md#why-undisclosed-is-a-statement); and what are they writing about, which `pagefront:reviewSubject` and the aspects answer [why](review-notes.md#why-every-review-declares-its-subject).
 
 ## The envelope
 
@@ -136,15 +132,15 @@ OPTIONAL, repeatable. Each entry says one thing the review addresses, and option
   - seller: `delivery`, `customer_service`, `returns`, `packaging`, `payment`, `communication`
 - `ratingValue` *(optional)*: the author's rating of that aspect alone, on the same scale as `reviewRating`.
 
-The list is closed and final for this version: it names the aspects that recur across verticals and nothing vertical-specific. A publisher with finer aspects (`scent`, `battery_life`, `noise`) carries them in Schema.org's free-text `reviewAspect` beside the closed list, and a consumer treats those as opaque strings. Additional values require a spec amendment.
+The list is closed and final for this version. A publisher with finer aspects (`scent`, `battery_life`, `noise`) carries them in Schema.org's free-text `reviewAspect` beside the closed list, and a consumer treats those as opaque strings. Additional values require a spec amendment. [why](review-notes.md#why-the-aspect-list-is-closed)
 
-Alongside the array, **`pagefront:aspectSource`** *(required when `pagefront:aspect` is present)* says who assigned the aspects: `author` (the author chose or rated them on a form), `publisher` (the publisher tagged them by hand), `inferred` (a classifier). A consumer weights the three differently and the sheet does not pretend otherwise.
+Alongside the array, **`pagefront:aspectSource`** *(required when `pagefront:aspect` is present)* says who assigned the aspects: `author` (the author chose or rated them on a form), `publisher` (the publisher tagged them by hand), `inferred` (a classifier).
 
 Consistency: a review whose `pagefront:reviewSubject` is `product` and whose aspects are all seller-side, or the reverse, is flagged. Check: REV-W-008.
 
 ## Undisclosed is a statement
 
-Each of the four declarations, and `pagefront:reviewPolicy.collection`, has three states:
+Each of the four declarations, and `pagefront:reviewPolicy.collection`, has three states: [why](review-notes.md#why-undisclosed-is-a-statement)
 
 | State | Meaning | Linter |
 |---|---|---|
@@ -152,7 +148,7 @@ Each of the four declarations, and `pagefront:reviewPolicy.collection`, has thre
 | `undisclosed` | The publisher states it does not know, or will not say. | — |
 | Absent | The publisher said nothing. | Error |
 
-`undisclosed` is not a default and a producer MUST NOT emit it where it holds the fact. A publisher that imports a review set without its metadata emits `undisclosed`, and is conformant; a consumer reads `undisclosed` as a reason to discount, and reads absence as a broken sheet. The distinction is the point: silence can never be mistaken for "none".
+`undisclosed` is not a default and a producer MUST NOT emit it where it holds the fact. A publisher that imports a review set without its metadata emits `undisclosed`, and is conformant; a consumer reads `undisclosed` as a reason to discount, and reads absence as a broken sheet.
 
 ## Scoping the aggregate
 
@@ -190,7 +186,7 @@ Inline `review[]` on the Product Sheet stays schema-valid and is DISCOURAGED: th
 
 ## Subject granularity
 
-Reviews attach to the **variant family**, not to a variant. A customer reviewing a jumper is reviewing the jumper; which colour and size they own is a fact about the order, and most authors could not say which variant their review is "about" if asked. The format follows the author's mental model:
+Reviews attach to the **variant family**, not to a variant: [why](review-notes.md#why-reviews-attach-to-the-variant-family)
 
 - Where a `ProductGroup` sheet exists, the review sheet's `about` is the group. A producer MUST NOT emit a review sheet whose `about` is a variant `Product` (one carrying `isVariantOf`).
 - Every variant `Product` sheet's `subjectOf` points at the group's review sheet, with the group's review-set `@id`. A consumer landing on a variant reaches the same reviews as one landing on the group.
@@ -201,17 +197,15 @@ Producer obligation; a single-sheet linter cannot see whether the `about` produc
 
 ## Size and ordering
 
-`itemListElement` is **exhaustive**: it carries every review the publisher's set contains for the subject under its declared `pagefront:reviewPolicy`, ordered by `datePublished` descending, as `hasPart` is exhaustive on a Collection Sheet. There is no pagination and no continuation hint; a consumer reads the array as the whole set. A publisher that cannot enumerate its reviews does not emit a sheet. `numberOfItems` equals the array length and exists so a consumer can check it did not receive a truncated document.
+`itemListElement` is **exhaustive**: it carries every review the publisher's set contains for the subject under its declared `pagefront:reviewPolicy`, ordered by `datePublished` descending, as `hasPart` is exhaustive on a Collection Sheet. There is no pagination and no continuation hint; a consumer reads the array as the whole set. A publisher that cannot enumerate its reviews does not emit a sheet. `numberOfItems` equals the array length and exists so a consumer can check it did not receive a truncated document. [why](review-notes.md#why-the-list-is-exhaustive)
 
 **Rating-only entries** (a `reviewRating` and no `reviewBody`) are carried like any other review. They count toward the product's `aggregateRating.ratingCount` and not toward `reviewCount`; a consumer computing either count from this sheet splits on the presence of `reviewBody`.
-
-Size is the accepted cost. A subject with thousands of reviews produces a large sheet; the per-review declarations are short enums, and a consumer that wants a sample truncates on its side, in date order.
 
 ## Language
 
 A review is in its author's language, declared in its own `inLanguage`. A review sheet in `en` MAY carry reviews in `fr`: the sheet's `inLanguage` scopes the sheet's prose, not the reviews. Sibling sheets across `pagefront:availableLanguages` carry the same review set with the same `@id` per review; what differs between them is the sheet's own prose.
 
-**Originals only.** `reviewBody` and `name` are the text as the author wrote it. A publisher that shows a translation on its page does not carry it: no `workTranslation`, no translated body, no `translator`. Translation is a consumer's operation on a text whose language it has been told. Check: REV-E-011 (a `workTranslation` or `translationOfWork` on a review entry).
+**Originals only.** `reviewBody` and `name` are the text as the author wrote it. A publisher that shows a translation on its page does not carry it: no `workTranslation`, no translated body, no `translator`. [why](review-notes.md#why-originals-only) Check: REV-E-011 (a `workTranslation` or `translationOfWork` on a review entry).
 
 ## Discovery
 
