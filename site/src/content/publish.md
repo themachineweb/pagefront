@@ -172,6 +172,22 @@ Link: <https://your-shop.example/product/anorak.en.json>; rel="alternate"; type=
 Either form is enough. Most publishers should use the element, because they
 cannot edit headers.
 
+**A link in the page body.** The head `<link>` reaches machines that read
+the document. Some readers see only a page's extracted text, where the head
+and the response headers are gone and the body's links remain. For them the
+page may also carry a visible link in its body, with any text you like:
+
+```html
+<a rel="alternate" type="application/pagefront+json"
+   href="https://your-shop.example/product/anorak.en.json">Product data</a>
+```
+
+It is optional, and it points at the same sheet as the head link. Search
+crawlers follow it too, which gets the sheet's address indexed. Sites did
+the same for feeds: an RSS link in the footer beside the one in the head.
+The prompts print it beside the head link, from the same field; you may
+change its text or leave it out.
+
 The prompt for your platform walks you through it: one piece of code, pasted
 once, that prints the link on every page whose field is set, then each
 sheet's address to paste into its page's field. It checks each page as you

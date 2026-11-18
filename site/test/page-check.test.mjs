@@ -5,7 +5,7 @@
  */
 import test from "node:test";
 import assert from "node:assert/strict";
-import { parseLinkHeader, parseHeadLinks, isSheetLink, robotsAllows, robotsPagefrontLine, txtRecordValue } from "../worker/page-check.ts";
+import { parseLinkHeader, parseHeadLinks, parseBodyLinks, isSheetLink, robotsAllows, robotsPagefrontLine, txtRecordValue } from "../worker/page-check.ts";
 
 test("Link header: several links, quoted parameters, commas inside <> and quotes", () => {
   const refs = parseLinkHeader(
@@ -37,6 +37,20 @@ test("head links: quoted, single-quoted and unquoted attributes; elements after 
   assert.deepEqual(refs.map((r) => r.href), ["https://m.example/s.json", "/a.css", "/relative.json"]);
   assert.equal(refs[0].params.title, "Sheet");
   assert.equal(refs[2].params.rel, "Alternate");
+});
+
+test("body links: anchors after the head with their text, tags stripped; anchors in the head and without href are ignored", () => {
+  const html = `<!doctype html><html><head><title>A</title><a rel="alternate" type="application/pagefront+json" href="https://m.example/in-head.json">x</a></head>
+    <body><h1>A</h1><a href="/about">About <em>us</em></a>
+    <p class="pagefront-data"><A REL="alternate" TYPE="application/pagefront+json" HREF="https://m.example/s.json">
+      Product <span>data</span>
+    </A></p>
+    <a name="anchor"></a>
+    <a rel="alternate" type="application/pagefront+json" href="/empty.json"></a></body></html>`;
+  const refs = parseBodyLinks(html);
+  assert.deepEqual(refs.map((r) => [r.href, r.text]), [["/about", "About us"], ["https://m.example/s.json", "Product data"], ["/empty.json", ""]]);
+  assert.equal(refs.filter(isSheetLink).length, 2);
+  assert.deepEqual(parseBodyLinks("<html><head><a href=\"/x\">x</a></head></html>"), []);
 });
 
 test("sheet-link selection: rel and type together, case-insensitive, parameters on the type ignored", () => {

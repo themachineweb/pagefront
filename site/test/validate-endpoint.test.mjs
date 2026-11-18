@@ -367,8 +367,9 @@ function publisher() {
   const header = (href, type = SHEET_TYPE, extra = "") => `<${href}>; rel="alternate"; type="${type}"${extra}`;
   const PRODUCT_PROFILE = "https://themachineweb.org/pagefront/spec/commerce/product/v0.12.0.json";
   const REVIEW_PROFILE = "https://themachineweb.org/pagefront/spec/commerce/review/v0.1.0.json";
-  const page = (links, extraHead = "") => `<!doctype html><html><head><title>Anorak</title>${links}${extraHead}</head><body><h1>Anorak</h1></body></html>`;
+  const page = (links, extraHead = "", body = "") => `<!doctype html><html><head><title>Anorak</title>${links}${extraHead}</head><body><h1>Anorak</h1>${body}</body></html>`;
   const canonical = (href) => `<link rel="canonical" href="${href}">`;
+  const bodyLink = (href, text = "Product data") => `<p class="pagefront-data"><a rel="alternate" type="${SHEET_TYPE}" href="${href}">${text}</a></p>`;
 
   // name → { html?, headers?, status?, location?, sheet?, sheetHeaders? }
   const scenarios = {
@@ -395,6 +396,10 @@ function publisher() {
     "sheet-url-mismatch": (p) => ({ html: page(element(`${base}/sheets${p}.json`)), sheet: sheetFor(p, { sheet_url: `${base}/old/location.json` }) }),
     // Served as the sheet media type: still a sheet, with the warning that application/json is recommended.
     "ct-sheet-type": (p) => ({ html: page(element(`${base}/sheets${p}.json`)), sheetHeaders: { "content-type": SHEET_TYPE } }),
+    // The optional body link ("Body link" in Discovery): beside the head link, pointing elsewhere, and without text.
+    "body-link": (p) => ({ html: page(element(`${base}/sheets${p}.json`), "", bodyLink(`${base}/sheets${p}.json`)) }),
+    "body-link-differs": (p) => ({ html: page(element(`${base}/sheets${p}.json`), "", bodyLink(`${base}/sheets${p}-other.json`)) }),
+    "body-link-empty": (p) => ({ html: page(element(`${base}/sheets${p}.json`), "", bodyLink(`${base}/sheets${p}.json`, "")) }),
     "ct-other": (p) => ({ html: page(element(`${base}/sheets${p}.json`)), sheetHeaders: { "content-type": "text/plain" } }),
     "no-cors": (p) => ({ html: page(element(`${base}/sheets${p}.json`)), sheetHeaders: { "access-control-allow-origin": null } }),
     "robots-blocked": (p) => ({ html: page(element(`${base}/private${p}.json`)) }),
@@ -554,6 +559,7 @@ test("page check: the hop (status, redirects, Content-Type, size, robots, CORS)"
   try {
     const both = await check("both");
     assert.deepEqual(statuses(both.hop), {
+      "Body link": "info",
       "Sheet URL fetches": "pass",
       "Content-Type is application/json": "pass",
       "Size": "pass",
@@ -567,6 +573,18 @@ test("page check: the hop (status, redirects, Content-Type, size, robots, CORS)"
     assert.match(sheetType.detail, /^Sheet at .*\/sheets\/page\/ct-sheet-type\.json is served as application\/pagefront\+json; application\/json is recommended: some generic JSON readers accept only that type\.$/);
     assert.equal(sheetType.remediation, "Set Content-Type: application/json on the sheet response. The link's type attribute stays application/pagefront+json.");
     assert.equal(line((await check("ct-other")).hop, "Content-Type is application/json").status, "fail");
+
+    // The body link: optional, so absent and present are information; another sheet or no text is a warning.
+    assert.match(line(both.hop, "Body link").detail, /^none; a visible <a rel="alternate" type="application\/pagefront\+json"> in the body is optional$/);
+    const withBody = line((await check("body-link")).hop, "Body link");
+    assert.equal(withBody.status, "info");
+    assert.equal(withBody.detail, `present: ${base}/sheets/page/body-link.json, text "Product data"`);
+    const differs = line((await check("body-link-differs")).hop, "Body link");
+    assert.equal(differs.status, "warning");
+    assert.equal(differs.detail, `Body link at ${base}/page/body-link-differs points to ${base}/sheets/page/body-link-differs-other.json; the head declaration points to ${base}/sheets/page/body-link-differs.json. Both must name the same sheet.`);
+    const empty = line((await check("body-link-empty")).hop, "Body link");
+    assert.equal(empty.status, "warning");
+    assert.equal(empty.detail, "Body link has no text; text extractors discard empty anchors.");
     assert.equal(line((await check("no-cors")).hop, "Access-Control-Allow-Origin present on the sheet response").status, "warning");
 
     const blocked = await check("robots-blocked");

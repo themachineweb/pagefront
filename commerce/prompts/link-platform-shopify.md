@@ -19,12 +19,17 @@
   Collections and Pages: name "Pagefront sheet", namespace and key
   `custom.pagefront_sheet`, type URL (not Link), one value, Storefront
   API access on.
-- **The code**: a block for the theme's `layout/theme.liquid`, the file
-  `pagefront-theme-link.txt`, pasted just before `</head>`. By
+- **The code**: two blocks for the theme's `layout/theme.liquid`. The
+  file `pagefront-theme-link.txt`, pasted just before `</head>`: by
   `request.page_type` (`product`, `collection`, `page`), it reads that
   object's `metafields.custom.pagefront_sheet.value` and, if not blank and
   under the sheet path (rule 4), prints the `<link>` element, its `href`
-  escaped. Short Liquid comments; nothing else.
+  escaped. The file `pagefront-theme-body.txt`, pasted just before
+  `</body>`: the same guard on the same metafield, printing the body link
+  `<p class="pagefront-data"><a rel="alternate" type="application/pagefront+json" href="…">Product data</a></p>`,
+  the text in a Liquid `assign` at its top, which the merchant may change;
+  a merchant who wants no body link leaves this second block out. Short
+  Liquid comments; nothing else.
 - **Sign the code runs**: none until a field is filled; the code step has
   no check.
 - **What Shopify cannot do**, said plainly in the report: a theme sets no
@@ -64,7 +69,9 @@
      themes": leave it. Then the top card's three dots again › "Edit code";
      it opens in its own browser tab, filling the window. In Layout,
      `theme.liquid`; paste all of `pagefront-theme-link.txt` on a new line
-     just above `</head>`; "Save" (top right). Then close that browser tab,
+     just above `</head>`, and all of `pagefront-theme-body.txt` on a new
+     line just above `</body>` (or leave that one out: then the pages carry
+     the head link alone); "Save" (top right). Then close that browser tab,
      back to the admin: the editor's own ⚙ settings are not Shopify's.
   3. A product, collection or page: open it; in the Metafields section,
      next to "Pagefront sheet", "+ Add" (or "View all" if it is not
@@ -76,7 +83,7 @@
      which `/.well-known/pagefront` does on a Shopify store.
 - **What stays the merchant's** (report): a theme update can drop code
   edits ("Theme added: code edits could not be included"); after one,
-  paste the block again. A new theme needs the block too. When the root
+  paste the blocks again. A new theme needs the blocks too. When the root
   sheet's address changes, edit the redirect (Content › Menus › "View URL
   Redirects", the redirect's row), and the old target can answer for some
   hours after the save; a redirect deleted there removes the
