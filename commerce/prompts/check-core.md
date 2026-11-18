@@ -1,6 +1,6 @@
 # Pagefront — check your shop's sheets
 
-- Prompt set 1.22.0, for commerce release 0.6.0.
+- Prompt set 1.23.0, for commerce release 0.6.0.
 - Checks, end to end, the sheets the write, serve and link phases put online (commerce release 0.6.0), as an agent finds them.
 - Pagefront Discovery: https://themachineweb.org/pagefront/spec/core/discovery.md (page: https://themachineweb.org/pagefront/spec/core/discovery)
 - Commerce Organization Sheet, "Entry point (commerce binding)": https://themachineweb.org/pagefront/spec/commerce/organization.md
@@ -70,8 +70,8 @@ hand the browser back; then go on in that browser. Without such a browser,
 or if the merchant declines: say so and stop, this phase runs once the shop
 is open.
 
-- **Run**, read in the browser: the start, each page's `<link>` element,
-  each sheet, the tree, the links between sheets both ways (CHECKS 4, 5
+- **Run**, read in the browser: the start, each page's `<link>` element
+  and body link, each sheet, the tree, the links between sheets both ways (CHECKS 4, 5
   and 7), a page without a sheet declaring nothing in its head (CHECKS 6),
   and where the entry point ends.
 - **Not run**: the Check's own checks (CHECKS 1 to 3: the `hop`,
@@ -157,6 +157,11 @@ see.
    - the other warnings, on what a sheet says (its prices, terms, brand):
      counted, by rule and by sheet, for the content section of the report
      (OUTPUT). They are the write phase's; this phase does not weigh them.
+   The `hop` list's "Body link" line reports the visible body link
+   ("Body link" in Discovery) as the Check does: present or absent is
+   information, since the body link is optional; a body link that names
+   another sheet than the head's declaration, or has no text, is a
+   warning (link), reported with the Check's own words.
    A page whose platform's section says it cannot declare a sheet: run the
    Check on the sheet's address instead, and report the page's missing
    declaration once, not as a failure.

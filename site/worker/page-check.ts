@@ -139,6 +139,35 @@ export function parseHeadLinks(html: string): LinkRef[] {
   return refs;
 }
 
+export interface BodyLinkRef extends LinkRef {
+  /** The anchor's text content, tags stripped and trimmed. */
+  text: string;
+}
+
+/**
+ * The body link ("Body link" in core/spec/discovery.md): the <a>
+ * elements from the end of the head on, with their attributes and text
+ * content. The same attribute grammar as the head parser; an anchor with
+ * no href is skipped.
+ */
+export function parseBodyLinks(html: string): BodyLinkRef[] {
+  const headEnd = html.search(/<\/head\s*>|<body[\s>]/i);
+  const body = headEnd < 0 ? '' : html.slice(headEnd);
+  const refs: BodyLinkRef[] = [];
+  for (const tag of body.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a\s*>/gi)) {
+    const params: Record<string, string> = {};
+    for (const attr of tag[1].matchAll(/([a-zA-Z_:][-a-zA-Z0-9_:.]*)\s*(?:=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>`]+)))?/g)) {
+      const key = attr[1].toLowerCase();
+      if (!(key in params)) params[key] = (attr[2] ?? attr[3] ?? attr[4] ?? '').trim();
+    }
+    const href = params.href;
+    if (href === undefined) continue;
+    delete params.href;
+    refs.push({ href, params, text: tag[2].replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim() });
+  }
+  return refs;
+}
+
 const relTokens = (ref: LinkRef): string[] => (ref.params.rel ?? '').toLowerCase().split(/\s+/).filter(Boolean);
 const mediaType = (value: string | undefined): string => (value ?? '').split(';')[0].trim().toLowerCase();
 
@@ -527,6 +556,10 @@ export interface PageCheckInput {
   response: Response;
   /** The page's <head>, as far as the endpoint read it. */
   head: string;
+  /** The page from the end of its head on, as far as the endpoint read it; absent when the page was not read past the head. */
+  body?: string;
+  /** False when the page was cut at the endpoint's cap, so a body link may lie beyond what was read. */
+  bodyComplete?: boolean;
   fetcher: Fetcher;
   allowedProtocols: string[];
   maxSheetBytes: number;
@@ -698,6 +731,41 @@ export async function checkPage(input: PageCheckInput): Promise<PageCheck> {
       discovery.push(unknown > 0
         ? warning('Other sheets the page declares', `${named.join('; ')}; this check follows the first link, ${primaryUrl}`)
         : info('Other sheets the page declares', `${named.join('; ')}; this check follows the first link, ${primaryUrl}, and the others are checked from their own addresses`));
+    }
+  }
+
+  // The body link ("Body link" in core/spec/discovery.md): optional, so
+  // present and absent are information; a body link that names another
+  // sheet than the head's declaration, or has no text, is a warning.
+  if (!entry) {
+    const bodyRefs = parseBodyLinks(input.body === undefined ? head : head + input.body).filter(isSheetLink);
+    const bodyRef = bodyRefs[0];
+    if (!bodyRef) {
+      hop.push(info('Body link', input.bodyComplete === false
+        ? `none in the part of the page read (the page was not read past the endpoint's cap); a visible <a rel="alternate" type="${SHEET_MEDIA_TYPE}"> in the body is optional`
+        : `none; a visible <a rel="alternate" type="${SHEET_MEDIA_TYPE}"> in the body is optional`));
+    } else {
+      const bodyUrl = resolve(bodyRef.href, finalUrl) ?? bodyRef.href;
+      const declaredUrl = headerUrl ?? headUrl;
+      const declaredBy = headerUrl ? 'the Link header' : 'the head declaration';
+      const count = bodyRefs.length > 1 ? `; ${bodyRefs.length} such links in the body, the first is read` : '';
+      if (declaredUrl && bodyUrl !== declaredUrl) {
+        hop.push({
+          check: 'Body link',
+          status: 'warning',
+          detail: `Body link at ${finalUrl} points to ${bodyUrl}; ${declaredBy} points to ${declaredUrl}. Both must name the same sheet.${count}`,
+          remediation: `Point the body link and the head declaration at the same sheet address.`,
+        });
+      } else if (bodyRef.text === '') {
+        hop.push({
+          check: 'Body link',
+          status: 'warning',
+          detail: `Body link has no text; text extractors discard empty anchors.${count}`,
+          remediation: 'Give the anchor visible text, such as "Product data".',
+        });
+      } else {
+        hop.push(info('Body link', `present: ${bodyUrl}, text "${bodyRef.text}"${count}`));
+      }
     }
   }
 

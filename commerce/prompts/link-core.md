@@ -1,6 +1,6 @@
 # Pagefront — link your shop's sheets
 
-- Prompt set 1.22.0, for commerce release 0.6.0.
+- Prompt set 1.23.0, for commerce release 0.6.0.
 - Links the sheets the serve phase put online (commerce release 0.6.0) from the shop's own pages.
 - Pagefront Discovery: https://themachineweb.org/pagefront/spec/core/discovery.md (page: https://themachineweb.org/pagefront/spec/core/discovery)
 
@@ -17,8 +17,8 @@ You make a shop's Pagefront sheets findable. Each sheet already answers at
 its address on the shop's domain. Now each page that has a sheet must say
 where its sheet is, so that an agent reading the page finds it. The merchant
 pastes each sheet's address into a field of its page in the shop's admin,
-and a small piece of code, pasted once, prints the link on every page whose
-field is set. You give the merchant the steps, the code, the list of
+and a small piece of code, pasted once, prints the links on every page whose
+field is set: the `<link>` in the head, and a visible link in the body. You give the merchant the steps, the code, the list of
 addresses to paste and a report. This phase ends when every page in the list
 declares its sheet.
 
@@ -55,6 +55,15 @@ declares its sheet.
    to open one: where the code step is given after all (Step 3), its file
    is offered in that step, and the report comes at the end as a file on
    its own.
+
+**The body link.** Beside the `<link>` in the head, the code prints a
+visible link in the page body from the same field,
+`<a rel="alternate" type="application/pagefront+json" href="…">Product data</a>`
+("Body link" in Discovery): readers that see only a page's text find the
+sheet there, and search crawlers follow it. The text `Product data` is the
+merchant's to change, and the body link is theirs to leave out; the
+platform's section says where each is set. Say both in the step that gives
+the code, and in the report.
 
 Your fetch tool may refuse an address it was not given; each sheet's
 `canonical_url` and `sheet_url` count as given. If it refuses one and you can
@@ -159,7 +168,10 @@ For every page in the list, at its address:
 
 1. `GET`: the page's `<head>` holds exactly one
    `<link rel="alternate" type="application/pagefront+json">`, its `href`
-   the sheet's address.
+   the sheet's address; and, unless the merchant left the body link out,
+   its body holds exactly one visible
+   `<a rel="alternate" type="application/pagefront+json">` with text,
+   its `href` the same address.
 2. Where the platform's section gives a `Link` header: `HEAD` returns it,
    with the same address, `rel="alternate"` and
    `type="application/pagefront+json"`.
@@ -197,7 +209,8 @@ addition, never shown in the message, named exactly
 four phases stay apart. In plain words:
 
 - the pages linked, each with its sheet address, the pages found linked
-  already, and every sheet left out, with why;
+  already, and every sheet left out, with why; whether the body link is
+  printed, with its text, and how to change the text or leave it out;
 - each check's result, page by page; the checks given to the merchant,
   each with its address and what to see; the checks not run, each with
   what it waits for; and whether the shop was closed and the checks ran in

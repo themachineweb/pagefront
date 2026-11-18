@@ -17,10 +17,14 @@
   labelled "Pagefront sheet".
 - **The code**: a Code Snippets snippet, the file `pagefront-link-snippet.txt`:
   plain PHP for the shop's WordPress version, no opening tag, names
-  prefixed `pagefront_`, short comments, the root's address in one
-  constant at the top, written by you.
+  prefixed `pagefront_`, short comments, three constants at the top,
+  written by you: the root's address, the body link's text (`Product
+  data`), and whether the body link is printed (on); the merchant
+  changes the text or turns the body link off there.
   - On a product, page or product category whose field is set (rule 4):
-    the `<link>` element in `<head>` (`wp_head`), and the `Link` header
+    the `<link>` element in `<head>` (`wp_head`), the body link
+    `<p class="pagefront-data"><a rel="alternate" type="application/pagefront+json" href="…">Product data</a></p>`
+    after the theme's footer (`wp_footer`), its `href` escaped, and the `Link` header
     `<address>; rel="alternate"; type="application/pagefront+json"`
     (`template_redirect` at priority 11, after WordPress's canonical
     redirect, so a `301` never carries it; it runs on `HEAD` too, while

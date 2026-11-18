@@ -57,9 +57,9 @@
  *     every URL beyond the submitted one is one the page declared;
  *   - each fetch is bounded in time (FETCH_TIMEOUT_MS) and follows at
  *     most MAX_REDIRECTS redirects; a sheet body is bounded in size
- *     (SHEET_MAX_BYTES); a page is read only to the end of its <head>,
- *     where the declaration lives, and the rest of the body is never
- *     downloaded; the body decides what was fetched (a sheet is JSON
+ *     (SHEET_MAX_BYTES); a page is read up to the same cap, its head
+ *     for the declaration and its body for the optional body link, and
+ *     never further; the body decides what was fetched (a sheet is JSON
  *     carrying $schema, everything else takes the page path), and the
  *     report shows at most the first bytes of a body whose label and
  *     content disagree;
@@ -188,16 +188,16 @@ async function readCapped(response: Request | Response, maxBytes: number): Promi
 const HEAD_END = /<\/head\s*>|<body[\s>]/i;
 
 type Document =
-  | { kind: 'page'; head: string; mismatch?: Line }
+  | { kind: 'page'; head: string; body: string; bodyComplete: boolean; mismatch?: Line }
   | { kind: 'sheet'; text: string }
   | { kind: 'too-large' };
 
 /**
  * Read a fetched URL as the document it is. The body decides, never the
  * Content-Type ("Serving" in core/spec/discovery.md): a body that
- * begins with `<` is a page, read only to the end of its <head> with
- * the rest cancelled, since the declaration lives in the response
- * headers or the head and nowhere else. Any other body is read whole,
+ * begins with `<` is a page, read up to `maxSheetBytes` and cut there:
+ * the declaration lives in the response headers or the head, and the
+ * optional body link in the body. Any other body is read whole,
  * up to `maxSheetBytes`, and is a sheet when it parses as JSON and
  * carries `$schema`. Everything else goes down the page path too (its
  * headers may still carry a Link), with the label-versus-body finding
@@ -206,7 +206,12 @@ type Document =
  */
 async function readDocument(response: Response, maxSheetBytes: number, url: string): Promise<Document> {
   const contentType = response.headers.get('content-type');
-  const asPage = (head: string): Document => ({ kind: 'page', head, mismatch: labelMismatch(url, contentType, head) });
+  const asPage = (text: string, complete = true): Document => {
+    const end = text.search(HEAD_END);
+    const head = end < 0 ? text : text.slice(0, end);
+    const body = end < 0 ? '' : text.slice(end);
+    return { kind: 'page', head, body, bodyComplete: complete, mismatch: labelMismatch(url, contentType, head) };
+  };
   if (!response.body) return asPage('');
 
   const reader = response.body.getReader();
@@ -225,10 +230,9 @@ async function readDocument(response: Response, maxSheetBytes: number, url: stri
       mode = lead.startsWith('<') ? 'page' : 'candidate';
     }
     if (mode === 'page') {
-      const end = text.search(HEAD_END);
-      if (end >= 0) {
+      if (received > maxSheetBytes) {
         await reader.cancel();
-        return asPage(text.slice(0, end));
+        return asPage(text, false);
       }
     } else if (received > maxSheetBytes) {
       await reader.cancel();
@@ -367,6 +371,8 @@ export async function validateSheetUrl(
       redirects,
       response,
       head: document.head,
+      body: document.body,
+      bodyComplete: document.bodyComplete,
       mismatch: document.mismatch,
       fetcher,
       allowedProtocols: allowed,

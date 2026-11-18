@@ -4,6 +4,13 @@ The prompt set's own semver; see "Versioning" in [`README.md`](README.md).
 
 ## Unreleased
 
+## 1.23.0 — 2026-11-18
+
+For commerce release 0.6.0.
+
+- **Link: the body link.** The link phase prints a visible `<a rel="alternate" type="application/pagefront+json">` in the page body beside the head `<link>`, from the same field ("Body link" in Pagefront Discovery, an optional carrier for readers that see only a page's text, followed by search crawlers): on WooCommerce a footer hook printing `<p class="pagefront-data">…</p>` after the theme's footer, with the text and an on/off switch in the snippet's constants; on Shopify a second block, `pagefront-theme-body.txt`, pasted before `</body>` under the same metafield guard, with the text in an `assign`. Default text "Product data"; the merchant may change the text or leave the body link out. CHECKS 1 expects the body link where it was kept; the report says whether it is printed. Minor: what the prompt produces changes.
+- **Check: the body link.** CHECKS 2 reports the Check's new "Body link" hop line as the Check grades it: present or absent is information, another address than the head's or no text a warning (link). The closed-shop list reads the body link in the browser with the `<link>` element.
+
 ## 1.22.0 — 2026-11-18
 
 For commerce release 0.6.0.
