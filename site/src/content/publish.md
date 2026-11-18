@@ -127,7 +127,7 @@ it.
 On another platform, the upcoming developer version is the route.
 
 **What the server does for you.** Serves each sheet at a stable address that
-survives a redesign. Sends `Content-Type: application/pagefront+json`, and
+survives a redesign. Sends `Content-Type: application/json`, and
 allows cross-origin reads for machines that run in a browser. Answers 404
 when there is no sheet, rather than a page that says "not found." Keeps the
 sheets indexable, with no `noindex`, so assistants that reach the web

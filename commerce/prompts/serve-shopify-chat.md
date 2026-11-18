@@ -1,6 +1,6 @@
 # Pagefront — serve your shop's sheets
 
-- Prompt set 1.21.0, for commerce release 0.6.0.
+- Prompt set 1.22.0, for commerce release 0.6.0.
 - Serves the sheets the write phase produced (commerce release 0.6.0) on the shop's own domain.
 - Cloudflare Workers, index for AI tools: https://developers.cloudflare.com/workers/llms.txt
 - Cloudflare R2, index for AI tools: https://developers.cloudflare.com/r2/llms.txt
@@ -199,8 +199,11 @@ before going on; never skip a step, never send two at once.
   (`/commerce/product/x.fr.json`). The key is that path without its first
   `/`, not decoded. Query strings are ignored.
 - `GET` and `HEAD` of a sheet: `200`, the bytes unchanged,
-  `Content-Type: application/pagefront+json`,
-  `Access-Control-Allow-Origin: *`; `HEAD` without a body. A sheet's key is
+  `Content-Type: application/json`,
+  `Access-Control-Allow-Origin: *`; `HEAD` without a body. The response
+  carries the plain JSON type because some JSON readers accept only that
+  one; the sheet media type `application/pagefront+json` belongs to the
+  page's link, which the link phase writes. A sheet's key is
   `commerce/<kind>/<file>.json` as in Step 1; a key ending in `/` (a
   dashboard folder) is not a sheet.
 - The bucket cannot be read (an error, not a missing object): `503`, empty.
@@ -257,7 +260,7 @@ redirecting to another host and shows the platform's signs.
 
 For every sheet served, at its address:
 
-1. `GET`: `200`, `content-type: application/pagefront+json`,
+1. `GET`: `200`, `content-type: application/json`,
    `access-control-allow-origin: *`, the body exactly the file's.
 2. `HEAD`: `200`, the same headers, no body.
 3. Its address with `-missing` before `.json`: `404`, empty.

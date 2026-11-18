@@ -9,9 +9,11 @@
  * rel="alternate" together with type="application/pagefront+json";
  * the Link response header is the primary carrier and the <link>
  * element in the page head the fallback; where both are present the
- * header is authoritative; a sheet served as application/json is still
- * a sheet, and a response is a sheet by its body alone (JSON carrying
- * $schema), whatever its Content-Type says. Nothing here constructs a
+ * header is authoritative; the recommended served Content-Type is
+ * application/json ("Serving" in core/spec/discovery.md), a sheet served
+ * as application/pagefront+json is still a sheet, and a response is a
+ * sheet by its body alone (JSON carrying $schema), whatever its
+ * Content-Type says. Nothing here constructs a
  * sheet URL: every URL fetched is one the page declared.
  */
 import { buildResult, canonicalHostOf, type Provenance, type RenderModel } from '../src/lib/validate-model.ts';
@@ -748,11 +750,17 @@ export async function checkPage(input: PageCheckInput): Promise<PageCheck> {
     : fail('Sheet URL fetches', `HTTP ${sheetResponse.status}; ${redirectNote}`));
 
   const served = mediaType(sheetResponse.headers.get('content-type') ?? undefined);
-  hop.push(served === SHEET_MEDIA_TYPE
-    ? pass('Content-Type is the sheet media type', served)
-    : served === 'application/json'
-      ? warning('Content-Type is the sheet media type', `served as application/json, which consumers accept; ${SHEET_MEDIA_TYPE} is recommended where you control headers`)
-      : fail('Content-Type is the sheet media type', served ? `served as ${served}` : 'no Content-Type header'));
+  const contentTypeCheck = 'Content-Type is application/json';
+  hop.push(served === 'application/json'
+    ? pass(contentTypeCheck, served)
+    : served === SHEET_MEDIA_TYPE
+      ? {
+          check: contentTypeCheck,
+          status: 'warning',
+          detail: `Sheet at ${sheetFinalUrl} is served as ${SHEET_MEDIA_TYPE}; application/json is recommended: some generic JSON readers accept only that type.`,
+          remediation: `Set Content-Type: application/json on the sheet response. The link's type attribute stays ${SHEET_MEDIA_TYPE}.`,
+        }
+      : fail(contentTypeCheck, served ? `served as ${served}` : 'no Content-Type header'));
 
   const text = sheetResponse.ok ? await input.readCapped(sheetResponse, input.maxSheetBytes) : undefined;
   if (sheetResponse.ok) {

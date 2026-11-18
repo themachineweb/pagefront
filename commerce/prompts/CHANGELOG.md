@@ -4,6 +4,12 @@ The prompt set's own semver; see "Versioning" in [`README.md`](README.md).
 
 ## Unreleased
 
+## 1.22.0 — 2026-11-18
+
+For commerce release 0.6.0.
+
+- **Serve: the sheet server sends `Content-Type: application/json`.** The Worker the serve prompt writes answered with `application/pagefront+json`; it now answers with `application/json`, and CHECKS item 1 expects it. The response carries the plain JSON type because some JSON readers accept only that one; the sheet media type `application/pagefront+json` stays in the page's link, which the link prompt writes unchanged. "Serving" in Pagefront Discovery says the same. Minor: the served header changes.
+
 ## 1.21.0 — 2026-11-17
 
 For commerce release 0.6.0.
