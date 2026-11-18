@@ -738,9 +738,26 @@ export async function checkPage(input: PageCheckInput): Promise<PageCheck> {
   // present and absent are information; a body link that names another
   // sheet than the head's declaration, or has no text, is a warning.
   if (!entry) {
-    const bodyRefs = parseBodyLinks(input.body === undefined ? head : head + input.body).filter(isSheetLink);
+    const allBodyRefs = parseBodyLinks(input.body === undefined ? head : head + input.body).filter(isSheetLink);
+    // Not a carrier ("Provenance" (b) in core/spec/discovery.md): an anchor
+    // whose rel says the publisher does not vouch for it, or whose href
+    // leaves the page's origin, is named with its reason and never read
+    // as the page's declaration.
+    const pageOrigin = new URL(finalUrl).origin;
+    const notCarrier = (ref: BodyLinkRef): string | undefined => {
+      const excluded = relTokens(ref).filter((t) => t === 'ugc' || t === 'nofollow' || t === 'sponsored');
+      if (excluded.length > 0) return `rel contains ${excluded.join(' and ')}`;
+      const url = resolve(ref.href, finalUrl);
+      if (!url) return 'its href does not resolve';
+      if (new URL(url).origin !== pageOrigin) return `its href is on ${new URL(url).origin}, off the page's origin`;
+      return undefined;
+    };
+    const rejected = allBodyRefs.map((ref) => [ref, notCarrier(ref)] as const).filter(([, why]) => why !== undefined);
+    const bodyRefs = allBodyRefs.filter((ref) => notCarrier(ref) === undefined);
     const bodyRef = bodyRefs[0];
-    if (!bodyRef) {
+    if (!bodyRef && rejected.length > 0) {
+      hop.push(info('Body link', `not a carrier: ${rejected.map(([ref, why]) => `${resolve(ref.href, finalUrl) ?? ref.href} (${why})`).join('; ')}`));
+    } else if (!bodyRef) {
       hop.push(info('Body link', input.bodyComplete === false
         ? `none in the part of the page read (the page was not read past the endpoint's cap); a visible <a rel="alternate" type="${SHEET_MEDIA_TYPE}"> in the body is optional`
         : `none; a visible <a rel="alternate" type="${SHEET_MEDIA_TYPE}"> in the body is optional`));
