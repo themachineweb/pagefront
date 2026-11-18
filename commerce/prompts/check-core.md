@@ -1,6 +1,6 @@
 # Pagefront — check your shop's sheets
 
-- Prompt set 1.21.0, for commerce release 0.6.0.
+- Prompt set 1.22.0, for commerce release 0.6.0.
 - Checks, end to end, the sheets the write, serve and link phases put online (commerce release 0.6.0), as an agent finds them.
 - Pagefront Discovery: https://themachineweb.org/pagefront/spec/core/discovery.md (page: https://themachineweb.org/pagefront/spec/core/discovery)
 - Commerce Organization Sheet, "Entry point (commerce binding)": https://themachineweb.org/pagefront/spec/commerce/organization.md

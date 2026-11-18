@@ -6,6 +6,8 @@ The history of [`product.md`](product.md). Changes land under "Unreleased" and a
 
 Changes land here and are versioned at the next release; see "Releasing" in [`../../CONTRIBUTING.md`](../../CONTRIBUTING.md).
 
+- **Served Content-Type.** Publishers SHOULD serve sheets as `application/json`; see "Serving" in [`../../core/spec/discovery.md`](../../core/spec/discovery.md). The media type `application/pagefront+json` identifies the sheet in the page's declaration and is not required on the response. Consumer rules unchanged. The hosted Check now warns on a served `application/pagefront+json`. No sheet changes shape.
+
 ### 0.12.0 — 2026-11-17
 
 Released in commerce release 0.6.0.

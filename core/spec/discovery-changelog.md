@@ -6,6 +6,8 @@ The history of [`discovery.md`](discovery.md). Changes land under "Unreleased" a
 
 Changes land here and are versioned at the next release; see "Releasing" in [`../../CONTRIBUTING.md`](../../CONTRIBUTING.md).
 
+- **Change: served Content-Type.** "Serving" now says publishers SHOULD serve sheets as `application/json`. The media type `application/pagefront+json` identifies the sheet in the page's declaration (the link's `type` attribute, the `Link` header, an `Accept` value) and is not required on the response: generic JSON readers may accept only `application/json`. A server answering `Accept: application/pagefront+json` MAY respond with `application/json`. The consumer rules are unchanged: a sheet is rejected for neither served type and accepted on neither alone. The entry point's direct-serve option names `application/json`. The hosted Check now warns on a served `application/pagefront+json`. The link's `type`, the `Accept` value and the selection rule do not change.
+
 ### 0.2.0 — 2026-11-17
 
 Dated on its own, as the format-level document is; commerce release 0.6.0 names it as the version in force.

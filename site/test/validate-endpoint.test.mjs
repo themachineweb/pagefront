@@ -147,6 +147,7 @@ test("rate limits: per host and total, 429 when either refuses", async () => {
 function attributionPublisher() {
   let base = "";
   const SHEET_TYPE = "application/pagefront+json";
+  const SERVED_TYPE = "application/json";
   const element = (href) => `<link rel="alternate" type="${SHEET_TYPE}" href="${href}">`;
   const header = (href) => `<${href}>; rel="alternate"; type="${SHEET_TYPE}"`;
   const page = (links) => `<!doctype html><html><head><title>Anorak</title>${links}</head><body><h1>Anorak</h1></body></html>`;
@@ -203,7 +204,7 @@ function attributionPublisher() {
       const name = m[1];
       // The forged sheet lints clean and names the victim's page.
       const body = name === "forged" ? sheetFor("victim") : sheetFor(name);
-      res.writeHead(200, { "content-type": SHEET_TYPE, "access-control-allow-origin": "*" });
+      res.writeHead(200, { "content-type": SERVED_TYPE, "access-control-allow-origin": "*" });
       return res.end(req.method === "HEAD" ? undefined : body);
     }
     res.writeHead(404);
@@ -352,6 +353,7 @@ test("provenance through a page: attributed via the page's declaration; a pasted
 function publisher() {
   let base = "";
   const SHEET_TYPE = "application/pagefront+json";
+  const SERVED_TYPE = "application/json";
   const sheetFor = (page, overrides = {}) => {
     const sheet = JSON.parse(CLEAN);
     sheet.canonical_url = `${base}${page}`;
@@ -391,7 +393,8 @@ function publisher() {
     "self-canonical": (p) => ({ html: page(element(`${base}/sheets${p}.json`), canonical(p)) }),
     "sheet-url-absent": (p) => ({ html: page(element(`${base}/sheets${p}.json`)), sheet: sheetFor(p, { sheet_url: undefined }) }),
     "sheet-url-mismatch": (p) => ({ html: page(element(`${base}/sheets${p}.json`)), sheet: sheetFor(p, { sheet_url: `${base}/old/location.json` }) }),
-    "ct-json": (p) => ({ html: page(element(`${base}/sheets${p}.json`)), sheetHeaders: { "content-type": "application/json" } }),
+    // Served as the sheet media type: still a sheet, with the warning that application/json is recommended.
+    "ct-sheet-type": (p) => ({ html: page(element(`${base}/sheets${p}.json`)), sheetHeaders: { "content-type": SHEET_TYPE } }),
     "ct-other": (p) => ({ html: page(element(`${base}/sheets${p}.json`)), sheetHeaders: { "content-type": "text/plain" } }),
     "no-cors": (p) => ({ html: page(element(`${base}/sheets${p}.json`)), sheetHeaders: { "access-control-allow-origin": null } }),
     "robots-blocked": (p) => ({ html: page(element(`${base}/private${p}.json`)) }),
@@ -404,8 +407,8 @@ function publisher() {
     "redirect-loop-4": () => ({ status: 301, location: "/page/both" }),
     // A server that echoes the first Accept media type as Content-Type: the page arrives labelled as a sheet.
     echo: (p) => ({ html: page(element(`${base}/sheets${p}.json`)), headers: { "content-type": "application/pagefront+json; charset=utf-8" } }),
-    // The same server at the sheet URL: HTML labelled as the sheet.
-    "sheet-echo": (p) => ({ html: page(element(`${base}/sheets${p}.json`)), sheet: "<!doctype html><html><head><title>Home</title></head><body></body></html>" }),
+    // The same server at the sheet URL: HTML labelled as the sheet (the echoed Accept value).
+    "sheet-echo": (p) => ({ html: page(element(`${base}/sheets${p}.json`)), sheet: "<!doctype html><html><head><title>Home</title></head><body></body></html>", sheetHeaders: { "content-type": `${SHEET_TYPE}; charset=utf-8` } }),
     // JSON at the sheet URL that carries no $schema.
     "sheet-noschema": (p) => ({ html: page(element(`${base}/sheets${p}.json`)), sheet: '{"a":1}', sheetHeaders: { "content-type": "application/json" } }),
   };
@@ -435,7 +438,7 @@ function publisher() {
       const scenario = scenarios[name];
       if (!scenario || name.endsWith("gone")) { res.writeHead(404); return res.end(); }
       const s = scenario(`/page/${name}`);
-      const headers = { "content-type": SHEET_TYPE, "access-control-allow-origin": "*", ...(s.sheetHeaders ?? {}) };
+      const headers = { "content-type": SERVED_TYPE, "access-control-allow-origin": "*", ...(s.sheetHeaders ?? {}) };
       for (const [k, v] of Object.entries(headers)) if (v === null) delete headers[k];
       res.writeHead(200, headers);
       // A redirected sheet is fetched from /sheets/…, which is where sheet_url points.
@@ -552,15 +555,18 @@ test("page check: the hop (status, redirects, Content-Type, size, robots, CORS)"
     const both = await check("both");
     assert.deepEqual(statuses(both.hop), {
       "Sheet URL fetches": "pass",
-      "Content-Type is the sheet media type": "pass",
+      "Content-Type is application/json": "pass",
       "Size": "pass",
       "Not blocked by robots.txt": "pass",
       "Access-Control-Allow-Origin present on the sheet response": "pass",
     });
     assert.match(line(both.hop, "Size").detail, /^\d+ bytes$/);
 
-    assert.equal(line((await check("ct-json")).hop, "Content-Type is the sheet media type").status, "warning");
-    assert.equal(line((await check("ct-other")).hop, "Content-Type is the sheet media type").status, "fail");
+    const sheetType = line((await check("ct-sheet-type")).hop, "Content-Type is application/json");
+    assert.equal(sheetType.status, "warning");
+    assert.match(sheetType.detail, /^Sheet at .*\/sheets\/page\/ct-sheet-type\.json is served as application\/pagefront\+json; application\/json is recommended: some generic JSON readers accept only that type\.$/);
+    assert.equal(sheetType.remediation, "Set Content-Type: application/json on the sheet response. The link's type attribute stays application/pagefront+json.");
+    assert.equal(line((await check("ct-other")).hop, "Content-Type is application/json").status, "fail");
     assert.equal(line((await check("no-cors")).hop, "Access-Control-Allow-Origin present on the sheet response").status, "warning");
 
     const blocked = await check("robots-blocked");
