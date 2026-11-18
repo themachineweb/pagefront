@@ -150,7 +150,8 @@ function attributionPublisher() {
   const SERVED_TYPE = "application/json";
   const element = (href) => `<link rel="alternate" type="${SHEET_TYPE}" href="${href}">`;
   const header = (href) => `<${href}>; rel="alternate"; type="${SHEET_TYPE}"`;
-  const page = (links) => `<!doctype html><html><head><title>Anorak</title>${links}</head><body><h1>Anorak</h1></body></html>`;
+  const page = (links, body = "") => `<!doctype html><html><head><title>Anorak</title>${links}</head><body><h1>Anorak</h1>${body}</body></html>`;
+  const anchor = (href, rel = "alternate") => `<p class="pagefront-data"><a rel="${rel}" type="${SHEET_TYPE}" href="${href}">Product data</a></p>`;
   const sheetFor = (name) => {
     const sheet = JSON.parse(CLEAN);
     sheet.canonical_url = `${base}/page/${name}`;
@@ -180,6 +181,12 @@ function attributionPublisher() {
     "head-refused": (n) => ({ html: page(element(`/sheets/${n}.json`)), refuseHead: true }),
     // The victim's page declares its own sheet; the forged sheet names that page.
     victim: (n) => ({ html: page(element(`/sheets/${n}.json`)) }),
+    // The body link as the third carrier (condition (b)): alone it attributes; alone with a rel the publisher does not vouch for, or off the origin, it does not; beside a head declaration the head attributes.
+    "body-only": (n) => ({ html: page("", anchor(`/sheets/${n}.json`)) }),
+    "body-nofollow": (n) => ({ html: page("", anchor(`/sheets/${n}.json`, "alternate nofollow")) }),
+    "body-off-origin": (n) => ({ html: page("", anchor(`https://elsewhere.example/sheets/${n}.json`)) }),
+    "head-body-agree": (n) => ({ html: page(element(`/sheets/${n}.json`), anchor(`/sheets/${n}.json`)) }),
+    "head-body-disagree": (n) => ({ html: page(element(`/sheets/${n}-other.json`), anchor(`/sheets/${n}.json`)) }),
   };
   const server = createServer((req, res) => {
     const url = new URL(req.url, base);
@@ -286,6 +293,23 @@ test("provenance of a sheet by its URL: the back link from canonical_url, matche
     const reverse = await check("disagree-reverse");
     assert.equal(reverse.provenance.status, "unattributed");
     assert.equal(reverse.provenance.declared_url, `${base}/sheets/disagree-reverse-other.json`);
+
+    // The body link: the third carrier, read only on a page with neither document carrier.
+    const bodyOnly = await check("body-only");
+    assert.equal(bodyOnly.provenance.status, "attributed");
+    assert.equal(bodyOnly.provenance.via, "back_link");
+    assert.equal(bodyOnly.provenance.declared_url, `${base}/sheets/body-only.json`);
+    const bodyNofollow = await check("body-nofollow");
+    assert.equal(bodyNofollow.provenance.status, "unattributed");
+    assert.equal(bodyNofollow.provenance.reason, `${base}/page/body-nofollow declares no sheet in its Link header or head, and its body link is not a carrier: ${base}/sheets/body-nofollow.json (rel contains nofollow)`);
+    const bodyOffOrigin = await check("body-off-origin");
+    assert.equal(bodyOffOrigin.provenance.status, "unattributed");
+    assert.equal(bodyOffOrigin.provenance.reason, `${base}/page/body-off-origin declares no sheet in its Link header or head, and its body link is not a carrier: https://elsewhere.example/sheets/body-off-origin.json (its href is on https://elsewhere.example, off the page's origin)`);
+    const agree = await check("head-body-agree");
+    assert.equal(agree.provenance.status, "attributed");
+    const headBodyDisagree = await check("head-body-disagree");
+    assert.equal(headBodyDisagree.provenance.status, "unattributed", "the head attributes; a matching body link never does beside it");
+    assert.equal(headBodyDisagree.provenance.declared_url, `${base}/sheets/head-body-disagree-other.json`);
 
     // HEAD refused: GET reads the head.
     const headRefused = await check("head-refused");
@@ -404,6 +428,8 @@ function publisher() {
     "body-link-nofollow": (p) => ({ html: page(element(`${base}/sheets${p}.json`), "", bodyLink(`${base}/sheets${p}.json`, "Product data", "nofollow alternate")) }),
     "body-link-sponsored": (p) => ({ html: page(element(`${base}/sheets${p}.json`), "", bodyLink(`${base}/sheets${p}.json`, "Product data", "alternate sponsored")) }),
     "body-link-off-origin": (p) => ({ html: page(element(`${base}/sheets${p}.json`), "", bodyLink(`https://elsewhere.example/sheets${p}.json`)) }),
+    // A page with the body link alone: it declares the sheet, which attributes; the head line warns.
+    "body-only": (p) => ({ html: page("", "", bodyLink(`${base}/sheets${p}.json`)) }),
     "body-link-empty": (p) => ({ html: page(element(`${base}/sheets${p}.json`), "", bodyLink(`${base}/sheets${p}.json`, "")) }),
     "ct-other": (p) => ({ html: page(element(`${base}/sheets${p}.json`)), sheetHeaders: { "content-type": "text/plain" } }),
     "no-cors": (p) => ({ html: page(element(`${base}/sheets${p}.json`)), sheetHeaders: { "access-control-allow-origin": null } }),
@@ -595,6 +621,14 @@ test("page check: the hop (status, redirects, Content-Type, size, robots, CORS)"
       assert.equal(rejected.status, "info", name);
       assert.equal(rejected.detail, `not a carrier: ${base}/sheets/page/body-link-${name}.json (${why})`);
     }
+    const bodyOnlyPage = await check("body-only");
+    assert.equal(line(bodyOnlyPage.discovery, "<link> element in the page head declares the sheet").status, "warning");
+    assert.equal(line(bodyOnlyPage.discovery, "Link response header declares the sheet").status, "info");
+    assert.equal(line(bodyOnlyPage.discovery, "Both carriers present (recommended)").status, "info");
+    assert.equal(line(bodyOnlyPage.hop, "Body link").detail, `present: ${base}/sheets/page/body-only.json, text "Product data"; the page's declaration, since neither the Link header nor the head declares a sheet`);
+    assert.equal(line(bodyOnlyPage.hop, "Sheet URL fetches").status, "pass");
+    assert.equal(bodyOnlyPage.provenance.status, "attributed");
+    assert.equal(bodyOnlyPage.provenance.via, "page_declaration");
     const offOrigin = line((await check("body-link-off-origin")).hop, "Body link");
     assert.equal(offOrigin.status, "info");
     assert.equal(offOrigin.detail, `not a carrier: https://elsewhere.example/sheets/page/body-link-off-origin.json (its href is on https://elsewhere.example, off the page's origin)`);

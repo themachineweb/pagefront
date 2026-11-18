@@ -4,7 +4,7 @@
 
 A sheet is Schema.org JSON-LD. The `pagefront:` vocabulary adds what commerce needs and Schema.org does not carry: material composition, care instructions, size charts, certifications with a scope, safety notices, documents, the legal entity behind a product. Every value in a sheet is the publisher's own statement, served from the publisher's domain.
 
-A sheet is found from the page it describes: a `<link rel="alternate" type="application/pagefront+json">` element or an HTTP `Link` header. An origin's entry point is `/.well-known/pagefront`, or a `Pagefront:` line in robots.txt, and leads to the Organization Sheet. Never construct a sheet URL from a page URL.
+A sheet is found from the page it describes: a `<link rel="alternate" type="application/pagefront+json">` element or an HTTP `Link` header. A page may also carry a visible body link: `<a rel="alternate" type="application/pagefront+json" href="…">…</a>`, with non-empty text. It attributes a sheet only when its href is on the page's origin, its rel contains none of ugc, nofollow or sponsored, and the page carries no head declaration; a head declaration takes precedence. An origin's entry point is `/.well-known/pagefront`, or a `Pagefront:` line in robots.txt, and leads to the Organization Sheet. Never construct a sheet URL from a page URL.
 
 Commerce release 0.5.0 is the current release. It bundles the Product Sheet spec 0.11.0, the Organization Sheet spec 0.5.0, the Collection Sheet spec 0.1.0 and the vocabulary. The format is suitable for experimentation and feedback today; the stability policy applies from release 1.0.0.
 
