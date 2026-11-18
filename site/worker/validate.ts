@@ -400,9 +400,9 @@ export async function validateSheetUrl(
       fetcher,
       allowedProtocols: allowed,
       admit,
-      readHead: async (res, url) => {
+      readPage: async (res, url) => {
         const page = await readDocument(res, maxBytes, url);
-        return page.kind === 'page' ? page.head : '';
+        return page.kind === 'page' ? { head: page.head, body: page.body } : { head: '', body: '' };
       },
     });
   }

@@ -168,6 +168,31 @@ export function parseBodyLinks(html: string): BodyLinkRef[] {
   return refs;
 }
 
+/**
+ * Why a body anchor is not a carrier ("Provenance" (b) in
+ * core/spec/discovery.md): a rel the publisher does not vouch for, or an
+ * href off the page's origin. Undefined when it is one.
+ */
+export function bodyLinkObjection(ref: BodyLinkRef, pageUrl: string): string | undefined {
+  const excluded = relTokens(ref).filter((t) => t === 'ugc' || t === 'nofollow' || t === 'sponsored');
+  if (excluded.length > 0) return `rel contains ${excluded.join(' and ')}`;
+  const url = resolve(ref.href, pageUrl);
+  if (!url) return 'its href does not resolve';
+  if (new URL(url).origin !== new URL(pageUrl).origin) return `its href is on ${new URL(url).origin}, off the page's origin`;
+  return undefined;
+}
+
+/** The page's body anchors of the sheet type: the carriers in order, and the rest with the objection to each. */
+export function bodyCarriers(html: string, pageUrl: string): { carriers: BodyLinkRef[]; rejected: Array<[BodyLinkRef, string]> } {
+  const carriers: BodyLinkRef[] = [];
+  const rejected: Array<[BodyLinkRef, string]> = [];
+  for (const ref of parseBodyLinks(html).filter(isSheetLink)) {
+    const why = bodyLinkObjection(ref, pageUrl);
+    if (why === undefined) carriers.push(ref); else rejected.push([ref, why]);
+  }
+  return { carriers, rejected };
+}
+
 const relTokens = (ref: LinkRef): string[] => (ref.params.rel ?? '').toLowerCase().split(/\s+/).filter(Boolean);
 const mediaType = (value: string | undefined): string => (value ?? '').split(';')[0].trim().toLowerCase();
 
@@ -590,6 +615,13 @@ export async function checkPage(input: PageCheckInput): Promise<PageCheck> {
   }
   const headerSheet = headerRefs.filter(isSheetLink);
   const headSheet = headRefs.filter(isSheetLink);
+  // The body link ("Body link" in core/spec/discovery.md): the third
+  // carrier, read after the header and the head; it declares the sheet
+  // only on a page that carries neither.
+  const bodyPick = entry ? { carriers: [] as BodyLinkRef[], rejected: [] as Array<[BodyLinkRef, string]> } : bodyCarriers(input.body === undefined ? head : head + input.body, finalUrl);
+  const bodyCarrier = bodyPick.carriers[0];
+  const bodyUrl = bodyCarrier ? resolve(bodyCarrier.href, finalUrl) : undefined;
+  const bodyOnly = headerSheet.length === 0 && headSheet.length === 0 && bodyCarrier !== undefined;
   const headerJson = headerRefs.filter(isJsonAlternate);
   const headJson = headRefs.filter(isJsonAlternate);
 
@@ -607,6 +639,8 @@ export async function checkPage(input: PageCheckInput): Promise<PageCheck> {
     ? pass('Link response header declares the sheet', `rel="alternate"; type="${SHEET_MEDIA_TYPE}": ${describe(headerSheet)}`)
     : oneCarrier
       ? info('Link response header declares the sheet', 'not set; the <link> element declares the sheet, which conforms on its own; the spec recommends both carriers')
+      : bodyOnly
+        ? info('Link response header declares the sheet', 'not set; the body link declares the sheet; the spec recommends the Link header and the head <link>')
       : fail('Link response header declares the sheet', headerJson.length > 0
         ? `an alternate link is present with type "${mediaType(headerJson[0].params.type)}"; the sheet's type is "${SHEET_MEDIA_TYPE}"`
         : headerRefs.length > 0 ? 'the header carries no alternate link of the sheet media type' : 'no Link header'));
@@ -614,16 +648,20 @@ export async function checkPage(input: PageCheckInput): Promise<PageCheck> {
     ? pass('<link> element in the page head declares the sheet', describe(headSheet))
     : oneCarrier
       ? info('<link> element in the page head declares the sheet', 'not set; the Link header declares the sheet, which conforms on its own; the spec recommends both carriers')
+      : bodyOnly
+        ? warning('<link> element in the page head declares the sheet', 'no <link rel="alternate" type="application/pagefront+json"> in the head; the body link declares the sheet, which attributes it; the head <link> is the recommended carrier, and readers that take the document look there')
       : fail('<link> element in the page head declares the sheet', headJson.length > 0
         ? `an alternate link is present with type "${mediaType(headJson[0].params.type)}"; the sheet's type is "${SHEET_MEDIA_TYPE}"`
         : 'no <link rel="alternate" type="application/pagefront+json"> in the head'));
   discovery.push(headerSheet.length > 0 && headSheet.length > 0
     ? pass('Both carriers present (recommended)')
     : headerSheet.length + headSheet.length === 0
-      ? fail('Both carriers present (recommended)', 'neither carrier declares the sheet')
+      ? (bodyOnly
+        ? info('Both carriers present (recommended)', 'neither document carrier declares the sheet; the body link alone does')
+        : fail('Both carriers present (recommended)', 'neither carrier declares the sheet'))
       : info('Both carriers present (recommended)', 'one carrier declares the sheet; the spec recommends both'));
 
-  const anySheet = headerSheet.length > 0 || headSheet.length > 0;
+  const anySheet = headerSheet.length > 0 || headSheet.length > 0 || bodyOnly;
   const nearMiss = headerJson.length > 0 || headJson.length > 0;
   discovery.push(anySheet
     ? pass(`type="${SHEET_MEDIA_TYPE}" on the declaration`)
@@ -635,10 +673,10 @@ export async function checkPage(input: PageCheckInput): Promise<PageCheck> {
 
   headerUrl = headerSheet[0] ? resolve(headerSheet[0].href, finalUrl) : undefined;
   headUrl = headSheet[0] ? resolve(headSheet[0].href, finalUrl) : undefined;
-  const declared = [headerSheet[0]?.href, headSheet[0]?.href].filter((h): h is string => h !== undefined);
+  const declared = [headerSheet[0]?.href, headSheet[0]?.href, bodyCarrier?.href].filter((h): h is string => h !== undefined);
   if (declared.length === 0) {
     discovery.push(skip('href is absolute, or resolves to an absolute URL', 'no declaration to check'));
-  } else if ((headerSheet[0] && !headerUrl) || (headSheet[0] && !headUrl)) {
+  } else if ((headerSheet[0] && !headerUrl) || (headSheet[0] && !headUrl) || (bodyCarrier && !bodyUrl)) {
     discovery.push(fail('href is absolute, or resolves to an absolute URL', `could not resolve: ${declared.join(', ')}`));
   } else {
     const absolute = declared.every((h) => /^https?:\/\//i.test(h));
@@ -738,23 +776,8 @@ export async function checkPage(input: PageCheckInput): Promise<PageCheck> {
   // present and absent are information; a body link that names another
   // sheet than the head's declaration, or has no text, is a warning.
   if (!entry) {
-    const allBodyRefs = parseBodyLinks(input.body === undefined ? head : head + input.body).filter(isSheetLink);
-    // Not a carrier ("Provenance" (b) in core/spec/discovery.md): an anchor
-    // whose rel says the publisher does not vouch for it, or whose href
-    // leaves the page's origin, is named with its reason and never read
-    // as the page's declaration.
-    const pageOrigin = new URL(finalUrl).origin;
-    const notCarrier = (ref: BodyLinkRef): string | undefined => {
-      const excluded = relTokens(ref).filter((t) => t === 'ugc' || t === 'nofollow' || t === 'sponsored');
-      if (excluded.length > 0) return `rel contains ${excluded.join(' and ')}`;
-      const url = resolve(ref.href, finalUrl);
-      if (!url) return 'its href does not resolve';
-      if (new URL(url).origin !== pageOrigin) return `its href is on ${new URL(url).origin}, off the page's origin`;
-      return undefined;
-    };
-    const rejected = allBodyRefs.map((ref) => [ref, notCarrier(ref)] as const).filter(([, why]) => why !== undefined);
-    const bodyRefs = allBodyRefs.filter((ref) => notCarrier(ref) === undefined);
-    const bodyRef = bodyRefs[0];
+    const rejected = bodyPick.rejected;
+    const bodyRef = bodyCarrier;
     if (!bodyRef && rejected.length > 0) {
       hop.push(info('Body link', `not a carrier: ${rejected.map(([ref, why]) => `${resolve(ref.href, finalUrl) ?? ref.href} (${why})`).join('; ')}`));
     } else if (!bodyRef) {
@@ -762,10 +785,9 @@ export async function checkPage(input: PageCheckInput): Promise<PageCheck> {
         ? `none in the part of the page read (the page was not read past the endpoint's cap); a visible <a rel="alternate" type="${SHEET_MEDIA_TYPE}"> in the body is optional`
         : `none; a visible <a rel="alternate" type="${SHEET_MEDIA_TYPE}"> in the body is optional`));
     } else {
-      const bodyUrl = resolve(bodyRef.href, finalUrl) ?? bodyRef.href;
       const declaredUrl = headerUrl ?? headUrl;
       const declaredBy = headerUrl ? 'the Link header' : 'the head declaration';
-      const count = bodyRefs.length > 1 ? `; ${bodyRefs.length} such links in the body, the first is read` : '';
+      const count = bodyPick.carriers.length > 1 ? `; ${bodyPick.carriers.length} such links in the body, the first is read` : '';
       if (declaredUrl && bodyUrl !== declaredUrl) {
         hop.push({
           check: 'Body link',
@@ -781,13 +803,16 @@ export async function checkPage(input: PageCheckInput): Promise<PageCheck> {
           remediation: 'Give the anchor visible text, such as "Product data".',
         });
       } else {
-        hop.push(info('Body link', `present: ${bodyUrl}, text "${bodyRef.text}"${count}`));
+        hop.push(info('Body link', declaredUrl
+          ? `present: ${bodyUrl}, text "${bodyRef.text}"${count}`
+          : `present: ${bodyUrl}, text "${bodyRef.text}"; the page's declaration, since neither the Link header nor the head declares a sheet${count}`));
       }
     }
   }
 
-  // The hop: the header is authoritative where both are present.
-  const sheetUrl = entry ? entry.sheetUrl : (headerUrl ?? headUrl);
+  // The hop: the header is authoritative where both are present; the body
+  // link is followed only on a page that carries neither.
+  const sheetUrl = entry ? entry.sheetUrl : (headerUrl ?? headUrl ?? bodyUrl);
   if (!sheetUrl) {
     hop.push(skip('Sheet URL fetches', 'no sheet declared'));
     coherence.push(skip('canonical_url equals the page URL', 'no sheet reached'));
@@ -979,8 +1004,8 @@ export interface BackLinkInput {
   fetchedUrl: string;
   fetcher: Fetcher;
   allowedProtocols: string[];
-  /** Reads a page response to the end of its head; an empty string for a body with no head. */
-  readHead: (response: Response, url: string) => Promise<string>;
+  /** Reads a page response: its head and, for the body link, the rest as far as the endpoint reads it; empty strings for a body with no head. */
+  readPage: (response: Response, url: string) => Promise<{ head: string; body: string }>;
   /** Called before the canonical page is fetched on another host; false means rate-limited. */
   admit?: (host: string) => Promise<boolean>;
 }
@@ -992,7 +1017,9 @@ export interface BackLinkInput {
  * HEAD is refused or carries no Link declaration, following redirects;
  * select the declaration as "Selection" does, by rel="alternate" and the
  * sheet media type together, the header authoritative where both
- * carriers declare one; resolve it against the page, follow its own
+ * document carriers declare one, and the body link read only on a page
+ * that carries neither, under the origin and rel conditions of (b);
+ * resolve it against the page, follow its own
  * redirects, and compare it with the URL the sheet was fetched from by
  * exact string after normalisation. Anything else, a page that cannot
  * be fetched included, is unattributed with the reason; never
@@ -1032,6 +1059,7 @@ export async function checkBackLink(input: BackLinkInput): Promise<Provenance> {
   let followed: Followed | undefined;
   let headerRefs: LinkRef[] = [];
   let headRefs: LinkRef[] = [];
+  let bodyPick: { carriers: BodyLinkRef[]; rejected: Array<[BodyLinkRef, string]> } = { carriers: [], rejected: [] };
   let lastError: string | undefined;
   for (const method of ['HEAD', 'GET'] as const) {
     try {
@@ -1053,7 +1081,9 @@ export async function checkBackLink(input: BackLinkInput): Promise<Provenance> {
       continue;
     }
     try {
-      headRefs = parseHeadLinks(await input.readHead(followed.response, followed.finalUrl)).filter(isSheetLink);
+      const page = await input.readPage(followed.response, followed.finalUrl);
+      headRefs = parseHeadLinks(page.head).filter(isSheetLink);
+      bodyPick = bodyCarriers(page.head + page.body, followed.finalUrl);
     } catch (error) {
       return unattributed(`canonical_url ${canonical} could not be read (${(error as Error).name === 'TimeoutError' || (error as Error).name === 'AbortError' ? 'no response in time' : 'the response could not be read'})`);
     }
@@ -1066,9 +1096,13 @@ export async function checkBackLink(input: BackLinkInput): Promise<Provenance> {
   // A page may declare one sheet per sheet type ("Several Sheets for one
   // page"): condition (b) holds when any of its links, resolved and
   // followed, is the URL the sheet was fetched from.
-  const chosen = headerRefs.length > 0 ? headerRefs : headRefs;
-  const carrier = headerRefs.length > 0 ? 'Link header' : 'page head';
-  if (chosen.length === 0) return unattributed(`${pageUrl} declares no sheet`);
+  const chosen: LinkRef[] = headerRefs.length > 0 ? headerRefs : headRefs.length > 0 ? headRefs : bodyPick.carriers;
+  const carrier = headerRefs.length > 0 ? 'Link header' : headRefs.length > 0 ? 'page head' : 'page body';
+  if (chosen.length === 0) {
+    return unattributed(bodyPick.rejected.length > 0
+      ? `${pageUrl} declares no sheet in its Link header or head, and its body link is not a carrier: ${bodyPick.rejected.map(([ref, why]) => `${resolve(ref.href, pageUrl) ?? ref.href} (${why})`).join('; ')}`
+      : `${pageUrl} declares no sheet`);
+  }
   const declaredUrls: string[] = [];
   let lastProblem: string | undefined;
   for (const ref of chosen) {
