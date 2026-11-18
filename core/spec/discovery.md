@@ -97,7 +97,7 @@ A consumer can hold a Sheet it did not reach through a declaration: a search ind
 **Attribution (normative).** A Sheet is the statement of the origin of its `canonical_url` only when one of these holds:
 
 - (a) the consumer reached the Sheet through a declaration from that origin: a page-based carrier under "Page-based carriers", or an entry-point carrier under "Entry point", a delegation by DNS included; or
-- (b) the consumer fetches `canonical_url`, following redirects, and finds a `Link` header or a `<link>` element with `rel="alternate"` and `type="application/pagefront+json"` whose target, resolved against the page and followed through the Sheet's own redirects, is exactly the URL the consumer fetched the Sheet from.
+- (b) the consumer fetches `canonical_url`, following redirects, and finds a `Link` header or a `<link>` element with `rel="alternate"` and `type="application/pagefront+json"`, or an `<a>` element in the page body with `rel="alternate"` and `type="application/pagefront+json"`, provided its `href` is on the page's origin and its `rel` contains none of `ugc`, `nofollow`, `sponsored`, whose target, resolved against the page and followed through the Sheet's own redirects, is exactly the URL the consumer fetched the Sheet from. Where a head `<link>` or `Link` header is present, it is the attributing declaration; a body `<a>` attributes a Sheet only on a page that carries neither. The body may carry content the publisher did not write; the origin and `rel` conditions exclude links added by users or sanitisers.
 
 A HEAD request on the canonical page satisfies (b) when the header is present, as under "Selection".
 

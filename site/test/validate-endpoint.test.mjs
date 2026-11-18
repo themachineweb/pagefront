@@ -369,7 +369,7 @@ function publisher() {
   const REVIEW_PROFILE = "https://themachineweb.org/pagefront/spec/commerce/review/v0.1.0.json";
   const page = (links, extraHead = "", body = "") => `<!doctype html><html><head><title>Anorak</title>${links}${extraHead}</head><body><h1>Anorak</h1>${body}</body></html>`;
   const canonical = (href) => `<link rel="canonical" href="${href}">`;
-  const bodyLink = (href, text = "Product data") => `<p class="pagefront-data"><a rel="alternate" type="${SHEET_TYPE}" href="${href}">${text}</a></p>`;
+  const bodyLink = (href, text = "Product data", rel = "alternate") => `<p class="pagefront-data"><a rel="${rel}" type="${SHEET_TYPE}" href="${href}">${text}</a></p>`;
 
   // name → { html?, headers?, status?, location?, sheet?, sheetHeaders? }
   const scenarios = {
@@ -399,6 +399,11 @@ function publisher() {
     // The optional body link ("Body link" in Discovery): beside the head link, pointing elsewhere, and without text.
     "body-link": (p) => ({ html: page(element(`${base}/sheets${p}.json`), "", bodyLink(`${base}/sheets${p}.json`)) }),
     "body-link-differs": (p) => ({ html: page(element(`${base}/sheets${p}.json`), "", bodyLink(`${base}/sheets${p}-other.json`)) }),
+    // Not a carrier: rel says the publisher does not vouch for the anchor, or the href leaves the origin.
+    "body-link-ugc": (p) => ({ html: page(element(`${base}/sheets${p}.json`), "", bodyLink(`${base}/sheets${p}.json`, "Product data", "alternate ugc")) }),
+    "body-link-nofollow": (p) => ({ html: page(element(`${base}/sheets${p}.json`), "", bodyLink(`${base}/sheets${p}.json`, "Product data", "nofollow alternate")) }),
+    "body-link-sponsored": (p) => ({ html: page(element(`${base}/sheets${p}.json`), "", bodyLink(`${base}/sheets${p}.json`, "Product data", "alternate sponsored")) }),
+    "body-link-off-origin": (p) => ({ html: page(element(`${base}/sheets${p}.json`), "", bodyLink(`https://elsewhere.example/sheets${p}.json`)) }),
     "body-link-empty": (p) => ({ html: page(element(`${base}/sheets${p}.json`), "", bodyLink(`${base}/sheets${p}.json`, "")) }),
     "ct-other": (p) => ({ html: page(element(`${base}/sheets${p}.json`)), sheetHeaders: { "content-type": "text/plain" } }),
     "no-cors": (p) => ({ html: page(element(`${base}/sheets${p}.json`)), sheetHeaders: { "access-control-allow-origin": null } }),
@@ -585,6 +590,14 @@ test("page check: the hop (status, redirects, Content-Type, size, robots, CORS)"
     const empty = line((await check("body-link-empty")).hop, "Body link");
     assert.equal(empty.status, "warning");
     assert.equal(empty.detail, "Body link has no text; text extractors discard empty anchors.");
+    for (const [name, why] of [["ugc", "rel contains ugc"], ["nofollow", "rel contains nofollow"], ["sponsored", "rel contains sponsored"]]) {
+      const rejected = line((await check(`body-link-${name}`)).hop, "Body link");
+      assert.equal(rejected.status, "info", name);
+      assert.equal(rejected.detail, `not a carrier: ${base}/sheets/page/body-link-${name}.json (${why})`);
+    }
+    const offOrigin = line((await check("body-link-off-origin")).hop, "Body link");
+    assert.equal(offOrigin.status, "info");
+    assert.equal(offOrigin.detail, `not a carrier: https://elsewhere.example/sheets/page/body-link-off-origin.json (its href is on https://elsewhere.example, off the page's origin)`);
     assert.equal(line((await check("no-cors")).hop, "Access-Control-Allow-Origin present on the sheet response").status, "warning");
 
     const blocked = await check("robots-blocked");
