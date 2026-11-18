@@ -6,6 +6,7 @@ The history of [`review.md`](review.md). Changes land under "Unreleased" and are
 
 Changes land here and are versioned at the next release; see "Releasing" in [`../../CONTRIBUTING.md`](../../CONTRIBUTING.md).
 
+- **Editorial: the "Open questions" section is removed.** Its six questions were each resolved in the draft and struck through; the sections they point at carry the decisions. No requirement changes.
 ### 0.1.0 — 2026-11-17
 
 Released in commerce release 0.6.0, the first release that bundles this sheet spec; ratified from the draft of the same day.

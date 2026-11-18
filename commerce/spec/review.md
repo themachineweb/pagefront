@@ -271,17 +271,6 @@ Review `@id` is the exact-string identity key, as everywhere in the format. A pr
 - **Reviews of reviews.** `interactionStatistic` is a count. Replies to replies, flags and reports are out of scope.
 - **Expert and editorial reviews.** `Review` objects whose author is a publication or the merchant are a different trust class and belong elsewhere; this sheet is consumer reviews. A review with `author` an `Organization` is an error. Check: REV-E-010.
 
-## Open questions
-
-1. ~~**Pagination.**~~ Resolved 2026-11-17: none. The sheet is exhaustive. See "Size and ordering".
-2. ~~**Translation.**~~ Resolved 2026-11-17: originals only; translations are not carried. See "Language".
-3. ~~**Aspect vocabulary.**~~ Resolved 2026-11-17: the closed list stays at the cross-vertical aspects; vertical-specific aspects go in free-text `reviewAspect`. See "Aspects".
-4. ~~**Rating-only reviews.**~~ Resolved 2026-11-17: carried; they count toward `ratingCount` and are left out of `reviewCount`. See "Size and ordering".
-5. ~~**Variant attribution on a ProductGroup.**~~ Resolved 2026-11-17: reviews attach to the `ProductGroup`; variant sheets defer to the group's review sheet; `itemReviewed` is the variant bought, from order data only. See "Subject granularity".
-6. ~~**Seller reviews across products.**~~ Resolved 2026-11-17: the Organization Sheet has its own review sheet; its `aggregateRating` is computed over that sheet; seller-subject reviews on product pages stay where published and MAY be duplicated under the same `@id`. See "The Organization review sheet".
-
-No open questions remain at draft 0.1.0. New ones are added here as they surface.
-
 ## Linter rules
 
 Codes are reserved here and defined under "Commerce Review Sheet rules" in [`rules.md`](rules.md), with their fixtures; the two lists are kept identical.
