@@ -68,8 +68,9 @@
 	Content-Type: text/markdown; charset=utf-8
 
 # The case studies' sheets are Pagefront sheets served from this domain:
-# the sheet media type (the discovery link's type), with open CORS as the
-# spec's serving note asks of every publisher.
+# application/json, as "Serving" in core/spec/discovery.md recommends (the
+# sheet media type application/pagefront+json belongs to the discovery
+# link), with open CORS as the serving note asks of every publisher.
 /pagefront/commerce/case-studies/*.json
-	Content-Type: application/pagefront+json; charset=utf-8
+	Content-Type: application/json; charset=utf-8
 	Access-Control-Allow-Origin: *
