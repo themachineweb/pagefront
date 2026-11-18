@@ -233,6 +233,11 @@ const UNLISTED = new Set(
  * as the landing page inlines its layers diagram. Raw HTML reaches rehype as
  * `raw` nodes (Astro parses them after the plugins run), so the marker is
  * replaced in the node's text. A name with no SVG fails the build.
+ *
+ * Several diagrams on one page share one HTML document, so their <style>
+ * blocks cascade across each other. Each SVG carries its file name as a
+ * class on its root and prefixes every selector with it, so a rule in one
+ * diagram reaches no text in another.
  */
 const DIAGRAM = /<!-- diagram: ([a-z0-9-]+) -->/g;
 
