@@ -180,7 +180,10 @@ see.
    ("Body link" in Discovery) as the Check does: present or absent is
    information, since the body link is optional; a body link that names
    another sheet than the head's declaration, or has no text, is a
-   warning (link), reported with the Check's own words.
+   warning (link), reported with the Check's own words. Its companion
+   line, "Body link survives main-content extraction", is a warning
+   (link) when extraction drops the link, reported with the Check's
+   remediation; a pass needs no mention.
    A page whose platform's section says it cannot declare a sheet: run the
    Check on the sheet's address instead, and report the page's missing
    declaration once, not as a failure.
