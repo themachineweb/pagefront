@@ -4,6 +4,12 @@ The prompt set's own semver; see "Versioning" in [`README.md`](README.md).
 
 ## Unreleased
 
+## 1.24.0 — 2026-11-19
+
+For commerce release 0.6.0.
+
+- **Link: the body link moves into the description.** The link phase prints the body link as one sentence closing the page's description, `Full specifications, materials and care for this product are published as <a rel="alternate" type="application/pagefront+json" href="…">Product data (JSON)</a>.`: readers that extract a page's main content keep anchors in running text and drop footers, navigation and link-only paragraphs (the placement note under "Body link" in Pagefront Discovery). WooCommerce: a `the_content` filter on singular pages in the main loop appends the sentence inside the description's container, the stored description untouched; a product category gets it through `woocommerce_archive_description` right after the term's description; the footer hook is gone. Shopify: one file, `pagefront-body.txt`, pasted after the line that prints the description in each section file that does, under the same metafield guard; the block before `</body>` is gone. The sentence, with the anchor's place marked, replaces the bare text as what the merchant may change; CHECKS 1 looks for the anchor inside the description, in a sentence. Minor: what the prompt produces changes.
+
 ## 1.23.0 — 2026-11-18
 
 For commerce release 0.6.0.

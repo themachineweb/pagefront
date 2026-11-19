@@ -18,13 +18,23 @@
 - **The code**: a Code Snippets snippet, the file `pagefront-link-snippet.txt`:
   plain PHP for the shop's WordPress version, no opening tag, names
   prefixed `pagefront_`, short comments, three constants at the top,
-  written by you: the root's address, the body link's text (`Product
-  data`), and whether the body link is printed (on); the merchant
-  changes the text or turns the body link off there.
+  written by you: the root's address, the body link's sentence (the one
+  in "The body link", with `%s` where the anchor goes, the anchor's text
+  `Product data (JSON)`), and whether the body link is printed (on); the
+  merchant changes the sentence or turns the body link off there.
   - On a product, page or product category whose field is set (rule 4):
-    the `<link>` element in `<head>` (`wp_head`), the body link
-    `<p class="pagefront-data"><a rel="alternate" type="application/pagefront+json" href="…">Product data</a></p>`
-    after the theme's footer (`wp_footer`), its `href` escaped, and the `Link` header
+    the `<link>` element in `<head>` (`wp_head`); the body link, one
+    sentence closing the description,
+    `<p class="pagefront-data">Full specifications, materials and care for this product are published as <a rel="alternate" type="application/pagefront+json" href="…">Product data (JSON)</a>.</p>`,
+    its `href` escaped: on a product or a page through the `the_content`
+    filter at priority 20 (after `wpautop`), only when `is_singular()`,
+    `is_main_query()` and `in_the_loop()` hold, so the stored description
+    stays as written and the sentence prints inside the description's own
+    container; on a product category through the
+    `woocommerce_archive_description` action at priority 11, right after
+    the term's description (the description's own `_raw` filter passes
+    through `wp_kses_post`, which strips `type` from `<a>`, so the anchor
+    cannot go through it); and the `Link` header
     `<address>; rel="alternate"; type="application/pagefront+json"`
     (`template_redirect` at priority 11, after WordPress's canonical
     redirect, so a `301` never carries it; it runs on `HEAD` too, while

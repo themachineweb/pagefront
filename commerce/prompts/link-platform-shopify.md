@@ -19,17 +19,25 @@
   Collections and Pages: name "Pagefront sheet", namespace and key
   `custom.pagefront_sheet`, type URL (not Link), one value, Storefront
   API access on.
-- **The code**: two blocks for the theme's `layout/theme.liquid`. The
-  file `pagefront-theme-link.txt`, pasted just before `</head>`: by
+- **The code**: two blocks. The file `pagefront-theme-link.txt`, pasted
+  into the theme's `layout/theme.liquid` just before `</head>`: by
   `request.page_type` (`product`, `collection`, `page`), it reads that
   object's `metafields.custom.pagefront_sheet.value` and, if not blank and
   under the sheet path (rule 4), prints the `<link>` element, its `href`
-  escaped. The file `pagefront-theme-body.txt`, pasted just before
-  `</body>`: the same guard on the same metafield, printing the body link
-  `<p class="pagefront-data"><a rel="alternate" type="application/pagefront+json" href="…">Product data</a></p>`,
-  the text in a Liquid `assign` at its top, which the merchant may change;
-  a merchant who wants no body link leaves this second block out. Short
-  Liquid comments; nothing else.
+  escaped. The file `pagefront-body.txt`, pasted in the theme's Sections on
+  a new line right after the line that prints the description, inside the
+  same container, in each of the three files that print one
+  (`{{ product.description }}`, `{{ collection.description }}`,
+  `{{ page.content }}`): the same guard on the same metafield, by
+  `request.page_type` too, so one file serves all three, printing the body
+  link as one sentence,
+  `<p class="pagefront-data">Full specifications, materials and care for this product are published as <a rel="alternate" type="application/pagefront+json" href="…">Product data (JSON)</a>.</p>`,
+  the sentence in a Liquid `assign` at its top with `[link]` where the
+  anchor goes (`replace` puts it in), which the merchant may change; a
+  merchant who wants no body link leaves this second file out. Where a
+  theme prints the description under a setting (a collection's "show
+  description"), the body link follows that setting. Short Liquid
+  comments; nothing else.
 - **Sign the code runs**: none until a field is filled; the code step has
   no check.
 - **What Shopify cannot do**, said plainly in the report: a theme sets no
@@ -69,10 +77,15 @@
      themes": leave it. Then the top card's three dots again › "Edit code";
      it opens in its own browser tab, filling the window. In Layout,
      `theme.liquid`; paste all of `pagefront-theme-link.txt` on a new line
-     just above `</head>`, and all of `pagefront-theme-body.txt` on a new
-     line just above `</body>` (or leave that one out: then the pages carry
-     the head link alone); "Save" (top right). Then close that browser tab,
-     back to the admin: the editor's own ⚙ settings are not Shopify's.
+     just above `</head>`; "Save" (top right). Then the body link: the
+     editor's search box, top left, finds the file in Sections whose line
+     reads `{{ product.description }}`; paste all of `pagefront-body.txt`
+     on a new line just after that line, inside the same `<div>`; "Save".
+     The same for the file whose line reads `{{ collection.description }}`
+     and the one whose line reads `{{ page.content }}`. (Or leave the body
+     link out: then the pages carry the head link alone.) Then close that
+     browser tab, back to the admin: the editor's own ⚙ settings are not
+     Shopify's.
   3. A product, collection or page: open it; in the Metafields section,
      next to "Pagefront sheet", "+ Add" (or "View all" if it is not
      listed); paste the address; "Save".
@@ -83,7 +96,7 @@
      which `/.well-known/pagefront` does on a Shopify store.
 - **What stays the merchant's** (report): a theme update can drop code
   edits ("Theme added: code edits could not be included"); after one,
-  paste the blocks again. A new theme needs the blocks too. When the root
+  paste both files again. A new theme needs them too. When the root
   sheet's address changes, edit the redirect (Content › Menus › "View URL
   Redirects", the redirect's row), and the old target can answer for some
   hours after the save; a redirect deleted there removes the

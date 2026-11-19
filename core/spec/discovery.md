@@ -43,7 +43,7 @@ Link: <https://merchant.example/api/sheets/anorak.en.json>;
    href="https://merchant.example/api/sheets/anorak.en.json">Product data</a>
 ```
 
-The anchor MUST have non-empty text content: readers that extract page text keep body anchors and discard empty ones, the head and the response headers. The head `<link>` remains the recommended carrier; the body link is an addition for consumers that read extracted text rather than the document. The link text is the publisher's choice.
+The anchor MUST have non-empty text content: readers that extract page text keep body anchors and discard empty ones, the head and the response headers. The head `<link>` remains the recommended carrier; the body link is an addition for consumers that read extracted text rather than the document. The link text is the publisher's choice. Non-normative placement note: readers that extract a page's main content keep anchors that sit within that content, in running text, and discard anchors in footers, navigation and link-only paragraphs.
 
 **Media type.** The sheet's media type is `application/pagefront+json`. A page carries other `alternate` links, such as feeds and embeds, and where a page has no `Link` header the `type` attribute is the one selector a consumer has; `application/json` would leave the sheet indistinguishable from any other JSON alternate.
 
