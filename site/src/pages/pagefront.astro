@@ -49,6 +49,7 @@ const canonical = 'https://themachineweb.org/pagefront';
       <h1>Pagefront</h1>
       <p class="spec-cta">
         <a href={LINKS.spec}>Read the spec docs <span aria-hidden="true">&rarr;</span></a>
+        <a href={LINKS.publish}>Publish a sheet <span aria-hidden="true">&rarr;</span></a>
       </p>
     </div>
     <p>
@@ -253,17 +254,19 @@ const canonical = 'https://themachineweb.org/pagefront';
 
   /* ---- spec call-to-action ---------------------------------------- */
 
-  /* The one solid element on the page: the spec is the section's main
-     destination and the masthead nav alone was too easy to miss. It sits
-     on the title row, against the right edge of the measure; the row
-     wraps on narrow screens and the pill drops under the title. */
+  /* The solid elements on the page: the spec is the section's main
+     destination and the masthead nav alone was too easy to miss, and the
+     publishing guide had no link above the benefits tabs, where readers
+     missed it. The two pills sit on the title row, against the right edge
+     of the measure; the row wraps on narrow screens and the pills drop
+     under the title. */
   .frame-head{
     display:flex; align-items:center; justify-content:space-between;
     flex-wrap:wrap; gap:.75rem 1.5rem;
     margin:0 0 clamp(1.5rem,3vw,2.25rem);
   }
   .frame-head h1{ margin:0; }
-  .section-page .spec-cta{ margin:0; }
+  .section-page .spec-cta{ margin:0; display:flex; flex-wrap:wrap; gap:.6rem .75rem; }
   /* .spec-cta a: the global `.wide a` underline rule is (0,1,1); the
      scoped attributes make this (0,3,1) and it wins. The benefits
      section's closing link wears the same pill. */
