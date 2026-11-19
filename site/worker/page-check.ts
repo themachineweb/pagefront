@@ -17,6 +17,12 @@
  * sheet URL: every URL fetched is one the page declared.
  */
 import { buildResult, canonicalHostOf, type Provenance, type RenderModel } from '../src/lib/validate-model.ts';
+// The main-content extractor the body link is tested against: Mozilla's
+// Readability, the library the reference fetch servers run over a page,
+// on a DOM built without a browser (linkedom's worker build, which has no
+// Node dependency, so it bundles for the Worker).
+import { parseHTML } from 'linkedom/worker';
+import { Readability } from '@mozilla/readability';
 
 export const SHEET_MEDIA_TYPE = 'application/pagefront+json';
 export const MAX_REDIRECTS = 3;
@@ -191,6 +197,28 @@ export function bodyCarriers(html: string, pageUrl: string): { carriers: BodyLin
     if (why === undefined) carriers.push(ref); else rejected.push([ref, why]);
   }
   return { carriers, rejected };
+}
+
+/**
+ * Whether a body link survives main-content extraction ("Body link" in
+ * core/spec/discovery.md, the placement note): the page is run through
+ * Readability and the extracted content searched for an anchor of the
+ * sheet type resolving to the body link's URL. Extractors keep anchors
+ * that sit in the main content, in running text, and drop footers,
+ * navigation and link-only paragraphs, which is where a body link goes
+ * missing for readers that take only that content. Undefined when the
+ * page cannot be parsed.
+ */
+export function survivesExtraction(html: string, pageUrl: string, sheetUrl: string): boolean | undefined {
+  let content: string | null | undefined;
+  try {
+    const { document } = parseHTML(html);
+    content = new Readability(document).parse()?.content;
+  } catch {
+    return undefined;
+  }
+  if (!content) return false;
+  return parseBodyLinks(`<body>${content}</body>`).filter(isSheetLink).some((ref) => resolve(ref.href, pageUrl) === sheetUrl);
 }
 
 const relTokens = (ref: LinkRef): string[] => (ref.params.rel ?? '').toLowerCase().split(/\s+/).filter(Boolean);
@@ -618,7 +646,8 @@ export async function checkPage(input: PageCheckInput): Promise<PageCheck> {
   // The body link ("Body link" in core/spec/discovery.md): the third
   // carrier, read after the header and the head; it declares the sheet
   // only on a page that carries neither.
-  const bodyPick = entry ? { carriers: [] as BodyLinkRef[], rejected: [] as Array<[BodyLinkRef, string]> } : bodyCarriers(input.body === undefined ? head : head + input.body, finalUrl);
+  const pageHtml = input.body === undefined ? head : head + input.body;
+  const bodyPick = entry ? { carriers: [] as BodyLinkRef[], rejected: [] as Array<[BodyLinkRef, string]> } : bodyCarriers(pageHtml, finalUrl);
   const bodyCarrier = bodyPick.carriers[0];
   const bodyUrl = bodyCarrier ? resolve(bodyCarrier.href, finalUrl) : undefined;
   const bodyOnly = headerSheet.length === 0 && headSheet.length === 0 && bodyCarrier !== undefined;
@@ -806,6 +835,26 @@ export async function checkPage(input: PageCheckInput): Promise<PageCheck> {
         hop.push(info('Body link', declaredUrl
           ? `present: ${bodyUrl}, text "${bodyRef.text}"${count}`
           : `present: ${bodyUrl}, text "${bodyRef.text}"; the page's declaration, since neither the Link header nor the head declares a sheet${count}`));
+      }
+      // The sub-check: a body link is for readers that take a page's
+      // extracted text, so it has to be in the part of the page an
+      // extractor keeps. A page cut at the cap is not run: the extractor
+      // would judge a fragment.
+      if (bodyUrl !== undefined) {
+        const EXTRACTION = 'Body link survives main-content extraction';
+        const kept = input.bodyComplete === false ? undefined : survivesExtraction(pageHtml, finalUrl, bodyUrl);
+        if (kept === undefined) {
+          hop.push(info(EXTRACTION, input.bodyComplete === false ? "not checked: the page was not read past the endpoint's cap" : 'not checked: the page could not be parsed'));
+        } else if (kept) {
+          hop.push(pass(EXTRACTION, `${bodyUrl} is kept when the page is reduced to its main content`));
+        } else {
+          hop.push({
+            check: EXTRACTION,
+            status: 'warning',
+            detail: `Body link at ${finalUrl} is dropped by main-content extraction; readers that keep only the page's main content will not see it.`,
+            remediation: 'Place the link inside the product description, as a sentence, not in the footer or as a paragraph on its own.',
+          });
+        }
       }
     }
   }

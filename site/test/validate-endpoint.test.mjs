@@ -394,6 +394,9 @@ function publisher() {
   const page = (links, extraHead = "", body = "") => `<!doctype html><html><head><title>Anorak</title>${links}${extraHead}</head><body><h1>Anorak</h1>${body}</body></html>`;
   const canonical = (href) => `<link rel="canonical" href="${href}">`;
   const bodyLink = (href, text = "Product data", rel = "alternate") => `<p class="pagefront-data"><a rel="${rel}" type="${SHEET_TYPE}" href="${href}">${text}</a></p>`;
+  // A product page with enough prose for main-content extraction to find its main content; the body link goes in the footer or in the description.
+  const anchor = (href, text = "Product data (JSON)") => `<a rel="alternate" type="${SHEET_TYPE}" href="${href}">${text}</a>`;
+  const productPage = (links, { footer = "", description = "" } = {}) => `<!doctype html><html><head><title>Anorak</title>${links}</head><body><header><nav><a href="/">Home</a> <a href="/shop">Shop</a> <a href="/about">About</a></nav></header><main><h1>Anorak</h1><div class="product-description"><p>The anorak is cut from a three-layer waterproof fabric with taped seams and a two-way front zip. The hood adjusts with a single pull at the back and the hem with a drawcord. Two hand pockets close with zips and an inside pocket takes a phone.</p><p>Wash at 30 degrees, reproof after ten washes, and do not tumble dry. The shell is made from fabric woven to the merchant's own specification.</p><p>Available in four colours and sizes from XS to XXL. The fit is regular with room for a mid layer.</p>${description}</div><p class="price">240.00</p></main><footer><p>Terms of sale</p>${footer}</footer></body></html>`;
 
   // name → { html?, headers?, status?, location?, sheet?, sheetHeaders? }
   const scenarios = {
@@ -431,6 +434,10 @@ function publisher() {
     // A page with the body link alone: it declares the sheet, which attributes; the head line warns.
     "body-only": (p) => ({ html: page("", "", bodyLink(`${base}/sheets${p}.json`)) }),
     "body-link-empty": (p) => ({ html: page(element(`${base}/sheets${p}.json`), "", bodyLink(`${base}/sheets${p}.json`, "")) }),
+    // Where the body link sits decides whether main-content extraction keeps it: a footer is dropped; a sentence closing the description is kept; a link-only paragraph in the description is kept by Readability, while other extractors drop it.
+    "body-link-footer": (p) => ({ html: productPage(element(`${base}/sheets${p}.json`), { footer: `<p class="pagefront-data">${anchor(`${base}/sheets${p}.json`)}</p>` }) }),
+    "body-link-sentence": (p) => ({ html: productPage(element(`${base}/sheets${p}.json`), { description: `<p>Full specifications, materials and care for this product are published as ${anchor(`${base}/sheets${p}.json`)}.</p>` }) }),
+    "body-link-paragraph": (p) => ({ html: productPage(element(`${base}/sheets${p}.json`), { description: `<p class="pagefront-data">${anchor(`${base}/sheets${p}.json`)}</p>` }) }),
     "ct-other": (p) => ({ html: page(element(`${base}/sheets${p}.json`)), sheetHeaders: { "content-type": "text/plain" } }),
     "no-cors": (p) => ({ html: page(element(`${base}/sheets${p}.json`)), sheetHeaders: { "access-control-allow-origin": null } }),
     "robots-blocked": (p) => ({ html: page(element(`${base}/private${p}.json`)) }),
@@ -632,6 +639,22 @@ test("page check: the hop (status, redirects, Content-Type, size, robots, CORS)"
     const offOrigin = line((await check("body-link-off-origin")).hop, "Body link");
     assert.equal(offOrigin.status, "info");
     assert.equal(offOrigin.detail, `not a carrier: https://elsewhere.example/sheets/page/body-link-off-origin.json (its href is on https://elsewhere.example, off the page's origin)`);
+
+    // The sub-check: the body link survives main-content extraction where it sits in the main content, in running text.
+    const EXTRACTION = "Body link survives main-content extraction";
+    const hasExtraction = (hop) => hop.some((l) => l.check === EXTRACTION);
+    assert.equal(hasExtraction(both.hop), false, "no body link, no sub-check");
+    assert.equal(hasExtraction((await check("body-link-off-origin")).hop), false, "an anchor that is not a carrier gets no sub-check");
+    const footer = line((await check("body-link-footer")).hop, EXTRACTION);
+    assert.equal(footer.status, "warning");
+    assert.equal(footer.detail, `Body link at ${base}/page/body-link-footer is dropped by main-content extraction; readers that keep only the page's main content will not see it.`);
+    assert.equal(footer.remediation, "Place the link inside the product description, as a sentence, not in the footer or as a paragraph on its own.");
+    assert.equal(line((await check("body-link-footer")).hop, "Body link").status, "info", "the Body link line itself still reports the link as present");
+    const sentence = line((await check("body-link-sentence")).hop, EXTRACTION);
+    assert.equal(sentence.status, "pass");
+    assert.equal(sentence.detail, `${base}/sheets/page/body-link-sentence.json is kept when the page is reduced to its main content`);
+    // Readability keeps a link-only paragraph inside the description; other extractors drop it. The assertion follows Readability.
+    assert.equal(line((await check("body-link-paragraph")).hop, EXTRACTION).status, "pass");
     assert.equal(line((await check("no-cors")).hop, "Access-Control-Allow-Origin present on the sheet response").status, "warning");
 
     const blocked = await check("robots-blocked");

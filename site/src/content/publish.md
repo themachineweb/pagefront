@@ -175,18 +175,23 @@ cannot edit headers.
 **A link in the page body.** The head `<link>` reaches machines that read
 the document. Some readers see only a page's extracted text, where the head
 and the response headers are gone and the body's links remain. For them the
-page may also carry a visible link in its body, with any text you like:
+page may also carry a visible link in its body, as a sentence at the end of
+the product description:
 
 ```html
+<p>Full specifications, materials and care for this product are published as
 <a rel="alternate" type="application/pagefront+json"
-   href="https://your-shop.example/product/anorak.en.json">Product data</a>
+   href="https://your-shop.example/product/anorak.en.json">Product data (JSON)</a>.</p>
 ```
 
-It is optional, and it points at the same sheet as the head link. Search
-crawlers follow it too, which gets the sheet's address indexed. Sites did
-the same for feeds: an RSS link in the footer beside the one in the head.
-The prompts print it beside the head link, from the same field; you may
-change its text or leave it out.
+It is optional, and it points at the same sheet as the head link. It sits
+inside the description, in running text, because readers that extract a
+page's main content keep the anchors in that text and drop footers,
+navigation and paragraphs that hold a link alone. Search crawlers follow it
+too, which gets the sheet's address indexed. The prompts print it at the end
+of the description, from the same field as the head link; you may change
+the sentence or leave it out. The Check reports whether the link survives
+main-content extraction.
 
 The prompt for your platform walks you through it: one piece of code, pasted
 once, that prints the link on every page whose field is set, then each

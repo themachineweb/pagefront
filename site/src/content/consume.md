@@ -3,6 +3,9 @@
 Reading a sheet takes two requests and no permission. You fetch a page you were
 going to fetch anyway, follow one link in it, and get a few kilobytes of typed
 JSON. There is no key to obtain, no account to register, and nobody to ask.
+Common open page readers return a few hundred characters of a product page,
+with no price, no identifier and no brand, which is why the sheet is where an
+agent finds the facts.
 
 Where there is no link, there is no sheet, and nothing about your existing
 pipeline changes.

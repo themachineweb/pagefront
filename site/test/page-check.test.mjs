@@ -5,7 +5,7 @@
  */
 import test from "node:test";
 import assert from "node:assert/strict";
-import { parseLinkHeader, parseHeadLinks, parseBodyLinks, isSheetLink, robotsAllows, robotsPagefrontLine, txtRecordValue } from "../worker/page-check.ts";
+import { parseLinkHeader, parseHeadLinks, parseBodyLinks, isSheetLink, survivesExtraction, robotsAllows, robotsPagefrontLine, txtRecordValue } from "../worker/page-check.ts";
 
 test("Link header: several links, quoted parameters, commas inside <> and quotes", () => {
   const refs = parseLinkHeader(
@@ -51,6 +51,31 @@ test("body links: anchors after the head with their text, tags stripped; anchors
   assert.deepEqual(refs.map((r) => [r.href, r.text]), [["/about", "About us"], ["https://m.example/s.json", "Product data"], ["/empty.json", ""]]);
   assert.equal(refs.filter(isSheetLink).length, 2);
   assert.deepEqual(parseBodyLinks("<html><head><a href=\"/x\">x</a></head></html>"), []);
+});
+
+// A product page with enough prose for an extractor to find its main
+// content: header and navigation, a description of three paragraphs, a
+// price, a footer. The body link goes in one of three places.
+const productPage = ({ footer = "", description = "" } = {}) => `<!doctype html><html><head><title>Anorak</title>
+  <link rel="alternate" type="application/pagefront+json" href="https://m.example/sheets/anorak.en.json"></head>
+  <body><header><nav><a href="/">Home</a> <a href="/shop">Shop</a> <a href="/about">About</a></nav></header>
+  <main><h1>Anorak</h1><div class="product-description">
+    <p>The anorak is cut from a three-layer waterproof fabric with taped seams and a two-way front zip. The hood adjusts with a single pull at the back and the hem with a drawcord. Two hand pockets close with zips and an inside pocket takes a phone.</p>
+    <p>Wash at 30 degrees, reproof after ten washes, and do not tumble dry. The shell is made from fabric woven to the merchant's own specification.</p>
+    <p>Available in four colours and sizes from XS to XXL. The fit is regular with room for a mid layer.</p>
+    ${description}
+  </div><p class="price">240.00</p></main>
+  <footer><p>Terms of sale</p>${footer}</footer></body></html>`;
+const sheetAnchor = (text = "Product data (JSON)") => `<a rel="alternate" type="application/pagefront+json" href="/sheets/anorak.en.json">${text}</a>`;
+const PAGE = "https://m.example/product/anorak";
+const SHEET = "https://m.example/sheets/anorak.en.json";
+
+test("body link extraction: a footer link is dropped, a sentence closing the description is kept, and a link-only paragraph in the description is kept by Readability (other extractors drop it)", () => {
+  assert.equal(survivesExtraction(productPage({ footer: `<p class="pagefront-data">${sheetAnchor()}</p>` }), PAGE, SHEET), false);
+  assert.equal(survivesExtraction(productPage({ description: `<p>Full specifications, materials and care for this product are published as ${sheetAnchor()}.</p>` }), PAGE, SHEET), true);
+  assert.equal(survivesExtraction(productPage({ description: `<p class="pagefront-data">${sheetAnchor()}</p>` }), PAGE, SHEET), true);
+  // An anchor of another sheet in the kept content does not stand in for the body link.
+  assert.equal(survivesExtraction(productPage({ description: `<p>See <a rel="alternate" type="application/pagefront+json" href="/sheets/other.json">other</a>.</p>` }), PAGE, SHEET), false);
 });
 
 test("sheet-link selection: rel and type together, case-insensitive, parameters on the type ignored", () => {
