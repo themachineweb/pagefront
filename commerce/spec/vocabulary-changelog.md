@@ -6,6 +6,8 @@ The history of [`vocabulary.md`](vocabulary.md). Changes land under "Unreleased"
 
 Changes land here and are versioned at the next release; see "Releasing" in [`../../CONTRIBUTING.md`](../../CONTRIBUTING.md).
 
+- **Editorial: a cross-sheet provenance principle.** "Design principles" gains a fifth entry, "Provenance is declared, never implied", stating once the two rules the sheet specs each apply: a value is a merchant statement only when it comes from the merchant, authored or platform-served, as "Merchant statements" in [`product.md`](product.md) states in full; and a source declaration is a closed enum with `undisclosed` as a member, absence an error and never read as "none", as "Undisclosed and unclassified are statements" in [`review.md`](review.md) applies to the three review provenance declarations. Each of those two sections gains one sentence pointing back here. No term, enum or schema changes.
+
 ### 0.6.0 — 2026-11-17
 
 The vocabulary of commerce release 0.6.0. Eleven terms are added, `pagefront:checkoutHosts` and the ten Commerce Review Sheet terms; nothing is renamed or removed.
