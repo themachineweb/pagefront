@@ -168,6 +168,8 @@ The subject declaration takes `unclassified` where the provenance declarations t
 
 **The minimum entry** is `@id`, `datePublished`, `reviewRating`, and the four declarations as `undisclosed`, `undisclosed`, `undisclosed`, `unclassified`. It is conformant, it contributes to no product aggregate, and it tells a consumer exactly what it is. Messy sets are the common case, and the format carries them without pretending otherwise.
 
+This is the review sheet's instance of the cross-sheet rule stated under "Provenance is declared, never implied" in [`vocabulary.md`](vocabulary.md#design-principles).
+
 ## Scoping the aggregate
 
 A Product Sheet's `aggregateRating` SHOULD be computed over reviews whose `pagefront:reviewSubject` is `product` only. `mixed` reviews are excluded from the product aggregate unless the publisher has a product-side `pagefront:aspect` rating for them, in which case that rating MAY be used. `unclassified` reviews are excluded from the product aggregate. Seller-subject reviews contribute to `aggregateRating` on the Organization Sheet and nowhere else.

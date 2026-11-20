@@ -35,6 +35,11 @@ The JSON-LD context for the vocabulary is the block under "JSON-LD Context" belo
 - **Closed enums where the set is bounded.** Image roles, material provenance categories, gemstone origins, promotion scopes, and review provenance declarations are closed enums. Stages and aftermarket services are open vocabularies because they vary by category.
 - **Composition over inheritance.** Pagefront types are flat objects with properties; they do not subclass Schema.org types. This keeps the vocabulary easy to read and easy to validate.
 - **Stable IRIs.** Once a term is published in this vocabulary, its IRI does not change. Deprecation is preferred over renaming.
+- **Provenance is declared, never implied.** Every value a sheet carries has a source, and the source is part of the statement. Two rules hold across every Pagefront sheet.
+  - **A value is a merchant statement only when it comes from the merchant.** Either the merchant authored it (its page, its dashboard, a sheet it wrote) or the merchant's own storefront serves it through a feed or protocol the merchant has enabled or accepted, including one its platform turns on by default. A value inferred from a pattern, taken from another domain, or composed by a producer is not a merchant statement and MUST NOT be published as one. The Product Sheet states this rule in full under "Merchant statements" in [`product.md`](product.md#merchant-statements).
+  - **Where a sheet carries a source declaration, it is a closed enum with `undisclosed` as a member, and absence is an error.** `undisclosed` means the publisher does not know or will not say. Absence means the publisher said nothing, and a linter flags it. The two are never equivalent: silence can never be read as "none". A producer MUST NOT emit `undisclosed` where it holds the fact. The Commerce Review Sheet applies this to `pagefront:reviewSource.kind`, `pagefront:purchaseVerification` and `pagefront:reviewIncentive`; see "Undisclosed and unclassified are statements" in [`review.md`](review.md#undisclosed-and-unclassified-are-statements). New sheets that declare a source follow the same shape.
+
+  Pagefront certifies nothing. It makes the publisher say what it knows, and makes the absence of a declaration the worst state a value can be in.
 
 ## Types
 

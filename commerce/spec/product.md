@@ -64,6 +64,8 @@ Both are merchant statements, and a field MAY take its value from either unless 
 
 Nothing else is a merchant statement: a value inferred from a pattern, a URL convention or a platform's documentation; a value taken from a page the merchant's domain does not serve, from a third-party aggregator or from another merchant's site; a value the producer composed, computed or remembered. A producer MUST NOT publish such a value as a merchant statement; a field no merchant statement gives is left out.
 
+The principle this section applies is stated once under "Provenance is declared, never implied" in [`vocabulary.md`](vocabulary.md#design-principles).
+
 ### Required and recommended core fields
 
 Required:

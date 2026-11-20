@@ -6,6 +6,7 @@ The history of [`product.md`](product.md). Changes land under "Unreleased" and a
 
 Changes land here and are versioned at the next release; see "Releasing" in [`../../CONTRIBUTING.md`](../../CONTRIBUTING.md).
 
+- **Editorial: "Merchant statements" points at the vocabulary.** One closing sentence names the cross-sheet principle the section applies, "Provenance is declared, never implied" under "Design principles" in [`vocabulary.md`](vocabulary.md). No requirement changes.
 - **Served Content-Type.** Publishers SHOULD serve sheets as `application/json`; see "Serving" in [`../../core/spec/discovery.md`](../../core/spec/discovery.md). The media type `application/pagefront+json` identifies the sheet in the page's declaration and is not required on the response. Consumer rules unchanged. The hosted Check now warns on a served `application/pagefront+json`. No sheet changes shape.
 
 ### 0.12.0 — 2026-11-17

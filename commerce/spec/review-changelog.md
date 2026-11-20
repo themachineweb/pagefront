@@ -6,6 +6,7 @@ The history of [`review.md`](review.md). Changes land under "Unreleased" and are
 
 Changes land here and are versioned at the next release; see "Releasing" in [`../../CONTRIBUTING.md`](../../CONTRIBUTING.md).
 
+- **Editorial: "Undisclosed and unclassified are statements" points at the vocabulary.** One closing sentence names the cross-sheet rule the section is an instance of, "Provenance is declared, never implied" under "Design principles" in [`vocabulary.md`](vocabulary.md). No requirement changes.
 - **Editorial: the "Open questions" section is removed.** Its six questions were each resolved in the draft and struck through; the sections they point at carry the decisions. No requirement changes.
 ### 0.1.0 — 2026-11-17
 
