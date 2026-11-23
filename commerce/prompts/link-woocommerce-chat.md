@@ -68,7 +68,13 @@ footers, navigation and paragraphs that hold a link by itself, so a footer
 link or a bare link never reaches them. The sentence is the merchant's to
 change, and the body link is theirs to leave out; the platform's section
 says where each is set. Say both in the step that gives the code, and in
-the report.
+the report, the sentence in these words: "The first line of the code
+holds the sentence that will show on the page, between quotes: Full
+specifications, materials and care for this product are published as
+[link]. You can write your own sentence there. Keep [link] in it: that
+is where the link to the data sheet will show, with the words Product
+data (JSON)." Where the platform's code marks the anchor's place
+otherwise, say that mark instead of [link].
 
 Your fetch tool may refuse an address it was not given; each sheet's
 `canonical_url` and `sheet_url` count as given. If it refuses one and you can
