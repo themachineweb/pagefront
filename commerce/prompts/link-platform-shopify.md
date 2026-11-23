@@ -25,8 +25,8 @@
   object's `metafields.custom.pagefront_sheet.value` and, if not blank and
   under the sheet path (rule 4), prints the `<link>` element, its `href`
   escaped. The file `pagefront-body.txt`, pasted in the theme editor into
-  a "Custom Liquid" block placed right below the description on the
-  product template, and into a "Custom Liquid" section placed right below
+  a "Custom liquid" block placed right below the description on the
+  product template, and into a "Custom liquid" section placed right below
   the section that prints the description on the collection and the page
   templates, so the body link sits in the page's main content after the
   description: the same guard on the same metafield, by
@@ -65,8 +65,9 @@
 - **Admin, in English, from the documentation; step 1 (Products) and the
   code editor part of step 2 as shown on 2026-11-06, step 4 walked on
   2026-11-10 with the documentation's labels; the theme editor part of
-  step 2 from the documentation and Dawn's labels** (the rest not yet
-  walked):
+  step 2 as shown on 2026-11-23 on Dawn for a product, the collection
+  and page parts from the documentation and Dawn's labels** (the rest not
+  yet walked):
   1. The field, once per kind: in the admin, Settings (the very bottom of
      the left menu) › Metafields and metaobjects ›
      Products (then Collections, then Pages) › "Add definition" (top
@@ -88,24 +89,38 @@
      tab, back to the admin: the editor's own ⚙ settings are not
      Shopify's. Then the body link, in the theme editor: the top card's
      "Edit theme" button. The drop-down in the bar at the top, which reads
-     "Home page" at first, lists the templates: select the product
-     template. In the sidebar on the left, hover the section that holds
-     the description ("Product information" in Dawn), click "Add block",
-     and in "Search blocks" type `Custom Liquid`, then select it. In the
-     new block's settings, paste all of `pagefront-body.txt` into the
-     "Liquid code" field. In the sidebar, drag the block by its handle so
-     that it sits right below "Description". "Save". A shop
-     with more than one product template: the same on each template a
-     product in the list uses. Then the collection template from the same
-     drop-down: in the sidebar, "Add section", in "Search sections" type
-     `Custom Liquid`, select it; paste all of `pagefront-body.txt` into
-     its "Liquid code" field; drag the section so that it sits right
-     below the section that prints the description ("Collection banner"
-     in Dawn); "Save". The same on the page template, below the section
-     that prints the page's content ("Page" in Dawn). (Or leave the body
-     link out: then the pages carry the head link alone.) Where the shop's
-     pages carry no block or section named "Custom Liquid", the body link
-     is left out and the report says so.
+     "Home page" at first, lists the templates: "Products", then the
+     template the products use. A shop that never made a template of its
+     own sees one, "Default product", with "Assigned to N products" under
+     it: that one. More than one listed: a product's own admin screen
+     names its template, under "Theme template"; the same on each template
+     a product in the list uses. In the sidebar on the left, click the
+     section that holds the description ("Product information" in Dawn);
+     it unfolds its blocks, with "Add block" below them: click it, and in
+     "Search blocks" type `Custom liquid`, then select it. The new block's
+     settings open in a panel on the right, with one large field labelled
+     "Custom liquid" (older versions of Dawn label it "Liquid code"):
+     paste all of `pagefront-body.txt` into it. In the sidebar, drag the
+     block by its handle so that it sits right below "Description".
+     "Save". What they should see: in the sidebar, "Custom liquid" listed
+     right below "Description". The large area on the right is the theme
+     editor's preview; it shows one product of that template, which need
+     not be a linked one, so it is no check: the pages are checked at
+     their own addresses (CHECKS). Then the collection template from the
+     same drop-down ("Collections", then the template): in the sidebar,
+     "Add section", in "Search sections" type `Custom liquid`, select it;
+     paste all of `pagefront-body.txt` into its field; drag the section so
+     that it sits right below the section that prints the description
+     ("Collection banner" in Dawn); "Save". The same on the page template
+     ("Pages"), below the section that prints the page's content ("Page"
+     in Dawn). Then back to the admin: the "Exit" button, the first icon
+     at the top left of the editor (pointing at it shows "Exit"). (Or
+     leave the body link out: then the pages carry the head link alone.)
+     The step says, in these words, after the search: "If your theme
+     offers neither a Custom liquid block nor a Custom liquid section,
+     stop here: your pages will keep their head link alone." A merchant
+     who stops there: CHECKS 1 expects no body link, and the report says
+     so.
   3. A product, collection or page: open it; in the Metafields section,
      next to "Pagefront sheet", "+ Add" (or "View all" if it is not
      listed); paste the address; "Save".
@@ -115,7 +130,7 @@
      "Save redirect". Shopify redirects only an address that answers 404,
      which `/.well-known/pagefront` does on a Shopify store.
 - **What stays the merchant's** (report): a theme update carries the
-  theme editor's work over, the "Custom Liquid" blocks and sections with
+  theme editor's work over, the "Custom liquid" blocks and sections with
   it, and can drop code edits ("Theme added: code edits could not be
   included"); after one, paste `pagefront-theme-link.txt` again and check
   the blocks and sections are still there. A new theme needs both files
