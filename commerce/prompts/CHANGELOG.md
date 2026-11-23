@@ -4,6 +4,12 @@ The prompt set's own semver; see "Versioning" in [`README.md`](README.md).
 
 ## Unreleased
 
+## 1.25.0 — 2026-11-23
+
+For commerce release 0.6.0.
+
+- **Link, Shopify: the body link goes in through the theme editor.** `pagefront-body.txt` is pasted into a "Custom Liquid" block placed right below the description on the product template, and into a "Custom Liquid" section placed right below the section that prints the description on the collection and page templates, instead of into three section files found in the code editor. The theme editor's work carries over a theme update, where a code edit can be dropped; a theme with no "Custom Liquid" block or section gets the head link alone, said in the report. The code editor is still opened once, for the head link in `theme.liquid`. CHECKS 1 looks for the anchor in the page's main content, in a sentence at the end of the description. The theme editor part of the step is written from the documentation and Dawn's labels, not yet walked. Minor: what the prompt asks for changes.
+
 ## 1.24.0 — 2026-11-19
 
 For commerce release 0.6.0.

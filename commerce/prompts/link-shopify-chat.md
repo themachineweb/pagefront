@@ -1,6 +1,6 @@
 # Pagefront — link your shop's sheets
 
-- Prompt set 1.24.0, for commerce release 0.6.0.
+- Prompt set 1.25.0, for commerce release 0.6.0.
 - Links the sheets the serve phase put online (commerce release 0.6.0) from the shop's own pages.
 - Pagefront Discovery: https://themachineweb.org/pagefront/spec/core/discovery.md (page: https://themachineweb.org/pagefront/spec/core/discovery)
 
@@ -191,20 +191,25 @@ After the last step: CHECKS, in full.
   `request.page_type` (`product`, `collection`, `page`), it reads that
   object's `metafields.custom.pagefront_sheet.value` and, if not blank and
   under the sheet path (rule 4), prints the `<link>` element, its `href`
-  escaped. The file `pagefront-body.txt`, pasted in the theme's Sections on
-  a new line right after the line that prints the description, inside the
-  same container, in each of the three files that print one
-  (`{{ product.description }}`, `{{ collection.description }}`,
-  `{{ page.content }}`): the same guard on the same metafield, by
+  escaped. The file `pagefront-body.txt`, pasted in the theme editor into
+  a "Custom Liquid" block placed right below the description on the
+  product template, and into a "Custom Liquid" section placed right below
+  the section that prints the description on the collection and the page
+  templates, so the body link sits in the page's main content after the
+  description: the same guard on the same metafield, by
   `request.page_type` too, so one file serves all three, printing the body
   link as one sentence,
   `<p class="pagefront-data">Full specifications, materials and care for this product are published as <a rel="alternate" type="application/pagefront+json" href="…">Product data (JSON)</a>.</p>`,
   the sentence in a Liquid `assign` at its top with `[link]` where the
   anchor goes (`replace` puts it in), which the merchant may change; a
-  merchant who wants no body link leaves this second file out. Where a
-  theme prints the description under a setting (a collection's "show
-  description"), the body link follows that setting. Short Liquid
-  comments; nothing else.
+  merchant who wants no body link leaves this second file out. A Liquid
+  setting runs standard tags and filters, global objects and the
+  template's own object (`product`, `collection`, `page`), none of
+  `section`, `layout` or `settings`; it must stay under 50 KB and be valid
+  Liquid, or the editor refuses to save. Short Liquid comments; nothing
+  else. The block and the section are the theme's: Shopify's own theme
+  Dawn has both, and so do most current themes. A theme with neither
+  gets the head link alone, said in the report.
 - **Sign the code runs**: none until a field is filled; the code step has
   no check.
 - **What Shopify cannot do**, said plainly in the report: a theme sets no
@@ -224,9 +229,11 @@ After the last step: CHECKS, in full.
   once): a check run right after an edit that still shows the old target
   is run again later before it counts as failed, and the merchant is never
   told to make the redirect again for it.
-- **Admin, in English, from the documentation; steps 1 (Products) and 2 as
-  shown on 2026-11-06, step 4 walked on 2026-11-10 with the
-  documentation's labels** (the rest not yet walked):
+- **Admin, in English, from the documentation; step 1 (Products) and the
+  code editor part of step 2 as shown on 2026-11-06, step 4 walked on
+  2026-11-10 with the documentation's labels; the theme editor part of
+  step 2 from the documentation and Dawn's labels** (the rest not yet
+  walked):
   1. The field, once per kind: in the admin, Settings (the very bottom of
      the left menu) › Metafields and metaobjects ›
      Products (then Collections, then Pages) › "Add definition" (top
@@ -244,15 +251,28 @@ After the last step: CHECKS, in full.
      themes": leave it. Then the top card's three dots again › "Edit code";
      it opens in its own browser tab, filling the window. In Layout,
      `theme.liquid`; paste all of `pagefront-theme-link.txt` on a new line
-     just above `</head>`; "Save" (top right). Then the body link: the
-     editor's search box, top left, finds the file in Sections whose line
-     reads `{{ product.description }}`; paste all of `pagefront-body.txt`
-     on a new line just after that line, inside the same `<div>`; "Save".
-     The same for the file whose line reads `{{ collection.description }}`
-     and the one whose line reads `{{ page.content }}`. (Or leave the body
-     link out: then the pages carry the head link alone.) Then close that
-     browser tab, back to the admin: the editor's own ⚙ settings are not
-     Shopify's.
+     just above `</head>`; "Save" (top right). Then close that browser
+     tab, back to the admin: the editor's own ⚙ settings are not
+     Shopify's. Then the body link, in the theme editor: the top card's
+     "Edit theme" button. The drop-down in the bar at the top, which reads
+     "Home page" at first, lists the templates: select the product
+     template. In the sidebar on the left, hover the section that holds
+     the description ("Product information" in Dawn), click "Add block",
+     and in "Search blocks" type `Custom Liquid`, then select it. In the
+     new block's settings, paste all of `pagefront-body.txt` into the
+     "Liquid code" field. In the sidebar, drag the block by its handle so
+     that it sits right below "Description". "Save". A shop
+     with more than one product template: the same on each template a
+     product in the list uses. Then the collection template from the same
+     drop-down: in the sidebar, "Add section", in "Search sections" type
+     `Custom Liquid`, select it; paste all of `pagefront-body.txt` into
+     its "Liquid code" field; drag the section so that it sits right
+     below the section that prints the description ("Collection banner"
+     in Dawn); "Save". The same on the page template, below the section
+     that prints the page's content ("Page" in Dawn). (Or leave the body
+     link out: then the pages carry the head link alone.) Where the shop's
+     pages carry no block or section named "Custom Liquid", the body link
+     is left out and the report says so.
   3. A product, collection or page: open it; in the Metafields section,
      next to "Pagefront sheet", "+ Add" (or "View all" if it is not
      listed); paste the address; "Save".
@@ -261,9 +281,13 @@ After the last step: CHECKS, in full.
      `/.well-known/pagefront`; "Redirect to" the root's address, in full;
      "Save redirect". Shopify redirects only an address that answers 404,
      which `/.well-known/pagefront` does on a Shopify store.
-- **What stays the merchant's** (report): a theme update can drop code
-  edits ("Theme added: code edits could not be included"); after one,
-  paste both files again. A new theme needs them too. When the root
+- **What stays the merchant's** (report): a theme update carries the
+  theme editor's work over, the "Custom Liquid" blocks and sections with
+  it, and can drop code edits ("Theme added: code edits could not be
+  included"); after one, paste `pagefront-theme-link.txt` again and check
+  the blocks and sections are still there. A new theme needs both files
+  again. A new product template needs the block; a product moved to a
+  template without it loses its body link. When the root
   sheet's address changes, edit the redirect (Content › Menus › "View URL
   Redirects", the redirect's row), and the old target can answer for some
   hours after the save; a redirect deleted there removes the
@@ -277,9 +301,10 @@ For every page in the list, at its address:
 1. `GET`: the page's `<head>` holds exactly one
    `<link rel="alternate" type="application/pagefront+json">`, its `href`
    the sheet's address; and, unless the merchant left the body link out,
-   its description holds exactly one visible
+   its main content holds exactly one visible
    `<a rel="alternate" type="application/pagefront+json">` with text,
-   inside a sentence, its `href` the same address.
+   inside a sentence at the end of the description, its `href` the same
+   address.
 2. Where the platform's section gives a `Link` header: `HEAD` returns it,
    with the same address, `rel="alternate"` and
    `type="application/pagefront+json"`.

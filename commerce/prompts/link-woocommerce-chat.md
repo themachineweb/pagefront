@@ -1,6 +1,6 @@
 # Pagefront — link your shop's sheets
 
-- Prompt set 1.24.0, for commerce release 0.6.0.
+- Prompt set 1.25.0, for commerce release 0.6.0.
 - Links the sheets the serve phase put online (commerce release 0.6.0) from the shop's own pages.
 - Pagefront Discovery: https://themachineweb.org/pagefront/spec/core/discovery.md (page: https://themachineweb.org/pagefront/spec/core/discovery)
 
@@ -258,9 +258,10 @@ For every page in the list, at its address:
 1. `GET`: the page's `<head>` holds exactly one
    `<link rel="alternate" type="application/pagefront+json">`, its `href`
    the sheet's address; and, unless the merchant left the body link out,
-   its description holds exactly one visible
+   its main content holds exactly one visible
    `<a rel="alternate" type="application/pagefront+json">` with text,
-   inside a sentence, its `href` the same address.
+   inside a sentence at the end of the description, its `href` the same
+   address.
 2. Where the platform's section gives a `Link` header: `HEAD` returns it,
    with the same address, `rel="alternate"` and
    `type="application/pagefront+json"`.
