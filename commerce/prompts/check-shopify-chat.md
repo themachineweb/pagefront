@@ -1,6 +1,6 @@
 # Pagefront — check your shop's sheets
 
-- Prompt set 1.26.0, for commerce release 0.6.0.
+- Prompt set 1.27.0, for commerce release 0.6.0.
 - Checks, end to end, the sheets the write, serve and link phases put online (commerce release 0.6.0), as an agent finds them.
 - Pagefront Discovery: https://themachineweb.org/pagefront/spec/core/discovery.md (page: https://themachineweb.org/pagefront/spec/core/discovery)
 - Commerce Organization Sheet, "Entry point (commerce binding)": https://themachineweb.org/pagefront/spec/commerce/organization.md
@@ -141,10 +141,12 @@ As an agent would:
   that line, and its note that `robots.txt` has no line, are reported
   once, as what the platform cannot do, neither failure nor warning. A `301` that
   leads to the organization sheet passes CHECKS 1.
-- **The homepage** has no field. An organization sheet whose page is the
-  homepage is reached from the entry point and the products' `seller`, and
-  its page cannot declare it (CHECKS 2: run the Check on the sheet's
-  address). Say so once.
+- **The homepage** declares its sheet from the shop's own field (the
+  link prompt's Shop metafield, since prompt set 1.27.0). A homepage that
+  declares nothing while the organization sheet names it was linked under
+  an earlier set: report it as the link phase's, once, with the entry
+  point and the products' `seller` as the ways a reader still reaches the
+  sheet (CHECKS 2: run the Check on the sheet's address too).
 ## CHECKS
 
 Each address written in full.

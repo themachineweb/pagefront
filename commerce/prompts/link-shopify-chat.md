@@ -1,6 +1,6 @@
 # Pagefront — link your shop's sheets
 
-- Prompt set 1.26.0, for commerce release 0.6.0.
+- Prompt set 1.27.0, for commerce release 0.6.0.
 - Links the sheets the serve phase put online (commerce release 0.6.0) from the shop's own pages.
 - Pagefront Discovery: https://themachineweb.org/pagefront/spec/core/discovery.md (page: https://themachineweb.org/pagefront/spec/core/discovery)
 
@@ -189,27 +189,31 @@ After the last step: CHECKS, in full.
   make; say so and stop.
 - **Sheet path**: `/apps/pagefront`.
 - **Pages with a field**: a product (`/products/<handle>`), a collection
-  (`/collections/<handle>`), the organization page if it is a page of the
-  online store (`/pages/<handle>`). The homepage has no field: an
-  organization sheet whose page is the homepage gets no page link and is
-  reported so, with the entry point as the way a reader reaches it.
+  (`/collections/<handle>`), the organization page: a page of the online
+  store (`/pages/<handle>`), or the homepage, whose field is the shop's
+  own.
 - **The field**: a metafield, one definition each for Products,
-  Collections and Pages: name "Pagefront sheet", namespace and key
+  Collections, Pages and, when the organization page is the homepage,
+  Shop: name "Pagefront sheet", namespace and key
   `custom.pagefront_sheet`, type URL (not Link), one value, Storefront
-  API access on.
+  API access on. The shop's value is entered on the "Shop metafields"
+  screen (step 3), there being no page to open for it.
 - **The code**: two blocks. The file `pagefront-theme-link.txt`, pasted
   into the theme's `layout/theme.liquid` just before `</head>`: by
-  `request.page_type` (`product`, `collection`, `page`), it reads that
-  object's `metafields.custom.pagefront_sheet.value` and, if not blank and
-  under the sheet path (rule 4), prints the `<link>` element, its `href`
-  escaped. The file `pagefront-body.txt`, pasted in the theme editor into
-  a "Custom liquid" block placed right below the description on the
-  product template, and into a "Custom liquid" section placed right below
-  the section that prints the description on the collection and the page
-  templates, so the body link sits in the page's main content after the
-  description: the same guard on the same metafield, by
-  `request.page_type` too, so one file serves all three, printing the body
-  link as one sentence, the pair of that kind of page,
+  `request.page_type` (`product`, `collection`, `page`, `index`), it reads
+  that object's `metafields.custom.pagefront_sheet.value`, the `shop`
+  object's on `index`, and, if not blank and under the sheet path (rule
+  4), prints the `<link>` element, its `href` escaped. The file
+  `pagefront-body.txt`, pasted in the theme editor into a "Custom liquid"
+  block placed right below the description on the product template, into
+  a "Custom liquid" section placed right below the section that prints
+  the description on the collection and the page templates, and into a
+  "Custom liquid" section at the end of the home template when the
+  organization page is the homepage, so the body link sits in the page's
+  main content after the description: the same guard on the same
+  metafields, by `request.page_type` too, so one file serves all four,
+  printing the body link as one sentence, the pair of that kind of page
+  (the organization pair on `page` and on `index`),
   `<p class="pagefront-data">Full specifications, materials and care for this product are published as <a rel="alternate" type="application/pagefront+json" href="…">Product data (JSON)</a>.</p>`
   on a product: the three sentences in Liquid `assign` lines at its top
   with `[link]` where the anchor goes, and the three anchor texts in three
@@ -217,10 +221,11 @@ After the last step: CHECKS, in full.
   putting the anchor in; the merchant may change them. A merchant who
   wants no body link leaves this second file out. A Liquid
   setting runs standard tags and filters, global objects and the
-  template's own object (`product`, `collection`, `page`), none of
+  template's own object (`product`, `collection`, `page`, `shop`), none of
   `section`, `layout` or `settings`; it must stay under 50 KB and be valid
-  Liquid, or the editor refuses to save. Short Liquid comments; nothing
-  else. The block and the section are the theme's: Shopify's own theme
+  Liquid, or the editor refuses to save, and it refuses the `liquid` tag
+  (seen on 2026-11-24): plain `{% %}` tags only. Short Liquid comments;
+  nothing else. The block and the section are the theme's: Shopify's own theme
   Dawn has both, and so do most current themes. A theme with neither
   gets the head link alone, said in the report.
 - **Sign the code runs**: none until a field is filled; the code step has
@@ -245,17 +250,24 @@ After the last step: CHECKS, in full.
 - **Admin, in English, from the documentation; step 1 (Products) and the
   code editor part of step 2 as shown on 2026-11-06, step 4 walked on
   2026-11-10 with the documentation's labels; the theme editor part of
-  step 2 as shown on 2026-11-23 on Dawn for a product, the collection
-  and page parts from the documentation and Dawn's labels** (the rest not
-  yet walked):
+  step 2 as shown on 2026-11-23 on Dawn for a product and on 2026-11-24
+  for the homepage, the collection and page parts from the documentation
+  and Dawn's labels; the Shop definition and its value as shown on
+  2026-11-24** (the rest not yet walked):
   1. The field, once per kind: in the admin, Settings (the very bottom of
      the left menu) › Metafields and metaobjects ›
-     Products (then Collections, then Pages) › "Add definition" (top
-     right). Other definitions may be listed already: leave them. Name
-     `Pagefront sheet`; below it the screen shows `custom.pagefront_sheet`
-     (there is no separate key field). Type: "One", then URL in the list
-     next to it. Leave "Validation" empty. Under "Options", "Storefront API
-     access" on. "Save", in the bar at the top of the screen.
+     Products (then Collections, then Pages; then Shop, the last entry in
+     the list, when the organization page is the homepage) › "Add
+     definition" (top right). Other definitions may be listed already:
+     leave them. Name `Pagefront sheet`; below it the screen shows
+     `custom.pagefront_sheet` (there is no separate key field). Type:
+     "One", then URL in the list next to it. Leave "Validation" empty.
+     Under "Options", "Storefront API access" on (already on for Shop,
+     whose form adds "Customer Account API access": leave it at "No
+     access"). "Save", in the bar at the top of the screen. For Shop, the
+     green banner after the save, "Add another shop definition or edit
+     the metafield value", is the way to the value: step 3 says what to
+     do there, so give the homepage's address in the same message.
   2. The theme: click "Online Store" in the left menu; it opens the
      themes page (there is no "Themes" item). The current theme is the
      large card at the top, named with the store's address. "Duplicate"
@@ -293,7 +305,11 @@ After the last step: CHECKS, in full.
      that it sits right below the section that prints the description
      ("Collection banner" in Dawn); "Save". The same on the page template
      ("Pages"), below the section that prints the page's content ("Page"
-     in Dawn). Then back to the admin: the "Exit" button, the first icon
+     in Dawn). When the organization page is the homepage: the drop-down
+     back on "Home page"; "Add section", `Custom liquid`, select it; paste
+     all of `pagefront-body.txt` into its field; drag the section to the
+     end of the Template group, just above the Footer group; "Save".
+     Then back to the admin: the "Exit" button, the first icon
      at the top left of the editor (pointing at it shows "Exit"). (Or
      leave the body link out: then the pages carry the head link alone.)
      The step says, in these words, after the search: "If your theme
@@ -303,7 +319,13 @@ After the last step: CHECKS, in full.
      so.
   3. A product, collection or page: open it; in the Metafields section,
      next to "Pagefront sheet", "+ Add" (or "View all" if it is not
-     listed); paste the address; "Save".
+     listed); paste the address; "Save". The homepage: the "Shop
+     metafields" screen, which the banner's "edit the metafield value"
+     opens right after the Shop definition is saved (the way to it from
+     Settings afterwards is not yet walked); in the "Pagefront sheet" row
+     under "Pinned", "+ Add"; paste the organization sheet's address;
+     "Save" in the "Unsaved changes" bar at the top. Reload the screen:
+     the row shows the address and the bar is gone.
   4. The entry point, once, when there is a root: Content › Menus › "View
      URL Redirects" › "Create URL redirect". "Redirect from"
      `/.well-known/pagefront`; "Redirect to" the root's address, in full;
@@ -315,7 +337,9 @@ After the last step: CHECKS, in full.
   included"); after one, paste `pagefront-theme-link.txt` again and check
   the blocks and sections are still there. A new theme needs both files
   again. A new product template needs the block; a product moved to a
-  template without it loses its body link. When the root
+  template without it loses its body link. The shop's value, when the
+  organization page is the homepage: Settings › Metafields and
+  metaobjects › Shop, the "Shop metafields" screen. When the root
   sheet's address changes, edit the redirect (Content › Menus › "View URL
   Redirects", the redirect's row), and the old target can answer for some
   hours after the save; a redirect deleted there removes the

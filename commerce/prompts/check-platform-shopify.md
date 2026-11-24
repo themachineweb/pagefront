@@ -24,7 +24,9 @@
   that line, and its note that `robots.txt` has no line, are reported
   once, as what the platform cannot do, neither failure nor warning. A `301` that
   leads to the organization sheet passes CHECKS 1.
-- **The homepage** has no field. An organization sheet whose page is the
-  homepage is reached from the entry point and the products' `seller`, and
-  its page cannot declare it (CHECKS 2: run the Check on the sheet's
-  address). Say so once.
+- **The homepage** declares its sheet from the shop's own field (the
+  link prompt's Shop metafield, since prompt set 1.27.0). A homepage that
+  declares nothing while the organization sheet names it was linked under
+  an earlier set: report it as the link phase's, once, with the entry
+  point and the products' `seller` as the ways a reader still reaches the
+  sheet (CHECKS 2: run the Check on the sheet's address too).

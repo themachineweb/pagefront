@@ -4,6 +4,12 @@ The prompt set's own semver; see "Versioning" in [`README.md`](README.md).
 
 ## Unreleased
 
+## 1.27.0 — 2026-11-24
+
+For commerce release 0.6.0.
+
+- **Link, Shopify: the homepage declares its sheet.** An organization sheet whose page is the homepage gets its page link from a Shop metafield: a fourth "Pagefront sheet" definition under Shop, its value entered on the "Shop metafields" screen. `pagefront-theme-link.txt` reads `shop.metafields.custom.pagefront_sheet.value` on `index`; `pagefront-body.txt` prints the organization sentence from it, in a "Custom liquid" section at the end of the home template, and one file serves all four page types. The "Custom liquid" field refuses the `liquid` tag, so the file uses plain tags. The rule that the homepage has no field is gone from the link and check sections. Walked on 2026-11-24 on a Dawn development store, where the Check's extraction keeps the sentence; the way back to the "Shop metafields" screen from Settings is not yet walked. Minor: what the prompt asks for changes.
+
 ## 1.26.0 — 2026-11-24
 
 For commerce release 0.6.0.
