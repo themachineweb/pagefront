@@ -17,16 +17,17 @@
   labelled "Pagefront sheet".
 - **The code**: a Code Snippets snippet, the file `pagefront-link-snippet.txt`:
   plain PHP for the shop's WordPress version, no opening tag, names
-  prefixed `pagefront_`, short comments, three constants at the top,
-  written by you: the root's address, the body link's sentence (the one
-  in "The body link", with `%s` where the anchor goes, the anchor's text
-  `Product data (JSON)`), and whether the body link is printed (on); the
-  merchant changes the sentence or turns the body link off there.
+  prefixed `pagefront_`, short comments, the constants at the top,
+  written by you: the root's address; the body link's three sentences
+  (the ones in "The body link", with `%s` where the anchor goes) and
+  their three anchor texts, one pair each for a product, a product
+  category and a page; and whether the body link is printed (on); the
+  merchant changes the sentences or turns the body link off there.
   - On a product, page or product category whose field is set (rule 4):
     the `<link>` element in `<head>` (`wp_head`); the body link, one
-    sentence closing the description,
-    `<p class="pagefront-data">Full specifications, materials and care for this product are published as <a rel="alternate" type="application/pagefront+json" href="…">Product data (JSON)</a>.</p>`,
-    its `href` escaped: on a product or a page through the `the_content`
+    sentence closing the description, the pair of that kind of page,
+    `<p class="pagefront-data">Full specifications, materials and care for this product are published as <a rel="alternate" type="application/pagefront+json" href="…">Product data (JSON)</a>.</p>`
+    on a product, its `href` escaped: on a product or a page through the `the_content`
     filter at priority 20 (after `wpautop`), only when `is_singular()`,
     `is_main_query()` and `in_the_loop()` hold, so the stored description
     stays as written and the sentence prints inside the description's own

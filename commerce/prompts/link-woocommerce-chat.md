@@ -1,6 +1,6 @@
 # Pagefront — link your shop's sheets
 
-- Prompt set 1.25.0, for commerce release 0.6.0.
+- Prompt set 1.26.0, for commerce release 0.6.0.
 - Links the sheets the serve phase put online (commerce release 0.6.0) from the shop's own pages.
 - Pagefront Discovery: https://themachineweb.org/pagefront/spec/core/discovery.md (page: https://themachineweb.org/pagefront/spec/core/discovery)
 
@@ -61,19 +61,24 @@ every page in the list declares its sheet.
 visible link in the page body from the same field ("Body link" in
 Discovery): readers that see only a page's text find the sheet there, and
 search crawlers follow it. It is one sentence holding the anchor, added at
-the end of the page's description so that it sits in running text:
-`Full specifications, materials and care for this product are published as <a rel="alternate" type="application/pagefront+json" href="…">Product data (JSON)</a>.`
+the end of the page's description so that it sits in running text. The
+sentence and the anchor's text follow the kind of page:
+
+- a product: `Full specifications, materials and care for this product are published as <a rel="alternate" type="application/pagefront+json" href="…">Product data (JSON)</a>.`
+- a category or collection: `The full list of products in this collection is published as <a rel="alternate" type="application/pagefront+json" href="…">Collection data (JSON)</a>.`
+- the organization page: `Details of the business behind this shop are published as <a rel="alternate" type="application/pagefront+json" href="…">Organization data (JSON)</a>.`
+
 Readers that extract a page's main content keep that content alone and drop
 footers, navigation and paragraphs that hold a link by itself, so a footer
-link or a bare link never reaches them. The sentence is the merchant's to
+link or a bare link never reaches them. The sentences are the merchant's to
 change, and the body link is theirs to leave out; the platform's section
 says where each is set. Say both in the step that gives the code, and in
-the report, the sentence in these words: "The first line of the code
-holds the sentence that will show on the page, between quotes: Full
-specifications, materials and care for this product are published as
-[link]. You can write your own sentence there. Keep [link] in it: that
-is where the link to the data sheet will show, with the words Product
-data (JSON)." Where the platform's code marks the anchor's place
+the report, the sentences in these words: "The first lines of the code
+hold the three sentences that can show on a page, between quotes: one for
+a product, one for a category or collection, one for your organization
+page, each with the words its link will show. You can write your own
+sentences there. Keep [link] in each: that is where the link to the data
+sheet will show." Where the platform's code marks the anchor's place
 otherwise, say that mark instead of [link].
 
 Your fetch tool may refuse an address it was not given; each sheet's
@@ -190,16 +195,17 @@ After the last step: CHECKS, in full.
   labelled "Pagefront sheet".
 - **The code**: a Code Snippets snippet, the file `pagefront-link-snippet.txt`:
   plain PHP for the shop's WordPress version, no opening tag, names
-  prefixed `pagefront_`, short comments, three constants at the top,
-  written by you: the root's address, the body link's sentence (the one
-  in "The body link", with `%s` where the anchor goes, the anchor's text
-  `Product data (JSON)`), and whether the body link is printed (on); the
-  merchant changes the sentence or turns the body link off there.
+  prefixed `pagefront_`, short comments, the constants at the top,
+  written by you: the root's address; the body link's three sentences
+  (the ones in "The body link", with `%s` where the anchor goes) and
+  their three anchor texts, one pair each for a product, a product
+  category and a page; and whether the body link is printed (on); the
+  merchant changes the sentences or turns the body link off there.
   - On a product, page or product category whose field is set (rule 4):
     the `<link>` element in `<head>` (`wp_head`); the body link, one
-    sentence closing the description,
-    `<p class="pagefront-data">Full specifications, materials and care for this product are published as <a rel="alternate" type="application/pagefront+json" href="…">Product data (JSON)</a>.</p>`,
-    its `href` escaped: on a product or a page through the `the_content`
+    sentence closing the description, the pair of that kind of page,
+    `<p class="pagefront-data">Full specifications, materials and care for this product are published as <a rel="alternate" type="application/pagefront+json" href="…">Product data (JSON)</a>.</p>`
+    on a product, its `href` escaped: on a product or a page through the `the_content`
     filter at priority 20 (after `wpautop`), only when `is_singular()`,
     `is_main_query()` and `in_the_loop()` hold, so the stored description
     stays as written and the sentence prints inside the description's own
@@ -306,8 +312,8 @@ four phases stay apart. In plain words:
 
 - the pages linked, each with its sheet address, the pages found linked
   already, and every sheet left out, with why; whether the body link is
-  printed, with its sentence, and how to change the sentence or leave it
-  out;
+  printed, with its sentences, and how to change them or leave the body
+  link out;
 - each check's result, page by page; the checks given to the merchant,
   each with its address and what to see; the checks not run, each with
   what it waits for; and whether the shop was closed and the checks ran in

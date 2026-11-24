@@ -4,6 +4,12 @@ The prompt set's own semver; see "Versioning" in [`README.md`](README.md).
 
 ## Unreleased
 
+## 1.26.0 — 2026-11-24
+
+For commerce release 0.6.0.
+
+- **Link: a sentence per kind of page.** The body link's sentence and anchor text follow the kind of page: a product keeps `Full specifications, materials and care for this product are published as … Product data (JSON).`; a category or collection gets `The full list of products in this collection is published as … Collection data (JSON).`; the organization page gets `Details of the business behind this shop are published as … Organization data (JSON).` Shopify: three sentence lines and three anchor-text lines at the top of `pagefront-body.txt`, the `case` on `request.page_type` picking the pair. WooCommerce: the pairs as constants in the snippet. The merchant's words for changing the sentence name the three. The publish guide says the same. Minor: what the prompt produces changes.
+
 ## 1.25.0 — 2026-11-23
 
 For commerce release 0.6.0.

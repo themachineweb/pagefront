@@ -1,6 +1,6 @@
 # Pagefront — link your shop's sheets
 
-- Prompt set 1.25.0, for commerce release 0.6.0.
+- Prompt set 1.26.0, for commerce release 0.6.0.
 - Links the sheets the serve phase put online (commerce release 0.6.0) from the shop's own pages.
 - Pagefront Discovery: https://themachineweb.org/pagefront/spec/core/discovery.md (page: https://themachineweb.org/pagefront/spec/core/discovery)
 
@@ -61,19 +61,24 @@ every page in the list declares its sheet.
 visible link in the page body from the same field ("Body link" in
 Discovery): readers that see only a page's text find the sheet there, and
 search crawlers follow it. It is one sentence holding the anchor, added at
-the end of the page's description so that it sits in running text:
-`Full specifications, materials and care for this product are published as <a rel="alternate" type="application/pagefront+json" href="…">Product data (JSON)</a>.`
+the end of the page's description so that it sits in running text. The
+sentence and the anchor's text follow the kind of page:
+
+- a product: `Full specifications, materials and care for this product are published as <a rel="alternate" type="application/pagefront+json" href="…">Product data (JSON)</a>.`
+- a category or collection: `The full list of products in this collection is published as <a rel="alternate" type="application/pagefront+json" href="…">Collection data (JSON)</a>.`
+- the organization page: `Details of the business behind this shop are published as <a rel="alternate" type="application/pagefront+json" href="…">Organization data (JSON)</a>.`
+
 Readers that extract a page's main content keep that content alone and drop
 footers, navigation and paragraphs that hold a link by itself, so a footer
-link or a bare link never reaches them. The sentence is the merchant's to
+link or a bare link never reaches them. The sentences are the merchant's to
 change, and the body link is theirs to leave out; the platform's section
 says where each is set. Say both in the step that gives the code, and in
-the report, the sentence in these words: "The first line of the code
-holds the sentence that will show on the page, between quotes: Full
-specifications, materials and care for this product are published as
-[link]. You can write your own sentence there. Keep [link] in it: that
-is where the link to the data sheet will show, with the words Product
-data (JSON)." Where the platform's code marks the anchor's place
+the report, the sentences in these words: "The first lines of the code
+hold the three sentences that can show on a page, between quotes: one for
+a product, one for a category or collection, one for your organization
+page, each with the words its link will show. You can write your own
+sentences there. Keep [link] in each: that is where the link to the data
+sheet will show." Where the platform's code marks the anchor's place
 otherwise, say that mark instead of [link].
 
 Your fetch tool may refuse an address it was not given; each sheet's
@@ -204,11 +209,13 @@ After the last step: CHECKS, in full.
   templates, so the body link sits in the page's main content after the
   description: the same guard on the same metafield, by
   `request.page_type` too, so one file serves all three, printing the body
-  link as one sentence,
-  `<p class="pagefront-data">Full specifications, materials and care for this product are published as <a rel="alternate" type="application/pagefront+json" href="…">Product data (JSON)</a>.</p>`,
-  the sentence in a Liquid `assign` at its top with `[link]` where the
-  anchor goes (`replace` puts it in), which the merchant may change; a
-  merchant who wants no body link leaves this second file out. A Liquid
+  link as one sentence, the pair of that kind of page,
+  `<p class="pagefront-data">Full specifications, materials and care for this product are published as <a rel="alternate" type="application/pagefront+json" href="…">Product data (JSON)</a>.</p>`
+  on a product: the three sentences in Liquid `assign` lines at its top
+  with `[link]` where the anchor goes, and the three anchor texts in three
+  more, the `case` on `request.page_type` picking the pair and `replace`
+  putting the anchor in; the merchant may change them. A merchant who
+  wants no body link leaves this second file out. A Liquid
   setting runs standard tags and filters, global objects and the
   template's own object (`product`, `collection`, `page`), none of
   `section`, `layout` or `settings`; it must stay under 50 KB and be valid
@@ -364,8 +371,8 @@ four phases stay apart. In plain words:
 
 - the pages linked, each with its sheet address, the pages found linked
   already, and every sheet left out, with why; whether the body link is
-  printed, with its sentence, and how to change the sentence or leave it
-  out;
+  printed, with its sentences, and how to change them or leave the body
+  link out;
 - each check's result, page by page; the checks given to the merchant,
   each with its address and what to see; the checks not run, each with
   what it waits for; and whether the shop was closed and the checks ran in
