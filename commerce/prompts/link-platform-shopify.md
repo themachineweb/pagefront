@@ -31,11 +31,13 @@
   templates, so the body link sits in the page's main content after the
   description: the same guard on the same metafield, by
   `request.page_type` too, so one file serves all three, printing the body
-  link as one sentence,
-  `<p class="pagefront-data">Full specifications, materials and care for this product are published as <a rel="alternate" type="application/pagefront+json" href="…">Product data (JSON)</a>.</p>`,
-  the sentence in a Liquid `assign` at its top with `[link]` where the
-  anchor goes (`replace` puts it in), which the merchant may change; a
-  merchant who wants no body link leaves this second file out. A Liquid
+  link as one sentence, the pair of that kind of page,
+  `<p class="pagefront-data">Full specifications, materials and care for this product are published as <a rel="alternate" type="application/pagefront+json" href="…">Product data (JSON)</a>.</p>`
+  on a product: the three sentences in Liquid `assign` lines at its top
+  with `[link]` where the anchor goes, and the three anchor texts in three
+  more, the `case` on `request.page_type` picking the pair and `replace`
+  putting the anchor in; the merchant may change them. A merchant who
+  wants no body link leaves this second file out. A Liquid
   setting runs standard tags and filters, global objects and the
   template's own object (`product`, `collection`, `page`), none of
   `section`, `layout` or `settings`; it must stay under 50 KB and be valid

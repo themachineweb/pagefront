@@ -189,9 +189,13 @@ inside the description, in running text, because readers that extract a
 page's main content keep the anchors in that text and drop footers,
 navigation and paragraphs that hold a link alone. Search crawlers follow it
 too, which gets the sheet's address indexed. The prompts print it at the end
-of the description, from the same field as the head link; you may change
-the sentence or leave it out. The Check reports whether the link survives
-main-content extraction.
+of the description, from the same field as the head link, with a sentence
+of its own for a collection page ("The full list of products in this
+collection is published as Collection data (JSON).") and for the
+organization page ("Details of the business behind this shop are published
+as Organization data (JSON)."); you may change the sentences or leave the
+body link out. The Check reports whether the link survives main-content
+extraction.
 
 The prompt for your platform walks you through it: one piece of code, pasted
 once, that prints the link on every page whose field is set, then each
