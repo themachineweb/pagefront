@@ -179,8 +179,64 @@ Where the site contradicts itself, a merchant would want to know:
   also carry "Max 15 characters". The sheet carries the field's limit.
 - The UK FAQ gives one contact address, the French legal notice another.
 - The shipping-cost range in the FAQ names no currency.
+- Read again on 2026-11-25, the FAQ gives a ring two delivery windows in
+  two answers, "4 to 6 weeks" and "6 to 8 weeks", says engagement-ring
+  resizing is free "for US, UK, EU, and UAE orders only" where the product
+  panel states no region, ships "worldwide (excluding Russia and China)"
+  in one answer and "worldwide" in another, and names Klarna, bank
+  transfers and "financing options" as the flexible payment methods where
+  the sheet, from the 2026-09-04 reading, also lists Alma. The ring-repair
+  answer charges repairs "after two years" where the warranty section
+  promises repair of manufacturing defects at no cost with no limit. The
+  sheet keeps its structured values; the page's own words are the FAQ's
+  to settle.
 - The terms name a second company at the same address as a joint
   contracting party. The sheet carries Kimaï Ltd alone.
+
+## Store Q&A
+
+The organization sheet carries a `question` array derived from the UK FAQ
+page, read on 2026-11-25, under the structure-first rule of "Store Q&A" in
+the organization spec: a question whose answer a structured field already
+holds goes into the field and never into `question`. The page had 77
+questions under nine topics, plus three headed statements under "Our
+Warranty" that ask nothing. 25 were carried, each with its topic as
+`keywords`, with the answer as the page writes it and the encoded email
+addresses decoded:
+
+- Engagement rings, seven: where the rings are made, where the diamonds
+  come from, whether a setting or a diamond is sold alone, the IGI
+  certificate and what it is, bespoke work, and seeing diamonds on video or
+  at an appointment.
+- Materials and craftsmanship, all eleven: bespoke pieces, the materials,
+  recycled gold and why, 18-carat gold, whether gold fades, lab-grown
+  diamonds and whether they are real, independent certification, cleaning.
+- Care and composition, two: wear and water. Gift cards, four. Size and
+  fit, one: length adjustments on chains.
+
+52 were dropped: the fourteen under "Orders, Payment & Shipping" and the
+nine under "Returns & Exchange", whose homes are
+`pagefront:fulfillmentTerms`, `paymentAccepted` and
+`hasMerchantReturnPolicy`; the two Black Friday and three Spring Archives
+questions, which are seasonal return terms and a sale collection; five
+"Size & Fit" questions, which are product-page sizing; eighteen under
+"Engagement Rings" that restate shipping, duties, payment, cancellation,
+returns, resizing, delivery times, order status, engraving and sizes, or
+point at the stores and appointments the sheet's `location` entries hold;
+and "What should I do if my jewellery breaks?", a warranty question with
+no home on the organization sheet yet (the spec tracks an org-level
+warranty home pending a worked example). The resizing answers were dropped
+on the contradiction recorded above, the product sheet carrying the panel's
+terms. "Can I get a refund on my gift card?" was kept: a nuance the return
+policy cannot express, and it does not contradict it. The FAQ's seasonal
+return extension (online orders from 25 November 2026 returnable until 15
+January 2027) is a temporary term the 14-day policy in
+`hasMerchantReturnPolicy` does not carry.
+
+The sheet validates at release 0.6.0 with no warning, and moved to 0.7.0
+under the test manifest ORG-W-010 stays silent (`store-qa.test.mjs`). Only
+the FAQ page was read on 2026-11-25; the other fields were not re-verified
+that day.
 
 ## What publishing would take
 
@@ -289,3 +345,8 @@ that day.
 
 - **2026-11-17** — sheets moved to commerce release 0.6.0 (`release` and
   `$schema` only); no other value changed.
+- **2026-11-25** — organization sheet re-emitted with a `question` array
+  of 25 store questions from the UK FAQ page, read that day; 52 dropped
+  under the structure-first rule ("Store Q&A" above). New `generated_at`
+  and `expires_at`; no other value changed, and the other fields were not
+  re-verified.

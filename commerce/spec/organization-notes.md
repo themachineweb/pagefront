@@ -105,7 +105,7 @@ For "Return policy" in [`organization.md`](organization.md#return-policy).
 
 A store's return policy is a property of the store. It lives on the seller block, as `hasMerchantReturnPolicy`, the store-wide default, stated once. Restating it on every Product Sheet would duplicate it and let the copies drift.
 
-This is the format's one semantic cross-sheet dependency, and its cost is accepted. "Can I return this product" is not answerable from the Product Sheet alone when the product is silent; the consumer must also fetch the seller sheet. The read rides the *existing* `Offer.seller` edge and stays `@id`-keyed for identity; `pagefront:sheetUrl` on the reference says where the seller sheet is. It is the one exception to each-sheet-is-self-contained. It is scoped to return and shipping terms and MUST NOT be generalized to other fields.
+This is the format's one semantic cross-sheet dependency, and its cost is accepted. "Can I return this product" is not answerable from the Product Sheet alone when the product is silent; the consumer must also fetch the seller sheet. The read rides the *existing* `Offer.seller` edge and stays `@id`-keyed for identity; `pagefront:sheetUrl` on the reference says where the seller sheet is. It is the one exception to each-sheet-is-self-contained. It is scoped to return and shipping terms, and since Organization Sheet spec 0.7.0 to store Q&A, which rides the same edge, and MUST NOT be generalized to other fields.
 
 ## Why fulfillment terms reuse `OfferShippingDetails`
 
@@ -114,6 +114,16 @@ For "Fulfillment terms" in [`organization.md`](organization.md#fulfillment-terms
 The term is composition over inheritance. Schema.org scopes `OfferShippingDetails` to the Offer, so the Pagefront term is only the org-level attachment point Schema.org lacks; the payload stays plain Schema.org, and no parallel shipping vocabulary is minted.
 
 An org-level home for store-wide warranty terms is tracked pending a worked example.
+
+## Why store questions come after structure
+
+For "Store Q&A" in [`organization.md`](organization.md#store-qa).
+
+A site-wide FAQ is mostly the store's commercial terms in prose, and the sheet already carries those terms as data: the return policy, the shipping regimes, the payment methods, the stores and their hours. Carrying a term twice, once as a field and once as an answer, duplicates it and lets the copies drift, which is the failure the store-wide default exists to prevent (see "Why the return policy lives on the seller sheet"). So the field comes first, and `question` holds what no field expresses: where the materials come from, whether bespoke work is offered, how to care for the pieces.
+
+The Kimaï FAQ is the worked case. Read on 2026-11-25, it states two free-resize allowances for engagement rings in two answers, two delivery windows for a ring in two answers, and a shipping-cost range with no currency; the sheet carries the terms the structured fields hold, and of the FAQ's 77 questions, 25 went into `question` and 52 had a structured home or were product-scoped. A producer that copied the page would have carried every one of those disagreements. Nitto's FAQ, read the same day, gave eight store questions out of 31; the rest restated the shipping tiers, the return terms and the payment methods the sheet already holds.
+
+Store Q&A rides the `Offer.seller` edge like the return policy because the alternative is a second cross-sheet pointer for the same destination. The read stays scoped: return and shipping terms and store Q&A, nothing else.
 
 ## Why store locations use Schema.org's `location`
 

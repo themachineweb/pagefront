@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://themachineweb.org/pagefront/spec/commerce/organization/v0.6.0.json",
-  "title": "Pagefront Commerce Organization Sheet 0.6.0",
-  "description": "Sheet spec version 0.6.0, a member of commerce release 0.6.0. Since 0.6.0 the sheet may carry subjectOf, the Organization review sheet, as member entries (@type, @id and url required; pagefront:sheetUrl and name optional). Since 0.6.0 a seller sheet may carry pagefront:checkoutHosts, an array of bare host names outside the canonical host on which the seller's offers are bought or checked out; it counts only on the seller sheet reached through the linking contract, and ORG-W-008 warns on it without the seller role or on an entry that is not a bare host. Since 0.5.0 the sheet may carry hasOfferCatalog, the catalogue entry point: a flat Schema.org OfferCatalog whose itemListElement lists the storefront's root collections as Collection member entries (@type, @id and url required; pagefront:sheetUrl, name and pagefront:collectionKind optional), valid for any commerce role, referencing Commerce Collection Sheets on the sheet's own host. Since 0.5.0 sheet_url is optional: it is an address the sheet is served from as known at generation time, and the page's alternate link locates the sheet. Since 0.4.0 the envelope requires $schema. The envelope carries release in place of format_version, and $schema, which is required, names this sheet-spec version; a sheet carrying format_version belongs to the legacy draft line and validates against the legacy schema at .../organization/v0.9.json, which is otherwise identical. Formal schema for the Pagefront Commerce Organization Sheet — the sheet describing the entity behind products (brand owner, manufacturer, seller), introduced with commerce format 0.9 alongside the reference-capable legalEntity and the seller-sheet return/shipping model. The data block roots on Schema.org Organization (recognized subtypes permitted; @type is not constrained to a single value). pagefront:commerceRole is the required role discriminator, an array of one or more values from the closed enum brand_owner / manufacturer / seller. pagefront:fulfillmentTerms carries the store-wide shipping defaults as an array of Schema.org-native OfferShippingDetails objects; only the attachment shell is validated, the payload is Schema.org content. pagefront:socialAccount carries the organization's official social accounts (platform / url / handle; publisher-stated only), distinct from sameAs, which carries identity authority records only. pagefront:authorizedResellers carries the brand's authorization claim over its distribution — a pagefront:AuthorizedResellers object with an optional exhaustive flag and a reseller array whose entries name an Organization either as a reference stub (@id) or inline (name plus url and/or address), with optional Schema.org-native areaServed; valid only where commerceRole includes brand_owner (linter ORG-W-006). There is no GTIN-equivalent identifier requirement: identity is @id + name. Validates the envelope and pagefront-namespaced extensions strictly; Schema.org-typed blocks permit additional unspecified properties.",
+  "$id": "https://themachineweb.org/pagefront/spec/commerce/organization/v0.7.0.json",
+  "title": "Pagefront Commerce Organization Sheet 0.7.0",
+  "description": "Sheet spec version 0.7.0, the editable head for the next commerce release. Since 0.7.0 the sheet may carry question, store-scoped Q&A as an array of Question entries with the Product Sheet schema's Question and Answer definitions (organization.md, Store Q&A). Since 0.6.0 the sheet may carry subjectOf, the Organization review sheet, as member entries (@type, @id and url required; pagefront:sheetUrl and name optional). Since 0.6.0 a seller sheet may carry pagefront:checkoutHosts, an array of bare host names outside the canonical host on which the seller's offers are bought or checked out; it counts only on the seller sheet reached through the linking contract, and ORG-W-008 warns on it without the seller role or on an entry that is not a bare host. Since 0.5.0 the sheet may carry hasOfferCatalog, the catalogue entry point: a flat Schema.org OfferCatalog whose itemListElement lists the storefront's root collections as Collection member entries (@type, @id and url required; pagefront:sheetUrl, name and pagefront:collectionKind optional), valid for any commerce role, referencing Commerce Collection Sheets on the sheet's own host. Since 0.5.0 sheet_url is optional: it is an address the sheet is served from as known at generation time, and the page's alternate link locates the sheet. Since 0.4.0 the envelope requires $schema. The envelope carries release in place of format_version, and $schema, which is required, names this sheet-spec version; a sheet carrying format_version belongs to the legacy draft line and validates against the legacy schema at .../organization/v0.9.json, which is otherwise identical. Formal schema for the Pagefront Commerce Organization Sheet — the sheet describing the entity behind products (brand owner, manufacturer, seller), introduced with commerce format 0.9 alongside the reference-capable legalEntity and the seller-sheet return/shipping model. The data block roots on Schema.org Organization (recognized subtypes permitted; @type is not constrained to a single value). pagefront:commerceRole is the required role discriminator, an array of one or more values from the closed enum brand_owner / manufacturer / seller. pagefront:fulfillmentTerms carries the store-wide shipping defaults as an array of Schema.org-native OfferShippingDetails objects; only the attachment shell is validated, the payload is Schema.org content. pagefront:socialAccount carries the organization's official social accounts (platform / url / handle; publisher-stated only), distinct from sameAs, which carries identity authority records only. pagefront:authorizedResellers carries the brand's authorization claim over its distribution — a pagefront:AuthorizedResellers object with an optional exhaustive flag and a reseller array whose entries name an Organization either as a reference stub (@id) or inline (name plus url and/or address), with optional Schema.org-native areaServed; valid only where commerceRole includes brand_owner (linter ORG-W-006). There is no GTIN-equivalent identifier requirement: identity is @id + name. Validates the envelope and pagefront-namespaced extensions strictly; Schema.org-typed blocks permit additional unspecified properties.",
   "type": "object",
   "required": [
     "$schema",
@@ -229,6 +229,13 @@
         "hasMerchantReturnPolicy": {
           "type": "object"
         },
+        "question": {
+          "$comment": "Since 0.7.0: store-scoped Q&A (organization.md, Store Q&A), with the Product Sheet schema's definitions.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/questionObject"
+          }
+        },
         "paymentAccepted": {
           "oneOf": [
             {
@@ -436,6 +443,51 @@
             "additionalProperties": false
           }
         }
+      },
+      "additionalProperties": true
+    },
+    "answerObject": {
+      "$comment": "Since 0.7.0: the Product Sheet schema's Answer definition (product.json), kept in step by hand since each schema file stands alone.",
+      "type": "object",
+      "required": ["@type", "text"],
+      "properties": {
+        "@type": {"const": "Answer"},
+        "text": {"type": "string", "minLength": 1},
+        "dateModified": {"type": "string", "format": "date"},
+        "author": {
+          "oneOf": [
+            {"type": "string", "minLength": 1},
+            {
+              "type": "object",
+              "properties": {
+                "@type": {"type": "string", "enum": ["Person", "Organization"]},
+                "@id": {"type": "string"},
+                "name": {"type": "string"}
+              },
+              "additionalProperties": true
+            }
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "questionObject": {
+      "$comment": "Since 0.7.0: the Product Sheet schema's Question definition (product.json); acceptedAnswer optional, suggestedAnswer an array of Answer.",
+      "type": "object",
+      "required": ["@type", "name"],
+      "properties": {
+        "@type": {"const": "Question"},
+        "name": {"type": "string", "minLength": 1},
+        "url": {"type": "string", "format": "uri"},
+        "keywords": {
+          "oneOf": [
+            {"type": "string"},
+            {"type": "array", "items": {"type": "string"}}
+          ]
+        },
+        "dateModified": {"type": "string", "format": "date"},
+        "acceptedAnswer": {"$ref": "#/$defs/answerObject"},
+        "suggestedAnswer": {"type": "array", "items": {"$ref": "#/$defs/answerObject"}}
       },
       "additionalProperties": true
     },

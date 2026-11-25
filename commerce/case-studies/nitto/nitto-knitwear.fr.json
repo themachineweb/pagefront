@@ -4,8 +4,8 @@
   "schema_org_version": "30.0",
   "canonical_url": "https://www.nittoknitwear.com/pages/atelier",
   "sheet_url": "https://www.nittoknitwear.com/pagefront/commerce/organization/nitto-knitwear.fr.json",
-  "generated_at": "2026-10-27T07:53:00Z",
-  "expires_at": "2026-11-03T07:53:00Z",
+  "generated_at": "2026-11-25T11:20:00Z",
+  "expires_at": "2026-12-02T11:20:00Z",
   "data": {
     "@context": [
       "https://schema.org",
@@ -2303,6 +2303,72 @@
       "PayPal",
       "Apple Pay",
       "Google Pay"
+    ],
+    "question": [
+      {
+        "@type": "Question",
+        "name": "Puis-je venir récupérer ma commande à l'atelier ?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Bien sûr. Il vous suffit de choisir ce mode de livraison lors du paiement, puis de nous prévenir par email avant votre venue. Notre atelier est ouvert du lundi au vendredi, de 9h30 à 17h30."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Avez-vous des boutiques ?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Nous n’avons pas de boutiques physiques, mais vous pouvez venir directement à l’atelier ou chez l’un de nos revendeurs. Retrouvez la liste complète des revendeurs Nitto Knitwear ici."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Comment entretenir mes produits ?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Nos pulls sont réalisés à partir de matières naturelles, laine mérinos extra fine pour l’hiver et coton pour l’été. Ils n’ont pas besoin d’être lavés après chaque port, il est même préférable de les aérer régulièrement et de limiter les lavages. En général, un lavage tous les six ou sept ports est suffisant. En cas de petite tache, un nettoyage local à la main avec un peu d’eau tiède et un savon doux est souvent suffisant.\n\nPour un lavage en machine, il convient de choisir un programme délicat à 20°C avec un essorage doux (600 tours maximum), en retournant le pull avant lavage. Pour le coton, un cycle délicat est idéal, tandis que pour la laine mérinos, mieux vaut privilégier le programme laine à froid, toujours avec un essorage léger. Le séchage se fait à plat, à l’abri de la lumière directe, sur une serviette ou un étendoir, car le sèche-linge ou les cintres mouillés risquent de déformer la maille. Le repassage est possible pour le coton, à température adaptée et sans insister, tandis que pour la laine, il est rarement nécessaire mais, si besoin, il faut privilégier une basse température et la délicatesse pour garder la douceur du vêtement. Pour plus de conseils, n’hésitez pas à consulter notre page Conseils d’entretien."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "D’où proviennent vos matières ?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Nous sélectionnons nos matières auprès des meilleurs filateurs italiens, réputés pour la qualité exceptionnelle de leurs fils et la transparence de leur production."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Où sont fabriqués vos produits ?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Nos pulls sont tous confectionnés dans notre atelier situé à Clamart, en Île-de-France."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Vos produits sont-ils unisexes ?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Nos modèles sont conçus pour les hommes, mais ils peuvent tout à fait être portés par des femmes. Il suffit généralement de choisir une taille en dessous de votre taille habituelle, car la coupe est un peu plus droite que celle d’un modèle féminin."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Vos produits sont-ils certifiés / responsables ?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Nous attachons une grande importance à la qualité et à la transparence de nos matières. Nos fils proviennent des meilleurs filateurs italiens, reconnus pour leurs pratiques responsables. Nous travaillons également à minimiser notre impact environnemental tout au long du processus de fabrication."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Pourquoi vos produits coûtent-ils ce prix ?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Nos produits sont conçus avec des matières de haute qualité, issues des meilleurs filateurs italiens, et fabriqués avec soin dans notre atelier en Île-de-France. Ce savoir-faire, associé à une production responsable et à une attention particulière portée à chaque détail, explique le prix de nos articles."
+        }
+      }
     ]
   }
 }

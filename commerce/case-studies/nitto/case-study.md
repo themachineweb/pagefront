@@ -142,6 +142,43 @@ ladder at the SIREN rung, store-wide fulfilment terms with conditional
 pricing, and an authorized-reseller list of physical shops with addresses
 and no websites.
 
+## Store Q&A
+
+The organization sheet carries a `question` array derived from the FAQ
+page, read on 2026-11-25, under the structure-first rule of "Store Q&A" in
+the organization spec. The page had 31 questions in one list. Eight were
+carried, the answer as the page writes it: collecting an order at the
+workshop (with its weekday hours), whether there are shops, how to care
+for the knitwear, where the yarns come from, where the pieces are made,
+whether the models are unisex, whether the products are certified or
+responsible, and why they cost what they cost.
+
+23 were dropped: the shipping cost, the pick-up point, tracking, delivery
+to another address and the undelivered or damaged parcel, whose home is
+`pagefront:fulfillmentTerms`; the return and exchange terms, the return
+procedure, the refund delay, the sale exchange, the wrong or defective
+item and the online-versus-shop return, whose home is
+`hasMerchantReturnPolicy`; the payment methods and payment security,
+whose home is `paymentAccepted`; the two size-guide questions and the
+out-of-stock alert, which are product-page matters; and the order
+confirmation, the order change, the contact-details mistake and the site
+problem, which are customer-service process with no store fact in them.
+
+Where the FAQ and the structured fields disagree: the FAQ says returns are
+free for orders from France and Belgium, where the terms of sale, which
+the sheet carries, offer them from metropolitan France alone; the FAQ
+lists Visa, Mastercard, American Express, PayPal and Apple Pay (from a
+phone only), where the sheet's `paymentAccepted`, from the 2026-09-30
+reading, also lists Google Pay; the FAQ's refund "generally within 1 to 5
+working days" sits inside the terms' 14-day limit the sheet states. The
+workshop pick-up answer gives weekday hours and no address; a `location`
+entry would need the workshop's address from another page, so the hours
+stay in the question for now.
+
+The sheet validates at release 0.6.0, and moved to 0.7.0 under the test
+manifest ORG-W-010 stays silent (`store-qa.test.mjs`). Only the FAQ page
+was read on 2026-11-25; the other fields were not re-verified that day.
+
 ## Method
 
 Sources read on 2026-09-30: the product page, its Shopify product data and
@@ -196,3 +233,8 @@ tariff and the return terms on the shipping page were unchanged.
 
 - **2026-11-17** — sheets moved to commerce release 0.6.0 (`release` and
   `$schema` only); no other value changed.
+- **2026-11-25** — organization sheet re-emitted with a `question` array
+  of eight store questions from the FAQ page, read that day; 23 dropped
+  under the structure-first rule ("Store Q&A" above). New `generated_at`
+  and `expires_at`; no other value changed, and the other fields were not
+  re-verified.
