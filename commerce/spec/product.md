@@ -91,7 +91,7 @@ Recommended:
 - **`offers`**: an array of `Offer` (see "Offers").
 - **`isVariantOf`**: the `ProductGroup`, when the product belongs to a variant family.
 - **`pagefront:availableLanguages`**: an array of `{lang, url}` objects pointing at language siblings, when the publisher publishes in multiple languages (see "Internationalization").
-- **`question`**: an array of Schema.org `Question` entries with `acceptedAnswer` (see "Product Q&A").
+- **`question`**: an array of Schema.org `Question` entries, each with the publisher's `acceptedAnswer`, community `suggestedAnswer` entries or both (see "Product Q&A").
 - **`pagefront:document`**: an array of typed product documents (see "Documents").
 - **`pagefront:relatedProduct`**: an array of typed product relationships (see "Related products").
 
@@ -415,7 +415,63 @@ Video is language-scoped: a sheet's `video` array carries videos in the sheet's 
 
 ### Product Q&A
 
-- **`question`** on the `Product` or `ProductGroup`: FAQ-style content scoped to the product, as an array of Schema.org `Question` entries. MAY be carried. Source: a set of questions and answers the page shows for this product, a FAQ section or a `FAQPage` in its structured data, one entry per pair, the question and the answer as the page writes them, in the page's order; questions about the shop as a whole are left out, and a pair the producer would have to compose is never written. Each entry: `@type: Question`, `name` carrying the question, and `acceptedAnswer` of `@type: Answer` whose `text` carries the answer prose. One `acceptedAnswer` per question; publishers MAY add Schema.org's `suggestedAnswer` array. Questions and answers are in the sheet's `inLanguage`, and cross-language sibling sheets carry parallel Q&A in their own languages. Check: PDP-W-027 (empty `acceptedAnswer.text`). [why](product-notes.md#why-a-question-has-one-accepted-answer)
+- **`question`** on the `Product` or `ProductGroup`: FAQ-style content scoped to the product, as an array of Schema.org `Question` entries. MAY be carried. Source: a set of questions and answers the page shows for this product, a FAQ section or a `FAQPage` in its structured data, one entry per pair, the question and the answer as the page writes them, in the page's order; questions about the shop as a whole are left out, and a pair the producer would have to compose is never written. Each entry: `@type: Question`, `name` carrying the question, and the publisher's `acceptedAnswer` of `@type: Answer` whose `text` carries the answer prose, a `suggestedAnswer` array of such entries, or both. One `acceptedAnswer` per question. Questions and answers are in the sheet's `inLanguage`, and cross-language sibling sheets carry parallel Q&A in their own languages. Checks: PDP-W-027 (empty `acceptedAnswer.text`), PDP-W-046 (a question with no answer). [why](product-notes.md#why-a-question-has-one-accepted-answer)
+
+#### Provenance
+
+`acceptedAnswer` MUST be publisher-authored: the merchant's, brand's or manufacturer's own answer, as published on the product page or in the publisher's content system. An answer written by a customer, a marketplace community or a third-party reviewer MUST NOT be carried as `acceptedAnswer`, even when the publisher displays it in an "accepted" or "best answer" position. [why](product-notes.md#why-a-question-has-one-accepted-answer)
+
+Community-contributed answers that the publisher displays but has not endorsed as its own MAY be carried in Schema.org's `suggestedAnswer` array on the same `Question`, each an `Answer` whose `author` names the contributor: a `Person` or `Organization`, or a display name as a string. Check: PDP-W-045 (a `suggestedAnswer` without `author`). A `Question` MAY carry `suggestedAnswer` entries and no `acceptedAnswer` when the publisher has not answered it. Check: PDP-W-046 (neither).
+
+`upvoteCount` and `answerCount` are NOT RECOMMENDED: the spec models no voting or ranking among answers. [notes](product-notes.md#what-v08-deliberately-does-not-address)
+
+#### Recommended Schema.org properties
+
+The shape above is the minimum. Producers SHOULD also carry, where the source exposes them:
+
+- `url` on `Question`: the product page URL with a fragment that resolves to the question as rendered, so that a consumer citing an answer can point at it. Producers SHOULD NOT invent fragments; where the page exposes no anchor, `url` is omitted.
+- `dateModified` on `Answer`, or on `Question` when the page dates the pair as one: an ISO 8601 date. [why](product-notes.md#why-a-question-has-one-accepted-answer)
+- `author` on every `suggestedAnswer` entry, as "Provenance" requires. `author` on `acceptedAnswer` is permitted and SHOULD be the publisher's `Organization`, by `@id` reference to the seller or brand where one exists; it carries no new information, since publisher authorship is the rule.
+- `keywords` on `Question`: a topic label, as a string or an array, when the page groups its Q&A under headings ("Sizing", "Care", "Shipping"). Carry the page's own labels in the sheet's `inLanguage`; a grouping the page does not show is never synthesised.
+
+```json
+"question": [
+  {
+    "@type": "Question",
+    "name": "Is this watch water-resistant?",
+    "url": "https://merchant.com/watches/aurora#faq-water-resistance",
+    "keywords": "Care",
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Yes. The case is rated to 100 metres (10 ATM), suitable for swimming and snorkelling but not for high-speed water sports or scuba diving.",
+      "dateModified": "2026-03-14"
+    }
+  },
+  {
+    "@type": "Question",
+    "name": "Will the bracelet fit a 19 cm wrist?",
+    "suggestedAnswer": [
+      {
+        "@type": "Answer",
+        "text": "Fits my 19.5 cm wrist with two links removed.",
+        "author": { "@type": "Person", "name": "M. Dubois" },
+        "dateModified": "2026-02-02"
+      }
+    ]
+  }
+]
+```
+
+#### Q&A and the structured fields
+
+An answer restates in prose what the sheet may already state structurally: a water-resistance rating in `pagefront:featureGroup`, a lug width in `additionalProperty`, resize terms in `pagefront:aftermarketService`, shipping in `shippingDetails`. Where both exist, the structured field is authoritative and the answer is commentary. Producers SHOULD NOT carry an answer that contradicts a structured field; where the page itself disagrees, the sheet carries the structured field's value and omits or corrects the conflicting answer, and the case study records the discrepancy. Contradiction in general is beyond the linter. Check: PDP-W-047 (a number with a unit in the answer that disagrees with the feature the question names). [why](product-notes.md#why-the-structured-field-outranks-the-answer)
+
+#### What's not in `question`
+
+- **Site-wide FAQ pages** (shipping, returns, payment, sizing for the whole catalogue). `question` is product-scoped. Return and shipping terms belong on the Offer or on the seller's Commerce Organization Sheet (see "Return policy"); the rest belongs on the organization sheet or nowhere. A site-wide question that happens to apply to this product is still a question about the shop.
+- **Questions with no answer from anyone.** A question the publisher shows as awaiting an answer carries nothing a consumer can use; it is omitted.
+- **Ranking, voting and helpfulness counts.** See "Provenance" above.
+- **Document pointers as a field.** An answer that says "see the manual" names the document in prose; the manual itself is a `pagefront:document` entry. A typed cross-reference from an `Answer` to a document entry is deferred (open design question 24b) until a case study shows the need. [notes](product-notes.md#new-design-questions-surfaced-in-v07)
 
 ### Feature groups
 

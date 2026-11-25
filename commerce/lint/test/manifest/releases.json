@@ -1,5 +1,5 @@
 {
-  "$comment": "Test manifest: commerce/spec/releases.json plus any unreleased row the fixtures need ahead of its release. Since release 0.6.0 landed on 2026-11-17 it equals the bundled manifest. Installed by test-hooks.ts; never read in production.",
+  "$comment": "Test manifest: commerce/spec/releases.json plus any unreleased row the fixtures need ahead of its release. It adds the 0.7.0 row (Product Sheet spec 0.13.0, the editable head commerce/spec/product.json) for the fixtures of the product Q&A rules PDP-W-045, PDP-W-046 and PDP-W-047; the release pull request adds that row to the bundled manifest and freezes the head. Installed by test-hooks.ts; never read in production.",
   "vertical": "commerce",
   "schema_url_template": "https://themachineweb.org/pagefront/spec/commerce/{sheet}/v{version}.json",
   "releases": [
@@ -37,6 +37,17 @@
       "vocabulary": "0.6.0",
       "sheets": {
         "product": "0.12.0",
+        "organization": "0.6.0",
+        "collection": "0.2.0",
+        "review": "0.1.0"
+      }
+    },
+    {
+      "release": "0.7.0",
+      "date": "unreleased",
+      "vocabulary": "0.6.0",
+      "sheets": {
+        "product": "0.13.0",
         "organization": "0.6.0",
         "collection": "0.2.0",
         "review": "0.1.0"

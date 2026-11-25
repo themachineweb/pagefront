@@ -12,7 +12,7 @@
  */
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync, readdirSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { schemaErrorsFor } from "../dist/validate-and-lint.js";
@@ -54,10 +54,10 @@ test("the Layer 1 check covered the ten fixtures this change adds", () => {
   assert.equal(checked, 10);
 });
 
-test("the head is Product Sheet spec 0.12.0, which the 0.6.0 row of the test manifest resolves to", () => {
-  assert.equal(HEAD.$id, "https://themachineweb.org/pagefront/spec/commerce/product/v0.12.0.json");
+test("the 0.6.0 row of the test manifest resolves to Product Sheet spec 0.12.0, frozen in the store since the release", () => {
   const row = TEST_MANIFEST.releases.find((r) => r.release === "0.6.0");
   assert.equal(row.sheets.product, "0.12.0");
+  assert.ok(existsSync(join(here, "..", "..", "schemas", "product", "v0.12.0.json")));
 });
 
 test("an offer without a price fails Layer 1 unless its availability is OutOfStock, SoldOut or Discontinued", () => {

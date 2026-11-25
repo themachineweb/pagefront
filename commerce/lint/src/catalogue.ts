@@ -63,6 +63,9 @@ import { pdpW038 } from "./rules/pdp-w-038.js";
 import { pdpW039 } from "./rules/pdp-w-039.js";
 import { pdpW040 } from "./rules/pdp-w-040.js";
 import { pdpW041 } from "./rules/pdp-w-041.js";
+import { pdpW045 } from "./rules/pdp-w-045.js";
+import { pdpW046 } from "./rules/pdp-w-046.js";
+import { pdpW047 } from "./rules/pdp-w-047.js";
 import { pdpI001 } from "./rules/pdp-i-001.js";
 
 /**
@@ -75,6 +78,6 @@ import { pdpI001 } from "./rules/pdp-i-001.js";
 export const commerceCatalogue: Catalogue = {
   vertical: "commerce",
   releases: KNOWN_RELEASES,
-  catalogueVersion: "0.21.0",
-  rules: [pdpE001, pdpE002, pdpE003, pdpE004, pdpE005, pdpE006, pdpE007, pdpE008, pdpE009, pdpE010, pdpE011, pdpE012, pdpE013, pdpE014, pdpE015, pdpE016, pdpE017, pdpE018, pdpE019, pdpE020, pdpE021, pdpE022, pdpW001, pdpW002, pdpW003, pdpW004, pdpW005, pdpW006, pdpW007, pdpW008, pdpW009, pdpW010, pdpW011, pdpW012, pdpW013, pdpW014, pdpW015, pdpW016, pdpW017, pdpW018, pdpW019, pdpW020, pdpW021, pdpW022, pdpW023, pdpW024, pdpW025, pdpW026, pdpW027, pdpW028, pdpW029, pdpW030, pdpW031, pdpW032, pdpW033, pdpW034, pdpW035, pdpW036, pdpW037, pdpW038, pdpW039, pdpW040, pdpW041, pdpI001],
+  catalogueVersion: "0.22.0",
+  rules: [pdpE001, pdpE002, pdpE003, pdpE004, pdpE005, pdpE006, pdpE007, pdpE008, pdpE009, pdpE010, pdpE011, pdpE012, pdpE013, pdpE014, pdpE015, pdpE016, pdpE017, pdpE018, pdpE019, pdpE020, pdpE021, pdpE022, pdpW001, pdpW002, pdpW003, pdpW004, pdpW005, pdpW006, pdpW007, pdpW008, pdpW009, pdpW010, pdpW011, pdpW012, pdpW013, pdpW014, pdpW015, pdpW016, pdpW017, pdpW018, pdpW019, pdpW020, pdpW021, pdpW022, pdpW023, pdpW024, pdpW025, pdpW026, pdpW027, pdpW028, pdpW029, pdpW030, pdpW031, pdpW032, pdpW033, pdpW034, pdpW035, pdpW036, pdpW037, pdpW038, pdpW039, pdpW040, pdpW041, pdpW045, pdpW046, pdpW047, pdpI001],
 };

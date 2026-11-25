@@ -40,7 +40,7 @@ test("PDP-W-001 fires exactly once on a sheet without images", () => {
     info: 0,
     rules_fired: ["PDP-W-001"],
   });
-  assert.equal(report.catalogue_version, "0.21.0");
+  assert.equal(report.catalogue_version, "0.22.0");
   assert.equal(report.release, "0.4.0");
   assert.equal(report.sheet_spec_version, "0.10.0");
 });

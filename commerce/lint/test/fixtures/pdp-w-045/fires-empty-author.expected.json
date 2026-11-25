@@ -1,0 +1,26 @@
+{
+  "sheet": "https://merchant.example/products/aurora-dive-watch",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.7.0",
+  "sheet_spec_version": "0.13.0",
+  "catalogue_version": "0.22.0",
+  "findings": [
+    {
+      "rule": "PDP-W-045",
+      "severity": "warning",
+      "path": "$['data']['question'][0]['suggestedAnswer'][0]",
+      "values": {},
+      "message": "Suggested answer at `$['data']['question'][0]['suggestedAnswer'][0]` names no author.",
+      "remediation": "Add `author` naming the contributor as shown on the page. If the answer is in fact the publisher's, move it to `acceptedAnswer`. If the contributor cannot be recovered, drop the entry."
+    }
+  ],
+  "summary": {
+    "errors": 0,
+    "warnings": 1,
+    "info": 0,
+    "rules_fired": [
+      "PDP-W-045"
+    ]
+  }
+}

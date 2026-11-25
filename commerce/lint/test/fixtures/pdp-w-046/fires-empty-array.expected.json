@@ -1,0 +1,28 @@
+{
+  "sheet": "https://merchant.example/products/aurora-dive-watch",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.7.0",
+  "sheet_spec_version": "0.13.0",
+  "catalogue_version": "0.22.0",
+  "findings": [
+    {
+      "rule": "PDP-W-046",
+      "severity": "warning",
+      "path": "$['data']['question'][0]",
+      "values": {
+        "name": "Is this watch water-resistant?"
+      },
+      "message": "Question `Is this watch water-resistant?` at `$['data']['question'][0]` has no answer.",
+      "remediation": "Add the answer, or remove the question."
+    }
+  ],
+  "summary": {
+    "errors": 0,
+    "warnings": 1,
+    "info": 0,
+    "rules_fired": [
+      "PDP-W-046"
+    ]
+  }
+}

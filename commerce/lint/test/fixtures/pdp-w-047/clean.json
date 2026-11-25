@@ -1,0 +1,70 @@
+{
+  "$schema": "https://themachineweb.org/pagefront/spec/commerce/product/v0.13.0.json",
+  "release": "0.7.0",
+  "schema_org_version": "30.0",
+  "canonical_url": "https://merchant.example/products/aurora-dive-watch",
+  "sheet_url": "https://merchant.example/products/aurora-dive-watch.pagefront.json",
+  "generated_at": "2026-11-01T00:00:00Z",
+  "data": {
+    "@context": [
+      "https://schema.org",
+      {
+        "pagefront": "https://themachineweb.org/pagefront/vocabulary/"
+      }
+    ],
+    "@type": "Product",
+    "@id": "https://merchant.example/products/aurora-dive-watch#product",
+    "name": "Aurora Dive Watch",
+    "url": "https://merchant.example/products/aurora-dive-watch",
+    "inLanguage": "en",
+    "sku": "AUR-DW-100",
+    "description": "A steel dive watch with a sapphire crystal and a screw-down crown.",
+    "brand": {
+      "@type": "Brand",
+      "name": "Auroral"
+    },
+    "image": [
+      {
+        "@type": "ImageObject",
+        "url": "https://merchant.example/media/aurora-dive-watch-hero.jpg",
+        "additionalProperty": [
+          {
+            "@type": "PropertyValue",
+            "name": "role",
+            "value": "hero"
+          }
+        ]
+      }
+    ],
+    "question": [
+      {
+        "@type": "Question",
+        "name": "What is the water resistance rating?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The case is rated to 100 metres (10 ATM), suitable for swimming and snorkelling."
+        }
+      }
+    ],
+    "pagefront:featureGroup": [
+      {
+        "@type": "pagefront:FeatureGroup",
+        "name": "Case",
+        "feature": [
+          {
+            "@type": "PropertyValue",
+            "name": "Water resistance",
+            "value": 100,
+            "unitCode": "MTR"
+          },
+          {
+            "@type": "PropertyValue",
+            "name": "Case diameter",
+            "value": 40,
+            "unitCode": "MMT"
+          }
+        ]
+      }
+    ]
+  }
+}

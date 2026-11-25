@@ -140,7 +140,7 @@ test("schema head: the policy and every declaration are closed enums with undisc
 test("the worked example lints clean against the review catalogue, under the test manifest", () => {
   const report = underTestManifest(() => lintSheet(loadExample(), OPTS));
   assert.deepEqual(report.summary, { errors: 0, warnings: 0, info: 0, rules_fired: [] });
-  assert.equal(report.catalogue_version, "0.21.0");
+  assert.equal(report.catalogue_version, "0.22.0");
   assert.equal(report.release, "0.6.0");
   assert.equal(report.sheet_spec_version, "0.1.0");
 });

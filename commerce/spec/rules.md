@@ -1,7 +1,7 @@
 # Pagefront Commerce Linter — Rule Catalogue
 
 Status: draft / design document, not yet a published normative artifact.
-Catalogue version: 0.21.0
+Catalogue version: 0.22.0
 Supports: commerce releases 0.6.0 (Product Sheet spec 0.12.0, Organization Sheet spec 0.6.0, Collection Sheet spec 0.2.0, Review Sheet spec 0.1.0), 0.5.0 (Product Sheet spec 0.11.0, Organization Sheet spec 0.5.0, Collection Sheet spec 0.1.0), 0.4.0 (Product Sheet spec 0.10.0, Organization Sheet spec 0.4.0) and 0.3.0 (Product Sheet spec 0.9.0, Organization Sheet spec 0.3.0), and the legacy draft line (format 0.9).
 
 This document is the normative linter rule catalogue for Pagefront commerce Sheets. Its version is a semver of its own, independent of the commerce release and of the sheet specs ([`releases.md`](releases.md)); the "Supports" line above states which releases this catalogue version applies to. It implements the rule structure, severity levels, and output format defined in the vertical-agnostic linter design at [`../../core/spec/linter.md`](../../core/spec/linter.md).
@@ -29,6 +29,7 @@ Rules that do not follow the default:
 | PDP-E-019, PDP-E-020, PDP-E-021, PDP-W-040 | release 0.5.0, whose Product Sheet spec 0.11.0 adds "Where to buy" | no |
 | PDP-E-022 | release 0.6.0, whose Product Sheet spec 0.12.0 adds "Unavailable offers without a price" | no |
 | PDP-W-041 | release 0.6.0, whose Product Sheet spec 0.12.0 adds "Purchase host" under "Where to buy" | no |
+| PDP-W-045, PDP-W-046, PDP-W-047 | release 0.7.0, whose Product Sheet spec 0.13.0 adds "Provenance" and "Q&A and the structured fields" under "Product Q&A" | no |
 | COL-E-001, COL-E-002, COL-E-003, COL-E-005, COL-W-001 to COL-W-007 | release 0.5.0, the release that bundles Collection Sheet spec 0.1.0 | no (the Collection Sheet spec has no legacy draft line) |
 | ORG-W-007 | release 0.5.0, which admits `hasOfferCatalog` | no |
 | ORG-W-008 | release 0.6.0, which admits `pagefront:checkoutHosts` | no |
@@ -842,6 +843,46 @@ The `{host}` placeholder renders `(none)` when `canonical_url` has no host, whic
 **Applies from:** not applicable.
 **Fixtures:** none.
 **Spec reference:** `review.md#the-organization-review-sheet`
+
+#### PDP-W-045 — Suggested answer without an author
+
+**Severity:** warning
+**Target:** `$.data.question[*].suggestedAnswer[*]`
+**Description:** `acceptedAnswer` is publisher-authored by rule ("Provenance" under "Product Q&A"); `suggestedAnswer` is the slot for answers the publisher displays but did not write. A `suggestedAnswer` without `author` cannot be told apart from a publisher answer placed in the wrong slot, and a consumer has no way to weigh it. Typically an extraction that captured the answer text and dropped the contributor's name.
+**Check:** Fires on any `suggestedAnswer` entry that lacks `author`, or whose `author` is an empty or whitespace-only string, or an object with neither a non-empty `name` nor a non-empty `@id`.
+**Message:** Suggested answer at `{path}` names no author.
+**Remediation:** Add `author` naming the contributor as shown on the page. If the answer is in fact the publisher's, move it to `acceptedAnswer`. If the contributor cannot be recovered, drop the entry.
+**Introduced:** release 0.7.0
+**Applies from:** release 0.7.0, whose Product Sheet spec 0.13.0 adds "Provenance" under "Product Q&A"; never to the legacy line.
+**Fixtures:** `fires` (no `author`), `fires-empty-author` (a whitespace-only `author`), `clean` (a `Person` with a `name`)
+**Spec reference:** `product.md#provenance`
+
+#### PDP-W-046 — Question with no answer
+
+**Severity:** warning
+**Target:** `$.data.question[*]`
+**Description:** A `Question` carrying neither `acceptedAnswer` nor a non-empty `suggestedAnswer` array is a question nobody has answered. It tells a consumer only that the question was asked, which is no information about the product. Present-but-empty, in the family of PDP-W-022, PDP-W-027 and PDP-W-030.
+**Check:** Fires on any `question` entry with no `acceptedAnswer` and with `suggestedAnswer` absent or an empty array. Does not fire where `acceptedAnswer` is present but empty; PDP-W-027 covers that.
+**Message:** Question `{name}` at `{path}` has no answer.
+The `{name}` placeholder renders the question's `name`; the defensive fallback `(unnamed)` is unreachable on Layer-1-valid input (the schema requires `name`).
+**Remediation:** Add the answer, or remove the question.
+**Introduced:** release 0.7.0
+**Applies from:** release 0.7.0, whose Product Sheet spec 0.13.0 makes `acceptedAnswer` optional on a `Question`; never to the legacy line.
+**Fixtures:** `fires` (neither answer), `fires-empty-array` (an empty `suggestedAnswer`), `clean` (one question with `acceptedAnswer`, one with `suggestedAnswer` alone), `clean-empty-accepted` (an empty `acceptedAnswer`, PDP-W-027's)
+**Spec reference:** `product.md#product-qa`
+
+#### PDP-W-047 — Answer contradicts a named feature
+
+**Severity:** warning
+**Target:** `$.data.question[*].acceptedAnswer`
+**Description:** The structured field is authoritative and the answer is commentary ("Q&A and the structured fields" under "Product Q&A"). Where the two state different numbers for the same measure, a consumer reading only the Q&A is misled. The general case is undetectable; this rule covers the narrow case where the mismatch is numeric and the measure is named.
+**Check:** For each `acceptedAnswer`, collect every `pagefront:featureGroup` row and every `additionalProperty` entry whose `name`, case-folded, appears as a substring of the parent `Question`'s `name`, case-folded. For each such row with a numeric `value` (a number, or a string that parses as one) and a `unitCode` or `unitText`, take the unit's spellings: the row's `unitText`, and the labels and names the catalogue's unit table gives for the `unitCode` (`MTR`: `m`, `metre`, `metres`, `meter`, `meters`; `CMT`: `cm` and the centimetre spellings; and so on for the UN/CEFACT codes the product spec recommends and the registry uses). Fire if `acceptedAnswer.text` contains a number followed, with or without a space, by one of those spellings as a whole word, case-folded, and no number so matched equals the row's `value`. A number followed by another unit's spelling is not matched: `10 ATM` beside a `100` `MTR` rating does not fire. One finding per question, on the first mismatching row in sheet order; a row with a non-numeric `value` or no unit is skipped.
+**Message:** Answer to `{name}` at `{path}` states `{stated}` where the sheet's `{feature}` is `{value} {unit}`.
+**Remediation:** Correct whichever is wrong on the page, then re-emit. If the answer is right and the feature is stale, fix the feature; the structured field is what consumers compare on.
+**Introduced:** release 0.7.0
+**Applies from:** release 0.7.0, whose Product Sheet spec 0.13.0 adds "Q&A and the structured fields" under "Product Q&A"; never to the legacy line.
+**Fixtures:** `fires` (`50 metres` against a `100` `MTR` rating), `clean` (`100 metres (10 ATM)`), `clean-other-unit` (`10 ATM` alone against the same rating)
+**Spec reference:** `product.md#qa-and-the-structured-fields`
 
 #### PDP-I-001 — Property outside Pagefront's modeled set
 

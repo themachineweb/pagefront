@@ -40,10 +40,14 @@ const UNAVAILABLE_OFFERS = new Set(["pdp-e-022", "pdp-w-016", "pdp-w-028", "pdp-
 // in organization.md): their fixtures declare release 0.6.0, whose row in
 // the test manifest resolves both sheet specs to the editable heads.
 const PURCHASE_HOST = new Set(["pdp-w-041", "org-w-008"]);
+// The product Q&A rules ("Product Q&A" in product.md, Product Sheet spec
+// 0.13.0): their fixtures declare release 0.7.0, which the test manifest
+// adds ahead of its release, resolving the product spec to the editable head.
+const PRODUCT_QA = new Set(["pdp-w-045", "pdp-w-046", "pdp-w-047"]);
 // The review rules (review.md): their fixtures declare release 0.6.0, whose
 // row in the test manifest bundles Review Sheet spec 0.1.0 ahead of its release.
 const runsAgainstTestManifest = (ruleDir) =>
-  ruleDir.startsWith("col-") || ruleDir.startsWith("rev-") || ruleDir === "org-w-007" || WHERE_TO_BUY.has(ruleDir) || UNAVAILABLE_OFFERS.has(ruleDir) || PURCHASE_HOST.has(ruleDir);
+  ruleDir.startsWith("col-") || ruleDir.startsWith("rev-") || ruleDir === "org-w-007" || WHERE_TO_BUY.has(ruleDir) || UNAVAILABLE_OFFERS.has(ruleDir) || PURCHASE_HOST.has(ruleDir) || PRODUCT_QA.has(ruleDir);
 
 const ruleDirs = readdirSync(fixturesDir, { withFileTypes: true })
   .filter((entry) => entry.isDirectory())
