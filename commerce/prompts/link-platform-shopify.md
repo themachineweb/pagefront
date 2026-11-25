@@ -101,8 +101,9 @@
      `theme.liquid`; paste all of `pagefront-theme-link.txt` on a new line
      just above `</head>`; "Save" (top right). Then close that browser
      tab, back to the admin: the editor's own ⚙ settings are not
-     Shopify's. Then the body link, in the theme editor: the top card's
-     "Edit theme" button. The drop-down in the bar at the top, which reads
+     Shopify's. Then the body link part, in the theme editor, from here
+     to "Exit" (on an addition, Step 3 gives this part on its own): the
+     top card's "Edit theme" button. The drop-down in the bar at the top, which reads
      "Home page" at first, lists the templates: "Products", then the
      template the products use. A shop that never made a template of its
      own sees one, "Default product", with "Assigned to N products" under

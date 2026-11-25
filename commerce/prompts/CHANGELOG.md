@@ -4,6 +4,12 @@ The prompt set's own semver; see "Versioning" in [`README.md`](README.md).
 
 ## Unreleased
 
+## 1.28.0 — 2026-11-25
+
+For commerce release 0.6.0.
+
+- **Link: the body link on an addition.** A shop linked under a set before 1.23.0 carries the head link alone. On an addition, when CHECKS 1 finds a page whose head declares its sheet and whose body does not, the body link part of the code step is given once, before that kind's step, without asking: on Shopify the theme editor part of step 2; on WooCommerce the earlier run's snippet with its code replaced by the new file (Snippets › All Snippets › the snippet › "Snippet Content" › "Save Snippet", labels from the plugin's source at 4.1.0, not yet walked). Such a page needs no field step and is checked again after that part. A merchant who leaves the body link out there: CHECKS 1 expects none. The report names the pages found linked in the head alone. Minor: what the prompt asks for changes.
+
 ## 1.27.0 — 2026-11-24
 
 For commerce release 0.6.0.

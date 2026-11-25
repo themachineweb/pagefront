@@ -1,6 +1,6 @@
 # Pagefront — link your shop's sheets
 
-- Prompt set 1.27.0, for commerce release 0.6.0.
+- Prompt set 1.28.0, for commerce release 0.6.0.
 - Links the sheets the serve phase put online (commerce release 0.6.0) from the shop's own pages.
 - Pagefront Discovery: https://themachineweb.org/pagefront/spec/core/discovery.md (page: https://themachineweb.org/pagefront/spec/core/discovery)
 
@@ -154,7 +154,14 @@ next; if a check fails, say what to fix in that step, and check again.
    one, the sign that the code runs. On an addition this step is left
    out, the code being in place: run its check before the first step of
    kind 3, and if the check fails, give this step after all, its file
-   offered in the step.
+   offered in the step. On an addition too, the body link part of this
+   step (the platform's section marks it) is given when CHECKS 1, run
+   before a step of kind 3, finds a page whose head declares its sheet
+   and whose body does not: the code in place is from a set before the
+   body link. Give that part once, before that kind's step, its file
+   offered in it, without asking whether the merchant wants the body
+   link: the part itself says it can be left out. A merchant who leaves
+   it out there: CHECKS 1 expects no body link, on every page.
 3. Then one step per kind of page, in the order the admin lists them:
    first how to fill its field (PLATFORMS), then each page: its name as
    the admin lists it, never its address (the merchant copies the first
@@ -162,11 +169,15 @@ next; if a check fails, say what to fix in that step, and check again.
    block, so the copy button copies that address and nothing else. No
    table: its copy button copies the whole table. Check: CHECKS 1 and 2 on
    each page of that kind. On an addition, run CHECKS 1 and 2 on each page
-   of the kind before giving the step: a page that already declares the
-   sheet at the address in the list is linked, so it is left out of the
-   step and named in one line as already linked; a kind whose every page
-   is linked gets no step, that line alone. A step names only the pages
-   with something to do.
+   of the kind before giving the step: a page whose head and body both
+   declare the sheet at the address in the list (the head alone, where
+   the merchant left the body link out) is linked, so it is left out of
+   the step and named in one line as already linked; a page whose head
+   declares it and whose body does not has its field set, so it needs no
+   step of this kind: it brings the body link part of step 2 (above) and
+   is checked again after that part; a kind whose every page is linked
+   gets no step, that line alone. A step names only the pages with
+   something to do.
 4. The entry point, where the platform's section gives an admin step for
    it, once, when Step 1 found a root. Check: CHECKS 4. On an addition,
    run that check first; if it passes, this step is left out and the
@@ -226,7 +237,8 @@ addition, never shown in the message, named exactly
 four phases stay apart. In plain words:
 
 - the pages linked, each with its sheet address, the pages found linked
-  already, and every sheet left out, with why; whether the body link is
+  already, the pages found linked in the head alone and given the body
+  link, and every sheet left out, with why; whether the body link is
   printed, with its sentences, and how to change them or leave the body
   link out;
 - each check's result, page by page; the checks given to the merchant,

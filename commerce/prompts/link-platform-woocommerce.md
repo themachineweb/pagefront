@@ -49,6 +49,16 @@
     an SEO plugin wrote, the filter does not run: tell the merchant to add
     the line in that plugin's editor.
 - **Sign the code runs**: `<origin>/.well-known/pagefront` answers `303`.
+- **The body link part of the code** (Step 3, on an addition): the one
+  snippet prints both links, so the part is the earlier run's snippet
+  with its code replaced. Snippets › All Snippets; click the snippet's
+  name (`Pagefront: links` where the earlier run's title was kept; "Edit"
+  shows below the name too); in "Snippet Content", replace all of the
+  code with all of the new `pagefront-link-snippet.txt`, written with the
+  shop's root address; "Save Snippet" (the snippet stays active; an
+  inactive one shows "Save and Activate" instead). Labels from the
+  plugin's source at its version 4.1.0, read on 2026-11-25; not yet
+  walked.
 - **Entry point**: made by the code; the merchant does nothing for it.
   Its checks, at full addresses: `<origin>/.well-known/pagefront` and
   `<origin>/.well-known/pagefront/` answer `303` with `Location` the root's
