@@ -177,7 +177,7 @@ Store-wide commercial terms an agent needs before it reaches a specific offer. A
 ### Return policy
 
 - **`hasMerchantReturnPolicy`** on the seller block: the store-wide default, stated once. A Product Sheet carries return terms only when the product deviates from the store default, such as a final-sale item, or a made-to-order product, whose returns exceptions live in `pagefront:madeToOrderTerms` and stay there.
-- **Resolution.** A consumer reads the product's own return terms if present; otherwise it follows `Offer.seller` to the seller's sheet, located by the reference's `pagefront:sheetUrl` and checked per "Linking contract", on the product sheet's own host, and uses its store-wide policy. When the sheet cannot be resolved, the inherited terms are unknown. The read is scoped to return and shipping terms and MUST NOT be generalized to other fields. [why](organization-notes.md#why-the-return-policy-lives-on-the-seller-sheet)
+- **Resolution.** A consumer reads the product's own return terms if present; otherwise it follows `Offer.seller` to the seller's sheet, located by the reference's `pagefront:sheetUrl` and checked per "Linking contract", on the product sheet's own host, and uses its store-wide policy. When the sheet cannot be resolved, the inherited terms are unknown. The read is scoped to return and shipping terms and to store Q&A ("Store Q&A") and MUST NOT be generalized to other fields. [why](organization-notes.md#why-the-return-policy-lives-on-the-seller-sheet)
 
 ### Fulfillment terms
 
@@ -202,6 +202,25 @@ Store-wide commercial terms an agent needs before it reaches a specific offer. A
 ```
 
 - **Warranty** does not participate in seller defaults: a warranty the product page states lives on its Offer as `warranty`, a manufacturer's warranty lives on the Product as `pagefront:manufacturerWarranty` ("Warranty" in `product.md`), and a warranty document is a `pagefront:document` entry with `role: "warranty"`.
+
+### Store Q&A
+
+- **`question`** on the `Organization` data block, under any role: FAQ-style content scoped to the store as a whole, as an array of Schema.org `Question` entries with the shape, provenance rule, language scoping and recommended properties of product Q&A ("Product Q&A" in [`product.md`](product.md)). MAY be carried. Source: the merchant's site-wide FAQ, one entry per pair, the question and the answer as the page writes them. It holds brand and sourcing ("Are your diamonds lab-grown?"), bespoke and services ("Do you make custom pieces?"), care and maintenance guidance that applies across the catalogue, and the like. Check: ORG-W-010 (a question with a structured home the sheet lacks). [why](organization-notes.md#why-store-questions-come-after-structure)
+
+#### Structure first
+
+Most of a site-wide FAQ page restates what this sheet already carries structurally: return terms in `hasMerchantReturnPolicy`, shipping destinations, rates and timeframes in `pagefront:fulfillmentTerms`, payment methods in `paymentAccepted`, hours and contacts on `location` and `contactPoint`. A question whose answer is expressible in one of those fields MUST be carried in that field and SHOULD NOT be repeated as `question`. `question` on the organization sheet is for what the structured fields cannot express. Where a FAQ answer carries a nuance the structured field cannot (a return exception for engraved items, a shipping caveat for one region), the producer carries the structured field and MAY carry the nuance as `question`, provided the two do not contradict. The structured field is authoritative; the answer is commentary. [why](organization-notes.md#why-store-questions-come-after-structure)
+
+#### Resolution
+
+A consumer reading a Product Sheet reaches store Q&A the way it reaches the store's return policy: through `Offer.seller` and the seller reference's `pagefront:sheetUrl` ("Return policy"). No product-side pointer to store Q&A is minted; the existing edge carries it. Product Sheets MUST NOT copy store-scoped questions into their own `question` array.
+
+#### What's not in `question`
+
+- Anything with a structured home on this sheet ("Structure first").
+- Product-scoped questions. Those belong on the Product Sheet.
+- A link to the FAQ page. A consumer that must fetch HTML to read the FAQ gains nothing from the sheet; the sheet carries the content or nothing.
+- Ranking, voting and helpfulness counts ("Provenance" under "Product Q&A" in [`product.md`](product.md)).
 
 ### Store locations
 
@@ -297,7 +316,7 @@ Three case-study sheets show the shapes: DTC with all three roles, seller-only, 
 ## What this spec does not address
 
 - **Product and carried-brand enumeration.** No product list and no brand list on the organization sheet: "what does this store sell" is answered by `hasOfferCatalog` and the Commerce Collection Sheets below it, and that a retailer is authorized is stated on each brand's sheet only.
-- **Policy inheritance beyond return and shipping.** Return and shipping inheritance is in scope (default plus override, above). Broader inheritance of arbitrary fields from organization to product is out of scope; organization-level and product-level statements are otherwise independent.
+- **Policy inheritance beyond return and shipping.** Return and shipping inheritance is in scope (default plus override, above), and store Q&A rides the same edge ("Store Q&A"). Broader inheritance of arbitrary fields from organization to product is out of scope; organization-level and product-level statements are otherwise independent.
 - **Ownership and governance beyond Schema.org.** `parentOrganization` / `subOrganization` and `ownershipFundingInfo` cover the common cases; no typed `pagefront:` ownership-structure extension exists.
 - **Marketplace partner-seller modeling.** A third-party partner as `Offer.seller` is another organization, referenced by `@id` like any seller and eligible for its own sheet; no new vocabulary. [notes](organization-notes.md#why-these-questions-stay-open)
 

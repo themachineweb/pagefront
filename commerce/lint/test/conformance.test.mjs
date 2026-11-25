@@ -41,9 +41,10 @@ const UNAVAILABLE_OFFERS = new Set(["pdp-e-022", "pdp-w-016", "pdp-w-028", "pdp-
 // the test manifest resolves both sheet specs to the editable heads.
 const PURCHASE_HOST = new Set(["pdp-w-041", "org-w-008"]);
 // The product Q&A rules ("Product Q&A" in product.md, Product Sheet spec
-// 0.13.0): their fixtures declare release 0.7.0, which the test manifest
-// adds ahead of its release, resolving the product spec to the editable head.
-const PRODUCT_QA = new Set(["pdp-w-045", "pdp-w-046", "pdp-w-047"]);
+// 0.13.0) and the store Q&A rule (organization.md, Organization Sheet spec
+// 0.7.0): their fixtures declare release 0.7.0, which the test manifest adds
+// ahead of its release, resolving both specs to the editable heads.
+const PRODUCT_QA = new Set(["pdp-w-045", "pdp-w-046", "pdp-w-047", "org-w-010"]);
 // The review rules (review.md): their fixtures declare release 0.6.0, whose
 // row in the test manifest bundles Review Sheet spec 0.1.0 ahead of its release.
 const runsAgainstTestManifest = (ruleDir) =>

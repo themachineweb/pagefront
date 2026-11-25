@@ -33,6 +33,7 @@ Rules that do not follow the default:
 | COL-E-001, COL-E-002, COL-E-003, COL-E-005, COL-W-001 to COL-W-007 | release 0.5.0, the release that bundles Collection Sheet spec 0.1.0 | no (the Collection Sheet spec has no legacy draft line) |
 | ORG-W-007 | release 0.5.0, which admits `hasOfferCatalog` | no |
 | ORG-W-008 | release 0.6.0, which admits `pagefront:checkoutHosts` | no |
+| ORG-W-010 | release 0.7.0, whose Organization Sheet spec 0.7.0 adds "Store Q&A" | no |
 | REV-E-001 to REV-E-016, REV-W-001 to REV-W-010 | release 0.6.0 | no (the Review Sheet spec has no legacy draft line) |
 
 ### Definitions
@@ -897,7 +898,7 @@ The `{name}` placeholder renders the question's `name`; the defensive fallback `
 
 ## Commerce Organization Sheet rules
 
-The organization-sheet catalogue, applying to Commerce Organization Sheets ([`organization.md`](organization.md)) only, per the sheet-type dispatch described at the top of this document. Layer 1 for this sheet type is the published organization JSON Schema the sheet names (`../schemas/organization/`); these rules assume a schema-valid sheet. The warning rules implement organization.md's role-scoped-content guidance ("each declared role SHOULD have its corresponding content present … and content SHOULD NOT appear without its role declared": ORG-W-001–004, and ORG-W-006 for the brand-owner-only authorized-resellers statement), a shape check on the registration machine keys (ORG-W-005), the host rule of the catalogue entry point (ORG-W-007), and the role and shape rule of the checkout hosts (ORG-W-008). Per the registration-identity rules in organization.md, **no rule in this catalogue warns on absent registration identifiers** (`leiCode`, `iso6523Code`, `identifier`, `sameAs`): absence is jurisdiction-dependent and carries no quality signal. Three further error rules, ORG-E-002, ORG-E-003 and ORG-E-004, check the envelope's version fields and are the counterparts of PDP-E-016, PDP-E-002 and PDP-E-018.
+The organization-sheet catalogue, applying to Commerce Organization Sheets ([`organization.md`](organization.md)) only, per the sheet-type dispatch described at the top of this document. Layer 1 for this sheet type is the published organization JSON Schema the sheet names (`../schemas/organization/`); these rules assume a schema-valid sheet. The warning rules implement organization.md's role-scoped-content guidance ("each declared role SHOULD have its corresponding content present … and content SHOULD NOT appear without its role declared": ORG-W-001–004, and ORG-W-006 for the brand-owner-only authorized-resellers statement), a shape check on the registration machine keys (ORG-W-005), the host rule of the catalogue entry point (ORG-W-007), the role and shape rule of the checkout hosts (ORG-W-008), and the structure-first rule of store Q&A (ORG-W-010). Per the registration-identity rules in organization.md, **no rule in this catalogue warns on absent registration identifiers** (`leiCode`, `iso6523Code`, `identifier`, `sameAs`): absence is jurisdiction-dependent and carries no quality signal. Three further error rules, ORG-E-002, ORG-E-003 and ORG-E-004, check the envelope's version fields and are the counterparts of PDP-E-016, PDP-E-002 and PDP-E-018.
 
 #### ORG-E-001 — `pagefront:` term without the vocabulary prefix in `@context`
 
@@ -1051,6 +1052,19 @@ The `{problem}` placeholder renders "the sheet does not declare the `seller` rol
 **Applies from:** not applicable.
 **Fixtures:** none.
 **Spec reference:** `review.md#discovery`
+
+#### ORG-W-010 — Store question with a structured home
+
+**Severity:** warning
+**Target:** `$.data.question[*]` (organization sheets only, by the sheet-type dispatch)
+**Description:** A store-wide FAQ answer about returns, shipping, payment or hours belongs in the structured field that carries it: `hasMerchantReturnPolicy`, `pagefront:fulfillmentTerms`, `paymentAccepted`, `location[*].openingHoursSpecification` ("Structure first" under "Store Q&A" in `organization.md`). A `question` on one of those topics, on a sheet where the corresponding field is absent, is prose standing in for structure: typically a producer that carried the FAQ page over and skipped the extraction.
+**Check:** Case-fold the `Question`'s `name` and test it against four keyword sets, one per structured field, each keyword matching at the start of a word: returns (`return`, `refund`, `exchange`, `send back`; `retour`, `rembourse`, `échange`, `echange`), shipping (`ship`, `deliver`, `postage`, `duties`, `customs`; `livraison`, `livrer`, `livré`, `expédition`, `expedition`, `douane`), payment (`pay`, `payment`, `card`, `instalment`, `installment`, `klarna`, `paypal`; `paiement`, `carte`), hours (`open`, `hours`, `closing`; `horaires`, `ouvert`). Fire when a set matches and its structured field is absent or *empty or whitespace-only* (see Definitions) on the sheet; for hours, when no `location` entry carries `openingHoursSpecification` or `openingHours`. One finding per question, naming the first matching field in that order. Does not fire when the field is present: a redundant question beside a present field is a style matter. The keyword sets live in one place in the rule's source so that they can be extended per language; the English set is the baseline, and the French equivalents are included because the corpus has French sheets.
+**Message:** Question `{name}` at `{path}` concerns {topic} but the sheet carries no `{field}`.
+**Remediation:** Extract the answer into the field the message names. Keep the question only if it carries a nuance the field cannot.
+**Introduced:** release 0.7.0
+**Applies from:** release 0.7.0, whose Organization Sheet spec 0.7.0 adds "Store Q&A"; never to the legacy line.
+**Fixtures:** `fires-returns` (an English returns question, no `hasMerchantReturnPolicy`), `fires-shipping-fr` (a French shipping question, no `pagefront:fulfillmentTerms`), `fires-hours` (an hours question, no `location`), `clean` (the four topics beside their four fields), `clean-no-topic` (a sourcing question on a sheet with none of the four fields but `paymentAccepted`)
+**Spec reference:** `organization.md#store-qa`
 
 ## Commerce Collection Sheet rules
 

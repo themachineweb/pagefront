@@ -1,0 +1,39 @@
+{
+  "$schema": "https://themachineweb.org/pagefront/spec/commerce/organization/v0.7.0.json",
+  "release": "0.7.0",
+  "schema_org_version": "30.0",
+  "canonical_url": "https://merchant.example/pages/about",
+  "sheet_url": "https://merchant.example/pagefront/commerce/organization/maison-example.en.json",
+  "generated_at": "2026-11-01T00:00:00Z",
+  "data": {
+    "@context": [
+      "https://schema.org",
+      {
+        "pagefront": "https://themachineweb.org/pagefront/vocabulary/"
+      }
+    ],
+    "@type": "Organization",
+    "@id": "https://merchant.example/#org",
+    "name": "Maison Example",
+    "inLanguage": "en",
+    "url": "https://merchant.example",
+    "pagefront:commerceRole": [
+      "seller"
+    ],
+    "paymentAccepted": [
+      "Visa",
+      "Mastercard",
+      "PayPal"
+    ],
+    "question": [
+      {
+        "@type": "Question",
+        "name": "Where do your diamonds come from?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "From laboratories we visit regularly, all of them powered by renewable energy."
+        }
+      }
+    ]
+  }
+}

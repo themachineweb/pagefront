@@ -34,8 +34,8 @@ Sheet spec 0.1.0), 0.5.0 (Product Sheet spec 0.11.0, Organization Sheet spec
 0.5.0, Collection Sheet spec 0.1.0), 0.4.0
 (Product Sheet spec 0.10.0, Organization Sheet spec 0.4.0) and 0.3.0, and the
 legacy draft line (format 0.9): 67 product rules (`PDP-E-001` to `PDP-E-022`, `PDP-W-001` to
-`PDP-W-041`, `PDP-W-045` to `PDP-W-047`, `PDP-I-001`), 12 organization rules (`ORG-E-001` to
-`ORG-E-004`, `ORG-W-001` to `ORG-W-008`), 11 collection rules
+`PDP-W-041`, `PDP-W-045` to `PDP-W-047`, `PDP-I-001`), 13 organization rules (`ORG-E-001` to
+`ORG-E-004`, `ORG-W-001` to `ORG-W-008`, `ORG-W-010`; `ORG-W-009` is reserved), 11 collection rules
 (`COL-E-001` to `COL-E-005`, `COL-W-001`, `COL-W-002`, `COL-W-004` to
 `COL-W-007`; `COL-W-003` is reserved) and 29 review rules (`REV-E-001` to
 `REV-E-017`, `REV-W-001` to `REV-W-010`), each defined in
@@ -227,6 +227,10 @@ at publish), from the product spec's "Product Q&A" (Product Sheet spec
   number with a unit for a feature the question names, where no such
   number equals the feature's `value`; the unit is matched by its
   spellings, so a rating in another unit does not fire.
+- `ORG-W-010` (applies from release 0.7.0) — a `question` on a Commerce
+  Organization Sheet about returns, shipping, payment or hours while the
+  field that carries that topic is absent or empty; the keyword sets
+  (English, with French equivalents) live in the rule's source.
 
 Added in 0.15.0 (catalogue 0.21.0), with the Commerce Review Sheet spec
 draft ([`review.md`](https://github.com/themachineweb/pagefront/blob/main/commerce/spec/review.md)).

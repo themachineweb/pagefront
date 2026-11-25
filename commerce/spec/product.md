@@ -468,7 +468,7 @@ An answer restates in prose what the sheet may already state structurally: a wat
 
 #### What's not in `question`
 
-- **Site-wide FAQ pages** (shipping, returns, payment, sizing for the whole catalogue). `question` is product-scoped. Return and shipping terms belong on the Offer or on the seller's Commerce Organization Sheet (see "Return policy"); the rest belongs on the organization sheet or nowhere. A site-wide question that happens to apply to this product is still a question about the shop.
+- **Site-wide FAQ pages** (shipping, returns, payment, sizing for the whole catalogue). `question` is product-scoped. Return and shipping terms belong on the Offer or on the seller's Commerce Organization Sheet (see "Return policy"); the rest belongs on the organization sheet or nowhere. A site-wide question that happens to apply to this product is still a question about the shop; its home is "Store Q&A" in [`organization.md`](organization.md).
 - **Questions with no answer from anyone.** A question the publisher shows as awaiting an answer carries nothing a consumer can use; it is omitted.
 - **Ranking, voting and helpfulness counts.** See "Provenance" above.
 - **Document pointers as a field.** An answer that says "see the manual" names the document in prose; the manual itself is a `pagefront:document` entry. A typed cross-reference from an `Answer` to a document entry is deferred (open design question 24b) until a case study shows the need. [notes](product-notes.md#new-design-questions-surfaced-in-v07)

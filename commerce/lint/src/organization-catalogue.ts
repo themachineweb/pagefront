@@ -12,6 +12,7 @@ import { orgW005 } from "./rules/org-w-005.js";
 import { orgW006 } from "./rules/org-w-006.js";
 import { orgW007 } from "./rules/org-w-007.js";
 import { orgW008 } from "./rules/org-w-008.js";
+import { orgW010 } from "./rules/org-w-010.js";
 
 /**
  * The Commerce Organization Sheet rule catalogue — the executable form
@@ -26,5 +27,5 @@ export const organizationCatalogue: Catalogue = {
   vertical: "commerce",
   releases: KNOWN_RELEASES,
   catalogueVersion: "0.22.0",
-  rules: [orgE001, orgE002, orgE003, orgE004, orgW001, orgW002, orgW003, orgW004, orgW005, orgW006, orgW007, orgW008],
+  rules: [orgE001, orgE002, orgE003, orgE004, orgW001, orgW002, orgW003, orgW004, orgW005, orgW006, orgW007, orgW008, orgW010],
 };

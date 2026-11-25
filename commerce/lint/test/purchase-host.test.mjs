@@ -43,8 +43,8 @@ for (const ruleDir of ["pdp-w-041", "org-w-008"]) {
   }
 }
 
-test("the organization head admits pagefront:checkoutHosts as an array of strings, at spec 0.6.0", () => {
-  assert.equal(ORGANIZATION_HEAD.$id, "https://themachineweb.org/pagefront/spec/commerce/organization/v0.6.0.json");
+test("the organization head admits pagefront:checkoutHosts as an array of strings, since spec 0.6.0 (the head is 0.7.0)", () => {
+  assert.equal(ORGANIZATION_HEAD.$id, "https://themachineweb.org/pagefront/spec/commerce/organization/v0.7.0.json");
   assert.deepEqual(ORGANIZATION_HEAD.$defs.dataBlock.properties["pagefront:checkoutHosts"], {
     type: "array",
     items: { type: "string" },

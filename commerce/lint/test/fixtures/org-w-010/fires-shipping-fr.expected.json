@@ -1,0 +1,30 @@
+{
+  "sheet": "https://merchant.example/pages/about",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.7.0",
+  "sheet_spec_version": "0.7.0",
+  "catalogue_version": "0.22.0",
+  "findings": [
+    {
+      "rule": "ORG-W-010",
+      "severity": "warning",
+      "path": "$['data']['question'][0]",
+      "values": {
+        "name": "Combien coûte la livraison ?",
+        "topic": "shipping",
+        "field": "pagefront:fulfillmentTerms"
+      },
+      "message": "Question `Combien coûte la livraison ?` at `$['data']['question'][0]` concerns shipping but the sheet carries no `pagefront:fulfillmentTerms`.",
+      "remediation": "Extract the answer into the field the message names. Keep the question only if it carries a nuance the field cannot."
+    }
+  ],
+  "summary": {
+    "errors": 0,
+    "warnings": 1,
+    "info": 0,
+    "rules_fired": [
+      "ORG-W-010"
+    ]
+  }
+}

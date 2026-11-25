@@ -1,0 +1,101 @@
+{
+  "$schema": "https://themachineweb.org/pagefront/spec/commerce/organization/v0.7.0.json",
+  "release": "0.7.0",
+  "schema_org_version": "30.0",
+  "canonical_url": "https://merchant.example/pages/about",
+  "sheet_url": "https://merchant.example/pagefront/commerce/organization/maison-example.en.json",
+  "generated_at": "2026-11-01T00:00:00Z",
+  "data": {
+    "@context": [
+      "https://schema.org",
+      {
+        "pagefront": "https://themachineweb.org/pagefront/vocabulary/"
+      }
+    ],
+    "@type": "Organization",
+    "@id": "https://merchant.example/#org",
+    "name": "Maison Example",
+    "inLanguage": "en",
+    "url": "https://merchant.example",
+    "pagefront:commerceRole": [
+      "seller"
+    ],
+    "paymentAccepted": [
+      "Visa",
+      "Mastercard",
+      "PayPal"
+    ],
+    "hasMerchantReturnPolicy": {
+      "@type": "MerchantReturnPolicy",
+      "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+      "merchantReturnDays": 14,
+      "returnMethod": "https://schema.org/ReturnByMail",
+      "returnFees": "https://schema.org/FreeReturn"
+    },
+    "pagefront:fulfillmentTerms": [
+      {
+        "@type": "OfferShippingDetails",
+        "name": "France, free from 200 €",
+        "shippingRate": {
+          "@type": "MonetaryAmount",
+          "value": "0",
+          "currency": "EUR"
+        },
+        "shippingDestination": [
+          {
+            "@type": "DefinedRegion",
+            "addressCountry": "FR"
+          }
+        ]
+      }
+    ],
+    "location": [
+      {
+        "@type": "Place",
+        "name": "The Paris store",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "1 rue Example",
+          "postalCode": "75001",
+          "addressLocality": "Paris",
+          "addressCountry": "FR"
+        },
+        "openingHours": "Tu-Sa 11:00-19:00"
+      }
+    ],
+    "question": [
+      {
+        "@type": "Question",
+        "name": "What is your return policy?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "You have 14 days from delivery to send an item back; returns are free."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How much does shipping cost?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Shipping is free from 200 € in France."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Which payment methods do you accept?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Visa, Mastercard and PayPal."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What are your opening hours?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Our Paris store is open Tuesday to Saturday, 11:00 to 19:00."
+        }
+      }
+    ]
+  }
+}

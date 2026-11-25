@@ -4,8 +4,8 @@
   "schema_org_version": "30.0",
   "canonical_url": "https://kimai.com/uk/about",
   "sheet_url": "https://kimai.com/pagefront/commerce/organization/kimai.en-GB.json",
-  "generated_at": "2026-09-04T12:30:00Z",
-  "expires_at": "2026-09-11T12:30:00Z",
+  "generated_at": "2026-11-25T11:19:00Z",
+  "expires_at": "2026-12-02T11:19:00Z",
   "data": {
     "@context": [
       "https://schema.org",
@@ -183,6 +183,233 @@
         "openingHours": "Tu-Sa 10:00-18:00",
         "telephone": "+447897789225",
         "email": "chiltern.store@kimai.com"
+      }
+    ],
+    "question": [
+      {
+        "@type": "Question",
+        "name": "Where do you make your rings?",
+        "keywords": "Engagement Rings",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "All our engagement rings are handmade in Antwerp, Belgium."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Where do Kimai diamonds come from?",
+        "keywords": "Engagement Rings",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "We work with trusted labs around the world that we visit on a regular basis and that use renewable energy."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I buy a setting or a diamond separately?",
+        "keywords": "Engagement Rings",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Unfortunately not. We take great pride in the quality of our diamonds and craftsmanship of our settings and have curated a broad collection of rings and wedding bands to meet the style and preferences of our customers. We do offer a personalisation service, for this, please visit our appointment page."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does my lab grown diamond come with a certificate?",
+        "keywords": "Engagement Rings",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, every engagement ring comes with a complimentary IGI certificate for the lab-grown diamond. Upon special request, we can source a GIA certificate for an additional fee."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "I can’t find what I like online - can you make something different?",
+        "keywords": "Engagement Rings",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, check out our Bespoke page for more details on our service or send us an email at bespoke@kimai.com with your ideas and we’re happy to work something out with you."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I know how a diamond will look?",
+        "keywords": "Engagement Rings",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Simply email us at bespoke@kimai.com and we can send over videos of different stones. Alternatively we could schedule a call with you to show you the different diamonds if you’re hesitant. Book an appointment here."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is an IGI certificate?",
+        "keywords": "Engagement Rings",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The International Gemological Institute (IGI) is a leading third party diamond grading organization. Each IGI certificate is unique to your diamond and provides a diamond identification number that is laser-inscribed in your diamond. Check out our learn page for more info."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do gift cards come with an expiration date?",
+        "keywords": "Gift Cards",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No, all of our gift cards can be used indefinitely until the voucher has been fully used."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do you offer physical gift cards?",
+        "keywords": "Gift Cards",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "At the moment we do not offer physical gift cards but if you have a special request, please do reach out and we might be able to assist."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can the digital gift card be sent directly to the person I’d like to gift?",
+        "keywords": "Gift Cards",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Unfortunately not, the gift card will be sent to the person who places the order. That being said, you can forward him or her that email."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I get a refund on my gift card?",
+        "keywords": "Gift Cards",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Our gift cards are non refundable.\u0000"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I create a bespoke piece of jewellery that isn't an engagement ring ?",
+        "keywords": "Materials & Craftsmanship",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes of course, simply get in touch at bespoke@kimai.com with your request and we’ll be able to assist you."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What materials do you use for your jewellery?",
+        "keywords": "Materials & Craftsmanship",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "At Kimai, we exclusively use high-quality, low-impact materials for all of our rings, necklaces, bracelets, and earrings. That means solid, 18-karat recycled gold and lab-grown diamonds. Our men's bracelet are made with solid 14K recycled gold."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What does recycled gold mean?",
+        "keywords": "Materials & Craftsmanship",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "We use 100% recycled gold, derived from recycled 18K gold old jewellery (and 14K for our men's bracelets)."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why 18-carat solid gold?",
+        "keywords": "Materials & Craftsmanship",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "18K gold consists of 75% gold and it has the highest amount of pure gold in accessible materials. 18K gold is also very hard to tarnish, damage or stain and so it is the best quality for cost."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why recycled gold?",
+        "keywords": "Materials & Craftsmanship",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "According to the Gold Standard Institute, there is already more gold circulating above Earth than we will ever find in current or new mines. So rather than pollute unnecessarily by mining for gold, we use only recycled gold to help protect our planet."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is recycled gold cheaper?",
+        "keywords": "Materials & Craftsmanship",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Recycled gold is not cheaper, as the price of gold is set based on market value."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does gold fade?",
+        "keywords": "Materials & Craftsmanship",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Our gold will not fade, as it is solid gold. However, gold plated jewellery will fade over time, and affect the color of the jewellery. At Kimaï, we specifically use 18K solid gold (and 14K for our men's bracelets) to provide our clients with high quality pieces of jewellery that resist time, and can be passed onto generations."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why lab-grown diamonds?",
+        "keywords": "Materials & Craftsmanship",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Our diamonds are created using cutting-edge technology that replicates natural growing conditions in a lab. This results in diamonds that are chemically and physically identical to ones that come from mine — but with a lower environmental impact. Learn more about the process here."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Are lab diamonds real diamonds?",
+        "keywords": "Materials & Craftsmanship",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Lab-grown diamonds have the same chemical, physical, and optical properties as mined diamonds. The key difference is origin: lab-grown diamonds are created in controlled laboratory conditions, while mined diamonds form in the earth. Specialist equipment is required to distinguish between them, and both are graded by the same gemological standards."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Are your diamonds independently certified?",
+        "keywords": "Materials & Craftsmanship",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, GIA, HRD, and IGI all grade lab-grown diamonds and all four pieces featuring a diamond above 0.5ct come with one of these certificates. At Kimai, we mostly use IGI grading. We can get larger stones a GIA or HRD certificate on request."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do you clean Kimai's jewellery?",
+        "keywords": "Materials & Craftsmanship",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The easiest way to clean your Kimai jewellery at home would be to fill a bowl with 2 cups warm water and several drops mild dish detergent. Soak your jewellery in the solution for 15 minutes. Scrub the gold jewellery with a soft baby toothbrush or a cotton swab then rinse it with water."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Will my Kimaï jewellery fade or wear away?",
+        "keywords": "Care & Composition",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No, because we use solid 18K gold (and solid 14K for men's bracelets) instead of gold plating. Gold plating can wear away over time, revealing the metal below it and affecting the color of the jewellery. At Kimaï, we specifically use solid gold to provide our clients with high quality pieces of jewellery that resist time, and can be passed onto generations. If you do have any issue with your piece do get in touch at info-uk@kimai.com"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I wear my Kimai jewellery in water?",
+        "keywords": "Care & Composition",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes! All our pieces are made with solid 18K gold (and solid 14K gold for our men's bracelets) so there's no harm wearing them in water. Water will not damage the metal nor will the pieces discolour."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can you adjust the length of Kimai necklaces and bracelets?",
+        "keywords": "Size & Fit",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, we can! Feel free to contact us at info-uk@kimai.com after placing your order. Mention your order number and request, and we will provide you with a quote for the additional length.\n\nPlease note that if you wish to adjust a piece after receiving it, this is possible, but only for pieces on chains. Bangles are not resizable."
+        }
       }
     ]
   }
