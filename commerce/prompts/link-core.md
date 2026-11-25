@@ -1,6 +1,6 @@
 # Pagefront — link your shop's sheets
 
-- Prompt set 1.28.0, for commerce release 0.6.0.
+- Prompt set 1.29.0, for commerce release 0.6.0.
 - Links the sheets the serve phase put online (commerce release 0.6.0) from the shop's own pages.
 - Pagefront Discovery: https://themachineweb.org/pagefront/spec/core/discovery.md (page: https://themachineweb.org/pagefront/spec/core/discovery)
 
@@ -161,7 +161,12 @@ next; if a check fails, say what to fix in that step, and check again.
    body link. Give that part once, before that kind's step, its file
    offered in it, without asking whether the merchant wants the body
    link: the part itself says it can be left out. A merchant who leaves
-   it out there: CHECKS 1 expects no body link, on every page.
+   it out there: CHECKS 1 expects no body link, on every page. A page
+   whose head still declares nothing once its field is filled (the
+   merchant says the step of its kind is done): the code in place is
+   from a set that did not cover that kind of page. Give this step after
+   all, the platform's section saying how the new code replaces the
+   earlier run's, then check the page again.
 3. Then one step per kind of page, in the order the admin lists them:
    first how to fill its field (PLATFORMS), then each page: its name as
    the admin lists it, never its address (the merchant copies the first

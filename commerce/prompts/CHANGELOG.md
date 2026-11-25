@@ -4,6 +4,12 @@ The prompt set's own semver; see "Versioning" in [`README.md`](README.md).
 
 ## Unreleased
 
+## 1.29.0 — 2026-11-25
+
+For commerce release 0.6.0.
+
+- **Link, Shopify: the code on an addition.** A page whose head declares nothing once its field is filled brings the code step back, the new code replacing the earlier run's: the `theme.liquid` block deleted from its start comment to its end comment (`Pagefront head link: start` and `Pagefront head link: end`, which the file carries from this set on) or to the line above `</head>`, then the new file pasted; a "Custom liquid" block or section from an earlier run gets the new `pagefront-body.txt` pasted over its field. The usual case is a homepage set up under a set before 1.27.0, whose head code has no `index` branch. The collection, page and homepage section labels of the theme editor step are read in Dawn's source (v16.2.0). Minor: what the prompt asks for changes.
+
 ## 1.28.0 — 2026-11-25
 
 For commerce release 0.6.0.

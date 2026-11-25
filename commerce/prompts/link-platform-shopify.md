@@ -25,7 +25,9 @@
   `request.page_type` (`product`, `collection`, `page`, `index`), it reads
   that object's `metafields.custom.pagefront_sheet.value`, the `shop`
   object's on `index`, and, if not blank and under the sheet path (rule
-  4), prints the `<link>` element, its `href` escaped. The file
+  4), prints the `<link>` element, its `href` escaped; its first line is
+  the Liquid comment `Pagefront head link: start`, its last the comment
+  `Pagefront head link: end`, so that a later run finds the block. The file
   `pagefront-body.txt`, pasted in the theme editor into a "Custom liquid"
   block placed right below the description on the product template, into
   a "Custom liquid" section placed right below the section that prints
@@ -52,6 +54,15 @@
   gets the head link alone, said in the report.
 - **Sign the code runs**: none until a field is filled; the code step has
   no check.
+- **On an addition** (Step 3), the new code replaces the earlier run's.
+  In `theme.liquid`, the earlier block is deleted first: from
+  `Pagefront head link: start` to `Pagefront head link: end` where it has
+  them, else from its first line, a Liquid comment naming Pagefront, to
+  the line just above `</head>`; then the new file is pasted as step 2
+  says. A "Custom liquid" block or section from an earlier run keeps its
+  place: click it in the sidebar, select all of its field, paste the new
+  `pagefront-body.txt` over it, "Save". The usual case is a homepage set
+  up under a set before 1.27.0, whose head code has no `index` branch.
 - **What Shopify cannot do**, said plainly in the report: a theme sets no
   response header, so no `Link` header; no `Pagefront:` line in
   `robots.txt`. The entry point is the redirect below, on its own.
@@ -74,7 +85,8 @@
   2026-11-10 with the documentation's labels; the theme editor part of
   step 2 as shown on 2026-11-23 on Dawn for a product and on 2026-11-24
   for the homepage, the collection and page parts from the documentation
-  and Dawn's labels; the Shop definition and its value as shown on
+  with their section labels read in Dawn's source (v16.2.0, on
+  2026-11-25); the Shop definition and its value as shown on
   2026-11-24** (the rest not yet walked):
   1. The field, once per kind: in the admin, Settings (the very bottom of
      the left menu) › Metafields and metaobjects ›
@@ -126,9 +138,10 @@
      "Add section", in "Search sections" type `Custom liquid`, select it;
      paste all of `pagefront-body.txt` into its field; drag the section so
      that it sits right below the section that prints the description
-     ("Collection banner" in Dawn); "Save". The same on the page template
-     ("Pages"), below the section that prints the page's content ("Page"
-     in Dawn). When the organization page is the homepage: the drop-down
+     ("Collection banner" in Dawn, above "Product grid"); "Save". The
+     same on the page template ("Pages"), below the section that prints
+     the page's content ("Page" in Dawn, the template's only section).
+     When the organization page is the homepage: the drop-down
      back on "Home page"; "Add section", `Custom liquid`, select it; paste
      all of `pagefront-body.txt` into its field; drag the section to the
      end of the Template group, just above the Footer group; "Save".
