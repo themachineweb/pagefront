@@ -1,6 +1,6 @@
 # Pagefront — write your shop's sheets
 
-- Prompt set 1.27.0, for commerce release 0.6.0.
+- Prompt set 1.28.0, for commerce release 0.6.0.
 - Writes Product sheets (spec 0.12.0), Collection sheets (spec 0.2.0) and the Organization sheet (spec 0.6.0), commerce release 0.6.0.
 - Product spec: https://themachineweb.org/pagefront/spec/commerce/product.md (page: https://themachineweb.org/pagefront/spec/commerce/product)
 - Product schema: https://themachineweb.org/pagefront/spec/commerce/product/v0.12.0.json
