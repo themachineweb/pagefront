@@ -1,0 +1,32 @@
+{
+  "sheet": "https://merchant.example/products/aurora-dive-watch",
+  "checked_at": "2026-01-01T00:00:00Z",
+  "linter_version": "0.0.0-test",
+  "release": "0.7.0",
+  "sheet_spec_version": "0.13.0",
+  "catalogue_version": "0.22.0",
+  "findings": [
+    {
+      "rule": "PDP-W-047",
+      "severity": "warning",
+      "path": "$['data']['question'][0]['acceptedAnswer']",
+      "values": {
+        "name": "What is the water resistance rating?",
+        "stated": "50 metres",
+        "feature": "Water resistance",
+        "value": "100",
+        "unit": "m"
+      },
+      "message": "Answer to `What is the water resistance rating?` at `$['data']['question'][0]['acceptedAnswer']` states `50 metres` where the sheet's `Water resistance` is `100 m`.",
+      "remediation": "Correct whichever is wrong on the page, then re-emit. If the answer is right and the feature is stale, fix the feature; the structured field is what consumers compare on."
+    }
+  ],
+  "summary": {
+    "errors": 0,
+    "warnings": 1,
+    "info": 0,
+    "rules_fired": [
+      "PDP-W-047"
+    ]
+  }
+}

@@ -49,6 +49,6 @@ import { revW012 } from "./rules/rev-w-012.js";
 export const reviewCatalogue: Catalogue = {
   vertical: "commerce",
   releases: KNOWN_RELEASES,
-  catalogueVersion: "0.21.0",
+  catalogueVersion: "0.22.0",
   rules: [revE001, revE002, revE003, revE004, revE005, revE006, revE007, revE008, revE009, revE010, revE011, revE012, revE013, revE014, revE015, revE016, revE017, revW001, revW002, revW003, revW004, revW005, revW006, revW007, revW008, revW009, revW010, revW011, revW012],
 };
